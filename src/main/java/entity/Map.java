@@ -20,12 +20,12 @@ public class Map {
     /**
      * 
      */
-    protected HashMap<Integer, Node> nodeMap;
+    protected HashMap<Long, Node> nodeMap;
 
     /**
      * 
      */
-    protected HashMap<Integer,Set<Bow>> bowMap;
+    protected HashMap<Long,Set<Bow>> bowMap;
 
     /**
      * 
@@ -51,19 +51,19 @@ public class Map {
     }
 
 
-    public HashMap<Integer, Node> getNodeMap() {
+    public HashMap<Long, Node> getNodeMap() {
 		return nodeMap;
 	}
 
-	public void setNodeMap(HashMap<Integer, Node> nodeMap) {
+	public void setNodeMap(HashMap<Long, Node> nodeMap) {
 		this.nodeMap = new HashMap(nodeMap);
 	}
 
-	public HashMap<Integer, Set<Bow>> getBowMap() {
+	public HashMap<Long, Set<Bow>> getBowMap() {
 		return bowMap;
 	}
 
-	public void setBowMap(HashMap<Integer, Set<Bow>> bowMap) {
+	public void setBowMap(HashMap<Long, Set<Bow>> bowMap) {
 		this.bowMap = new HashMap(bowMap);
 	}
 
@@ -88,6 +88,27 @@ public class Map {
         return result;
     }
 
+
+	@Override
+	public String toString() {
+		String s = "";
+		
+		for (long key : nodeMap.keySet()) {
+			s += key + ": ";
+			s += nodeMap.get(key).toString();
+			s += "\n";
+		}
+		
+		for (long key : bowMap.keySet()) {
+			s += key + ": ";
+			s += bowMap.get(key).toString();
+			s += "\n";
+		}
+		
+		return s;
+	}
+
+    
     
 
 }

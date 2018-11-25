@@ -25,22 +25,22 @@ public class Delivery {
     /**
      * 
      */
-    private Node position;
+    protected Node position;
 
     /**
      * 
      */
-    private int duration;
+    protected int duration;
 
     /**
      * 
      */
-    private Calendar hourOfArrival;
+    protected Calendar hourOfArrival;
     
 	/**
      * 
      */
-    private Calendar hourOfDeparture;
+    protected Calendar hourOfDeparture;
     
 
     public Node getPosition() {
@@ -58,13 +58,19 @@ public class Delivery {
 
 	public void setHourOfArrival(Calendar hourOfArrival) {
 		this.hourOfArrival = hourOfArrival;
+		hourOfDeparture = (Calendar) hourOfArrival.clone();
+		hourOfDeparture.add(Calendar.SECOND, duration);
 	}
 
 	public Calendar getHourOfDeparture() {
 		return hourOfDeparture;
 	}
 
-	public void setHourOfDeparture(Calendar hourOfDeparture) {
-		this.hourOfDeparture = hourOfDeparture;
+	@Override
+	public String toString() {
+		return "Delivery [position=" + position.getId() + ", duration=" + duration + ", hourOfArrival=" + hourOfArrival.toString()
+				+ ", hourOfDeparture=" + hourOfDeparture.toString() + "]";
 	}
+	
+	
 }

@@ -12,7 +12,7 @@ public class Node {
 	/**
      * Default constructor
      */
-    protected Node() {
+	public Node() {
     }
 
     //add a non-default constructor
@@ -20,7 +20,7 @@ public class Node {
     /**
      * 
      */
-    private int id;
+    private Long id;
 
     /**
      * 
@@ -34,37 +34,43 @@ public class Node {
     
     
 
-    protected Node(int id, double latitude, double longitude) {
+    public Node(long id, double latitude, double longitude) {
 		super();
 		this.id = id;
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
 
-	protected int getId() {
+    public long getId() {
 		return id;
 	}
 
-	protected void setId(int id) {
+    public void setId(long id) {
 		this.id = id;
 	}
 
-	protected double getLatitude() {
+    public double getLatitude() {
 		return latitude;
 	}
 
-	protected void setLatitude(double latitude) {
+    public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
-	protected double getLongitude() {
+    public double getLongitude() {
 		return longitude;
 	}
 
-	protected void setLongitude(double longitude) {
+    public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
+	@Override
+	public String toString() {
+		return "Node [id=" + id + ", latitude=" + latitude + ", longitude=" + longitude + "]";
+	}
+
+    
 
 
 }
