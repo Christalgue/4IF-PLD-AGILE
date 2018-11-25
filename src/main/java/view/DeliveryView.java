@@ -7,7 +7,7 @@ public class DeliveryView {
 	/**
 	 * Default constructor
 	 */
-	protected DeliveryView () {
+	public DeliveryView () {
 	}
 	
 	/**

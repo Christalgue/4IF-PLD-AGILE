@@ -7,7 +7,7 @@ public class CircuitView {
 	/**
      * Default constructor
      */
-    protected CircuitView() {
+    public CircuitView() {
     }
     
     /**
@@ -25,7 +25,7 @@ public class CircuitView {
      * @param color The color of the circuit
      * @param width The width of the circuit
      */
-    protected CircuitView(String color, int width) {
+    public CircuitView(String color, int width) {
     	this.color = color;
     	this.width = width;
     }
