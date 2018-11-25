@@ -1,3 +1,5 @@
+package main.java.entity;
+
 
 import java.util.*;
 
@@ -13,41 +15,43 @@ public class Circuit {
     }
 
     /**
-     * 
-     */
-    public double circuitDuration;
-
-    /**
-     * 
-     */
-    public List<AtomicPath> path;
-
-    /**
-     * 
-     */
-    public List<Delivery> deliveryList;
-
-
-
-    /**
+     * Constructor
      * @param ListDelivery 
      * @param AtomicPath[][]
      */
-    public void Circuit(void ListDelivery, void AtomicPath[][]) {
-        // TODO implement here
+    public Circuit(List<Delivery> deliveries, AtomicPath[][] allPaths) {
+    	this.deliveryList = deliveries;
+    	calculateTrackTSP(allPaths);
     }
+    
+    
+    /**
+     * 
+     */
+    private double circuitDuration;
 
     /**
      * 
      */
-    public void calculateDuration() {
+    private List<AtomicPath> path;
+
+    /**
+     * 
+     */
+    private List<Delivery> deliveryList;
+
+
+    /**
+     * 
+     */
+    protected void calculateDuration() {
         // TODO implement here
     }
 
     /**
      * @param AtomicPath[][]
      */
-    public void calculateTrackTSP(void AtomicPath[][]) {
+    protected void calculateTrackTSP(AtomicPath[][] allPaths) {
         // TODO implement here
     }
 
@@ -55,18 +59,42 @@ public class Circuit {
      * @param Map 
      * @param Delivery
      */
-    public void Remove(void Map, void Delivery) {
+    protected void Remove(Delivery deliveryToRemove) {
         // TODO implement here
     }
 
     /**
-     *  ////////////////@param Map 
-     *  a voir si CircuitManagement lui envoie pas directement le atomicPath, dans ce ca pas besoin de Map
      * @param Delivery 
      * @param nextToDelivery
      */
-    public void Add(/*void Map,*/ void Delivery, void nextToDelivery) {
+    protected void Add(Delivery deliveryToAdd, Delivery nextToDelivery) {
         // TODO implement here
     }
+
+	protected double getCircuitDuration() {
+		return circuitDuration;
+	}
+
+	protected void setCircuitDuration(double circuitDuration) {
+		this.circuitDuration = circuitDuration;
+	}
+
+	protected List<AtomicPath> getPath() {
+		return path;
+	}
+
+	private void setPath(List<AtomicPath> path) {
+		this.path = path;
+	}
+
+	protected List<Delivery> getDeliveryList() {
+		return deliveryList;
+	}
+
+	protected void setDeliveryList(List<Delivery> deliveryList) {
+		this.deliveryList = deliveryList;
+	}
+    
+    
 
 }
