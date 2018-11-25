@@ -48,7 +48,7 @@ public class Map {
 	}
 
 	protected void setNodeMap(HashMap<Integer, Node> nodeMap) {
-		this.nodeMap = nodeMap;
+		this.nodeMap = new HashMap(nodeMap);
 	}
 
 	protected HashMap<Integer, Set<Bow>> getBowMap() {
@@ -56,7 +56,7 @@ public class Map {
 	}
 
 	protected void setBowMap(HashMap<Integer, Set<Bow>> bowMap) {
-		this.bowMap = bowMap;
+		this.bowMap = new HashMap(bowMap);
 	}
 
 	protected Deserializer getChargingUnit() {
