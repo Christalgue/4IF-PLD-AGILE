@@ -22,13 +22,14 @@ public class Circuit {
     public Circuit(List<Delivery> deliveries, AtomicPath[][] allPaths) {
     	this.deliveryList = deliveries;
     	calculateTrackTSP(allPaths);
+    	this.circuitLength = calculateLength();
     }
     
     
     /**
      * 
      */
-    private double circuitDuration;
+    private double circuitLength;
 
     /**
      * 
@@ -44,8 +45,13 @@ public class Circuit {
     /**
      * 
      */
-    protected void calculateDuration() {
+    protected double calculateLength() {
         // TODO implement here
+    	double result = 0;
+    	for(AtomicPath segment : this.path){
+    		result += segment.getLength();
+    	}
+    	return result;
     }
 
     /**
@@ -71,12 +77,12 @@ public class Circuit {
         // TODO implement here
     }
 
-	protected double getCircuitDuration() {
-		return circuitDuration;
+	protected double getCircuitLength() {
+		return circuitLength;
 	}
 
-	protected void setCircuitDuration(double circuitDuration) {
-		this.circuitDuration = circuitDuration;
+	protected void setCircuitLength(double circuitLength) {
+		this.circuitLength = circuitLength;
 	}
 
 	protected List<AtomicPath> getPath() {
