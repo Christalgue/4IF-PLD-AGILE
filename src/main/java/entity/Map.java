@@ -47,7 +47,7 @@ public class Map {
 		return nodeMap;
 	}
 
-	protected void setNodeMap(HashMap<Integer, Node> nodeMap) {
+	public void setNodeMap(HashMap<Integer, Node> nodeMap) {
 		this.nodeMap = new HashMap(nodeMap);
 	}
 
@@ -55,7 +55,7 @@ public class Map {
 		return bowMap;
 	}
 
-	protected void setBowMap(HashMap<Integer, Set<Bow>> bowMap) {
+	public void setBowMap(HashMap<Integer, Set<Bow>> bowMap) {
 		this.bowMap = new HashMap(bowMap);
 	}
 
