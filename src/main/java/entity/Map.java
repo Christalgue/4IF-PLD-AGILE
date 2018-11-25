@@ -51,7 +51,7 @@ public class Map {
     }
 
 
-    protected HashMap<Integer, Node> getNodeMap() {
+    public HashMap<Integer, Node> getNodeMap() {
 		return nodeMap;
 	}
 
@@ -59,7 +59,7 @@ public class Map {
 		this.nodeMap = new HashMap(nodeMap);
 	}
 
-	protected HashMap<Integer, Set<Bow>> getBowMap() {
+	public HashMap<Integer, Set<Bow>> getBowMap() {
 		return bowMap;
 	}
 
@@ -67,11 +67,11 @@ public class Map {
 		this.bowMap = new HashMap(bowMap);
 	}
 
-	protected Deserializer getChargingUnit() {
+	public Deserializer getChargingUnit() {
 		return chargingUnit;
 	}
 
-	protected void setChargingUnit(Deserializer chargingUnit) {
+	public void setChargingUnit(Deserializer chargingUnit) {
 		this.chargingUnit = chargingUnit;
 	}
 
