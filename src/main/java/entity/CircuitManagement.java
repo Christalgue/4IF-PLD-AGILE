@@ -1,5 +1,10 @@
+package main.java.entity;
+
 
 import java.util.*;
+
+import main.java.exception.*;
+import main.java.utils.Deserializer;
 
 /**
  * 
@@ -15,27 +20,27 @@ public class CircuitManagement {
     /**
      * 
      */
-    public Map actualMap;
+    private Map actualMap;
 
     /**
      * 
      */
-    public int nbDeliveryMan;
+    private int nbDeliveryMan;
 
     /**
      * 
      */
-    public Circuit[] circuitsList;
+    private Circuit[] circuitsList;
 
     /**
      * 
      */
-    public List<Delivery> deliveryList;
+    private List<Delivery> deliveryList;
 
     /**
      * 
      */
-    public Serializer chargingUnit;
+    private Deserializer chargingUnit;
 
 
 
@@ -44,24 +49,34 @@ public class CircuitManagement {
     /**
      * @param filename 
      * @return
+     * @throws LoadDeliveryException 
      */
-    public List<Delivery> loadDeliveryList(void filename) {
-        // TODO implement here
-        return null;
+    protected void loadDeliveryList(String filename) throws LoadDeliveryException {
+    	try {
+    		this.chargingUnit.loadDeliveries(filename, this.deliveryList, this.actualMap);
+		} catch (Exception e) {
+			throw new LoadDeliveryException(e.getMessage());
+		}
+        
     }
 
     /**
      * @param filename
+     * @throws LoadMapException 
      */
-    public void loadMap(void filename) {
-        // TODO implement here
+    protected void loadMap(String filename) throws LoadMapException {
+        try {
+			this.actualMap = new Map(filename);
+		} catch (LoadMapException e) {
+			throw e; 
+		}
     }
 
     /**
      * K-means clustering algorithm
      * @return
      */
-    public List<Delivery>[] cluster() {
+    protected List<Delivery>[] cluster() throws ClusteringException {
         // TODO implement here
         return null;
     }
@@ -71,9 +86,48 @@ public class CircuitManagement {
      * call the cluster method and create the circuits one by one after having 
      *      calculated the atomic path between each delivery
      * @param nbDeliveryman
+     * @throws MapNotChargedException 
+     * @throws DeliveryListNotCharged 
+     * @throws ClusteringException 
      */
-    public void calculateCircuits(void nbDeliveryman) {
-        // TODO implement here
+    protected void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException {
+    	
+    	if(nbDeliveryman>0){
+    		this.nbDeliveryMan = nbDeliveryman;
+    	}
+    	List<Delivery>[] groupedDeliveries;
+    	if(this.actualMap.getNodeMap().isEmpty()){
+    		throw new MapNotChargedException("Impossible to calculate the circuits"
+    				+ "if there is not any Map in the system");
+    	} else if (this.deliveryList.isEmpty()){
+    		throw new DeliveryListNotCharged("Impossible to calculate the circuits"
+    				+ "if there is not any Delivery in the system");
+    	} else {
+    		try {
+				groupedDeliveries = cluster();
+			} catch (ClusteringException e) {
+				throw e;
+			}
+    	}
+    	if(groupedDeliveries.length>0){
+    		this.circuitsList = new Circuit[groupedDeliveries.length];
+    		for(int i=0; i<groupedDeliveries.length; i++){
+    			List<Delivery> deliveryList = groupedDeliveries[i];
+    			AtomicPath allPaths[][] = new AtomicPath[deliveryList.size()][deliveryList.size()];
+    			for(int j=0; j< deliveryList.size(); j++){
+    				Delivery start = deliveryList.get(j);
+    				for(int k=0; k<deliveryList.size(); k++){
+    					if(j != k){
+	    					Delivery end = deliveryList.get(k);
+	    					allPaths[j][k] = this.actualMap.findShortestPath(start.getPosition(), end.getPosition());
+    					}
+    				}
+    			}
+    			circuitsList[i] = new Circuit(deliveryList, allPaths);
+    		}
+    	}
     }
+
+	
 
 }
