@@ -3,6 +3,7 @@ package main.java.entity;
 
 import java.util.*;
 
+import main.java.exception.LoadMapException;
 import main.java.utils.Deserializer;
 
 /**
@@ -36,10 +37,17 @@ public class Map {
     /**
      * appel au serializer etc
      * @param filename
+     * @throws LoadMapException 
      */
-    protected void Map(String filename) {
+    protected void Map(String filename) throws LoadMapException {
         // TODO implement here
-    	chargingUnit.loadMap(filename, this);
+    	try {
+    		chargingUnit.loadMap(filename, this);
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new LoadMapException(e.getMessage());
+		}
+    	
     }
 
 
