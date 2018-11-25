@@ -7,8 +7,7 @@ public class MapView {
 	/**
 	 * Default constructor
 	 */
-	protected MapView () {
-		
+	public MapView () {
 	}
 	
 	/**
@@ -25,6 +24,18 @@ public class MapView {
      * The color of the background
      */
 	private String colorBackground;
+	
+	/**
+	 * 
+	 * @param colorRoad 		The color of the road
+	 * @param width 			The width of the road
+	 * @param colorBackground	The color of the background
+	 */
+	public MapView(String colorRoad, int width, String colorBackground) {
+		this.colorRoad = colorRoad;
+		this.width = width;
+		this.colorBackground = colorBackground;
+	}
 	
 	/**
 	 * 
