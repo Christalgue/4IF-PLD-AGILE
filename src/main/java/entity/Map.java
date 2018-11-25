@@ -14,7 +14,7 @@ public class Map {
     /**
      * Default constructor
      */
-    protected Map() {
+    public Map() {
     }
 
     /**
@@ -39,7 +39,7 @@ public class Map {
      * @param filename
      * @throws LoadMapException 
      */
-    protected void Map(String filename) throws LoadMapException {
+    public Map(String filename) throws LoadMapException {
         // TODO implement here
     	try {
     		chargingUnit.loadMap(filename, this);
