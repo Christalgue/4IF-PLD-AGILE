@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import java.awt.TextField;
@@ -19,6 +20,11 @@ import javax.swing.border.LineBorder;
 import javax.swing.JTree;
 import java.awt.Canvas;
 import javax.swing.tree.DefaultTreeModel;
+
+import main.java.controller.Controller;
+import main.java.entity.CircuitManagement;
+import main.java.exception.LoadMapException;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 
 // https://examples.javacodegeeks.com/desktop-java/ide/eclipse/eclipse-windowbuilder-tutorial/
@@ -59,7 +65,16 @@ public class Window extends JFrame{
 	private final int messageFrameHeight = 80;
 	//private final int largeurVueTextuelle = 400;
 	
+	/**
+	 * 
+	 */
+	private MapView mapView;
 	
+	/**
+	 * Default constructor
+	 */
+	public Window () {
+	}
 	
 	/**
 	 * Launch the application.
@@ -75,33 +90,50 @@ public class Window extends JFrame{
 				}
 			}
 		});
+		
+		/*CircuitManagement circuitManagement = new CircuitManagement();
+		Controller controller = new Controller(circuitManagement);
+		Window window = new Window (circuitManagement, controller);*/
 	}
 
 	/**
 	 * Create the application.
 	 */
-	/*public Window( CircuitManagement circuitManagement, Controller controller ){
+	/*public Window (CircuitManagement circuitManagement, Controller controller){
 		
 		setLayout(null);
-		createButtons(controller);
+		//createButtons(controller);
 		
-		/*messageFrame = new JLabel();
+		messageFrame = new JLabel();
 		messageFrame.setBorder(BorderFactory.createTitledBorder("Messages..."));
-		getContentPane().add(messageFrame);*/
+		getContentPane().add(messageFrame);
 		
-		/*graphicView = new graphicView (CircuitManagement circuitManagement, this);
+		GraphicView graphicView = new GraphicView (circuitManagement, this);
 		
 		//textualView = new VueTextuelle(plan, this);
 		
-		mouseListener = new MouseListener(controller,GraphicView,this);
+		mouseListener = new MouseListener(controller,graphicView,this);
 		
 		addMouseListener(mouseListener);
-		addKeyListener = new keyListener(controller);
+		keyListener = new KeyListener(controller);
 		addKeyListener(keyListener);
+		
+		
+		try {
+			circuitManagement.loadMap("ressources/xml/petitPlan");
+		} catch (LoadMapException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		circuitManagement.getCurrentMap();
+		System.out.println(circuitManagement.getCurrentMap().toString());
+		
 		
 		initialize();
 		setVisible(true);
 	}*/
+	
 
 	/**
 	 * Initialize the contents of the frame.
