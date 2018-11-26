@@ -111,19 +111,20 @@ public class CircuitManagement {
     	}
     	if(groupedDeliveries.length>0){
     		this.circuitsList = new Circuit[groupedDeliveries.length];
-    		for(int i=0; i<groupedDeliveries.length; i++){
-    			List<Delivery> deliveryList = groupedDeliveries[i];
+    		for(int indexCircuits=0; indexCircuits<groupedDeliveries.length; indexCircuits++){
+    			List<Delivery> deliveryList = groupedDeliveries[indexCircuits];
     			AtomicPath allPaths[][] = new AtomicPath[deliveryList.size()][deliveryList.size()];
-    			for(int j=0; j< deliveryList.size(); j++){
-    				Delivery start = deliveryList.get(j);
+
+    			for(int indexDeliveryStart=0; indexDeliveryStart< deliveryList.size(); indexDeliveryStart++){
+    				Delivery start = deliveryList.get(indexDeliveryStart);
     				try {
-						allPaths[j] = this.actualMap.findShortestPath(start, deliveryList);
+						allPaths[indexDeliveryStart] = this.actualMap.findShortestPath(start, deliveryList);
 					} catch (DijkstraException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
     			}
-    			circuitsList[i] = new Circuit(deliveryList, allPaths);
+    			circuitsList[indexCircuits] = new Circuit(deliveryList, allPaths);
     		}
     	}
     }
