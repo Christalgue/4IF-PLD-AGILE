@@ -120,7 +120,7 @@ public class Deserializer {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		if (nodes.get(repository.getAttribute("adresse")) == null) {
+		if (nodes.get(Long.parseLong(repository.getAttribute("adresse"))) == null) {
 			throw new XMLException("Delivery place does not exist");
 		}
 		tempDeliveriesList.add(new Repository(nodes.get(repository.getAttribute("adresse")),cal));
