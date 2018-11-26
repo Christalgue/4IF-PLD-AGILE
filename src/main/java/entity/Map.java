@@ -131,7 +131,7 @@ public class Map extends Observable{
         				}
         			}
         			
-        			bowList.add(bowToAddToAtomicPath);
+        			bowList.add(0, bowToAddToAtomicPath);
         			currentNode = precedentNode;
         		}
         		/*System.out.println("Taille de atomic path : "+bowList.size());
