@@ -70,12 +70,13 @@ public class Map extends Observable{
      * @return
 	 * @throws DijkstraException 
      */
-    public AtomicPath[] findShortestPath(Delivery startDelivery, List<Delivery> arrivalDeliveries) throws DijkstraException {
+    public HashMap<Delivery,AtomicPath> findShortestPath(Delivery startDelivery, List<Delivery> arrivalDeliveries) throws DijkstraException {
         if (!arrivalDeliveries.contains(startDelivery)) {
         	throw new DijkstraException("Deliveries does not contains startDelivery.");
         }
         
-        AtomicPath AtomicPaths[] = new AtomicPath[arrivalDeliveries.size()];
+        HashMap<Delivery,AtomicPath> AtomicPaths = new HashMap<Delivery,AtomicPath>();
+        		//new AtomicPath[arrivalDeliveries.size()-1];
     	
         HashMap<Node, Double> nodeDistances = new HashMap<Node, Double>();
         HashMap<Node, Node> nodePrecedences = new HashMap<Node, Node>();
@@ -86,7 +87,7 @@ public class Map extends Observable{
         
         grayNodes.add(startDelivery.getPosition());
         nodeDistances.put(startDelivery.getPosition(), (double)0 );
-        nodePrecedences.put(startDelivery.getPosition(), startDelivery.getPosition());
+        //nodePrecedences.put(startDelivery.getPosition(), startDelivery.getPosition());
         
     	while(grayNodes.size()!=0) {
     		Pair<Long,Node> minimumDistanceNode = getLowestDistanceNode(grayNodes, nodeDistances);
@@ -116,25 +117,33 @@ public class Map extends Observable{
     	}
     	
     	for (Delivery currentDelivery : arrivalDeliveries) {
-    		Integer AtomicPathsIndex = 0;
-    		List<Bow> bowList = new ArrayList<Bow>();
-    		Node currentNode = currentDelivery.getPosition();
-    		Node precedentNode = nodePrecedences.get(currentNode);
-    		while (!precedentNode.equals(currentNode)) {
-    			Set<Bow> currentNodeBows = bowMap.get(precedentNode.getId());
-    			Bow bowToAddToAtomicPath = null;
-    			for (Bow currentBow : currentNodeBows) {
-    				if (currentBow.getEndNode().equals(currentNode)) {			////////////////////////////////////////////////////////////////////////////
-    					bowToAddToAtomicPath = currentBow;
-    				}
-    			}
-    			bowList.add(bowToAddToAtomicPath);
-    			currentNode = precedentNode;
-    			precedentNode = nodePrecedences.get(currentNode);
+    		if (!currentDelivery.equals(startDelivery)) {
+    			//System.out.println("Delivery : "+currentDelivery.getPosition());
+        		List<Bow> bowList = new ArrayList<Bow>();
+        		Node currentNode = currentDelivery.getPosition();
+        		while (nodePrecedences.containsKey(currentNode)) {
+        			Node precedentNode = nodePrecedences.get(currentNode);
+        			Set<Bow> currentNodeBows = bowMap.get(precedentNode.getId());
+        			Bow bowToAddToAtomicPath = null;
+        			for (Bow currentBow : currentNodeBows) {
+        				if (currentBow.getEndNode().equals(currentNode)) {			////////////////////////////////////////////////////////////////////////////
+        					bowToAddToAtomicPath = currentBow;
+        				}
+        			}
+        			
+        			bowList.add(bowToAddToAtomicPath);
+        			currentNode = precedentNode;
+        		}
+        		/*System.out.println("Taille de atomic path : "+bowList.size());
+        		System.out.println("Atomic path : "+AtomicPathsIndex);
+        		for (Bow b : bowList) {
+        			System.out.println(b.getStartNode().getId()+" => "+b.getEndNode().getId());
+        		}
+        		System.out.println("");*/
+        		
+        		AtomicPath optimalPath = new AtomicPath(bowList);
+        		AtomicPaths.put(currentDelivery, optimalPath);
     		}
-    		AtomicPath optimalPath = new AtomicPath(bowList,10);
-    		AtomicPaths[AtomicPathsIndex] = optimalPath;
-    		AtomicPathsIndex++;
     	}    	
         return AtomicPaths;
     }

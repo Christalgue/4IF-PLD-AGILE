@@ -24,13 +24,13 @@ public class AtomicPath extends Observable{
      */
     private double length;
 
-	public AtomicPath(List<Bow> path, double duration) {
+	public AtomicPath(List<Bow> path) {
 		super();
 		this.path = new ArrayList<>(path);
 		this.length = calculateLength();
 	}
 	
-	protected List<Bow> getPath() {
+	public List<Bow> getPath() {
 		return path;
 	}
 
