@@ -2,16 +2,22 @@ package main.java.tsp;
 
 import java.util.*;
 
+import main.java.entity.AtomicPath;
+import main.java.entity.Delivery;
+
 public class TSP1 extends TemplateTSP {
 
 	@Override
-	protected Iterator<Integer> iterator(Integer sommetCrt, ArrayList<Integer> nonVus, int[][] cout, int[] duree) {
-		return new IteratorSeq(nonVus, sommetCrt);
+	protected int bound(Delivery delivery, ArrayList<Delivery> nonViewed,
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathes, int[] duree) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
-	protected int bound(Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout, int[] duree) {
-		// TODO implement bounds method
-		return 0;
+	protected Iterator<Delivery> iterator(Delivery currentDelivery, ArrayList<Delivery> nonViewed,
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathes, int[] duration) {
+		// TODO Auto-generated method stub
+		return new IteratorSeq(nonViewed, currentDelivery);
 	}
 }
