@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * 
  */
-public class Delivery {
+public class Delivery extends Observable{
 
     /**
      * Default constructor

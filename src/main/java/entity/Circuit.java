@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * 
  */
-public class Circuit {
+public class Circuit extends Observable{
 
     /**
      * Default constructor
