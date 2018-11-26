@@ -97,13 +97,15 @@ public class CircuitManagement extends Observable{
      * @throws MapNotChargedException 
      * @throws DeliveryListNotCharged 
      * @throws ClusteringException 
+     * @throws DijkstraException 
      */
-    public void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException {
+    public void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException, DijkstraException {
     	
     	if(nbDeliveryman>0){
     		this.nbDeliveryMan = nbDeliveryman;
     	}
     	List<Delivery>[] groupedDeliveries;
+    	//List<List<Delivery>> groupedDeliveries;
     	if(this.currentMap.getNodeMap().isEmpty()){
     		throw new MapNotChargedException("Impossible to calculate the circuits"
     				+ "if there is not any Map in the system");
@@ -117,6 +119,22 @@ public class CircuitManagement extends Observable{
 				throw e;
 			}
     	}
+    	if(groupedDeliveries.length>0){
+    		this.circuitsList = new Circuit[groupedDeliveries.length];
+    		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
+    		for(List<Delivery> arrivalDeliveries : groupedDeliveries){
+    			for(Delivery departureDelivery : arrivalDeliveries){
+    				try {
+						HashMap<Delivery, AtomicPath> pairMap = this.currentMap.findShortestPath(departureDelivery, arrivalDeliveries);
+					} catch (DijkstraException e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+						throw e;
+					}
+    			}
+    		}
+    	}
+    	
     	// refactor multimap atomic path
     	/*if(groupedDeliveries.length>0){
     		this.circuitsList = new Circuit[groupedDeliveries.length];
