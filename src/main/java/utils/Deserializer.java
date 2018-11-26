@@ -26,49 +26,24 @@ public class Deserializer {
 	
 	public static void loadMap(String path, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		try {
-		    final DocumentBuilder builder = factory.newDocumentBuilder();		
-		    final Document document= builder.parse(path);
-		    final Element root = document.getDocumentElement();
-		    if (root.getNodeName().equals("reseau")) 
-		        fillMap(root, map);
-		    else
-		    	throw new XMLException("Document non conforme");
-		}
-		catch (final ParserConfigurationException e) {
-		    e.printStackTrace();
-		}
-		catch (final SAXException e) {
-		    e.printStackTrace();
-		}
-		catch (final IOException e) {
-		    e.printStackTrace();
-		}
-		catch (final XMLException e) {
-			e.printStackTrace();
-		}
+	    final DocumentBuilder builder = factory.newDocumentBuilder();		
+	    final Document document= builder.parse(path);
+	    final Element root = document.getDocumentElement();
+	    if (root.getNodeName().equals("reseau")) 
+	        fillMap(root, map);
+	    else
+	    	throw new XMLException("The file is not valid");
 	}
 	
 	public static void loadDeliveries(String path, List<Delivery> deliveriesList, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		try {
-		    final DocumentBuilder builder = factory.newDocumentBuilder();		
-		    final Document document= builder.parse(path);
-		    final Element root = document.getDocumentElement();
-		    if (root.getNodeName().equals("demandeDeLivraisons")) 
-		        fillDeliveries(root, deliveriesList, map);
-		    else
-		    	throw new XMLException("Document non conforme");
-		}
-		catch (final ParserConfigurationException e) {
-		    e.printStackTrace();
-		}
-		catch (final SAXException e) {
-		    e.printStackTrace();
-		}
-		catch (final IOException e) {
-		    e.printStackTrace();
-		}
+	    final DocumentBuilder builder = factory.newDocumentBuilder();		
+	    final Document document= builder.parse(path);
+	    final Element root = document.getDocumentElement();
+	    if (root.getNodeName().equals("demandeDeLivraisons")) 
+	        fillDeliveries(root, deliveriesList, map);
+	    else
+	    	throw new XMLException("The file is not valid");
 	}
 	
 	private static void fillMap(Element root, Map map) throws XMLException{
@@ -87,7 +62,7 @@ public class Deserializer {
 		
 		if (tempNodeMap.size()==0)
 		{
-			throw new XMLException("Fichier vide");
+			throw new XMLException("The file is empty");
 		}
 		
 		for (int i = 0; i<nbBows; i++) {
@@ -97,16 +72,24 @@ public class Deserializer {
 			long arrival = Long.parseLong(element.getAttribute("destination"));
 			double length = Double.parseDouble(element.getAttribute("longueur"));
 			
-			if(!tempNodeMap.containsKey(origin) && !tempNodeMap.containsKey(arrival)) {
-				throw new XMLException("Noeud d'un troncon inexistant");
+			if(!tempNodeMap.containsKey(origin) || !tempNodeMap.containsKey(arrival)) {
+				throw new XMLException("The node of a bow does not exist");
 			}
 			if (length < 0) {
-				throw new XMLException("Longueur negative");
+				throw new XMLException("The length of a bow is negative");
 			}
 			String streetName = element.getAttribute("nomRue");
 			
 			if(!tempBowMap.containsKey(origin)){
 				tempBowMap.put(origin, new HashSet<Bow>());
+			}
+			else
+			{
+				for(Bow b : tempBowMap.get(origin)) {
+					if(b.getEndNode().getId()==arrival) {
+						throw new XMLException("Duplicate bow detected");
+					}
+				}
 			}
 			tempBowMap.get(origin).add(new Bow(tempNodeMap.get(origin),tempNodeMap.get(arrival),streetName,length));
 		}
@@ -125,7 +108,7 @@ public class Deserializer {
 		List<Delivery> tempDeliveriesList = new ArrayList<Delivery>();
 		
 		if(nbRepositories!=1) {
-			throw new XMLException("Nombre d'entrepot non conforme");
+			throw new XMLException("Number of repository not valid");
 		}
 		
 		Element repository = (Element) repositories.item(0);
@@ -135,11 +118,10 @@ public class Deserializer {
 		try {
 			cal.setTime(sdf.parse(repository.getAttribute("heureDepart")));
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (nodes.get(repository.getAttribute("adresse")) == null) {
-			throw new XMLException("Lieu de livraison inexistant");
+			throw new XMLException("Delivery place does not exist");
 		}
 		tempDeliveriesList.add(new Repository(nodes.get(repository.getAttribute("adresse")),cal));
 		
