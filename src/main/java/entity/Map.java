@@ -3,6 +3,9 @@ package main.java.entity;
 
 import java.util.*;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import main.java.exception.DijkstraException;
 import main.java.exception.LoadMapException;
 import main.java.utils.Deserializer;
 
@@ -27,11 +30,6 @@ public class Map {
      */
     protected HashMap<Long,Set<Bow>> bowMap;
 
-    /**
-     * 
-     */
-    protected Deserializer chargingUnit;
-
 
 
     /**
@@ -42,7 +40,7 @@ public class Map {
     public Map(String filename) throws LoadMapException {
         // TODO implement here
     	try {
-    		chargingUnit.loadMap(filename, this);
+    		Deserializer.loadMap(filename, this);
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new LoadMapException(e.getMessage());
@@ -67,24 +65,24 @@ public class Map {
 		this.bowMap = new HashMap(bowMap);
 	}
 
-	public Deserializer getChargingUnit() {
-		return chargingUnit;
-	}
-
-	public void setChargingUnit(Deserializer chargingUnit) {
-		this.chargingUnit = chargingUnit;
-	}
-
-
 	/**
      * 
      * Dijkstra & co ;)
      * @param Node startNode; Node endNode 
      * @return
+	 * @throws DijkstraException 
      */
-    protected AtomicPath findShortestPath(Node startNode, Node endNode) {
-        // TODO implement here
-    	AtomicPath result = new AtomicPath();
+    protected AtomicPath[] findShortestPath(Delivery startDelivery, List<Delivery> arrivalDeliveries) throws DijkstraException {
+        if (!arrivalDeliveries.contains(startDelivery)) {
+        	throw new DijkstraException("Deliveries does not contains startDelivery.");
+        }
+    	
+    	Integer Distances[] = new Integer[arrivalDeliveries.size()];
+
+    	
+    	
+    	
+    	AtomicPath result[] = new AtomicPath[arrivalDeliveries.size()];
         return result;
     }
 

@@ -37,11 +37,6 @@ public class CircuitManagement {
      */
     private List<Delivery> deliveryList;
 
-    /**
-     * 
-     */
-    private Deserializer chargingUnit;
-
 
 
 
@@ -53,7 +48,7 @@ public class CircuitManagement {
      */
     protected void loadDeliveryList(String filename) throws LoadDeliveryException {
     	try {
-    		this.chargingUnit.loadDeliveries(filename, this.deliveryList, this.actualMap);
+    		Deserializer.loadDeliveries(filename, this.deliveryList, this.actualMap);
 		} catch (Exception e) {
 			throw new LoadDeliveryException(e.getMessage());
 		}
@@ -111,19 +106,20 @@ public class CircuitManagement {
     	}
     	if(groupedDeliveries.length>0){
     		this.circuitsList = new Circuit[groupedDeliveries.length];
-    		for(int i=0; i<groupedDeliveries.length; i++){
-    			List<Delivery> deliveryList = groupedDeliveries[i];
+    		for(int indexCircuits=0; indexCircuits<groupedDeliveries.length; indexCircuits++){
+    			List<Delivery> deliveryList = groupedDeliveries[indexCircuits];
     			AtomicPath allPaths[][] = new AtomicPath[deliveryList.size()][deliveryList.size()];
-    			for(int j=0; j< deliveryList.size(); j++){
-    				Delivery start = deliveryList.get(j);
-    				for(int k=0; k<deliveryList.size(); k++){
-    					if(j != k){
-	    					Delivery end = deliveryList.get(k);
-	    					allPaths[j][k] = this.actualMap.findShortestPath(start.getPosition(), end.getPosition());
-    					}
-    				}
+
+    			for(int indexDeliveryStart=0; indexDeliveryStart< deliveryList.size(); indexDeliveryStart++){
+    				Delivery start = deliveryList.get(indexDeliveryStart);
+    				try {
+						allPaths[indexDeliveryStart] = this.actualMap.findShortestPath(start, deliveryList);
+					} catch (DijkstraException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
     			}
-    			circuitsList[i] = new Circuit(deliveryList, allPaths);
+    			circuitsList[indexCircuits] = new Circuit(deliveryList, allPaths);
     		}
     	}
     }
