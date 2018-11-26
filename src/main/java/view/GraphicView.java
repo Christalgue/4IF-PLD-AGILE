@@ -25,24 +25,30 @@ public class GraphicView extends JPanel implements Observer {
 	
 	private int viewHeight;
 	private int viewWidth;
+	
 	private main.java.entity.CircuitManagement circuitManagement;
 	private Graphics2D g;
 	
+	private Color backgroundColor;
+	
 	/**
-	 * Cree la vue graphique permettant de dessiner plan avec l'echelle e dans la fenetre f
-	 * @param plan
-	 * @param e l'echelle
-	 * @param f la fenetre
+	 * Create the graphic view where the map will be drawn in Window windows
+	 * @param circuitManagement the CircuitManagement
+	 * @param windows the Window
 	 */
 	public GraphicView(main.java.entity.CircuitManagement circuitManagement, Window windows) {
 		super();
+		
 		circuitManagement.addObserver(this); // this observe circuitManagement
+		
 		viewHeight = windows.graphicViewHeight;
 		viewWidth = windows.graphicViewWidth;
 		setLayout(null);
-		setBackground(Color.white);
+		setBackground(backgroundColor);
 		setSize(viewWidth, viewHeight);
-		//windows.getContentPane().add(this);
+		
+		windows.getContentPane().add(this);
+		
 		this.circuitManagement = circuitManagement;
 		calculateScale(circuitManagement);
 	}
@@ -101,11 +107,18 @@ public class GraphicView extends JPanel implements Observer {
 	}
 	
 	
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	
+	/**
+	 * 
+	 * @return The color of the background of the map
+	 */
+	protected Color getBackgroundColor() {
+		return backgroundColor;
+	}
 }

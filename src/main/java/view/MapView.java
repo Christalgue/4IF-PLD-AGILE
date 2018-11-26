@@ -45,20 +45,13 @@ public class MapView extends JPanel {
 	private int width;
 	
 	/**
-     * The color of the background
-     */
-	private Color colorBackground;
-	
-	/**
 	 * 
 	 * @param colorRoad 		The color of the road
 	 * @param width 			The width of the road
-	 * @param colorBackground	The color of the background
 	 */
-	public MapView(Color colorRoad, int width, Color colorBackground, GraphicView graphicView) {
+	public MapView(Color colorRoad, int width,  GraphicView graphicView) {
 		this.colorRoad = colorRoad;
 		this.width = width;
-		this.colorBackground = colorBackground;
 		this.graphicView = graphicView;
 	}
 	
@@ -78,13 +71,6 @@ public class MapView extends JPanel {
 		return width;
 	}
 	
-	/**
-	 * 
-	 * @return The color of the background of the map
-	 */
-	protected Color getColorBackground() {
-		return colorBackground;
-	}
 	
 	protected void paintMap ( Graphics2D g, main.java.entity.Map map ) {
 		

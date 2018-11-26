@@ -23,7 +23,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 // https://examples.javacodegeeks.com/desktop-java/ide/eclipse/eclipse-windowbuilder-tutorial/
 
-public class Window {
+public class Window extends JFrame{
 	
 	protected final static String LOAD_MAP = "Charger un plan";
 	protected static final String LOAD_DELIVERY_OFFER = "Charger une demande de livraison";
