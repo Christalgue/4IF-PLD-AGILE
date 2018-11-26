@@ -41,7 +41,7 @@ public class AtomicPath {
 
 
 
-	protected double getLength() {
+	public double getLength() {
 		return length;
 	}
 
