@@ -134,7 +134,7 @@ public class Deserializer {
 		deliveriesList = new ArrayList<Delivery>(tempDeliveriesList);
 	}
 	
-	/**
+	
 	public static void main (String[] args)
 	{
 		try {
@@ -162,5 +162,5 @@ public class Deserializer {
 			e.printStackTrace();
 		}
 	}
-	*/
+	
 }

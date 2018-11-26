@@ -3,6 +3,9 @@ package main.java.entity;
 
 import java.util.*;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import main.java.exception.DijkstraException;
 import main.java.exception.LoadMapException;
 import main.java.utils.Deserializer;
 
@@ -81,9 +84,18 @@ public class Map {
      * Dijkstra & co ;)
      * @param Node startNode; Node endNode 
      * @return
+	 * @throws DijkstraException 
      */
-    protected AtomicPath[] findShortestPath(Node startNode, List<Delivery> arrivalDeliveries) {
-        // TODO implement here
+    protected AtomicPath[] findShortestPath(Delivery startDelivery, List<Delivery> arrivalDeliveries) throws DijkstraException {
+        if (!arrivalDeliveries.contains(startDelivery)) {
+        	throw new DijkstraException("Deliveries does not contains startDelivery.");
+        }
+    	
+    	Integer Distances[] = new Integer[arrivalDeliveries.size()];
+
+    	
+    	
+    	
     	AtomicPath result[] = new AtomicPath[arrivalDeliveries.size()];
         return result;
     }
