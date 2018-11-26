@@ -2,6 +2,7 @@ package main.java.controller;
 
 import main.java.exception.ClusteringException;
 import main.java.exception.DeliveryListNotCharged;
+import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
 import main.java.exception.MapNotChargedException;
@@ -42,6 +43,9 @@ public class DeliveryLoadedState extends DefaultState {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (DeliveryListNotCharged e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DijkstraException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
