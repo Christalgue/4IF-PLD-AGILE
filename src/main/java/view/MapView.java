@@ -42,16 +42,19 @@ public class MapView extends JPanel {
 	/**
      * The width of the road
      */
-	private int width;
+	private int roadWidth;
+	
+	private int nodeRadius;
 	
 	/**
 	 * 
 	 * @param colorRoad 		The color of the road
-	 * @param width 			The width of the road
+	 * @param roadWidth 			The width of the road
 	 */
-	public MapView(Color colorRoad, int width,  GraphicView graphicView) {
+	public MapView(Color colorRoad, int roadWidth, int nodeRadius, GraphicView graphicView) {
 		this.colorRoad = colorRoad;
-		this.width = width;
+		this.roadWidth = roadWidth;
+		this.nodeRadius = nodeRadius;
 		this.graphicView = graphicView;
 	}
 	
@@ -68,9 +71,17 @@ public class MapView extends JPanel {
 	 * @return The width of the road
 	 */
 	public int getWidth() {
-		return width;
+		return roadWidth;
 	}
 	
+	
+	/**
+	 * 
+	 * @return The radius of the node
+	 */
+	public int getRadius() {
+		return nodeRadius;
+	}	
 	
 	protected void paintMap ( Graphics2D g, main.java.entity.Map map ) {
 		
@@ -84,6 +95,11 @@ public class MapView extends JPanel {
 		
 		for( Map.Entry<Long, Set<Bow>> entry : bowMap.entrySet()) {
 		    
+			Long nodeID = entry.getKey();
+			Node node = nodeMap.get(nodeID);
+			
+			drawNode( g, node);
+			
 			Set <Bow> bows = entry.getValue();
 
 		    for ( Bow bowEntry : bows) {
@@ -103,10 +119,16 @@ public class MapView extends JPanel {
 		Point start = graphicView.nodeToPoint( startNode );
 		Point end = graphicView.nodeToPoint ( endNode);
 		
-		g.setStroke(new BasicStroke(width));
+		g.setStroke(new BasicStroke(roadWidth));
         g.draw(new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()));
 		
 	}
 	
+	public void drawNode( Graphics2D g, Node node) {
+		
+		Point point = graphicView.nodeToPoint( node );
+		g.fillOval((int) (point.getX()- nodeRadius/2) ,(int) (point.getY()- nodeRadius/2), nodeRadius,nodeRadius);
+		
+	}
 	
 }
