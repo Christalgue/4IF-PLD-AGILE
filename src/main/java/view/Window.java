@@ -3,10 +3,14 @@ package main.java.view;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import java.awt.TextField;
@@ -23,20 +27,40 @@ public class Window {
 	
 	protected final static String LOAD_MAP = "Charger un plan";
 	protected static final String LOAD_DELIVERY_OFFER = "Charger une demande de livraison";
-	protected static final String CALCULATE_CIRCUITS = "Calculer les tournées";
+	protected static final String CALCULATE_CIRCUITS = "Calculer les tournees";
 	protected static final String UNDO = "Undo";
 	protected static final String ADD_DELIVERY = "Ajouter une livraison";
 	protected static final String VALIDATE_ADD = "Valider l'ajout";
 	protected static final String CANCEL_ADD = "Annuler l'ajout";
-	protected static final String MOVE_DELIVERY = "Déplacer la livraison";
-	protected static final String VALIDATE_MOVE = "Valider le déplacement";
-	protected static final String CANCEL_MOVE = "Annuler le déplacement";
+	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
+	protected static final String VALIDATE_MOVE = "Valider le deplacement";
+	protected static final String CANCEL_MOVE = "Annuler le deplacement";
 	protected static final String DELETE_DELIVERY = "Supprimer la livraison";
 	protected static final String VALIDATE_DELETE = "Valider la suppression";
 	protected static final String CANCEL_DELETE = "Annuler la suppression";
 
 	private JFrame frame;
+	
+	private ArrayList<JButton> buttons;
+	private JLabel messageFrame;
+	//private GraphicView graphicView;
+	//private TextualView textualView;
+	private ButtonsListener buttonsListener;
+	private MouseListener mouseListener;
+	private KeyListener keyListener;
 
+	private final String[] buttonsTitles = new String[]{LOAD_MAP, LOAD_DELIVERY_OFFER, 
+			CALCULATE_CIRCUITS, UNDO, ADD_DELIVERY, VALIDATE_ADD,
+			CANCEL_ADD, MOVE_DELIVERY, VALIDATE_MOVE, CANCEL_MOVE,DELETE_DELIVERY, VALIDATE_DELETE, CANCEL_DELETE};
+	
+	protected static final int graphicViewHeight = 400;
+	protected static final int graphicViewWidth = 400;
+	
+	private final int messageFrameHeight = 80;
+	//private final int largeurVueTextuelle = 400;
+	
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -56,9 +80,28 @@ public class Window {
 	/**
 	 * Create the application.
 	 */
-	public Window() {
+	/*public Window( CircuitManagement circuitManagement, Controller controller ){
+		
+		setLayout(null);
+		createButtons(controller);
+		
+		/*messageFrame = new JLabel();
+		messageFrame.setBorder(BorderFactory.createTitledBorder("Messages..."));
+		getContentPane().add(messageFrame);*/
+		
+		/*graphicView = new graphicView (CircuitManagement circuitManagement, this);
+		
+		//textualView = new VueTextuelle(plan, this);
+		
+		mouseListener = new MouseListener(controller,GraphicView,this);
+		
+		addMouseListener(mouseListener);
+		addKeyListener = new keyListener(controller);
+		addKeyListener(keyListener);
+		
 		initialize();
-	}
+		setVisible(true);
+	}*/
 
 	/**
 	 * Initialize the contents of the frame.
