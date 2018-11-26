@@ -30,11 +30,6 @@ public class Map {
      */
     protected HashMap<Long,Set<Bow>> bowMap;
 
-    /**
-     * 
-     */
-    protected Deserializer chargingUnit;
-
 
 
     /**
@@ -45,7 +40,7 @@ public class Map {
     public Map(String filename) throws LoadMapException {
         // TODO implement here
     	try {
-    		chargingUnit.loadMap(filename, this);
+    		Deserializer.loadMap(filename, this);
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new LoadMapException(e.getMessage());
@@ -69,15 +64,6 @@ public class Map {
 	public void setBowMap(HashMap<Long, Set<Bow>> bowMap) {
 		this.bowMap = new HashMap(bowMap);
 	}
-
-	public Deserializer getChargingUnit() {
-		return chargingUnit;
-	}
-
-	public void setChargingUnit(Deserializer chargingUnit) {
-		this.chargingUnit = chargingUnit;
-	}
-
 
 	/**
      * 

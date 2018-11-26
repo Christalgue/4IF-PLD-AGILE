@@ -37,11 +37,6 @@ public class CircuitManagement {
      */
     private List<Delivery> deliveryList;
 
-    /**
-     * 
-     */
-    private Deserializer chargingUnit;
-
 
 
 
@@ -53,7 +48,7 @@ public class CircuitManagement {
      */
     protected void loadDeliveryList(String filename) throws LoadDeliveryException {
     	try {
-    		this.chargingUnit.loadDeliveries(filename, this.deliveryList, this.actualMap);
+    		Deserializer.loadDeliveries(filename, this.deliveryList, this.actualMap);
 		} catch (Exception e) {
 			throw new LoadDeliveryException(e.getMessage());
 		}
