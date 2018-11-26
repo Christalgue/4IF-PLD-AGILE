@@ -69,6 +69,16 @@ public class CircuitManagement extends Observable{
 	protected void setDeliveryList(List<Delivery> deliveryList) {
 		this.deliveryList = deliveryList;
 	}
+	
+	protected Repository getRepository() throws NoRepositoryException{
+		for(Delivery delivery : this.deliveryList){
+			if(delivery.getClass() == Delivery.class){
+				return (Repository)delivery;
+				
+			}
+		}
+		throw new NoRepositoryException("CircuitManagement.java : problem when getting the repository in deliveryList");
+	}
 
 	/**
      * @param filename
@@ -214,6 +224,7 @@ public class CircuitManagement extends Observable{
     	if(groupedDeliveries.size()>0){
     		this.circuitsList = new Circuit[groupedDeliveries.size()];
     		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
+    		
     		for(List<Delivery> arrivalDeliveries : groupedDeliveries){
     			for(Delivery departureDelivery : arrivalDeliveries){
     				try {
