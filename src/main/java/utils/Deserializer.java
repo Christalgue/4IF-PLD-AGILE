@@ -35,13 +35,13 @@ public class Deserializer {
 	    	throw new XMLException("The file is not valid");
 	}
 	
-	public static void loadDeliveries(String path, List<Delivery> deliveriesList, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
+	public static List<Delivery> loadDeliveries(String path, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    final DocumentBuilder builder = factory.newDocumentBuilder();		
 	    final Document document= builder.parse(path);
 	    final Element root = document.getDocumentElement();
 	    if (root.getNodeName().equals("demandeDeLivraisons")) 
-	        fillDeliveries(root, deliveriesList, map);
+	        return fillDeliveries(root, map);
 	    else
 	    	throw new XMLException("The file is not valid");
 	}
@@ -98,7 +98,7 @@ public class Deserializer {
 		map.setBowMap(tempBowMap);
 	}
 	
-	private static void fillDeliveries(Element root, List<Delivery> deliveriesList, Map map) throws XMLException{
+	private static List<Delivery> fillDeliveries(Element root, Map map) throws XMLException{
 		final NodeList repositories = root.getElementsByTagName("entrepot");
 		final NodeList deliveries = root.getElementsByTagName("livraison");
 		final int nbRepositories = repositories.getLength();
@@ -118,19 +118,34 @@ public class Deserializer {
 		try {
 			cal.setTime(sdf.parse(repository.getAttribute("heureDepart")));
 		} catch (ParseException e) {
-			e.printStackTrace();
+			throw new XMLException("Wrong format for hour of departure");
 		}
-		if (nodes.get(Long.parseLong(repository.getAttribute("adresse"))) == null) {
+		if (!nodes.containsKey(Long.parseLong(repository.getAttribute("adresse")))) {
 			throw new XMLException("Delivery place does not exist");
 		}
-		tempDeliveriesList.add(new Repository(nodes.get(repository.getAttribute("adresse")),cal));
+		tempDeliveriesList.add(new Repository(nodes.get(Long.parseLong(repository.getAttribute("adresse"))),cal));
 		
 		for (int i = 0; i<nbDelieveries; i++) {
 			Element element = (Element) deliveries.item(i);
-			tempDeliveriesList.add(new Delivery(nodes.get(element.getAttribute("adresse")),Integer.parseInt(element.getAttribute("duree"))));
+			
+			if (!nodes.containsKey(Long.parseLong(element.getAttribute("adresse")))) {
+				throw new XMLException("Delivery place does not exist");
+			}
+			
+			if(Integer.parseInt(element.getAttribute("duree"))<0){
+				throw new XMLException("A duration is negative");
+			}
+			
+			for(Delivery d : tempDeliveriesList){
+				if(d.getPosition().getId()==Long.parseLong(element.getAttribute("adresse"))) {
+					throw new XMLException("Duplicate address detected");
+				}
+			}
+				
+			tempDeliveriesList.add(new Delivery(nodes.get(Long.parseLong(element.getAttribute("adresse"))),Integer.parseInt(element.getAttribute("duree"))));
 		}
 		
-		deliveriesList = new ArrayList<Delivery>(tempDeliveriesList);
+		return tempDeliveriesList;
 	}
 	
 	/*

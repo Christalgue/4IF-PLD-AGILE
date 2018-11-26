@@ -48,7 +48,7 @@ public class CircuitManagement extends Observable{
      */
     public void loadDeliveryList(String filename) throws LoadDeliveryException {
     	try {
-    		Deserializer.loadDeliveries(filename, this.deliveryList, this.currentMap);
+    		this.deliveryList= new ArrayList<Delivery>(Deserializer.loadDeliveries(filename, this.currentMap));
 		} catch (Exception e) {
 			throw new LoadDeliveryException(e.getMessage());
 		}
