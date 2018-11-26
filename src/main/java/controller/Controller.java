@@ -8,7 +8,7 @@ public class Controller {
 	
 	protected CircuitManagement circuitManagement;
 	private Window window;
-	private State currentState;
+	public State currentState; // A REMETTRE EN PRIVATE
 	// Instances associees a chaque etat possible du controleur
 	protected final InitialState initState = new InitialState();
 	protected final CalcState  calcState = new  CalcState();
