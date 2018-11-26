@@ -60,7 +60,15 @@ public class CircuitManagement extends Observable{
     }
     
     
-    /**
+    public List<Delivery> getDeliveryList() {
+		return deliveryList;
+	}
+
+	protected void setDeliveryList(List<Delivery> deliveryList) {
+		this.deliveryList = deliveryList;
+	}
+
+	/**
      * @param filename
      * @throws LoadMapException 
      */
