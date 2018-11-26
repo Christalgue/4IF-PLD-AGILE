@@ -3,8 +3,11 @@ package test.java;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -12,8 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 import main.java.entity.Bow;
+import main.java.entity.Delivery;
 import main.java.entity.Map;
 import main.java.entity.Node;
+import main.java.exception.LoadMapException;
 import main.java.exception.XMLException;
 import main.java.utils.Deserializer;
 
@@ -26,7 +31,7 @@ class TestDeserializer {
 	 * 3) The file is empty
 	 * 4) The node of a bow does not exist
 	 * 5) The length of a bow is negative
-	 * 6) 
+	 * 6) Duplicate bow detected
 	 * 7) Everything is good
 	 */
 	void testLoadMap() {
@@ -145,8 +150,147 @@ class TestDeserializer {
 	}
 
 	@Test
+	/**
+	 * 1) The file does not exist
+	 * 2) The file is not valid
+	 * 3) The file has an incorrect number of repository
+	 * 4) The node of a delivery doesn't match to the map
+	 * 5) The duration of a delivery is negative
+	 * 6) Duplicate delivery detected
+	 * 7) Hour of departure has not the correct format
+	 * 8) Everything is good
+	 */
 	void testLoadDeliveries() {
-		fail("Not yet implemented");
+		List<Delivery> deliveries;
+		Map map;
+		try {
+			map = new Map("resources/tests/xml/plan_conforme2.xml");
+		
+			//1
+			try {
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/bonjour.xml", map));
+				fail("1) No exception thrown");
+			} catch (ParserConfigurationException e) {
+				fail("1) Parser Exception");
+			} catch (SAXException e) {
+				fail("1) SAX Exception");
+			} catch (IOException e) {
+			} catch (XMLException e) {
+				fail("1) XML Exception");
+			}
+			
+			//2
+			try {
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_non_conforme.xml", map));
+				fail("2) No exception thrown");
+			} catch (ParserConfigurationException e) {
+				fail("2) Parser Exception");
+			} catch (SAXException e) {
+				fail("2) SAX Exception");
+			} catch (IOException e) {
+				fail("2) IO Exception");
+			} catch (XMLException e) {
+				assertTrue(e.getMessage().contains("The file is not valid"),"2) Wrong XMLException"+e.getMessage());
+			}
+			
+			//3
+			try {
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_mauvais_nombre_entrepot.xml", map));
+				fail("3) No exception thrown");
+			} catch (ParserConfigurationException e) {
+				fail("3) Parser Exception");
+			} catch (SAXException e) {
+				fail("3) SAX Exception");
+			} catch (IOException e) {
+				fail("3) IO Exception");
+			} catch (XMLException e) {
+				assertTrue(e.getMessage().contains("Number of repository not valid"),"3) Wrong XMLException : "+e.getMessage());
+			}
+			
+			//4
+			try {
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_noeud_inexistant.xml", map));
+				fail("4) No exception thrown");
+			} catch (ParserConfigurationException e) {
+				fail("4) Parser Exception");
+			} catch (SAXException e) {
+				fail("4) SAX Exception");
+			} catch (IOException e) {
+				fail("4) IO Exception");
+			} catch (XMLException e) {
+				assertTrue(e.getMessage().contains("Delivery place does not exist"),"4) Wrong XMLException : "+e.getMessage());
+			}
+			
+			//5
+			try {
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_duree_negative.xml", map));
+				fail("5) No exception thrown");
+			} catch (ParserConfigurationException e) {
+				fail("5) Parser Exception");
+			} catch (SAXException e) {
+				fail("5) SAX Exception");
+			} catch (IOException e) {
+				fail("5) IO Exception");
+			} catch (XMLException e) {
+				assertTrue(e.getMessage().contains("A duration is negative"),"5) Wrong XMLException : "+e.getMessage());
+			}
+			
+			//6
+			try {
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_doublon.xml", map));
+				fail("6) No exception thrown");
+			} catch (ParserConfigurationException e) {
+				fail("6) Parser Exception");
+			} catch (SAXException e) {
+				fail("6) SAX Exception");
+			} catch (IOException e) {
+				fail("6) IO Exception");
+			} catch (XMLException e) {
+				assertTrue(e.getMessage().contains("Duplicate address detected"),"6) Wrong XMLException : "+e.getMessage());
+			}
+			
+			//7
+			try {
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_mauvais_format_heure.xml", map));
+				fail("7) No exception thrown");
+			} catch (ParserConfigurationException e) {
+				fail("7) Parser Exception");
+			} catch (SAXException e) {
+				fail("7) SAX Exception");
+			} catch (IOException e) {
+				e.printStackTrace();
+				fail("7) IO Exception "+e.getMessage());
+			} catch (XMLException e) {
+				assertTrue(e.getMessage().contains("Wrong format for hour of departure"),"7) Wrong XMLException : "+e.getMessage());
+			}
+			
+			//8
+			try {
+				int UTC = TimeZone.getDefault().getRawOffset();
+				System.out.println(UTC);
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_conforme.xml", map));
+				assertTrue(deliveries.get(0).getClass().getName().contains("main.java.entity.Repository"),"8) First delivery is not repository");
+				assertTrue(deliveries.get(0).getDuration()==0,"8) Wrong duration (0)"+deliveries.get(0).getDuration());
+				assertTrue(deliveries.get(0).getHourOfArrival().getTimeInMillis()+UTC==28800000,"8) Wrong hour of departure (28800000)"+(deliveries.get(0).getHourOfArrival().getTimeInMillis()+UTC));
+				assertTrue(deliveries.get(0).getHourOfDeparture().getTimeInMillis()+UTC==28800000,"8) Wrong hour of arrival (28800000)"+(deliveries.get(0).getHourOfDeparture().getTimeInMillis()+UTC));
+				assertTrue(deliveries.get(0).getPosition().getId()==1,"8) Wrong node (1)"+deliveries.get(0).getPosition());
+				assertTrue(deliveries.get(1).getDuration()==60,"8) Wrong duration (60)"+deliveries.get(1).getDuration());
+				assertTrue(deliveries.get(1).getPosition().getId()==2,"8) Wrong node (2)"+deliveries.get(1).getPosition());
+			} catch (ParserConfigurationException e) {
+				fail("8) Parser Exception");
+			} catch (SAXException e) {
+				fail("8) SAX Exception");
+			} catch (IOException e) {
+				fail("8) IO Exception");
+			} catch (XMLException e) {
+				fail("8) "+e.getMessage());
+			}
+			
+			
+			
+		} catch (LoadMapException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 }

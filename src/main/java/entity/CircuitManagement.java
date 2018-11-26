@@ -50,7 +50,7 @@ public class CircuitManagement extends Observable{
      */
     public void loadDeliveryList(String filename) throws LoadDeliveryException {
     	try {
-    		Deserializer.loadDeliveries(filename, this.deliveryList, this.currentMap);
+    		this.deliveryList= new ArrayList<Delivery>(Deserializer.loadDeliveries(filename, this.currentMap));
 		} catch (Exception e) {
 			throw new LoadDeliveryException(e.getMessage());
 		}
@@ -62,7 +62,15 @@ public class CircuitManagement extends Observable{
     }
     
     
-    /**
+    public List<Delivery> getDeliveryList() {
+		return deliveryList;
+	}
+
+	protected void setDeliveryList(List<Delivery> deliveryList) {
+		this.deliveryList = deliveryList;
+	}
+
+	/**
      * @param filename
      * @throws LoadMapException 
      */

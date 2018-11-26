@@ -9,9 +9,11 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Observer;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
+import main.java.entity.Bow;
 import main.java.entity.Node;
 import main.java.entity.Point;
 
@@ -107,6 +109,25 @@ public class GraphicView extends JPanel implements Observer {
 	}
 	
 	
+	public Node pointToNode( Point point ) {
+		
+		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();
+		
+		
+		for( Map.Entry<Long, Node> entry : nodeMap.entrySet()) {
+		    
+			Node currentNode = entry.getValue();
+			
+			if ( currentNode.getLongitude() == point.getX() && currentNode.getLatitude() == point.getY()  )
+				return currentNode;
+				
+		}
+		 return null;
+		
+	}
+	
+	
+	
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {
@@ -121,4 +142,9 @@ public class GraphicView extends JPanel implements Observer {
 	protected Color getBackgroundColor() {
 		return backgroundColor;
 	}
+	
+	protected Graphics2D getGraphic() {
+		return g;
+	}
+
 }
