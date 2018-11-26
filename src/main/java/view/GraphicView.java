@@ -4,20 +4,29 @@ import java.util.Map;
 import java.util.Observable;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Observer;
 
 import javax.swing.JPanel;
 
 import main.java.entity.Node;
+import main.java.entity.Point;
 
 public class GraphicView extends JPanel implements Observer {
 	
-	private int scale;
+	private int heightScale;
+	private int widthScale;
+	
+	private double originLat;
+	private double originLong;
+	
 	private int viewHeight;
 	private int viewWidth;
-	private main.java.entity.Map map;
-	private Graphics g;
+	private main.java.entity.CircuitManagement circuitManagement;
+	private Graphics2D g;
 	
 	/**
 	 * Cree la vue graphique permettant de dessiner plan avec l'echelle e dans la fenetre f
@@ -25,36 +34,78 @@ public class GraphicView extends JPanel implements Observer {
 	 * @param e l'echelle
 	 * @param f la fenetre
 	 */
-	public GraphicView(main.java.entity.Map map, Window windows) {
+	public GraphicView(main.java.entity.CircuitManagement circuitManagement, Window windows) {
 		super();
-		//map.addObserver(this); // this observe map
-		//viewHeight = map.getHauteur()*s;
-		//viewWidth = map.getLargeur()*s;
+		circuitManagement.addObserver(this); // this observe circuitManagement
+		viewHeight = windows.graphicViewHeight;
+		viewWidth = windows.graphicViewWidth;
 		setLayout(null);
 		setBackground(Color.white);
 		setSize(viewWidth, viewHeight);
 		//windows.getContentPane().add(this);
-		this.map = map;
-		calculateScale(map);
+		this.circuitManagement = circuitManagement;
+		calculateScale(circuitManagement);
 	}
 	
-	protected void calculateScale (main.java.entity.Map map) {
-		double minLat;
-		double maxLat;
-		double minLong;
-		double maxLong;
+	protected void calculateScale (main.java.entity.CircuitManagement circuitManagement) {
+
+		double minLat = Double.MAX_VALUE;
+		double maxLat = Double.MIN_VALUE;
+		double minLong = Double.MAX_VALUE;
+		double maxLong = Double.MIN_VALUE;
 		
-		HashMap<Long, Node> nodeMap = map.getNodeMap();
+		double currentLat;
+		double currentLong;
+		
+		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();
 		
 		for(Map.Entry<Long, Node> entry : nodeMap.entrySet()) {
 		    Node node = entry.getValue();
+		    
+		    currentLat = node.getLatitude();
+		    currentLong = node.getLongitude();
+		    
+		    if ( currentLat > maxLat )
+		    	maxLat = currentLat;
+		    else if (currentLat < minLat )
+		    	minLat = currentLat;
+		    	
+		    if ( currentLong > maxLong )
+		    	maxLong = currentLong;
+		    else if ( currentLong < minLong)
+		    	minLong = currentLong; 
 		}
+		
+		heightScale = (int) ((maxLat - minLat) /(double) viewHeight);
+		widthScale = (int) ((maxLong-minLong)/ (double) viewWidth);
+		
+		originLat = maxLat;
+		originLong = minLong;
+		
 	}
 
+
+	public Point nodeToPoint( Node node ) {
+		
+		Point p = new Point ((node.getLongitude()- originLong)/widthScale, (originLat - node.getLatitude())/heightScale );
+		return p;
+	
+	}
+	
+	public Point pointToLatLong( Point point ) {
+		
+		
+		Point p = new Point ( point.getX()*widthScale + originLong, -point.getY()*heightScale + originLat);
+		return p;
+		
+	}
+	
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	
 }

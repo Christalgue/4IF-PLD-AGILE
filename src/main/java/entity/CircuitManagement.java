@@ -20,7 +20,7 @@ public class CircuitManagement extends Observable{
     /**
      * 
      */
-    private Map actualMap;
+    private Map currentMap;
 
     /**
      * 
@@ -48,20 +48,25 @@ public class CircuitManagement extends Observable{
      */
     protected void loadDeliveryList(String filename) throws LoadDeliveryException {
     	try {
-    		Deserializer.loadDeliveries(filename, this.deliveryList, this.actualMap);
+    		Deserializer.loadDeliveries(filename, this.deliveryList, this.currentMap);
 		} catch (Exception e) {
 			throw new LoadDeliveryException(e.getMessage());
 		}
         
     }
 
+    public Map getCurrentMap() {
+    	return currentMap;
+    }
+    
+    
     /**
      * @param filename
      * @throws LoadMapException 
      */
     protected void loadMap(String filename) throws LoadMapException {
         try {
-			this.actualMap = new Map(filename);
+			this.currentMap = new Map(filename);
 		} catch (LoadMapException e) {
 			throw e; 
 		}
@@ -91,7 +96,7 @@ public class CircuitManagement extends Observable{
     		this.nbDeliveryMan = nbDeliveryman;
     	}
     	List<Delivery>[] groupedDeliveries;
-    	if(this.actualMap.getNodeMap().isEmpty()){
+    	if(this.currentMap.getNodeMap().isEmpty()){
     		throw new MapNotChargedException("Impossible to calculate the circuits"
     				+ "if there is not any Map in the system");
     	} else if (this.deliveryList.isEmpty()){
@@ -113,7 +118,7 @@ public class CircuitManagement extends Observable{
     			for(int indexDeliveryStart=0; indexDeliveryStart< deliveryList.size(); indexDeliveryStart++){
     				Delivery start = deliveryList.get(indexDeliveryStart);
     				try {
-						allPaths[indexDeliveryStart] = this.actualMap.findShortestPath(start, deliveryList);
+						allPaths[indexDeliveryStart] = this.currentMap.findShortestPath(start, deliveryList);
 					} catch (DijkstraException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
