@@ -19,7 +19,8 @@ public class AtomicPath extends Observable{
      */
     private List<Bow> path;
 
-    /**
+
+	/**
      * 
      */
     private double length;
@@ -61,7 +62,15 @@ public class AtomicPath extends Observable{
 		return length;
 	}
 
-    
+
+    @Override
+	public String toString() {
+		String s = "Route :\n";
+		for (Bow currentBow : this.path) {
+			s+=(currentBow.getStartNode().getId()+" => "+currentBow.getEndNode().getId()+" ("+currentBow.getLength()+")\n");
+		}
+		return s;
+	}    
 
 
 }
