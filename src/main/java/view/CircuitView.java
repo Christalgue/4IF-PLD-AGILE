@@ -1,6 +1,7 @@
 package main.java.view;
 
 import main.java.entity.Circuit;
+import java.awt.Color;
 
 public class CircuitView {
 	
@@ -13,7 +14,7 @@ public class CircuitView {
     /**
      * The color of the circuit
      */
-    private String color;
+    private Color color;
     
     /**
      * The width of the circuit
@@ -25,7 +26,7 @@ public class CircuitView {
      * @param color The color of the circuit
      * @param width The width of the circuit
      */
-    public CircuitView(String color, int width) {
+    public CircuitView(Color color, int width) {
     	this.color = color;
     	this.width = width;
     }
@@ -34,7 +35,7 @@ public class CircuitView {
      * 
      * @return The color of the circuit
      */
-    protected String getColor() {
+    protected Color getColor() {
     	return color;
     }
     
@@ -44,13 +45,5 @@ public class CircuitView {
      */
     protected int getWidth() {
     	return width;
-    }
-    
-    /**
-     * 
-     * @param circuit The circuit to write in the Json
-     */
-    protected void toJson (Circuit circuit) {
-    	
     }
 }
