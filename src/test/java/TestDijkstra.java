@@ -89,14 +89,16 @@ public class TestDijkstra {
 		arrivalDeliveries.add(delE);
 		
 		try {
-			AtomicPath[] myPaths = map.findShortestPath(delA, arrivalDeliveries);
-			for (AtomicPath path : myPaths) {
+			HashMap<Delivery,AtomicPath> myPaths = map.findShortestPath(delA, arrivalDeliveries);
+			for (HashMap.Entry<Delivery,AtomicPath> deliveryPathEntry : myPaths.entrySet()) {
+				Delivery currentDelivery = deliveryPathEntry.getKey();
+				AtomicPath currentAtomicPath = deliveryPathEntry.getValue();
+				System.out.println("");
 				System.out.println("Atomic Path : ");
-				/*for (Bow currentBow : path.) {
-					
-				}*/
+				for (Bow currentBow : currentAtomicPath.getPath()) {
+					System.out.println("Route : "+currentBow.getStartNode().getId()+" => "+currentBow.getEndNode().getId()+" ("+currentBow.getLength()+")");
+				}
 			}
-			
 			System.out.println("FIN TEST");
 		} catch (DijkstraException e1) {
 			// TODO Auto-generated catch block
