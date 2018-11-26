@@ -9,14 +9,14 @@ import main.java.controller.Controller;
 
 public class MouseListener extends MouseAdapter {
 
-	private Controlleur controller;
+	//private Controlleur controller;
 	private GraphicView graphicView;
 	//private TextualView textualView;
 	private Window window;
 
 	public MouseListener(Controller controller, GraphicView graphicView, Window window){
 	//public MouseListener(Controller controller, GraphicView graphicView, TextualView textualView, Window window){
-		this.controller = controller;
+		//this.controller = controller;
 		this.graphicView = graphicView;
 		//this.textualView = textualView;
 		this.window = window;

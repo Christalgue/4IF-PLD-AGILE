@@ -28,10 +28,10 @@ public class ButtonsListener implements ActionListener {
 		// Method called by the button listener each time a button is clicked
 		// Send to controller a message associated to the clicked button
 		switch (e.getActionCommand()){
-		case Window.LOAD_MAP: controller.loadMap(); break;
-		case Window.LOAD_DELIVERY_OFFER: controller.loadDeliveryOffer(); break;
+		//case Window.LOAD_MAP: controller.loadMap(); break;
+		//case Window.LOAD_DELIVERY_OFFER: controller.loadDeliveryOffer(); break;
 		case Window.CALCULATE_CIRCUITS: controller.calculateCircuits(); break;
-		case Window.UNDO: controller.undo(); break;
+		//case Window.UNDO: controller.undo(); break;
 		case Window.ADD_DELIVERY: controller.addDelivery(); break;
 		case Window.VALIDATE_ADD: controller.validateAdd(); break;
 		case Window.CANCEL_ADD: controller.cancelAdd(); break;

@@ -1,7 +1,7 @@
 package main.java.view;
 
 import java.util.Map;
-
+import java.util.Observable;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashMap;
@@ -49,6 +49,12 @@ public class GraphicView extends JPanel implements Observer {
 		for(Map.Entry<Long, Node> entry : nodeMap.entrySet()) {
 		    Node node = entry.getValue();
 		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
