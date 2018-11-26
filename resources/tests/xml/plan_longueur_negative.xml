@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<reseau>
+<noeud id="1" latitude="45.75406" longitude="4.857418"/>
+<noeud id="2" latitude="45.750404" longitude="4.8744674"/>
+<noeud id="3" latitude="45.75871" longitude="4.8704023"/>
+<noeud id="4" latitude="45.75171" longitude="4.8718166"/>
+<noeud id="5" latitude="45.750896" longitude="4.859119"/>
+<troncon destination="2" longueur="-53.651497" nomRue="Impasse Richelieu" origine="1"/>
+<troncon destination="3" longueur="37.097897" nomRue="Rue Richelieu" origine="1"/>
+<troncon destination="1" longueur="24.386381" nomRue="Rue Richelieu" origine="4"/>
+<troncon destination="4" longueur="51.028988" nomRue="Impasse Lafontaine" origine="2"/>
+<troncon destination="5" longueur="106.73056" nomRue="Rue Frédéric Passy" origine="3"/>
+<troncon destination="2" longueur="79.801414" nomRue="Rue Édouard Aynard" origine="5"/>
+</reseau>

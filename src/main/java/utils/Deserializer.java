@@ -44,6 +44,9 @@ public class Deserializer {
 		catch (final IOException e) {
 		    e.printStackTrace();
 		}
+		catch (final XMLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void loadDeliveries(String path, List<Delivery> deliveriesList, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
@@ -68,7 +71,7 @@ public class Deserializer {
 		}
 	}
 	
-	private static void fillMap(Element root, Map map){
+	private static void fillMap(Element root, Map map) throws XMLException{
 		final NodeList nodes = root.getElementsByTagName("noeud");
 		final NodeList bows = root.getElementsByTagName("troncon");
 		final int nbNodes = nodes.getLength();
@@ -82,12 +85,24 @@ public class Deserializer {
 			tempNodeMap.put(Long.parseLong(element.getAttribute("id")), new Node(Long.parseLong(element.getAttribute("id")),Double.parseDouble(element.getAttribute("latitude")),Double.parseDouble(element.getAttribute("longitude"))));
 		}
 		
+		if (tempNodeMap.size()==0)
+		{
+			throw new XMLException("Fichier vide");
+		}
+		
 		for (int i = 0; i<nbBows; i++) {
 			Element element = (Element) bows.item(i);
 			
 			long origin = Long.parseLong(element.getAttribute("origine"));
 			long arrival = Long.parseLong(element.getAttribute("destination"));
 			double length = Double.parseDouble(element.getAttribute("longueur"));
+			
+			if(!tempNodeMap.containsKey(origin) && !tempNodeMap.containsKey(arrival)) {
+				throw new XMLException("Noeud d'un troncon inexistant");
+			}
+			if (length < 0) {
+				throw new XMLException("Longueur negative");
+			}
 			String streetName = element.getAttribute("nomRue");
 			
 			if(!tempBowMap.containsKey(origin)){
@@ -123,7 +138,9 @@ public class Deserializer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		if (nodes.get(repository.getAttribute("adresse")) == null) {
+			throw new XMLException("Lieu de livraison inexistant");
+		}
 		tempDeliveriesList.add(new Repository(nodes.get(repository.getAttribute("adresse")),cal));
 		
 		for (int i = 0; i<nbDelieveries; i++) {

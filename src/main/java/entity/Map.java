@@ -11,7 +11,7 @@ import main.java.utils.Deserializer;
 /**
  * 
  */
-public class Map {
+public class Map extends Observable{
 
     /**
      * Default constructor

@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * 
  */
-public class AtomicPath {
+public class AtomicPath extends Observable{
 
     /**
      * Default constructor
@@ -41,7 +41,7 @@ public class AtomicPath {
 
 
 
-	protected double getLength() {
+	public double getLength() {
 		return length;
 	}
 

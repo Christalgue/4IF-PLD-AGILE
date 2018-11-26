@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * 
  */
-public class Bow {
+public class Bow extends Observable{
 
     /**
      * Default constructor
