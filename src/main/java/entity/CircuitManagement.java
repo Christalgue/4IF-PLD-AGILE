@@ -197,8 +197,7 @@ public class CircuitManagement extends Observable{
     	if(nbDeliveryman>0){
     		this.nbDeliveryMan = nbDeliveryman;
     	}
-    	List<Delivery>[] groupedDeliveries;
-    	//List<List<Delivery>> groupedDeliveries;
+    	List<ArrayList<Delivery>> groupedDeliveries;
     	if(this.currentMap.getNodeMap().isEmpty()){
     		throw new MapNotChargedException("Impossible to calculate the circuits"
     				+ "if there is not any Map in the system");
@@ -212,8 +211,8 @@ public class CircuitManagement extends Observable{
 				throw e;
 			}
     	}
-    	if(groupedDeliveries.length>0){
-    		this.circuitsList = new Circuit[groupedDeliveries.length];
+    	if(groupedDeliveries.size()>0){
+    		this.circuitsList = new Circuit[groupedDeliveries.size()];
     		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
     		for(List<Delivery> arrivalDeliveries : groupedDeliveries){
     			for(Delivery departureDelivery : arrivalDeliveries){
