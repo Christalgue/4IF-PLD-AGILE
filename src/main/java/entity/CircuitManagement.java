@@ -46,7 +46,7 @@ public class CircuitManagement extends Observable{
      * @return
      * @throws LoadDeliveryException 
      */
-    protected void loadDeliveryList(String filename) throws LoadDeliveryException {
+    public void loadDeliveryList(String filename) throws LoadDeliveryException {
     	try {
     		Deserializer.loadDeliveries(filename, this.deliveryList, this.actualMap);
 		} catch (Exception e) {
@@ -59,7 +59,7 @@ public class CircuitManagement extends Observable{
      * @param filename
      * @throws LoadMapException 
      */
-    protected void loadMap(String filename) throws LoadMapException {
+    public void loadMap(String filename) throws LoadMapException {
         try {
 			this.actualMap = new Map(filename);
 		} catch (LoadMapException e) {
@@ -85,7 +85,7 @@ public class CircuitManagement extends Observable{
      * @throws DeliveryListNotCharged 
      * @throws ClusteringException 
      */
-    protected void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException {
+    public void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException {
     	
     	if(nbDeliveryman>0){
     		this.nbDeliveryMan = nbDeliveryman;
@@ -104,7 +104,8 @@ public class CircuitManagement extends Observable{
 				throw e;
 			}
     	}
-    	if(groupedDeliveries.length>0){
+    	// refactor multimap atomic path
+    	/*if(groupedDeliveries.length>0){
     		this.circuitsList = new Circuit[groupedDeliveries.length];
     		for(int indexCircuits=0; indexCircuits<groupedDeliveries.length; indexCircuits++){
     			List<Delivery> deliveryList = groupedDeliveries[indexCircuits];
@@ -121,7 +122,7 @@ public class CircuitManagement extends Observable{
     			}
     			circuitsList[indexCircuits] = new Circuit(deliveryList, allPaths);
     		}
-    	}
+    	}*/
     }
 
 	
