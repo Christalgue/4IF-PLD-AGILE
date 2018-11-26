@@ -17,7 +17,7 @@ public interface TSP {
 	 * @param allPathes : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
 	 * @param duree : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
 	 */
-	public void searchSolution(int limitTime, List<Delivery> deliveries, AtomicPath[][] allPathes, int[] duree);
+	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes, int[] duree);
 	
 	/**
 	 * @param i

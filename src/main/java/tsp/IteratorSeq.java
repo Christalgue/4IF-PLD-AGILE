@@ -3,32 +3,34 @@ package main.java.tsp;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class IteratorSeq implements Iterator<Integer> {
+import main.java.entity.Delivery;
 
-	private Integer[] candidats;
-	private int nbCandidats;
+public class IteratorSeq implements Iterator<Delivery> {
+
+	private Delivery[] candidates;
+	private int nbCandidates;
 
 	/**
 	 * Cree un iterateur pour iterer sur l'ensemble des sommets de nonVus
 	 * @param nonVus
 	 * @param sommetCrt
 	 */
-	public IteratorSeq(Collection<Integer> nonVus, int sommetCrt){
-		this.candidats = new Integer[nonVus.size()];
-		nbCandidats = 0;
-		for (Integer s : nonVus){
-			candidats[nbCandidats++] = s;
+	public IteratorSeq(Collection<Delivery> nonVus, Delivery sommetCrt){
+		this.candidates = new Delivery[nonVus.size()];
+		nbCandidates = 0;
+		for (Delivery s : nonVus){
+			candidates[nbCandidates++] = s;
 		}
 	}
 	
 	@Override
 	public boolean hasNext() {
-		return nbCandidats > 0;
+		return nbCandidates > 0;
 	}
 
 	@Override
-	public Integer next() {
-		return candidats[--nbCandidats];
+	public Delivery next() {
+		return candidates[--nbCandidates];
 	}
 
 	@Override
