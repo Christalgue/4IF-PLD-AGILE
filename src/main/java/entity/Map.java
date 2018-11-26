@@ -82,9 +82,9 @@ public class Map {
      * @param Node startNode; Node endNode 
      * @return
      */
-    protected AtomicPath findShortestPath(Node startNode, Node endNode) {
+    protected AtomicPath[] findShortestPath(Node startNode, List<Delivery> arrivalDeliveries) {
         // TODO implement here
-    	AtomicPath result = new AtomicPath();
+    	AtomicPath result[] = new AtomicPath[arrivalDeliveries.size()];
         return result;
     }
 

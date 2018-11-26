@@ -116,12 +116,7 @@ public class CircuitManagement {
     			AtomicPath allPaths[][] = new AtomicPath[deliveryList.size()][deliveryList.size()];
     			for(int j=0; j< deliveryList.size(); j++){
     				Delivery start = deliveryList.get(j);
-    				for(int k=0; k<deliveryList.size(); k++){
-    					if(j != k){
-	    					Delivery end = deliveryList.get(k);
-	    					allPaths[j][k] = this.actualMap.findShortestPath(start.getPosition(), end.getPosition());
-    					}
-    				}
+    				allPaths[j] = this.actualMap.findShortestPath(start.getPosition(), deliveryList);
     			}
     			circuitsList[i] = new Circuit(deliveryList, allPaths);
     		}
