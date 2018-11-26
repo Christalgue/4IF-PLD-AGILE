@@ -9,7 +9,7 @@ import main.java.utils.Deserializer;
 /**
  * 
  */
-public class CircuitManagement {
+public class CircuitManagement extends Observable{
 
     /**
      * Default constructor

@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * 
  */
-public class AtomicPath {
+public class AtomicPath extends Observable{
 
     /**
      * Default constructor
