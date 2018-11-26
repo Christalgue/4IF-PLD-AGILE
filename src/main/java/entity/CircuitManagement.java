@@ -20,7 +20,7 @@ public class CircuitManagement extends Observable{
     /**
      * 
      */
-    private Map actualMap;
+    private Map currentMap;
 
     /**
      * 
@@ -46,22 +46,27 @@ public class CircuitManagement extends Observable{
      * @return
      * @throws LoadDeliveryException 
      */
-    protected void loadDeliveryList(String filename) throws LoadDeliveryException {
+    public void loadDeliveryList(String filename) throws LoadDeliveryException {
     	try {
-    		Deserializer.loadDeliveries(filename, this.deliveryList, this.actualMap);
+    		Deserializer.loadDeliveries(filename, this.deliveryList, this.currentMap);
 		} catch (Exception e) {
 			throw new LoadDeliveryException(e.getMessage());
 		}
         
     }
 
+    public Map getCurrentMap() {
+    	return currentMap;
+    }
+    
+    
     /**
      * @param filename
      * @throws LoadMapException 
      */
-    protected void loadMap(String filename) throws LoadMapException {
+    public void loadMap(String filename) throws LoadMapException {
         try {
-			this.actualMap = new Map(filename);
+			this.currentMap = new Map(filename);
 		} catch (LoadMapException e) {
 			throw e; 
 		}
@@ -85,13 +90,13 @@ public class CircuitManagement extends Observable{
      * @throws DeliveryListNotCharged 
      * @throws ClusteringException 
      */
-    protected void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException {
+    public void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException {
     	
     	if(nbDeliveryman>0){
     		this.nbDeliveryMan = nbDeliveryman;
     	}
     	List<Delivery>[] groupedDeliveries;
-    	if(this.actualMap.getNodeMap().isEmpty()){
+    	if(this.currentMap.getNodeMap().isEmpty()){
     		throw new MapNotChargedException("Impossible to calculate the circuits"
     				+ "if there is not any Map in the system");
     	} else if (this.deliveryList.isEmpty()){
@@ -104,7 +109,8 @@ public class CircuitManagement extends Observable{
 				throw e;
 			}
     	}
-    	if(groupedDeliveries.length>0){
+    	// refactor multimap atomic path
+    	/*if(groupedDeliveries.length>0){
     		this.circuitsList = new Circuit[groupedDeliveries.length];
     		for(int indexCircuits=0; indexCircuits<groupedDeliveries.length; indexCircuits++){
     			List<Delivery> deliveryList = groupedDeliveries[indexCircuits];
@@ -113,7 +119,7 @@ public class CircuitManagement extends Observable{
     			for(int indexDeliveryStart=0; indexDeliveryStart< deliveryList.size(); indexDeliveryStart++){
     				Delivery start = deliveryList.get(indexDeliveryStart);
     				try {
-						allPaths[indexDeliveryStart] = this.actualMap.findShortestPath(start, deliveryList);
+						allPaths[indexDeliveryStart] = this.currentMap.findShortestPath(start, deliveryList);
 					} catch (DijkstraException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -121,7 +127,7 @@ public class CircuitManagement extends Observable{
     			}
     			circuitsList[indexCircuits] = new Circuit(deliveryList, allPaths);
     		}
-    	}
+    	}*/
     }
 
 	

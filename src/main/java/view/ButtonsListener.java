@@ -30,7 +30,7 @@ public class ButtonsListener implements ActionListener {
 		switch (e.getActionCommand()){
 		//case Window.LOAD_MAP: controller.loadMap(); break;
 		//case Window.LOAD_DELIVERY_OFFER: controller.loadDeliveryOffer(); break;
-		case Window.CALCULATE_CIRCUITS: controller.calculateCircuits(); break;
+		//case Window.CALCULATE_CIRCUITS: controller.calculateCircuits(); break;
 		//case Window.UNDO: controller.undo(); break;
 		case Window.ADD_DELIVERY: controller.addDelivery(); break;
 		case Window.VALIDATE_ADD: controller.validateAdd(); break;

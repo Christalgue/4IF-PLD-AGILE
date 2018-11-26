@@ -9,12 +9,4 @@ public class DeliveryView {
 	 */
 	public DeliveryView () {
 	}
-	
-	/**
-	 * 
-	 * @param delivery The delivery to write in the Json
-	 */
-	protected void toJson (Delivery delivery) {
-		
-	}
 }

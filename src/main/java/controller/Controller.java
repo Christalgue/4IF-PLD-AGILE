@@ -1,11 +1,12 @@
 package main.java.controller;
 
 import main.java.entity.CircuitManagement;
+import main.java.entity.Node;
 import main.java.view.Window;
 
 public class Controller {
 	
-	private CircuitManagement circuitManagement;
+	protected CircuitManagement circuitManagement;
 	private Window window;
 	private State currentState;
 	// Instances associees a chaque etat possible du controleur
@@ -36,8 +37,8 @@ public class Controller {
 		currentState.loadDeliveryOffer(this, window, filename);
 	}
 	
-	public void calculateCircuits() {
-		currentState.calculateCircuits(this, window);
+	public void calculateCircuits(int nbDeliveryMan) {
+		currentState.calculateCircuits(this, window, nbDeliveryMan);
 	}
 	
 	/*public void undo() {
@@ -88,8 +89,8 @@ public class Controller {
 	/**
 	 * 
 	 */
-	public void leftClick(){
-		currentState.leftClick(this, window);
+	public void leftClick(Node node, boolean exist){
+		currentState.leftClick(this, window, node, exist);
 	}
 
 	/**

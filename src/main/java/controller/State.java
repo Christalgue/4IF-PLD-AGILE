@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import main.java.entity.Node;
 import main.java.view.Window;
 
 public interface State {
@@ -8,7 +9,7 @@ public interface State {
 	
 	public void loadDeliveryOffer(Controller controler, Window window, String filename);
 	
-	public void calculateCircuits(Controller controler, Window window);
+	public void calculateCircuits(Controller controler, Window window, int nbDeliveryMan);
 	
 	//public void undo();
 	
@@ -25,7 +26,7 @@ public interface State {
 	
 	public void rightClick(Controller controler, Window window);
 	
-	public void leftClick(Controller controler, Window window);
+	public void leftClick(Controller controler, Window window, Node node, boolean exist);
 	
 	public void movedMouse(Controller controler, Window window);
 	
