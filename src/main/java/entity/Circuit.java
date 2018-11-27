@@ -95,7 +95,7 @@ public class Circuit extends Observable{
 		this.circuitLength = circuitLength;
 	}
 
-	protected List<AtomicPath> getPath() {
+	public List<AtomicPath> getPath() {
 		return path;
 	}
 
