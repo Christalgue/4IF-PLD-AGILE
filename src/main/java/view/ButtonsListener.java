@@ -32,7 +32,7 @@ public class ButtonsListener implements ActionListener {
 		//case Window.LOAD_DELIVERY_OFFER: controller.loadDeliveryOffer(); break;
 		//case Window.CALCULATE_CIRCUITS: controller.calculateCircuits(); break;
 		//case Window.UNDO: controller.undo(); break;
-		case Window.ADD_DELIVERY: controller.addDelivery(); break;
+		/*case Window.ADD_DELIVERY: controller.addDelivery(); break;
 		case Window.VALIDATE_ADD: controller.validateAdd(); break;
 		case Window.CANCEL_ADD: controller.cancelAdd(); break;
 		case Window.MOVE_DELIVERY: controller.moveDelivery();break;
@@ -40,7 +40,7 @@ public class ButtonsListener implements ActionListener {
 		case Window.CANCEL_MOVE: controller.cancelMove(); break;
 		case Window.DELETE_DELIVERY: controller.deleteDelivery(); break;
 		case Window.VALIDATE_DELETE: controller.validateDelete(); break;
-		case Window.CANCEL_DELETE: controller.cancelDelete(); break;
+		case Window.CANCEL_DELETE: controller.cancelDelete(); break;*/
 
 		}
 	}

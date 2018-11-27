@@ -21,8 +21,8 @@ import main.java.entity.Point;
 
 public class GraphicView extends JPanel implements Observer {
 	
-	private int heightScale;
-	private int widthScale;
+	private double heightScale;
+	private double widthScale;
 	
 	private double originLat;
 	private double originLong;
@@ -33,8 +33,6 @@ public class GraphicView extends JPanel implements Observer {
 	private main.java.entity.CircuitManagement circuitManagement;
 	private Graphics2D g;
 	
-	private Color backgroundColor;
-	
 	private MapView mapView;
 	private CircuitView circuitView;
 	private DeliveryView deliveryView;
@@ -44,9 +42,8 @@ public class GraphicView extends JPanel implements Observer {
 	/**
 	 * Create the graphic view where the map will be drawn in Window windows
 	 * @param circuitManagement the CircuitManagement
-	 * @param windows the Window
 	 */
-	public GraphicView(main.java.entity.CircuitManagement circuitManagement, Window windows, int viewHeight, int viewWidth) {
+	public GraphicView(main.java.entity.CircuitManagement circuitManagement, int viewHeight, int viewWidth) {
 		
 		super();
 		
@@ -54,20 +51,15 @@ public class GraphicView extends JPanel implements Observer {
 		
 		this.viewHeight = viewHeight;
 		this.viewWidth = viewWidth;
-		
-		setLayout(null);
-		setBackground(backgroundColor);
-		setSize(viewWidth, viewHeight);
-		windows.getContentPane().add(this);
 	
 		this.circuitManagement = circuitManagement;
 		calculateScale(circuitManagement);
+		System.out.println(heightScale + " " + widthScale);
 	
-		mapView = new MapView (Color.WHITE, 10, 10, this);
-		circuitView = new CircuitView(this, 10 );
-		deliveryView =new DeliveryView (Color.RED, 10, this);
+		mapView = new MapView (Color.WHITE, 7,15, this);
+		circuitView = new CircuitView(this, 10);
+		deliveryView =new DeliveryView (Color.RED, 15, this);
 		
-		paintComponent(g);
 	}
 	
 	protected void calculateScale (main.java.entity.CircuitManagement circuitManagement) {
@@ -99,12 +91,18 @@ public class GraphicView extends JPanel implements Observer {
 		    	minLong = currentLong; 
 		}
 		
-		heightScale = (int) ((maxLat - minLat) /(double) viewHeight);
-		widthScale = (int) ((maxLong-minLong)/ (double) viewWidth);
+		heightScale = (double) ((maxLat - minLat) /(double) viewHeight);
+		widthScale = (double) ((maxLong-minLong)/ (double) viewWidth);
 		
 		originLat = maxLat;
 		originLong = minLong;
 		
+		/*System.out.println("heightScale " + heightScale);
+		System.out.println("widthScale " + widthScale);
+		System.out.println("originLat " + originLat);
+		System.out.println("originLong " + originLong);
+		System.out.println("minLat " + minLat);
+		System.out.println("maxLong " + maxLong);*/
 	}
 
 
@@ -149,41 +147,44 @@ public class GraphicView extends JPanel implements Observer {
 		repaint();
 	}
 
+	public void paintComponent() {
+		
+		paintComponent(g);
+	}
 	
 	/**
 	 * Methode appelee a chaque fois que VueGraphique doit etre redessinee
 	 */
-	public void paintComponent(Graphics2D g) {
+	public void paintComponent(Graphics2D g2D) {
 		
-		super.paintComponent(g);
 		
-		mapView.paintMap(g, circuitManagement.getCurrentMap());
+		mapView.paintMap(g2D, circuitManagement.getCurrentMap());
 		
-		int colorIndex =0;
+		/*int colorIndex =0;
 		
 		for( Circuit entry : circuitManagement.getCircuitsList() ) {
 		    
-			circuitView.paintCircuit(g, entry, color[colorIndex%color.length]);
+			circuitView.paintCircuit(g2D, entry, color[colorIndex%color.length]);
 			colorIndex++;
 			
-		}
+		}*/
 		
-		deliveryView.paintDeliveries(g,circuitManagement.getDeliveryList());
+		deliveryView.paintDeliveries(g2D,circuitManagement.getDeliveryList());
 		
-	}
-	
-	
-	
-	/**
-	 * 
-	 * @return The color of the background of the map
-	 */
-	protected Color getBackgroundColor() {
-		return backgroundColor;
 	}
 	
 	protected Graphics2D getGraphic() {
 		return g;
+	}
+	
+	protected void setGraphics() {
+		g = (Graphics2D) this.getGraphics();
+		System.out.println(g);
+	}
+	
+	protected void paintRectangle() {
+		g.setColor(Color.RED);
+		g.fillRect(10, 10, 80, 80);
 	}
 
 }

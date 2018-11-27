@@ -84,9 +84,6 @@ public class MapView extends JPanel {
 	}	
 	
 	protected void paintMap ( Graphics2D g, main.java.entity.Map map ) {
-		
-		
-		super.paintComponent(g);
 		g.setColor(colorRoad);
 		
 		HashMap<Long,Set<Bow>> bowMap = map.getBowMap();
