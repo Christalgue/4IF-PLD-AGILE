@@ -61,6 +61,10 @@ public class CircuitManagement extends Observable{
     	return currentMap;
     }
     
+    public List<Circuit> getCircuitsList(){
+    	return circuitsList;
+    }
+    
     
     public List<Delivery> getDeliveryList() {
 		return deliveryList;

@@ -30,11 +30,6 @@ public class CircuitView extends JPanel {
 	private GraphicView graphicView;
     
     /**
-     * The color of the circuit
-     */
-    private Color color;
-    
-    /**
      * The width of the circuit
      */
     private int roadWidth;
@@ -44,18 +39,9 @@ public class CircuitView extends JPanel {
      * @param color The color of the circuit
      * @param width The width of the circuit
      */
-    public CircuitView( GraphicView graphicView, Color color, int width) {
+    public CircuitView( GraphicView graphicView, int width) {
     	this.graphicView= graphicView;
-    	this.color = color;
     	this.roadWidth = width;
-    }
-    
-    /**
-     * 
-     * @return The color of the circuit
-     */
-    protected Color getColor() {
-    	return color;
     }
     
     /**
@@ -66,7 +52,7 @@ public class CircuitView extends JPanel {
     	return roadWidth;
     }
 
-	protected void paintCircuit ( Graphics2D g, Circuit circuit ) {
+	protected void paintCircuit ( Graphics2D g, Circuit circuit, Color color ) {
 		
 		
 		super.paintComponent(g);

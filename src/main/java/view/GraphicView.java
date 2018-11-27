@@ -14,6 +14,8 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import main.java.entity.Bow;
+import main.java.entity.Circuit;
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
 
@@ -33,26 +35,39 @@ public class GraphicView extends JPanel implements Observer {
 	
 	private Color backgroundColor;
 	
+	private MapView mapView;
+	private CircuitView circuitView;
+	private DeliveryView deliveryView;
+	
+	Color color [] = { Color.RED, Color.BLUE, Color.GRAY, Color.GREEN, Color.PINK };
+	
 	/**
 	 * Create the graphic view where the map will be drawn in Window windows
 	 * @param circuitManagement the CircuitManagement
 	 * @param windows the Window
 	 */
-	public GraphicView(main.java.entity.CircuitManagement circuitManagement, Window windows) {
+	public GraphicView(main.java.entity.CircuitManagement circuitManagement, Window windows, int viewHeight, int viewWidth) {
+		
 		super();
 		
 		circuitManagement.addObserver(this); // this observe circuitManagement
 		
-		viewHeight = windows.graphicViewHeight;
-		viewWidth = windows.graphicViewWidth;
+		this.viewHeight = viewHeight;
+		this.viewWidth = viewWidth;
+		
 		setLayout(null);
 		setBackground(backgroundColor);
 		setSize(viewWidth, viewHeight);
-		
 		windows.getContentPane().add(this);
-		
+	
 		this.circuitManagement = circuitManagement;
 		calculateScale(circuitManagement);
+	
+		mapView = new MapView (Color.WHITE, 10, 10, this);
+		circuitView = new CircuitView(this, 10 );
+		deliveryView =new DeliveryView (Color.RED, 10, this);
+		
+		paintComponent(g);
 	}
 	
 	protected void calculateScale (main.java.entity.CircuitManagement circuitManagement) {
@@ -128,13 +143,37 @@ public class GraphicView extends JPanel implements Observer {
 	
 	
 	
-	
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
-		
+		repaint();
 	}
 
+	
+	/**
+	 * Methode appelee a chaque fois que VueGraphique doit etre redessinee
+	 */
+	public void paintComponent(Graphics2D g) {
+		
+		super.paintComponent(g);
+		
+		mapView.paintMap(g, circuitManagement.getCurrentMap());
+		
+		int colorIndex =0;
+		
+		for( Circuit entry : circuitManagement.getCircuitsList() ) {
+		    
+			circuitView.paintCircuit(g, entry, color[colorIndex%color.length]);
+			colorIndex++;
+			
+		}
+		
+		deliveryView.paintDeliveries(g,circuitManagement.getDeliveryList());
+		
+	}
+	
+	
+	
 	/**
 	 * 
 	 * @return The color of the background of the map
