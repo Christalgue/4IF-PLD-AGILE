@@ -84,10 +84,6 @@ public class CircuitManagement extends Observable{
 		throw new NoRepositoryException("CircuitManagement.java : problem when getting the repository in deliveryList");
 	}
 
-	public List<Circuit> getCircuitsList() {
-		return circuitsList;
-	}
-
 	public int getNbDeliveryMan() {
 		return nbDeliveryMan;
 	}
