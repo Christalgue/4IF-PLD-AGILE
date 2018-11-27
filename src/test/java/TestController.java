@@ -10,6 +10,9 @@ import main.java.entity.CircuitManagement;
 class TestController {
 
 	@Test
+	/**
+	 * 
+	 */
 	void testChangeState() {
 		CircuitManagement cm = new CircuitManagement();
 		Controller c = new Controller (cm);
