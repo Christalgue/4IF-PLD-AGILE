@@ -70,6 +70,8 @@ public class Map extends Observable{
      * @return
 	 * @throws DijkstraException 
      */
+	
+	// A METTRE EN NODE
     public HashMap<Delivery,AtomicPath> findShortestPath(Delivery startDelivery, List<Delivery> arrivalDeliveries) throws DijkstraException {
         if (!arrivalDeliveries.contains(startDelivery)) {
         	throw new DijkstraException("Deliveries does not contains startDelivery.");

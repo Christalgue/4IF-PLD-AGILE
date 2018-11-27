@@ -73,7 +73,7 @@ public class DeliveryView extends JPanel {
 	
 	protected void paintDeliveries ( Graphics2D g,  List<Delivery> deliveryList ) {
 		
-		super.paintComponent(g);
+		//super.paintComponent(g);
 		g.setColor(deliveryColor);
 		
 		for( Delivery entry : deliveryList ) {
