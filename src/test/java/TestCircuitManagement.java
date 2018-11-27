@@ -33,8 +33,8 @@ class TestCircuitManagement {
 			CircuitManager.setNbDeliveryMan(2);
 	    	
 	    	List<ArrayList<Delivery>> distribution = CircuitManager.KmeansClustering();
-	    	int nbDeliveries1 = distribution.get(1).size();
-	    	int nbDeliveries2 = distribution.get(2).size();
+	    	int nbDeliveries1 = distribution.get(0).size();
+	    	int nbDeliveries2 = distribution.get(1).size();
 	    	
 	    	assertTrue(nbDeliveries1<=nbDeliveries2+1 || nbDeliveries1>=nbDeliveries1-1, "Error, bad repartition of deliveries => "+nbDeliveries1+" vs "+nbDeliveries2);
 
