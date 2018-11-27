@@ -33,12 +33,12 @@ public class MouseListener extends MouseAdapter {
 			Node n = graphicView.pointToNode(p);
 			if (p != null) {
 				
-				//if(this.controller.circuitManagement.checkNodeInDeliveryList(n));
-				//{
+				if(this.controller.circuitManagement.checkNodeInDeliveryList(n))
+				{
 					this.controller.leftClick(n, true);
-				//} else {
-					//		this.controller.leftClick(n, false);
-			//}
+				} else {
+						this.controller.leftClick(n, false);
+				}
 			}
 				//controleur.clic(p);*/
 		}
