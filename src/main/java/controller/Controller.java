@@ -6,7 +6,7 @@ import main.java.view.Window;
 
 public class Controller {
 	
-	protected CircuitManagement circuitManagement;
+	public CircuitManagement circuitManagement;
 	private Window window;
 	public State currentState; // A REMETTRE EN PRIVATE
 	// Instances associees a chaque etat possible du controleur
