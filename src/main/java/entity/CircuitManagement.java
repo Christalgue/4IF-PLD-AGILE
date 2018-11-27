@@ -32,7 +32,7 @@ public class CircuitManagement extends Observable{
     /**
      * 
      */
-    private Circuit[] circuitsList;
+    private List<Circuit> circuitsList;
 
     /**
      * 
@@ -68,6 +68,16 @@ public class CircuitManagement extends Observable{
 
 	public void setDeliveryList(List<Delivery> deliveryList) {
 		this.deliveryList = deliveryList;
+	}
+	
+	protected Repository getRepository() throws NoRepositoryException{
+		for(Delivery delivery : this.deliveryList){
+			if(delivery.getClass() == Delivery.class){
+				return (Repository)delivery;
+				
+			}
+		}
+		throw new NoRepositoryException("CircuitManagement.java : problem when getting the repository in deliveryList");
 	}
 
 	public int getNbDeliveryMan() {
@@ -211,8 +221,9 @@ public class CircuitManagement extends Observable{
      * @throws DeliveryListNotCharged 
      * @throws ClusteringException 
      * @throws DijkstraException 
+     * @throws NoRepositoryException 
      */
-    public void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException, DijkstraException {
+    public void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException, DijkstraException, NoRepositoryException {
     	
     	if(nbDeliveryman>0){
     		this.nbDeliveryMan = nbDeliveryman;
@@ -232,18 +243,30 @@ public class CircuitManagement extends Observable{
 			}
     	}
     	if(groupedDeliveries.size()>0){
-    		this.circuitsList = new Circuit[groupedDeliveries.size()];
-    		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
+    		this.circuitsList = new ArrayList<Circuit>();
+    		Repository repository = null;
+    		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
+    		try {
+				repository = getRepository();
+			} catch (NoRepositoryException e1) {
+				// TODO Auto-generated catch block
+				//e1.printStackTrace();
+				throw e1;
+			}
+    		if(repository != null){
+    			allPaths.put(repository, this.currentMap.findShortestPath(repository, this.deliveryList));
+    		}
     		for(List<Delivery> arrivalDeliveries : groupedDeliveries){
     			for(Delivery departureDelivery : arrivalDeliveries){
     				try {
-						HashMap<Delivery, AtomicPath> pairMap = this.currentMap.findShortestPath(departureDelivery, arrivalDeliveries);
+						allPaths.put(departureDelivery, this.currentMap.findShortestPath(departureDelivery, arrivalDeliveries));
 					} catch (DijkstraException e) {
 						// TODO Auto-generated catch block
 						//e.printStackTrace();
 						throw e;
 					}
     			}
+    			this.circuitsList.add(new Circuit(arrivalDeliveries, allPaths));
     		}
     	}
     	

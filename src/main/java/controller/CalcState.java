@@ -7,6 +7,7 @@ import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
 import main.java.exception.MapNotChargedException;
+import main.java.exception.NoRepositoryException;
 import main.java.view.Window;
 
 public class CalcState extends DefaultState {
@@ -47,6 +48,9 @@ public class CalcState extends DefaultState {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (DijkstraException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoRepositoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
