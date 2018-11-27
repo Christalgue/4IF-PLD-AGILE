@@ -15,6 +15,7 @@ import javafx.util.Pair;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
+import main.java.exception.ClusteringException;
 import main.java.exception.LoadMapException;
 import main.java.exception.XMLException;
 import main.java.utils.Deserializer;
@@ -32,7 +33,7 @@ class TestCircuitManagement {
 			CircuitManager.setDeliveryList(arrivalDeliveries);
 			CircuitManager.setNbDeliveryMan(2);
 	    	
-	    	List<ArrayList<Delivery>> distribution = CircuitManager.KmeansClustering();
+	    	List<ArrayList<Delivery>> distribution = CircuitManager.cluster();
 	    	int nbDeliveries1 = distribution.get(0).size();
 	    	int nbDeliveries2 = distribution.get(1).size();
 	    	
@@ -48,6 +49,9 @@ class TestCircuitManagement {
 			fail("IOException, report to TestDeserializer");
 		} catch (XMLException e) {
 			fail("XMLException, report to TestDeserializer : "+e.getMessage());
+		} catch (ClusteringException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
