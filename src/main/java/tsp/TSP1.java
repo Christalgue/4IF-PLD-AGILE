@@ -16,7 +16,7 @@ public class TSP1 extends TemplateTSP {
 
 	@Override
 	protected Iterator<Delivery> iterator(Delivery currentDelivery, ArrayList<Delivery> nonViewed,
-			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathes, int[] duration) {
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration) {
 		// TODO Auto-generated method stub
 		return new IteratorSeq(nonViewed, currentDelivery);
 	}

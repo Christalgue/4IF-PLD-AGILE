@@ -14,16 +14,16 @@ public interface TSP {
 	 * Cherche un circuit de duree minimale passant par chaque sommet (compris entre 0 et nbSommets-1)
 	 * @param limitTime : limite (en millisecondes) sur le temps d'execution de chercheSolution
 	 * @param deliveries TODO
-	 * @param allPathes : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
+	 * @param allPaths : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
 	 * @param duree : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
 	 */
-	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes, int[] duree);
+	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duree);
 	
 	/**
-	 * @param i
+	 * @param index
 	 * @return le sommet visite en i-eme position dans la solution calculee par chercheSolution
 	 */
-	public Delivery getBestSolution(int i);
+	public Delivery getDeliveryInBestSolutionAtIndex(int index);
 	
 	/** 
 	 * @return la duree de la solution calculee par chercheSolution
