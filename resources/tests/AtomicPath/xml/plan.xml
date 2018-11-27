@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<reseau>
+<noeud id="1" latitude="1" longitude="0"/>
+<noeud id="2" latitude="0" longitude="1"/>
+<noeud id="3" latitude="0" longitude="2"/>
+<noeud id="4" latitude="2" longitude="2"/>
+<noeud id="5" latitude="2" longitude="1"/>
+<troncon destination="2" longueur="3" nomRue="ab" origine="1"/>
+<troncon destination="5" longueur="5" nomRue="ae" origine="1"/>
+<troncon destination="5" longueur="6" nomRue="be" origine="2"/>
+<troncon destination="3" longueur="5" nomRue="bc" origine="2"/>
+<troncon destination="4" longueur="1" nomRue="cd" origine="3"/>
+<troncon destination="1" longueur="3" nomRue="da" origine="4"/>
+<troncon destination="3" longueur="7" nomRue="dc" origine="4"/>
+<troncon destination="2" longueur="1" nomRue="eb" origine="5"/>
+<troncon destination="3" longueur="4" nomRue="ec" origine="5"/>
+<troncon destination="4" longueur="6" nomRue="ed" origine="5"/>
+</reseau>

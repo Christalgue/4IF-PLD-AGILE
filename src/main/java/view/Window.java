@@ -50,8 +50,8 @@ public class Window extends JFrame{
 	
 	private ArrayList<JButton> buttons;
 	private JLabel messageFrame;
-	//private GraphicView graphicView;
-	//private TextualView textualView;
+	private GraphicView graphicView; // A DECOMMENTER SINON JE PEUX PAAAAAAS
+	//private TextualView textualView;  // A DECOMMENTER SINON JE PEUX PAAAAAAS
 	private ButtonsListener buttonsListener;
 	private MouseListener mouseListener;
 	private KeyListener keyListener;
@@ -74,7 +74,16 @@ public class Window extends JFrame{
 	/**
 	 * Default constructor
 	 */
-	public Window () {
+	
+	public Window ()
+	{
+		
+	}
+	public Window (Controller controller) {
+		// AJOUT LEA
+		buttonsListener = new ButtonsListener(controller);
+		mouseListener = new MouseListener(controller, graphicView, this);
+		keyListener = new KeyListener(controller);
 	}
 	
 	/**

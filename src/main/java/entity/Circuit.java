@@ -15,18 +15,6 @@ public class Circuit extends Observable{
     }
 
     /**
-     * Constructor
-     * @param ListDelivery 
-     * @param AtomicPath[][]
-     */
-    public Circuit(List<Delivery> deliveries, AtomicPath[][] allPaths) {
-    	this.deliveryList = deliveries;
-    	calculateTrackTSP(allPaths);
-    	this.circuitLength = calculateLength();
-    }
-    
-    
-    /**
      * 
      */
     private double circuitLength;
@@ -40,7 +28,17 @@ public class Circuit extends Observable{
      * 
      */
     private List<Delivery> deliveryList;
-
+    
+    /**
+     * Constructor
+     * @param ListDelivery 
+     * @param AtomicPath[][]
+     */
+    public Circuit(List<Delivery> deliveries, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
+    	this.deliveryList = deliveries;
+    	calculateTrackTSP(allPaths);
+    	this.circuitLength = calculateLength();
+    }
 
     /**
      * 
@@ -57,7 +55,7 @@ public class Circuit extends Observable{
     /**
      * @param AtomicPath[][]
      */
-    protected void calculateTrackTSP(AtomicPath[][] allPaths) {
+    protected void calculateTrackTSP(HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
         // TODO implement here
     }
 

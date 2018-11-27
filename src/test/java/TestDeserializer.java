@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.TimeZone;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,7 +15,6 @@ import org.xml.sax.SAXException;
 import main.java.entity.Bow;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
-import main.java.entity.Node;
 import main.java.exception.LoadMapException;
 import main.java.exception.XMLException;
 import main.java.utils.Deserializer;
@@ -39,7 +36,7 @@ class TestDeserializer {
 		
 		//1
 		try {
-			Deserializer.loadMap("resources/tests/xml/bonjour.xml", map);
+			Deserializer.loadMap("resources/tests/Deserializer/xml/bonjour.xml", map);
 			fail("1) No exception thrown");
 		} catch (ParserConfigurationException e) {
 			fail("1) Parser Exception");
@@ -52,7 +49,7 @@ class TestDeserializer {
 		
 		//2
 		try {
-			Deserializer.loadMap("resources/tests/xml/plan_non_conforme.xml", map);
+			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_non_conforme.xml", map);
 			fail("2) No exception thrown");
 		} catch (ParserConfigurationException e) {
 			fail("2) Parser Exception");
@@ -66,7 +63,7 @@ class TestDeserializer {
 		
 		//3
 		try {
-			Deserializer.loadMap("resources/tests/xml/plan_vide.xml", map);
+			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_vide.xml", map);
 			fail("3) No exception thrown");
 		} catch (ParserConfigurationException e) {
 			fail("3) Parser Exception");
@@ -80,7 +77,7 @@ class TestDeserializer {
 		
 		//4
 		try {
-			Deserializer.loadMap("resources/tests/xml/plan_noeud_troncon_inexistant.xml", map);
+			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_noeud_troncon_inexistant.xml", map);
 			fail("4) No exception thrown");
 		} catch (ParserConfigurationException e) {
 			fail("4) Parser Exception");
@@ -94,7 +91,7 @@ class TestDeserializer {
 		
 		//5
 		try {
-			Deserializer.loadMap("resources/tests/xml/plan_longueur_negative.xml", map);
+			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_longueur_negative.xml", map);
 			fail("5) No exception thrown");
 		} catch (ParserConfigurationException e) {
 			fail("5) Parser Exception");
@@ -108,7 +105,7 @@ class TestDeserializer {
 		
 		//6
 		try {
-			Deserializer.loadMap("resources/tests/xml/plan_troncon_doublon.xml", map);
+			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_troncon_doublon.xml", map);
 			fail("6) No exception thrown");
 		} catch (ParserConfigurationException e) {
 			fail("6) Parser Exception");
@@ -122,7 +119,7 @@ class TestDeserializer {
 		
 		//7
 		try {
-			Deserializer.loadMap("resources/tests/xml/plan_conforme.xml", map);
+			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_conforme.xml", map);
 		} catch (ParserConfigurationException e) {
 			fail("7) Parser Exception");
 		} catch (SAXException e) {
@@ -164,11 +161,11 @@ class TestDeserializer {
 		List<Delivery> deliveries;
 		Map map;
 		try {
-			map = new Map("resources/tests/xml/plan_conforme2.xml");
+			map = new Map("resources/tests/Deserializer/xml/plan_conforme2.xml");
 		
 			//1
 			try {
-				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/bonjour.xml", map));
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/Deserializer/xml/bonjour.xml", map));
 				fail("1) No exception thrown");
 			} catch (ParserConfigurationException e) {
 				fail("1) Parser Exception");
@@ -181,7 +178,7 @@ class TestDeserializer {
 			
 			//2
 			try {
-				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_non_conforme.xml", map));
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/Deserializer/xml/delivery_non_conforme.xml", map));
 				fail("2) No exception thrown");
 			} catch (ParserConfigurationException e) {
 				fail("2) Parser Exception");
@@ -195,7 +192,7 @@ class TestDeserializer {
 			
 			//3
 			try {
-				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_mauvais_nombre_entrepot.xml", map));
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/Deserializer/xml/delivery_mauvais_nombre_entrepot.xml", map));
 				fail("3) No exception thrown");
 			} catch (ParserConfigurationException e) {
 				fail("3) Parser Exception");
@@ -209,7 +206,7 @@ class TestDeserializer {
 			
 			//4
 			try {
-				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_noeud_inexistant.xml", map));
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/Deserializer/xml/delivery_noeud_inexistant.xml", map));
 				fail("4) No exception thrown");
 			} catch (ParserConfigurationException e) {
 				fail("4) Parser Exception");
@@ -223,7 +220,7 @@ class TestDeserializer {
 			
 			//5
 			try {
-				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_duree_negative.xml", map));
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/Deserializer/xml/delivery_duree_negative.xml", map));
 				fail("5) No exception thrown");
 			} catch (ParserConfigurationException e) {
 				fail("5) Parser Exception");
@@ -237,7 +234,7 @@ class TestDeserializer {
 			
 			//6
 			try {
-				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_doublon.xml", map));
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/Deserializer/xml/delivery_doublon.xml", map));
 				fail("6) No exception thrown");
 			} catch (ParserConfigurationException e) {
 				fail("6) Parser Exception");
@@ -251,7 +248,7 @@ class TestDeserializer {
 			
 			//7
 			try {
-				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_mauvais_format_heure.xml", map));
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/Deserializer/xml/delivery_mauvais_format_heure.xml", map));
 				fail("7) No exception thrown");
 			} catch (ParserConfigurationException e) {
 				fail("7) Parser Exception");
@@ -267,8 +264,7 @@ class TestDeserializer {
 			//8
 			try {
 				int UTC = TimeZone.getDefault().getRawOffset();
-				System.out.println(UTC);
-				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/xml/delivery_conforme.xml", map));
+				deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/Deserializer/xml/delivery_conforme.xml", map));
 				assertTrue(deliveries.get(0).getClass().getName().contains("main.java.entity.Repository"),"8) First delivery is not repository");
 				assertTrue(deliveries.get(0).getDuration()==0,"8) Wrong duration (0)"+deliveries.get(0).getDuration());
 				assertTrue(deliveries.get(0).getHourOfArrival().getTimeInMillis()+UTC==28800000,"8) Wrong hour of departure (28800000)"+(deliveries.get(0).getHourOfArrival().getTimeInMillis()+UTC));

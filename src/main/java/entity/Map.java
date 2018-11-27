@@ -110,10 +110,10 @@ public class Map extends Observable{
     	}
     	
     	for (HashMap.Entry<Node,Double> e : nodeDistances.entrySet()) {
-    		System.out.println("Distance du node "+e.getKey().getId()+" : "+e.getValue());
+    		//System.out.println("Distance du node "+e.getKey().getId()+" : "+e.getValue());
     	}
     	for (HashMap.Entry<Node,Node> e : nodePrecedences.entrySet()) {
-    		System.out.println("Precedent du node "+e.getKey().getId()+" : "+e.getValue().getId());
+    		//System.out.println("Precedent du node "+e.getKey().getId()+" : "+e.getValue().getId());
     	}
     	
     	for (Delivery currentDelivery : arrivalDeliveries) {
