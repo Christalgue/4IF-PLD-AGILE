@@ -1,79 +1,102 @@
 package main.java.entity;
 
-
 import java.util.*;
+import main.java.tsp.*;
 
 /**
  * 
  */
-public class Circuit extends Observable{
+public class Circuit extends Observable {
 
-    /**
-     * Default constructor
-     */
-    public Circuit() {
-    }
+	/**
+	 * Default constructor
+	 */
+	public Circuit() {
+	}
 
-    /**
-     * 
-     */
-    private double circuitLength;
+	/**
+	 * 
+	 */
+	private double circuitLength;
 
-    /**
-     * 
-     */
-    private List<AtomicPath> path;
+	/**
+	 * 
+	 */
+	private List<AtomicPath> path;
 
-    /**
-     * 
-     */
-    private List<Delivery> deliveryList;
-    
-    /**
-     * Constructor
-     * @param ListDelivery 
-     * @param AtomicPath[][]
-     */
-    public Circuit(List<Delivery> deliveries, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
-    	this.deliveryList = deliveries;
-    	calculateTrackTSP(allPaths);
-    	this.circuitLength = calculateLength();
-    }
+	/**
+	 * 
+	 */
+	private List<Delivery> deliveryList;
 
-    /**
-     * 
-     */
-    protected double calculateLength() {
-        // TODO implement here
-    	double result = 0;
-    	for(AtomicPath segment : this.path){
-    		result += segment.getLength();
-    	}
-    	return result;
-    }
+	/**
+	 * Constructor
+	 * 
+	 * @param repository
+	 *            TODO
+	 * @param ListDelivery
+	 * @param AtomicPath[][]
+	 */
+	public Circuit(List<Delivery> deliveries, Repository repository,
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
+		this.deliveryList = deliveries;
+		calculateTrackTSP(repository, allPaths);
+		this.circuitLength = calculateLength();
+	}
 
-    /**
-     * @param AtomicPath[][]
-     */
-    protected void calculateTrackTSP(HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
-        // TODO implement here
-    }
+	/**
+	 * 
+	 */
+	protected double calculateLength() {
+		// TODO implement here
+		double result = 0;
+		for (AtomicPath segment : this.path) {
+			result += segment.getLength();
+		}
+		return result;
+	}
 
-    /**
-     * @param Map 
-     * @param Delivery
-     */
-    protected void Remove(Delivery deliveryToRemove) {
-        // TODO implement here
-    }
+	/**
+	 * @param repository
+	 * @param AtomicPath[][]
+	 */
+	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
+		TSP1 tsp = new TSP1();
+		tsp.searchSolution(Integer.MAX_VALUE, repository, allPaths, null);
+		Delivery bestSolution[];
+		bestSolution = tsp.getBestSolution();
+		List<Delivery> deliveriesOrdered = new ArrayList<Delivery>();
+		List<AtomicPath> finalPath = new ArrayList<AtomicPath>();
+		// add the first Delivery to the deliveryList
+		deliveriesOrdered.add(bestSolution[0]);
+		for (int indexBestSolution = 1; indexBestSolution < bestSolution.length; indexBestSolution++) {
+			deliveriesOrdered.add(bestSolution[indexBestSolution]);
+			HashMap<Delivery, AtomicPath> pathsFromLastDelivery = allPaths.get(bestSolution[indexBestSolution - 1]);
+			finalPath.add(pathsFromLastDelivery.get(bestSolution[indexBestSolution]));
+		}
+		// add the last AtomicPath to the finalPath
+		HashMap<Delivery, AtomicPath> pathsFromLastDeliveryOfTheList = allPaths.get(bestSolution[bestSolution.length]);
+		finalPath.add(pathsFromLastDeliveryOfTheList.get(bestSolution[0]));
 
-    /**
-     * @param Delivery 
-     * @param nextToDelivery
-     */
-    protected void Add(Delivery deliveryToAdd, Delivery nextToDelivery) {
-        // TODO implement here
-    }
+		this.deliveryList = deliveriesOrdered;
+		this.path = finalPath;
+	}
+
+	/**
+	 * @param Map
+	 * @param Delivery
+	 */
+	protected void Remove(Delivery deliveryToRemove) {
+		// TODO implement here
+	}
+
+	/**
+	 * @param Delivery
+	 * @param nextToDelivery
+	 */
+	protected void Add(Delivery deliveryToAdd, Delivery nextToDelivery) {
+		// TODO implement here
+	}
 
 	protected double getCircuitLength() {
 		return circuitLength;
@@ -98,7 +121,5 @@ public class Circuit extends Observable{
 	protected void setDeliveryList(List<Delivery> deliveryList) {
 		this.deliveryList = deliveryList;
 	}
-    
-    
 
 }

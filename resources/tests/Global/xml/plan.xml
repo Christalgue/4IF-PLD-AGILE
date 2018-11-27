@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<reseau>
+<noeud id="0" latitude="4" longitude="7"/>
+<noeud id="1" latitude="3" longitude="3"/>
+<noeud id="2" latitude="2" longitude="5"/>
+<noeud id="3" latitude="7" longitude="6"/>
+<noeud id="4" latitude="2" longitude="11"/>
+<noeud id="5" latitude="3" longitude="12"/>
+<noeud id="6" latitude="5" longitude="11"/>
+<noeud id="7" latitude="6" longitude="2"/>
+<noeud id="8" latitude="5" longitude="6"/>
+<noeud id="9" latitude="1" longitude="3"/>
+<noeud id="10" latitude="2" longitude="13"/>
+<troncon destination="2" longueur="7" nomRue="Eb" origine="0"/>
+<troncon destination="1" longueur="7" nomRue="Ea" origine="0"/>
+<troncon destination="5" longueur="8" nomRue="Ee" origine="0"/>
+<troncon destination="2" longueur="1" nomRue="ab" origine="1"/>
+<troncon destination="9" longueur="4" nomRue="ai" origine="1"/>
+<troncon destination="7" longueur="8" nomRue="ag" origine="1"/>
+<troncon destination="0" longueur="5" nomRue="bE" origine="2"/>
+<troncon destination="9" longueur="2" nomRue="bi" origine="2"/>
+<troncon destination="8" longueur="6" nomRue="ch" origine="3"/>
+<troncon destination="6" longueur="15" nomRue="cf" origine="3"/>
+<troncon destination="5" longueur="1" nomRue="de" origine="4"/>
+<troncon destination="10" longueur="1" nomRue="dj" origine="4"/>
+<troncon destination="0" longueur="7" nomRue="eE" origine="5"/>
+<troncon destination="6" longueur="6" nomRue="ef" origine="5"/>
+<troncon destination="10" longueur="1" nomRue="ej" origine="5"/>
+<troncon destination="5" longueur="6" nomRue="fe" origine="6"/>
+<troncon destination="0" longueur="3" nomRue="fE" origine="6"/>
+<troncon destination="3" longueur="8" nomRue="fc" origine="6"/>
+<troncon destination="3" longueur="9" nomRue="gc" origine="7"/>
+<troncon destination="8" longueur="10" nomRue="gh" origine="7"/>
+<troncon destination="7" longueur="6" nomRue="hg" origine="8"/>
+<troncon destination="3" longueur="3" nomRue="hc" origine="8"/>
+<troncon destination="1" longueur="2" nomRue="ia" origine="9"/>
+<troncon destination="4" longueur="2" nomRue="jd" origine="10"/>
+<troncon destination="6" longueur="4" nomRue="jf" origine="10"/>
+</reseau>

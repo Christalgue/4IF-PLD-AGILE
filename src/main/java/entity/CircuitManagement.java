@@ -108,58 +108,83 @@ public class CircuitManagement extends Observable{
      * K-means clustering algorithm
      * @return
      */
-    protected List<ArrayList<Delivery>> cluster() throws ClusteringException {
+    public List<ArrayList<Delivery>> cluster() throws ClusteringException {
     	
         // process Kmeansclustering multiple times and keep the best one
-        
-        
-        return null;
-    }
-    
-    public List<ArrayList<Delivery>> KmeansClustering() {
     	
-    	List<Pair<Double,Double>> barycenters = new ArrayList<Pair<Double,Double>>(nbDeliveryMan);
-    	for (int barycenterIndex = 0 ; barycenterIndex < nbDeliveryMan ; barycenterIndex++) {
-    		addRandomBarycenter(barycenters);
+    	
+    	List<ArrayList<Delivery>> distribution = KmeansClustering(nbDeliveryMan, deliveryList);
+    	// REEQUILIBRER LA DISTRIBUTION
+    	int iteration = 0;
+    	while (iteration<1000 && !checkClusterValidity(distribution)) {
+    		/*
+    		System.out.println("Iteration : "+iteration);
+    		System.out.println("Validity : "+checkClusterValidity(distribution));
+    		for (ArrayList<Delivery> cluster : distribution) {
+    			System.out.print(cluster.size()+" / ");
+    		}
+    		System.out.println("");
+    		*/
+    		iteration++;
+    		distribution = KmeansClustering(nbDeliveryMan, deliveryList);
+    	}
+    	if (iteration==1000) {
+    		System.out.println("PROBLEME DE DIVERGENCE DES CLUSTERS!!! (LA SOLUTION TROUVEE N'EST PAS OPTIMALE)");
+    	} else {
+    		System.out.println("Nombre d'iteration : "+iteration);
     	}
     	
+    	//distribution = balanceDistribution(distribution);
+        
+    	
+    	
+        return distribution;
+    }
+    
+    public List<ArrayList<Delivery>> KmeansClustering(int numberOfClusters, List<Delivery> deliveriesToCluster) {
+    	
+    	List<Pair<Double,Double>> barycenters = new ArrayList<Pair<Double,Double>>(numberOfClusters);
+    	for (int barycenterIndex = 0 ; barycenterIndex < numberOfClusters ; barycenterIndex++) {
+    		addRandomBarycenter(barycenters,numberOfClusters, deliveriesToCluster);
+    	}
+    	
+    	/*
     	System.out.println("Affichage des barycentres : ");
 		for (Pair<Double,Double> barycenter : barycenters) {
 			System.out.println("Barycentre : "+barycenter.getKey()+" (lat) / "+barycenter.getValue()+" (long)");
 		}
 		System.out.println("");
-    	
-    	List<ArrayList<Delivery>> newDistribution = KmeansClusteringStep(barycenters);
+    	*/
+		
+    	List<ArrayList<Delivery>> newDistribution = KmeansClusteringStep(barycenters, deliveriesToCluster);
     	List<ArrayList<Delivery>> oldDistribution = null; //// COMMENT INITIALISER????
     	    	
     	while (evaluateCluster(newDistribution, oldDistribution)) {
     		
     		barycenters = calculateBarycenters(newDistribution);
     		
+    		/*
     		System.out.println("Affichage des barycentres : ");
     		for (Pair<Double,Double> barycenter : barycenters) {
     			System.out.println("Barycentre : "+barycenter.getKey()+" (lat) / "+barycenter.getValue()+" (long)");
     		}
     		System.out.println("");
-    		
+    		*/
     		
     		oldDistribution = newDistribution;
-    		newDistribution = KmeansClusteringStep(barycenters);
-    		
+    		newDistribution = KmeansClusteringStep(barycenters, deliveriesToCluster);
     	}
     	
-    	// REEQUILIBRER LA DISTRIBUTION
-    	List<ArrayList<Delivery>> deliveriesDistribution = newDistribution;
-    	return deliveriesDistribution;
+    	return newDistribution;
     }
     
-    public List<ArrayList<Delivery>> KmeansClusteringStep(List<Pair<Double,Double>> barycenters) {
-    	List<ArrayList<Delivery>> deliveriesDistribution = new ArrayList<ArrayList<Delivery>>(nbDeliveryMan);
-    	for(int distributionIndex = 0 ; distributionIndex < nbDeliveryMan ; distributionIndex++) {
+    public List<ArrayList<Delivery>> KmeansClusteringStep(List<Pair<Double,Double>> barycenters, List<Delivery> deliveriesToCluster) {
+    	List<ArrayList<Delivery>> deliveriesDistribution = new ArrayList<ArrayList<Delivery>>(barycenters.size());
+    	for(int distributionIndex = 0 ; distributionIndex <  barycenters.size(); distributionIndex++) {
     		ArrayList<Delivery> deliveries = new ArrayList<Delivery>();
     		deliveriesDistribution.add(deliveries);
     	}
-    	for (Delivery currentDelivery : deliveryList) {
+    	for (Delivery currentDelivery : deliveriesToCluster) {
     		Double currentDistanceToBarycenter = Double.MAX_VALUE;
     		Integer currentDistributionIndex = 0;
     		for (Pair<Double,Double> barycenter : barycenters) {
@@ -195,16 +220,16 @@ public class CircuitManagement extends Observable{
     	return barycenters;
     }
     
-    public void addRandomBarycenter(List<Pair<Double,Double>> barycenters) {
+    public void addRandomBarycenter(List<Pair<Double,Double>> barycenters, int numberOfClusters, List<Delivery> deliveries) {
     	Random r = new Random();
-        Integer randomIndex = r.nextInt(deliveryList.size());
-        Delivery randomDelivery = deliveryList.get(randomIndex);
-        System.out.println("Delivery prise : "+randomDelivery.getPosition().getId());
+        Integer randomIndex = r.nextInt(deliveries.size());
+        Delivery randomDelivery = deliveries.get(randomIndex);
+        //System.out.println("Random Delivery prise (barycenter) : "+randomDelivery.getPosition().getId());
         Pair<Double,Double> barycenter = new Pair<Double,Double>(randomDelivery.getPosition().getLatitude(),randomDelivery.getPosition().getLongitude());
     	if (!barycenters.contains(barycenter)) {
     		barycenters.add(barycenter);
     	} else {
-    		addRandomBarycenter(barycenters);
+    		addRandomBarycenter(barycenters, numberOfClusters, deliveries);
     	}
     }
     
@@ -214,6 +239,48 @@ public class CircuitManagement extends Observable{
     	} else {
     		return true;
     	}
+    }
+    
+    
+    // NOT IN USE RIGHT NOW
+    protected List<ArrayList<Delivery>> balanceDistribution(List<ArrayList<Delivery>> distributionToBalance) {
+    	
+    	Integer bottomAverageNumberOfDeliveries = deliveryList.size()/nbDeliveryMan;
+    	Integer topAverageNumberOfDeliveries = bottomAverageNumberOfDeliveries;
+    	
+    	if (deliveryList.size()%nbDeliveryMan!=0) {
+    		topAverageNumberOfDeliveries += 1;
+    	}
+    	
+    	List<ArrayList<Delivery>> balancedDistribution = new ArrayList<ArrayList<Delivery>>(distributionToBalance);
+    	
+    	// Contains for each circuits, the number of delivery it is lacking / has in excess
+    	List<Integer> distributionDifferences = new ArrayList<Integer>(distributionToBalance.size());
+    	
+    	// Calculate the differences of deliveries
+    	for (ArrayList<Delivery> deliveries : distributionToBalance) {
+    		if (deliveries.size()>=topAverageNumberOfDeliveries) {
+    			distributionDifferences.add(deliveries.size()-topAverageNumberOfDeliveries);
+    		} else {
+    			distributionDifferences.add(deliveries.size()-bottomAverageNumberOfDeliveries);
+    		}
+    	}
+    	
+    	// ITERER sur les delivery restantes a traiter (refaire des KmeanClustering)
+    	
+    	return balancedDistribution;
+    }
+    
+    protected boolean checkClusterValidity (List<ArrayList<Delivery>> clustersToCheck) {
+    	Integer bottomAverageNumberOfDeliveries = deliveryList.size()/nbDeliveryMan;
+    	Integer topAverageNumberOfDeliveries = bottomAverageNumberOfDeliveries+1;
+    	boolean isValid = true;
+    	for (ArrayList<Delivery> cluster : clustersToCheck) {
+    		if (cluster.size() != bottomAverageNumberOfDeliveries && cluster.size() != topAverageNumberOfDeliveries) {
+    			isValid = false;
+    		}
+    	}
+    	return isValid;
     }
 
     /**
@@ -270,7 +337,7 @@ public class CircuitManagement extends Observable{
 						throw e;
 					}
     			}
-    			this.circuitsList.add(new Circuit(arrivalDeliveries, allPaths));
+    			this.circuitsList.add(new Circuit(arrivalDeliveries, repository, allPaths));
     		}
     	}
     	
@@ -295,6 +362,13 @@ public class CircuitManagement extends Observable{
     	}*/
     }
 
-	
+	public boolean checkNodeInDeliveryList(Node nodeTested){
+		for(Delivery deliveryTested : this.deliveryList){
+			if(deliveryTested.getPosition() == nodeTested)
+				return true;
+		}
+		return false;
+	}
+    
 
 }

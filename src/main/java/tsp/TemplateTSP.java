@@ -14,28 +14,37 @@ public abstract class TemplateTSP implements TSP {
 		return limitTimeReached;
 	}
 	
-	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathes, int[] duration){
+	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration){
 		limitTimeReached = false;
 		costBestSolution = Integer.MAX_VALUE;
-		Set<Delivery> deliveries = allPathes.keySet();
+		Set<Delivery> deliveries = allPaths.keySet();
 		bestSolution = new Delivery[deliveries.size()];
 		ArrayList<Delivery> nonViewed = new ArrayList<Delivery>();
-		nonViewed.addAll(allPathes.keySet());
+		nonViewed.addAll(allPaths.keySet());
 		nonViewed.remove(repository);
 		//for (int indexListDeliveries=1; indexListDeliveries<deliveries.size(); indexListDeliveries++) nonViewed.add(indexListDeliveries, deliveries.get(indexListDeliveries));
 		ArrayList<Delivery> viewed = new ArrayList<Delivery>(deliveries.size());
 		viewed.add(0, repository); // le premier sommet visite est l'entrepot
 		///duration must be sent with maxValue for each node to visit --> find an adaptation for our model
 		    ///HashMap<Delivery,ShortestAtomicPathToGoToThisDelivery> ?     
-		branchAndBound(0, nonViewed, viewed, 0, allPathes, duration, System.currentTimeMillis(), limitTime);
+		branchAndBound(0, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
 	}
 	
-	public Delivery getBestSolution(int i){
-		if ((bestSolution == null) || (i<0) || (i>=bestSolution.length))
+	public Delivery getDeliveryInBestSolutionAtIndex(int index){
+		if ((bestSolution == null) || (index<0) || (index>=bestSolution.length))
 			return null;
-		return bestSolution[i];
+		return bestSolution[index];
 	}
 	
+	
+	public Delivery[] getBestSolution() {
+		return bestSolution;
+	}
+
+	public void setBestSolution(Delivery[] bestSolution) {
+		this.bestSolution = bestSolution;
+	}
+
 	public double getCostBestSolution(){
 		return costBestSolution;
 	}
@@ -55,12 +64,12 @@ public abstract class TemplateTSP implements TSP {
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
 	 * @param currentDelivery
 	 * @param nonViewed : tableau des sommets restant a visiter
-	 * @param allPathes : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
+	 * @param allPaths : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
 	 * @param duration : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
 	 * @return un iterateur permettant d'iterer sur tous les sommets de nonVus
 	 */
 	protected abstract Iterator<Delivery> iterator(Delivery currentDelivery, ArrayList<Delivery> nonViewed,
-			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathes, int[] duration);
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration);
 	
 	/**
 	 * Methode definissant le patron (template) d'une resolution par separation et evaluation (branch and bound) du TSP

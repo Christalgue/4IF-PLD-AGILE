@@ -7,6 +7,7 @@ import javafx.util.Pair;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Node;
+import main.java.exception.ClusteringException;
 
 public class TestCluster {
 
@@ -76,14 +77,17 @@ public class TestCluster {
 		
 		CircuitManagement CircuitManager = new CircuitManagement();
 		CircuitManager.setDeliveryList(arrivalDeliveries);
-		CircuitManager.setNbDeliveryMan(2);
+		
+		int nbDeliveryMan = 4;
+		
+		CircuitManager.setNbDeliveryMan(nbDeliveryMan);
 		
 		System.out.println("TEST Clustering");
 		
-		List<Pair<Double,Double>> barycenters = new ArrayList<Pair<Double,Double>>(2);
-    	for (int barycenterIndex = 0 ; barycenterIndex < 2 ; barycenterIndex++) {
+		/*List<Pair<Double,Double>> barycenters = new ArrayList<Pair<Double,Double>>(nbDeliveryMan);
+    	for (int barycenterIndex = 0 ; barycenterIndex < nbDeliveryMan ; barycenterIndex++) {
     		CircuitManager.addRandomBarycenter(barycenters);
-    	}
+    	}*/
     	
     	/*
     	List<ArrayList<Delivery>> distribution = CircuitManager.KmeansClusteringStep(barycenters);
@@ -97,15 +101,22 @@ public class TestCluster {
     		}
     	}
     	*/
+		
+    	List<ArrayList<Delivery>> distribution;
+		try {
+			distribution = CircuitManager.cluster();
+			for (ArrayList<Delivery> deliveries : distribution) {
+	    		System.out.println("");
+	    		System.out.println("Livreur : ");
+	    		for (Delivery del : deliveries) {
+	    			System.out.println("Livraison "+del.getPosition().getId());
+	    		}
+	    	}
+		} catch (ClusteringException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     	
-    	List<ArrayList<Delivery>> distribution = CircuitManager.KmeansClustering();
-    	for (ArrayList<Delivery> deliveries : distribution) {
-    		System.out.println("");
-    		System.out.println("Livreur : ");
-    		for (Delivery del : deliveries) {
-    			System.out.println("Livraison "+del.getPosition().getId());
-    		}
-    	}
 	}
 
 }
