@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<reseau>
+<noeud id="1" latitude="0.5" longitude="0.5"/>
+<noeud id="2" latitude="0.25" longitude="2.75"/>
+<noeud id="3" latitude="1.25" longitude="1.75"/>
+<noeud id="4" latitude="1.25" longitude="2.75"/>
+<noeud id="5" latitude="1.75" longitude="1.25"/>
+<noeud id="6" latitude="2" longitude="2"/>
+<noeud id="7" latitude="2.5" longitude="0.5"/>
+<noeud id="8" latitude="2.5" longitude="2.5"/>
+<noeud id="9" latitude="2.75" longitude="5.5"/>
+<noeud id="10" latitude="3" longitude="1"/>
+<noeud id="11" latitude="3" longitude="5"/>
+<noeud id="12" latitude="3.25" longitude="2.5"/>
+<noeud id="13" latitude="3.25" longitude="3.75"/>
+<noeud id="14" latitude="3.75" longitude="3.5"/>
+<noeud id="15" latitude="4.25" longitude="3.25"/>
+<noeud id="16" latitude="4.5" longitude="3.75"/>
+<noeud id="17" latitude="4.5" longitude="4.5"/>
+<noeud id="18" latitude="4.75" longitude="4.75"/>
+<noeud id="19" latitude="4" longitude="6"/>
+</reseau>
