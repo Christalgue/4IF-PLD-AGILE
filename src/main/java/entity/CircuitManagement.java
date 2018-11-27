@@ -66,8 +66,16 @@ public class CircuitManagement extends Observable{
 		return deliveryList;
 	}
 
-	protected void setDeliveryList(List<Delivery> deliveryList) {
+	public void setDeliveryList(List<Delivery> deliveryList) {
 		this.deliveryList = deliveryList;
+	}
+
+	public int getNbDeliveryMan() {
+		return nbDeliveryMan;
+	}
+
+	public void setNbDeliveryMan(int nbDeliveryMan) {
+		this.nbDeliveryMan = nbDeliveryMan;
 	}
 
 	/**
@@ -94,37 +102,49 @@ public class CircuitManagement extends Observable{
         return null;
     }
     
-    protected List<ArrayList<Delivery>> KmeansClustering(List<Delivery> deliveryList) {
-    	List<ArrayList<Delivery>> deliveriesDistribution;
+    public List<ArrayList<Delivery>> KmeansClustering() {
     	
     	List<Pair<Double,Double>> barycenters = new ArrayList<Pair<Double,Double>>(nbDeliveryMan);
     	for (int barycenterIndex = 0 ; barycenterIndex < nbDeliveryMan ; barycenterIndex++) {
     		addRandomBarycenter(barycenters);
     	}
     	
+    	System.out.println("Affichage des barycentres : ");
+		for (Pair<Double,Double> barycenter : barycenters) {
+			System.out.println("Barycentre : "+barycenter.getKey()+" (lat) / "+barycenter.getValue()+" (long)");
+		}
+		System.out.println("");
+    	
     	List<ArrayList<Delivery>> newDistribution = KmeansClusteringStep(barycenters);
-    	List<ArrayList<Delivery>> oldDistribution = newDistribution; //// MDR FAUT CHANGER CA !!!!!!!!!!!!!!!!!!!!!!!! CA VA BUGGER SALE DEBILE METNALT
-    	// AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
-    	// OUBLIE PAS D'ENLEVER CETTE CONNERIE
-    	//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH
+    	List<ArrayList<Delivery>> oldDistribution = null; //// COMMENT INITIALISER????
     	    	
-    	// FAIRE DES ETAPES DE CLUSTERING TANT QUE C'EST PAS SATISFAISANT EN RECALCULANT LES BARYCENTRES
     	while (evaluateCluster(newDistribution, oldDistribution)) {
     		
     		barycenters = calculateBarycenters(newDistribution);
-
+    		
+    		System.out.println("Affichage des barycentres : ");
+    		for (Pair<Double,Double> barycenter : barycenters) {
+    			System.out.println("Barycentre : "+barycenter.getKey()+" (lat) / "+barycenter.getValue()+" (long)");
+    		}
+    		System.out.println("");
+    		
+    		
     		oldDistribution = newDistribution;
     		newDistribution = KmeansClusteringStep(barycenters);
+    		
     	}
     	
-    	
-    	
     	// REEQUILIBRER LA DISTRIBUTION
-    	return null;
+    	List<ArrayList<Delivery>> deliveriesDistribution = newDistribution;
+    	return deliveriesDistribution;
     }
     
-    protected List<ArrayList<Delivery>> KmeansClusteringStep(List<Pair<Double,Double>> barycenters) {
+    public List<ArrayList<Delivery>> KmeansClusteringStep(List<Pair<Double,Double>> barycenters) {
     	List<ArrayList<Delivery>> deliveriesDistribution = new ArrayList<ArrayList<Delivery>>(nbDeliveryMan);
+    	for(int distributionIndex = 0 ; distributionIndex < nbDeliveryMan ; distributionIndex++) {
+    		ArrayList<Delivery> deliveries = new ArrayList<Delivery>();
+    		deliveriesDistribution.add(deliveries);
+    	}
     	for (Delivery currentDelivery : deliveryList) {
     		Double currentDistanceToBarycenter = Double.MAX_VALUE;
     		Integer currentDistributionIndex = 0;
@@ -137,7 +157,6 @@ public class CircuitManagement extends Observable{
     				currentDistanceToBarycenter = newDistanceToBarycenter;
     			}
     		}
-    		// CA VA BUGGER DE OUF SALE DEBILE MENTALE CONGENITALE DE SA MERE LA PUTE        FAIS GAFFE AU GETINDEX?????????
     		deliveriesDistribution.get(currentDistributionIndex).add(currentDelivery);
     	}
     	return deliveriesDistribution;
@@ -162,10 +181,11 @@ public class CircuitManagement extends Observable{
     	return barycenters;
     }
     
-    protected void addRandomBarycenter(List<Pair<Double,Double>> barycenters) {
+    public void addRandomBarycenter(List<Pair<Double,Double>> barycenters) {
     	Random r = new Random();
-        Integer randomIndex = r.nextInt(nbDeliveryMan);
+        Integer randomIndex = r.nextInt(deliveryList.size());
         Delivery randomDelivery = deliveryList.get(randomIndex);
+        System.out.println("Delivery prise : "+randomDelivery.getPosition().getId());
         Pair<Double,Double> barycenter = new Pair<Double,Double>(randomDelivery.getPosition().getLatitude(),randomDelivery.getPosition().getLongitude());
     	if (!barycenters.contains(barycenter)) {
     		barycenters.add(barycenter);
@@ -176,9 +196,9 @@ public class CircuitManagement extends Observable{
     
     protected boolean evaluateCluster(List<ArrayList<Delivery>> newDistribution, List<ArrayList<Delivery>> oldDistribution) {
     	if (newDistribution.equals(oldDistribution)) {
-    		return true;
-    	} else {
     		return false;
+    	} else {
+    		return true;
     	}
     }
 
