@@ -333,7 +333,7 @@ public class CircuitManagement extends Observable{
 						throw e;
 					}
     			}
-    			this.circuitsList.add(new Circuit(arrivalDeliveries, allPaths));
+    			this.circuitsList.add(new Circuit(arrivalDeliveries, repository, allPaths));
     		}
     	}
     	
@@ -358,6 +358,13 @@ public class CircuitManagement extends Observable{
     	}*/
     }
 
-	
+	public boolean checkNodeInDeliveryList(Node nodeTested){
+		for(Delivery deliveryTested : this.deliveryList){
+			if(deliveryTested.getPosition() == nodeTested)
+				return true;
+		}
+		return false;
+	}
+    
 
 }

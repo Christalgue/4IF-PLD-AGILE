@@ -2,6 +2,7 @@ package main.java.entity;
 
 
 import java.util.*;
+import main.java.tsp.*;
 
 /**
  * 
@@ -31,12 +32,13 @@ public class Circuit extends Observable{
     
     /**
      * Constructor
+     * @param repository TODO
      * @param ListDelivery 
      * @param AtomicPath[][]
      */
-    public Circuit(List<Delivery> deliveries, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
+    public Circuit(List<Delivery> deliveries, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
     	this.deliveryList = deliveries;
-    	calculateTrackTSP(allPaths);
+    	calculateTrackTSP(repository, allPaths);
     	this.circuitLength = calculateLength();
     }
 
@@ -53,10 +55,20 @@ public class Circuit extends Observable{
     }
 
     /**
+     * @param repository 
      * @param AtomicPath[][]
      */
-    protected void calculateTrackTSP(HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
-        // TODO implement here
+    protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
+        TSP1 tsp = new TSP1();
+        tsp.searchSolution(Integer.MAX_VALUE, repository, allPaths, null);
+        Delivery bestSolution[];
+        bestSolution = tsp.getBestSolution();
+        List<Delivery> deliveriesOrdered;
+        for(int indexBestSolution = 0; indexBestSolution < bestSolution.length; indexBestSolution++){
+        	//deliveriesOrdered
+        }
+        
+    	
     }
 
     /**
@@ -83,7 +95,7 @@ public class Circuit extends Observable{
 		this.circuitLength = circuitLength;
 	}
 
-	protected List<AtomicPath> getPath() {
+	public List<AtomicPath> getPath() {
 		return path;
 	}
 

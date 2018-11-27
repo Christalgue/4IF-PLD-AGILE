@@ -1,6 +1,7 @@
 package main.java.view;
 
 import java.awt.EventQueue;
+import java.awt.Graphics2D;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -49,8 +50,8 @@ public class Window extends JFrame{
 	
 	private ArrayList<JButton> buttons;
 	private JLabel messageFrame;
-	//private GraphicView graphicView;
-	//private TextualView textualView;
+	private GraphicView graphicView; // A DECOMMENTER SINON JE PEUX PAAAAAAS
+	//private TextualView textualView;  // A DECOMMENTER SINON JE PEUX PAAAAAAS
 	private ButtonsListener buttonsListener;
 	private MouseListener mouseListener;
 	private KeyListener keyListener;
@@ -73,14 +74,23 @@ public class Window extends JFrame{
 	/**
 	 * Default constructor
 	 */
-	public Window () {
+	
+	public Window ()
+	{
+		
+	}
+	public Window (Controller controller) {
+		// AJOUT LEA
+		buttonsListener = new ButtonsListener(controller);
+		mouseListener = new MouseListener(controller, graphicView, this);
+		keyListener = new KeyListener(controller);
 	}
 	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+		/*EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Window window = new Window();
@@ -89,17 +99,17 @@ public class Window extends JFrame{
 					e.printStackTrace();
 				}
 			}
-		});
+		});*/
 		
-		/*CircuitManagement circuitManagement = new CircuitManagement();
+		CircuitManagement circuitManagement = new CircuitManagement();
 		Controller controller = new Controller(circuitManagement);
-		Window window = new Window (circuitManagement, controller);*/
+		Window window = new Window (circuitManagement, controller);
 	}
 
 	/**
 	 * Create the application.
 	 */
-	/*public Window (CircuitManagement circuitManagement, Controller controller){
+	public Window (CircuitManagement circuitManagement, Controller controller){
 		
 		setLayout(null);
 		//createButtons(controller);
@@ -107,6 +117,13 @@ public class Window extends JFrame{
 		messageFrame = new JLabel();
 		messageFrame.setBorder(BorderFactory.createTitledBorder("Messages..."));
 		getContentPane().add(messageFrame);
+		
+		try {
+			circuitManagement.loadMap("resources/xml/petitPlan.xml");
+		} catch (LoadMapException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		GraphicView graphicView = new GraphicView (circuitManagement, this);
 		
@@ -118,21 +135,17 @@ public class Window extends JFrame{
 		keyListener = new KeyListener(controller);
 		addKeyListener(keyListener);
 		
-		
-		try {
-			circuitManagement.loadMap("ressources/xml/petitPlan");
-		} catch (LoadMapException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		circuitManagement.getCurrentMap();
 		System.out.println(circuitManagement.getCurrentMap().toString());
 		
+		MapView mapView = new MapView(Color.BLACK, 10, 10, graphicView);
 		
-		initialize();
-		setVisible(true);
-	}*/
+		mapView.paintMap(graphicView.getGraphic(), circuitManagement.getCurrentMap());
+		
+		
+		//initialize();
+		//setVisible(true);
+	}
 	
 
 	/**

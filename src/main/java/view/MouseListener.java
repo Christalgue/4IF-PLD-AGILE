@@ -6,17 +6,19 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 
 import main.java.controller.Controller;
+import main.java.entity.Node;
+import main.java.entity.Point;
 
 public class MouseListener extends MouseAdapter {
 
-	//private Controlleur controller;
+	private Controller controller;
 	private GraphicView graphicView;
 	//private TextualView textualView;
 	private Window window;
 
 	public MouseListener(Controller controller, GraphicView graphicView, Window window){
 	//public MouseListener(Controller controller, GraphicView graphicView, TextualView textualView, Window window){
-		//this.controller = controller;
+		this.controller = controller;
 		this.graphicView = graphicView;
 		//this.textualView = textualView;
 		this.window = window;
@@ -27,9 +29,18 @@ public class MouseListener extends MouseAdapter {
 		// Called by MouseAdapter each time the mouse is clicked
 		// If it's a left click, the controller is worn
 		if ( evt.getButton() == MouseEvent.BUTTON1) { 
-			/*Point p = coordonnees(evt);
-			if (p != null)
-				controleur.clic(p);*/
+			Point p = graphicView.pointToLatLong(new Point (evt.getX(), evt.getY()));
+			Node n = graphicView.pointToNode(p);
+			if (p != null) {
+				
+				//if(this.controller.circuitManagement.checkNodeInDeliveryList(n));
+				//{
+					this.controller.leftClick(n, true);
+				//} else {
+					//		this.controller.leftClick(n, false);
+			//}
+			}
+				//controleur.clic(p);*/
 		}
 	}
 

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 import main.java.entity.AtomicPath;
-import main.java.entity.Bow;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
 import main.java.exception.DijkstraException;
