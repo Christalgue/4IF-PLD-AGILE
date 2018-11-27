@@ -9,7 +9,7 @@ public class TSP1 extends TemplateTSP {
 
 	@Override
 	protected int bound(Delivery delivery, ArrayList<Delivery> nonViewed,
-			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathes, int[] duree) {
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duree) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

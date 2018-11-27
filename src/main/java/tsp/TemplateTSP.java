@@ -53,12 +53,12 @@ public abstract class TemplateTSP implements TSP {
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
 	 * @param delivery
 	 * @param nonViewed : tableau des sommets restant a visiter
-	 * @param allPathes : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
+	 * @param allPaths : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
 	 * @param duree : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
 	 * @return une borne inferieure du cout des permutations commencant par sommetCourant, 
 	 * contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0
 	 */
-	protected abstract int bound(Delivery delivery, ArrayList<Delivery> nonViewed, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes, int[] duree);
+	protected abstract int bound(Delivery delivery, ArrayList<Delivery> nonViewed, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duree);
 	
 	/**
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
@@ -95,11 +95,31 @@ public abstract class TemplateTSP implements TSP {
 	    		costBestSolution = viewedCost;
 	    	}
 	    } else if (viewedCost + bound(viewed.get(indexCurrentDelivery), nonViewed, allPathes, duration) < costBestSolution){
+	    	
 	        Iterator<Delivery> it = iterator(viewed.get(indexCurrentDelivery), nonViewed, allPathes, duration);
 	        while (it.hasNext()){
 	        	Delivery nextDelivery = it.next();
 	        	viewed.add(nextDelivery);
 	        	nonViewed.remove(nextDelivery);
+	        	
+	        	// Y A DU NULL ICI
+	        	/*
+	        	System.out.println("");
+	        	System.out.println("Deliveries currentDelivery : "+viewed.get(indexCurrentDelivery).getPosition().getId());
+        		System.out.println("Deliveries nextDelivery : "+nextDelivery.getPosition().getId());
+        		System.out.println("Taille viewed : "+viewed.size());
+        		System.out.println("Taille nonviewed : "+nonViewed.size());
+        		System.out.println("");
+        		
+	        	if(allPathes.get(viewed.get(indexCurrentDelivery)).get(nextDelivery).getLength() == null) { // commenter le .getLength()
+	        		System.out.println("C'EST CET ARGUMENT DE MERDE QUI FAIT CHIER!!!");
+	        		
+	        		System.out.println("Deliveries currentDelivery : "+viewed.get(indexCurrentDelivery).getPosition().getId());
+	        		System.out.println("Deliveries nextDelivery : "+nextDelivery.getPosition().getId());
+	        		
+	        		System.out.println("Taille viewed : "+viewed.size());	        		
+	        	}*/
+	        	
 	        	branchAndBound(viewed.indexOf(nextDelivery), nonViewed, viewed, viewedCost + allPathes.get(viewed.get(indexCurrentDelivery)).get(nextDelivery).getLength()/*allPathes[indexCurrentDelivery][prochainSommet]*/ /*+ duration[prochainSommet]*/, allPathes, duration, startingTime, limitTime);
 	        	viewed.remove(nextDelivery);
 	        	nonViewed.add(nextDelivery);

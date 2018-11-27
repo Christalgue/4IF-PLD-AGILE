@@ -96,17 +96,24 @@ public class Map extends Observable{
     		Node currentNode = minimumDistanceNode.getValue();
     		    		
     		Set<Bow> nodeAdjacentEdges = bowMap.get(idCurrentNode);
-    		for (Bow adjacentBow : nodeAdjacentEdges) {
-    			Node adjacentNode = adjacentBow.getEndNode();
-    			if (!blackNodes.contains(adjacentNode)) {
-    				releaseBow(adjacentBow, nodeDistances, nodePrecedences);
-    				if(!grayNodes.contains(adjacentNode)) {
-    					grayNodes.add(adjacentNode);
-    				}
-    			}
+    		
+    		// Check if there is at least a bow commencing with the current node
+    		if (nodeAdjacentEdges!=null) {
+    			for (Bow adjacentBow : nodeAdjacentEdges) {
+        			Node adjacentNode = adjacentBow.getEndNode();
+        			if (!blackNodes.contains(adjacentNode)) {
+        				releaseBow(adjacentBow, nodeDistances, nodePrecedences);
+        				if(!grayNodes.contains(adjacentNode)) {
+        					grayNodes.add(adjacentNode);
+        				}
+        			}
+        		}
+        		grayNodes.remove(currentNode);
+        		blackNodes.add(currentNode);
+    		} else {
+    			grayNodes.remove(currentNode);
+        		blackNodes.add(currentNode);
     		}
-    		grayNodes.remove(currentNode);
-    		blackNodes.add(currentNode);
     	}
     	
     	for (HashMap.Entry<Node,Double> e : nodeDistances.entrySet()) {

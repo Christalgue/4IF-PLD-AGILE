@@ -72,12 +72,16 @@ public class CircuitManagement extends Observable{
 	
 	protected Repository getRepository() throws NoRepositoryException{
 		for(Delivery delivery : this.deliveryList){
-			if(delivery.getClass() == Delivery.class){
+			if(delivery.getClass() == Repository.class){
 				return (Repository)delivery;
 				
 			}
 		}
 		throw new NoRepositoryException("CircuitManagement.java : problem when getting the repository in deliveryList");
+	}
+
+	public List<Circuit> getCircuitsList() {
+		return circuitsList;
 	}
 
 	public int getNbDeliveryMan() {
@@ -108,32 +112,68 @@ public class CircuitManagement extends Observable{
     	
         // process Kmeansclustering multiple times and keep the best one
     	
+    	List<Delivery> deliveriesToDistribute = new ArrayList<Delivery>(deliveryList);
+    	try {
+			deliveriesToDistribute.remove(getRepository());
+		} catch (NoRepositoryException e) {
+			// TODO Auto-generated catch block
+			System.out.println("PAS DE REPOSITORY!!!");
+			e.printStackTrace();
+		}
     	
-    	List<ArrayList<Delivery>> distribution = KmeansClustering(nbDeliveryMan, deliveryList);
+    	List<ArrayList<Delivery>> distribution = KmeansClustering(nbDeliveryMan, deliveriesToDistribute);
     	// REEQUILIBRER LA DISTRIBUTION
-    	int iteration = 0;
+    	int iteration = 1;
     	while (iteration<1000 && !checkClusterValidity(distribution)) {
     		/*
+    		System.out.println("-------------------------------------------");
     		System.out.println("Iteration : "+iteration);
     		System.out.println("Validity : "+checkClusterValidity(distribution));
     		for (ArrayList<Delivery> cluster : distribution) {
-    			System.out.print(cluster.size()+" / ");
+    			System.out.println(cluster.size()+" : ");
+    			for (Delivery del : cluster) {
+    				System.out.println("Livraison : "+del.getPosition().getId());
+    			}
+    			System.out.println("");
     		}
+    		System.out.println("-------------------------------------------");
     		System.out.println("");
     		*/
     		iteration++;
-    		distribution = KmeansClustering(nbDeliveryMan, deliveryList);
+    		distribution = KmeansClustering(nbDeliveryMan, deliveriesToDistribute);
     	}
     	if (iteration==1000) {
     		System.out.println("PROBLEME DE DIVERGENCE DES CLUSTERS!!! (LA SOLUTION TROUVEE N'EST PAS OPTIMALE)");
-    	} else {
+    	} /*else {
     		System.out.println("Nombre d'iteration : "+iteration);
-    	}
+    	}*/
+
+    	/*
+		System.out.println("-------------------------------------------");
+		System.out.println("Iteration : "+iteration);
+		System.out.println("Validity : "+checkClusterValidity(distribution));
+		for (ArrayList<Delivery> cluster : distribution) {
+			System.out.println(cluster.size()+" : ");
+			for (Delivery del : cluster) {
+				System.out.println("Livraison : "+del.getPosition().getId()+" ("+del.getPosition().getLatitude()+"/"+del.getPosition().getLongitude()+")");
+			}
+			System.out.println("");
+		}
+		System.out.println("-------------------------------------------");
+		System.out.println("");
+    	*/
     	
-    	//distribution = balanceDistribution(distribution);
-        
-    	
-    	
+		// Add repository to each circuit
+		for (ArrayList<Delivery> cluster : distribution) {
+			try {
+				cluster.add(getRepository());
+			} catch (NoRepositoryException e) {
+				// TODO Auto-generated catch block
+				System.out.println("PAS DE REPOSITORY!!!");
+				e.printStackTrace();
+			}
+		} 
+		
         return distribution;
     }
     
@@ -268,8 +308,9 @@ public class CircuitManagement extends Observable{
     }
     
     protected boolean checkClusterValidity (List<ArrayList<Delivery>> clustersToCheck) {
-    	Integer bottomAverageNumberOfDeliveries = deliveryList.size()/nbDeliveryMan;
+    	Integer bottomAverageNumberOfDeliveries = (deliveryList.size()-1)/nbDeliveryMan; // Passer plutot la liste sans l'entrepot
     	Integer topAverageNumberOfDeliveries = bottomAverageNumberOfDeliveries+1;
+    	//System.out.println("Bornes valides : "+bottomAverageNumberOfDeliveries+"/"+topAverageNumberOfDeliveries);
     	boolean isValid = true;
     	for (ArrayList<Delivery> cluster : clustersToCheck) {
     		if (cluster.size() != bottomAverageNumberOfDeliveries && cluster.size() != topAverageNumberOfDeliveries) {
@@ -312,7 +353,7 @@ public class CircuitManagement extends Observable{
     	if(groupedDeliveries.size()>0){
     		this.circuitsList = new ArrayList<Circuit>();
     		Repository repository = null;
-    		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
+    		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathsTemp = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
     		try {
 				repository = getRepository();
 			} catch (NoRepositoryException e1) {
@@ -321,12 +362,15 @@ public class CircuitManagement extends Observable{
 				throw e1;
 			}
     		if(repository != null){
-    			allPaths.put(repository, this.currentMap.findShortestPath(repository, this.deliveryList));
+    			allPathsTemp.put(repository, this.currentMap.findShortestPath(repository, this.deliveryList));
     		}
     		for(List<Delivery> arrivalDeliveries : groupedDeliveries){
+    			HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>(allPathsTemp);
     			for(Delivery departureDelivery : arrivalDeliveries){
     				try {
-						allPaths.put(departureDelivery, this.currentMap.findShortestPath(departureDelivery, arrivalDeliveries));
+    					if (departureDelivery!=repository) {
+    						allPaths.put(departureDelivery, this.currentMap.findShortestPath(departureDelivery, arrivalDeliveries));
+    					}
 					} catch (DijkstraException e) {
 						// TODO Auto-generated catch block
 						//e.printStackTrace();

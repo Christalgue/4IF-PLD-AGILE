@@ -75,7 +75,7 @@ public class Circuit extends Observable {
 			finalPath.add(pathsFromLastDelivery.get(bestSolution[indexBestSolution]));
 		}
 		// add the last AtomicPath to the finalPath
-		HashMap<Delivery, AtomicPath> pathsFromLastDeliveryOfTheList = allPaths.get(bestSolution[bestSolution.length]);
+		HashMap<Delivery, AtomicPath> pathsFromLastDeliveryOfTheList = allPaths.get(bestSolution[bestSolution.length-1]);
 		finalPath.add(pathsFromLastDeliveryOfTheList.get(bestSolution[0]));
 
 		this.deliveryList = deliveriesOrdered;
@@ -114,7 +114,7 @@ public class Circuit extends Observable {
 		this.path = path;
 	}
 
-	protected List<Delivery> getDeliveryList() {
+	public List<Delivery> getDeliveryList() {
 		return deliveryList;
 	}
 
