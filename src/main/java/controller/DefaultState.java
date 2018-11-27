@@ -29,4 +29,11 @@ public abstract class DefaultState implements State {
 	public void leftClick(Controller controller, Window window, Node node, boolean exist){}
 	
 	public void movedMouse(Controller controller, Window window){}
+
+	@Override
+	public String toString() {
+		return "State : "+getClass().getName().substring(21);
+	}
+	
+	
 }

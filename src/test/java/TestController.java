@@ -1,21 +1,34 @@
 package test.java;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
 import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
 
-public class TestController {
-	
-	public static void main (String [] args) {
+class TestController {
+
+	@Test
+	void testChangeState() {
 		CircuitManagement cm = new CircuitManagement();
 		Controller c = new Controller (cm);
+		assertTrue(c.currentState.toString().contains("State : InitialState"),"Expected <State : InitialState>, got <"+c.currentState.toString()+">");
+		
+		c.loadMap("resources/xml/petitPlan.xml");
+		assertTrue(c.currentState.toString().contains("State : MapLoadedState"),"Expected <State : MapLoadedState>, got <"+c.currentState.toString()+">");
+		
 		c.loadMap("resources/xml/grandPlan.xml");
-		System.out.println("Etat desiré  : mapLoaded, etat obtenu :" + c.currentState.getClass().getName());
+		assertTrue(c.currentState.toString().contains("State : MapLoadedState"),"Expected <State : MapLoadedState>, got <"+c.currentState.toString()+">");
+
 		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
-		System.out.println("Etat desiré  : deliveryLoaded, etat obtenu :" + c.currentState.getClass().getName()); 
-		//c.calculateCircuits(1);
-		//System.out.println("Etat desiré  : calc, etat obtenu :" + c.currentState.getClass().getName()); 
+		assertTrue(c.currentState.toString().contains("State : DeliveryLoadedState"),"Expected <State : DeliveryLoadedState>, got <"+c.currentState.toString()+">");
 		
+		c.loadMap("resources/xml/petitPlan.xml");
+		assertTrue(c.currentState.toString().contains("State : MapLoadedState"),"Expected <State : MapLoadedState>, got <"+c.currentState.toString()+">");
 		
+		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
+		assertTrue(c.currentState.toString().contains("State : DeliveryLoadedState"),"Expected <State : DeliveryLoadedState>, got <"+c.currentState.toString()+">");
 	}
 
 }
