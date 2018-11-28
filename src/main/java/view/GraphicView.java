@@ -38,13 +38,15 @@ public class GraphicView extends JPanel implements Observer {
 	private CircuitView circuitView;
 	private DeliveryView deliveryView;
 	
+	private int width;
+	
 	Color color [] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.GREEN, Color.PINK };
 	
 	/**
 	 * Create the graphic view where the map will be drawn in Window windows
 	 * @param circuitManagement the CircuitManagement
 	 */
-	public GraphicView(main.java.entity.CircuitManagement circuitManagement, int viewHeight, int viewWidth) {
+	public GraphicView(main.java.entity.CircuitManagement circuitManagement, int viewHeight, int viewWidth, int width) {
 		
 		super();
 		
@@ -52,18 +54,15 @@ public class GraphicView extends JPanel implements Observer {
 		
 		this.viewHeight = viewHeight;
 		this.viewWidth = viewWidth;
+		this.width = width;
 	
 		this.circuitManagement = circuitManagement;
-		/*calculateScale(circuitManagement);
-		System.out.println(heightScale + " " + widthScale);
 	
-		mapView = new MapView (Color.WHITE, 7,15, this);
-		circuitView = new CircuitView(this, 10);
-		deliveryView = new DeliveryView (Color.RED, 15, this);*/
+		mapView = new MapView (Color.WHITE, width, 2*width, this);
+		circuitView = new CircuitView(this, width);
+		deliveryView = new DeliveryView (Color.RED, Color.ORANGE, 3*width, this);
 		
 	}
-	
-	
 	
 	
 	protected void calculateScale (main.java.entity.CircuitManagement circuitManagement) {
@@ -151,59 +150,32 @@ public class GraphicView extends JPanel implements Observer {
 		repaint();
 	}
 
-	public void paintComponent() {
-		
-		paintComponent(g);
-	}
 	
 	/**
 	 * Methode appelee a chaque fois que VueGraphique doit etre redessinee
 	 */
 	public void paintComponent(Graphics2D g2D) {
 		
-		
-		mapView.paintMap(g2D, circuitManagement.getCurrentMap());
-		
-		int colorIndex =0;
-		
-		for( Circuit entry : circuitManagement.getCircuitsList() ) {
-		    
-			circuitView.paintCircuit(g2D, entry, color[colorIndex%color.length]);
-			colorIndex++;
-			
-		}
-		
-		deliveryView.paintDeliveries(g2D,circuitManagement.getDeliveryList());
-		
-	}
-	
-	//A refaire en plus propre
-	public void paintComponentMap() {
-		System.out.println("couille : " + g);
-		paintMap(g);
-		
-	}
-	public void paintMap (Graphics2D g2D) {
-		calculateScale(circuitManagement);
-		mapView = new MapView (Color.WHITE, 3,7, this);
-		mapView.paintMap(g2D, circuitManagement.getCurrentMap());
-	}
-	
-	public void paintComponentDeliveries() {
-		
-		paintDeliveries(g);
-	}
-	public void paintDeliveries (Graphics2D g2D) {
-		deliveryView = new DeliveryView (Color.RED, 15, this);
-		deliveryView.paintDeliveries(g2D,circuitManagement.getDeliveryList());
-	}
-	
-	public void paintComponentCircuits() {
+		paintMap (g);
 		
 		paintCircuits(g);
+		
+		paintDeliveries(g);
+		
 	}
+	
+	public void paintMap (Graphics2D g2D) {
+		calculateScale(circuitManagement);
+		System.out.println(widthScale);
+		mapView.paintMap(g2D, circuitManagement.getCurrentMap());
+	}
+	
+	public void paintDeliveries (Graphics2D g2D) {
+		deliveryView.paintDeliveries(g2D,circuitManagement.getDeliveryList());
+	}
+	
 	public void paintCircuits(Graphics2D g2D) {
-		circuitView = new CircuitView(this, 5);
+
 		int colorIndex =0;
 		
 		for( Circuit entry : circuitManagement.getCircuitsList() ) {
@@ -212,6 +184,8 @@ public class GraphicView extends JPanel implements Observer {
 			colorIndex++;
 			
 		}
+		
+		paintDeliveries(g);
 	}
 	
 	protected Graphics2D getGraphic() {
@@ -223,13 +197,6 @@ public class GraphicView extends JPanel implements Observer {
 		g = (Graphics2D) this.getGraphics();
 		System.out.println(g);
 	}
-	
-	protected void paintRectangle() {
-		g.setColor(Color.RED);
-		g.fillRect(10, 10, 80, 80);
-	}
-
-
 
 
 	@Override

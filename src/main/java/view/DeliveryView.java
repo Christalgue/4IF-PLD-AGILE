@@ -39,6 +39,8 @@ public class DeliveryView extends JPanel {
      */
 	private Color deliveryColor;
 	
+	private Color repositoryColor;
+	
 	/**
      * The radius of the delivery
      */
@@ -49,8 +51,9 @@ public class DeliveryView extends JPanel {
 	 * @param colorDelivery 		The color of the delivery
 	 * @param deliveryRadius			The width of the road
 	 */
-	public DeliveryView (Color deliveryColor, int deliveryRadius, GraphicView graphicView) {
+	public DeliveryView (Color deliveryColor, Color repositoryColor, int deliveryRadius, GraphicView graphicView) {
 		this.deliveryColor = deliveryColor;
+		this.repositoryColor = repositoryColor;
 		this.deliveryRadius = deliveryRadius;
 		this.graphicView = graphicView;
 	}
@@ -73,13 +76,20 @@ public class DeliveryView extends JPanel {
 	
 	protected void paintDeliveries ( Graphics2D g,  List<Delivery> deliveryList ) {
 		
-		//super.paintComponent(g);
-		g.setColor(deliveryColor);
+		g.setColor(repositoryColor);
+		
+		boolean b = true;
 		
 		for( Delivery entry : deliveryList ) {
 		    
 			Node node = entry.getPosition();		
 			drawDelivery( g, node);
+			
+			if (b) {
+				g.setColor(deliveryColor);
+				b = false;
+			}
+			
 		}
 		
 	}
