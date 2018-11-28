@@ -47,9 +47,12 @@ public class ButtonsListener implements ActionListener {
 		switch (e.getActionCommand()){
 		case Window.LOAD_MAP: 
 			Window.getMapName();
+			Window.loadDeliveryList.setEnabled(true);
+			Window.calculateCircuitButton.setEnabled(false);
 			controller.loadMap(map); break;
 		case Window.LOAD_DELIVERY_OFFER: 
 			Window.getDeliveryListName();
+			Window.calculateCircuitButton.setEnabled(true);
 			controller.loadDeliveryOffer(deliveryList); break;
 		case Window.CALCULATE_CIRCUITS: 
 			Window.getDeliveryMenNumber();

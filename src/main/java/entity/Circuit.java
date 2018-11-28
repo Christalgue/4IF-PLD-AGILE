@@ -87,16 +87,25 @@ public class Circuit extends Observable {
 	 * @param Map
 	 * @param Delivery
 	 */
-	protected void Remove(Delivery deliveryToRemove) {
-		// TODO implement here
+	protected void removeDelivery(int position) {
+		this.deliveryList.remove(position);
 	}
 
 	/**
 	 * @param Delivery
 	 * @param nextToDelivery
 	 */
-	protected void Add(Delivery deliveryToAdd, Delivery nextToDelivery) {
-		// TODO implement here
+	protected void addDelivery(Delivery deliveryToAdd, int position) {
+		this.deliveryList.add(position, deliveryToAdd);
+	}
+	
+	protected void addAtomicPath(AtomicPath pathToAdd, int position) {
+		this.path.add(position, pathToAdd);
+		
+	}
+	
+	protected void removeAtomicPath(int position) {
+		this.path.remove(position);
 	}
 
 	protected double getCircuitLength() {
@@ -121,6 +130,18 @@ public class Circuit extends Observable {
 
 	protected void setDeliveryList(List<Delivery> deliveryList) {
 		this.deliveryList = deliveryList;
+	}
+	
+	protected int checkNodeInCircuit(Node nodeTested) {
+		int position;
+		for(position=0; position < this.deliveryList.size(); position++){
+			if(this.deliveryList.get(position).getPosition() == nodeTested) 
+			{
+				return position;
+			}
+		}
+		return -1;
+		
 	}
 
 }
