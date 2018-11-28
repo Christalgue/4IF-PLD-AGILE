@@ -34,7 +34,7 @@ class TestGlobalCircuitsCalculation {
 			
 			CircuitManager.calculateCircuits(3);
 			
-			/*
+			
 			for (Circuit c : CircuitManager.getCircuitsList()) {
 				System.out.println("");
 				System.out.println("Tournee");
@@ -47,7 +47,7 @@ class TestGlobalCircuitsCalculation {
 					}
 				}
 				System.out.println("");
-			}*/
+			}
 			
 		} catch (MapNotChargedException e) {
 			e.printStackTrace();
