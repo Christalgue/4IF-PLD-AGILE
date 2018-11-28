@@ -32,7 +32,7 @@ class TestGlobalCircuitsCalculation {
 			//CircuitManager.loadMap("resources/tests/Global/xml/plan.xml");
 			//CircuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
 			
-			CircuitManager.calculateCircuits(3);
+			CircuitManager.calculateCircuits(3, false);
 			
 			
 			for (Circuit c : CircuitManager.getCircuitsList()) {

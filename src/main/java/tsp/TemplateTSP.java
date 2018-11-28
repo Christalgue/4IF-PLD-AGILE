@@ -11,21 +11,36 @@ public abstract class TemplateTSP implements TSP {
 	private double costBestSolution = 0;
 	private Boolean limitTimeReached;
 	
+	
+	private int indexCurrentDeliverySVG;
+	private ArrayList<Delivery> nonViewedSVG = null;
+	private ArrayList<Delivery> viewedSVG = null;
+	private double viewedCostSVG;
+	private HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathesSVG = null;
+	private int[] durationSVG = null;
+	private long startingTimeSVG;
+	private int limitTimeSVG;
+	
+	
 	public Boolean getLimitTimeReached(){
 		return limitTimeReached;
 	}
 	
-	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration) throws TSPLimitTimeReachedException{
+	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException{
 		limitTimeReached = false;
-		costBestSolution = Integer.MAX_VALUE;
-		Set<Delivery> deliveries = allPaths.keySet();
-		bestSolution = new Delivery[deliveries.size()];
-		ArrayList<Delivery> nonViewed = new ArrayList<Delivery>();
-		nonViewed.addAll(allPaths.keySet());
-		nonViewed.remove(repository);
-		ArrayList<Delivery> viewed = new ArrayList<Delivery>(deliveries.size());
-		viewed.add(0, repository); // the first "node" visited in the repository 
-		branchAndBound(0, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
+		if (continueInterruptedCalculation == false) {
+			costBestSolution = Integer.MAX_VALUE;
+			Set<Delivery> deliveries = allPaths.keySet();
+			bestSolution = new Delivery[deliveries.size()];
+			ArrayList<Delivery> nonViewed = new ArrayList<Delivery>();
+			nonViewed.addAll(allPaths.keySet());
+			nonViewed.remove(repository);
+			ArrayList<Delivery> viewed = new ArrayList<Delivery>(deliveries.size());
+			viewed.add(0, repository); // the first "node" visited in the repository 
+			branchAndBound(0, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
+		} else {
+			branchAndBound(indexCurrentDeliverySVG, nonViewedSVG, viewedSVG, viewedCostSVG, allPathesSVG, durationSVG, startingTimeSVG, limitTimeSVG);
+		}
 		
 		// TODO need to consider the time spent delivering the order at each delivery point.
 	}
@@ -47,6 +62,18 @@ public abstract class TemplateTSP implements TSP {
 
 	public double getCostBestSolution(){
 		return costBestSolution;
+	}
+	
+	private void saveCurrentStateOfCalculation(int indexCurrentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes,
+			int[] duration, long startingTime, int limitTime) {
+		this.indexCurrentDeliverySVG = indexCurrentDelivery;
+		this.nonViewedSVG = nonViewed;
+		this.viewedSVG = viewed;
+		this.viewedCostSVG = viewedCost;
+		this.allPathesSVG = allPathes;
+		this.durationSVG = duration;
+		this.startingTimeSVG = startingTime;
+		this.limitTimeSVG = limitTime;
 	}
 	
 	/**
@@ -82,9 +109,10 @@ public abstract class TemplateTSP implements TSP {
 	 * @param limitTime : maximum time that the resolution is allowed to take
 	 * @throws TSPLimitTimeReachedException 
 	 */	
-	 void branchAndBound(int indexCurrentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes, int[] duration, long startingTime, int limitTime) throws TSPLimitTimeReachedException{
+	 private void branchAndBound(int indexCurrentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes, int[] duration, long startingTime, int limitTime) throws TSPLimitTimeReachedException{
 		 if (System.currentTimeMillis() - startingTime > limitTime){
 			 limitTimeReached = true;
+			 saveCurrentStateOfCalculation(indexCurrentDelivery, nonViewed, viewed, viewedCost, allPathes, duration, startingTime, limitTime);
 			 throw new TSPLimitTimeReachedException("Branch and Bound of the circuit : " + allPathes.keySet().toString());
 		 }
 	    if (nonViewed.size() == 0){ // all the deliveries have been visited 

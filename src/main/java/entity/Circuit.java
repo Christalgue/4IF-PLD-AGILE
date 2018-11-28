@@ -30,15 +30,21 @@ public class Circuit extends Observable {
 	 * 
 	 */
 	private List<Delivery> deliveryList;
+	
+	
+	private Repository repositorySVG = null;
+	
+	private HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathsSVG = null;
 
 	/**
 	 * Constructor
+	 * @throws TSPLimitTimeReachedException 
 	 * 
 	 */
 	public Circuit(List<Delivery> deliveries, Repository repository,
-			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) throws TSPLimitTimeReachedException {
 		this.deliveryList = deliveries;
-		calculateTrackTSP(repository, allPaths);
+		calculateTrackTSP(repository, allPaths, false);
 		this.circuitLength = calculateLength();
 	}
 
@@ -54,14 +60,19 @@ public class Circuit extends Observable {
 	}
 
 	/**
+	 * @param continueInterruptedCalculation 
+	 * @throws TSPLimitTimeReachedException 
 	 */
-	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
+	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException {
 		TSP1 tsp = new TSP1();
 		try {
-			tsp.searchSolution(10000, repository, allPaths, null);
+			tsp.searchSolution(10000, repository, allPaths, null, continueInterruptedCalculation);
 		} catch (TSPLimitTimeReachedException e) {
 			// TODO Auto-generated catch block
 			///e.printStackTrace();
+			saveCurrentStateForCalculation(repository, allPaths);
+			
+			throw e;
 		} finally {
 			Delivery bestSolution[];
 			bestSolution = tsp.getBestSolution();
@@ -81,6 +92,15 @@ public class Circuit extends Observable {
 			this.deliveryList = deliveriesOrdered;
 			this.path = finalPath;
 		}
+	}
+	private void saveCurrentStateForCalculation(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
+		this.allPathsSVG = allPaths;
+		this.repositorySVG = repository;
+	}
+	
+	public void continueCalculation() throws TSPLimitTimeReachedException {
+		//load the save and continue the calculation.
+		calculateTrackTSP(repositorySVG, allPathsSVG, true);
 	}
 
 	/**

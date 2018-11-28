@@ -7,6 +7,7 @@ import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
 import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
+import main.java.exception.TSPLimitTimeReachedException;
 import main.java.view.Window;
 
 public class DeliveryLoadedState extends DefaultState {
@@ -37,7 +38,7 @@ public class DeliveryLoadedState extends DefaultState {
 	
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan){
 		try {
-			controller.circuitManagement.calculateCircuits(nbDeliveryMan);
+			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			controller.setCurrentState(controller.calcState);
 			window.drawCircuits();
 		} catch (ClusteringException e)
@@ -55,6 +56,11 @@ public class DeliveryLoadedState extends DefaultState {
 		} catch (NoRepositoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (TSPLimitTimeReachedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			////if user want to continue then a while in there
+			//// else just end the algorithm.
 		}
 		
 	}

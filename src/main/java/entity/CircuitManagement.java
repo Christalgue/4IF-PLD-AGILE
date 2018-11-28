@@ -325,59 +325,70 @@ public class CircuitManagement extends Observable{
      * call the cluster method and create the circuits one by one after having 
      *      calculated the atomic path between each delivery
      * @param nbDeliveryman
+     * @param continueInterruptedCalculation TODO
      * @throws MapNotChargedException 
      * @throws DeliveryListNotCharged 
      * @throws ClusteringException 
      * @throws DijkstraException 
      * @throws NoRepositoryException 
+     * @throws TSPLimitTimeReachedException 
      */
-    public void calculateCircuits(int nbDeliveryman) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException, DijkstraException, NoRepositoryException {
+    public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException {
     	
-    	if(nbDeliveryman>0){
-    		this.nbDeliveryMan = nbDeliveryman;
-    	}
-    	List<ArrayList<Delivery>> groupedDeliveries;
-    	if(this.currentMap.getNodeMap().isEmpty()){
-    		throw new MapNotChargedException("Impossible to calculate the circuits if there is not any Map in the system");
-    	} else if (this.deliveryList.isEmpty()){
-    		throw new DeliveryListNotCharged("Impossible to calculate the circuits if there is not any Delivery in the system");
-    	} else {
-    		try {
-				groupedDeliveries = cluster();
-			} catch (ClusteringException e) {
-				throw e;
-			}
-    	}
-    	if(groupedDeliveries.size()>0){
-    		this.circuitsList = new ArrayList<Circuit>();
-    		Repository repository = null;
-    		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathsTemp = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
-    		try {
-				repository = getRepository();
-			} catch (NoRepositoryException e1) {
-				// TODO Auto-generated catch block
-				//e1.printStackTrace();
-				throw e1;
-			}
-    		if(repository != null){
-    			allPathsTemp.put(repository, this.currentMap.findShortestPath(repository, this.deliveryList));
-    		}
-    		for(List<Delivery> arrivalDeliveries : groupedDeliveries){
-    			HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>(allPathsTemp);
-    			for(Delivery departureDelivery : arrivalDeliveries){
-    				try {
-    					if (departureDelivery!=repository) {
-    						allPaths.put(departureDelivery, this.currentMap.findShortestPath(departureDelivery, arrivalDeliveries));
-    					}
-					} catch (DijkstraException e) {
-						// TODO Auto-generated catch block
-						//e.printStackTrace();
-						throw e;
-					}
+    	if(continueInterruptedCalculation == false) {
+
+        	if(nbDeliveryman>0){
+        		this.nbDeliveryMan = nbDeliveryman;
+        	}
+        	List<ArrayList<Delivery>> groupedDeliveries;
+        	if(this.currentMap.getNodeMap().isEmpty()){
+        		throw new MapNotChargedException("Impossible to calculate the circuits if there is not any Map in the system");
+        	} else if (this.deliveryList.isEmpty()){
+        		throw new DeliveryListNotCharged("Impossible to calculate the circuits if there is not any Delivery in the system");
+        	} else {
+        		try {
+    				groupedDeliveries = cluster();
+    			} catch (ClusteringException e) {
+    				throw e;
     			}
-    			this.circuitsList.add(new Circuit(arrivalDeliveries, repository, allPaths));
+        	}
+        	if(groupedDeliveries.size()>0){
+        		this.circuitsList = new ArrayList<Circuit>();
+        		Repository repository = null;
+        		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathsTemp = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
+        		try {
+    				repository = getRepository();
+    			} catch (NoRepositoryException e1) {
+    				// TODO Auto-generated catch block
+    				//e1.printStackTrace();
+    				throw e1;
+    			}
+        		if(repository != null){
+        			allPathsTemp.put(repository, this.currentMap.findShortestPath(repository, this.deliveryList));
+        		}
+        		for(List<Delivery> arrivalDeliveries : groupedDeliveries){
+        			HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>(allPathsTemp);
+        			for(Delivery departureDelivery : arrivalDeliveries){
+        				try {
+        					if (departureDelivery!=repository) {
+        						allPaths.put(departureDelivery, this.currentMap.findShortestPath(departureDelivery, arrivalDeliveries));
+        					}
+    					} catch (DijkstraException e) {
+    						// TODO Auto-generated catch block
+    						//e.printStackTrace();
+    						throw e;
+    					}
+        			}
+        			this.circuitsList.add(new Circuit(arrivalDeliveries, repository, allPaths));
+        		}
+        	}
+    	} else {
+    		for(Circuit circuitTested : this.circuitsList)
+    		{
+    			//if circuit have its save attributes non null then continue calculation circuit from them
     		}
     	}
+    	
     }
 
 	public boolean checkNodeInDeliveryList(Node nodeTested){
@@ -459,7 +470,7 @@ public class CircuitManagement extends Observable{
 						e.printStackTrace();
 					}
 				} else {
-					// cas où c'est un entrepot
+					// case when it's a repository
 				}
 			}
 			

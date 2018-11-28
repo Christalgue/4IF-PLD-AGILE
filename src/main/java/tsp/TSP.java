@@ -11,9 +11,10 @@ public interface TSP {
 	public Boolean getLimitTimeReached();
 	
 	/**
+	 * @param continueInterruptedCalculation TODO
 	 * @throws TSPLimitTimeReachedException 
 	 */
-	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration) throws TSPLimitTimeReachedException;
+	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException;
 	
 	/**
 	 */
