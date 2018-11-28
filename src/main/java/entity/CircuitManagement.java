@@ -397,7 +397,7 @@ public class CircuitManagement extends Observable{
 			if ((position=circuit.checkNodeInCircuit(previousNode))!=-1) {
 				// on rajoute le delivery à la liste et on supprime l'atomic path entre le delivery precedent et suivant
 				circuit.addDelivery(delivery, (position+1));
-				circuit.removeAtomicPath((position+1));
+				circuit.removeAtomicPath(position);
 				
 				// on recupere le delivery precedent et suivant
 				Delivery previousDelivery = circuit.getDeliveryList().get(position);
@@ -411,7 +411,7 @@ public class CircuitManagement extends Observable{
 				
 				try {
 					HashMap<Delivery,AtomicPath> deliveryPrevious = this.currentMap.findShortestPath(previousDelivery, newDeliveryList);
-					circuit.addAtomicPath(deliveryPrevious.get(delivery), (position+1));
+					circuit.addAtomicPath(deliveryPrevious.get(delivery), (position));
 				} catch (DijkstraException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -419,7 +419,7 @@ public class CircuitManagement extends Observable{
 				
 				try {
 					HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(delivery, nextDeliveryList);
-					circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+2));
+					circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+1));
 				} catch (DijkstraException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
