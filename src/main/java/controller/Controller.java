@@ -8,8 +8,8 @@ public class Controller {
 	
 	public CircuitManagement circuitManagement;
 	private Window window;
-	public State currentState; // A REMETTRE EN PRIVATE
-	// Instances associees a chaque etat possible du controleur
+	public State currentState; // TURN BACK TO PRIVATE
+	// Instances associated to each possible state of the controller
 	protected final InitialState initState = new InitialState();
 	protected final CalcState  calcState = new  CalcState();
 	protected final DeliveryAddedState deliveryAddedState = new DeliveryAddedState();
@@ -105,9 +105,9 @@ public class Controller {
 	}
 
 	/**
-	 * Methode appelee par fenetre apres un deplacement de la souris sur la vue graphique du plan
+	 * Method called by window after the mouse has moved in the graphical view of the plan
 	 * Precondition : p != null
-	 * @param p = coordonnees du plan correspondant a la position de la souris
+	 * @param p = coordinates in the plan of the mouse position
 	 */
 	public void movedMouse() {
 		currentState.movedMouse(this, window);

@@ -11,14 +11,15 @@ public class IteratorSeq implements Iterator<Delivery> {
 	private int nbCandidates;
 
 	/**
-	 * Cree un iterateur pour iterer sur l'ensemble des sommets de nonVus
-	 * @param nonVus
-	 * @param sommetCrt
+	 * create an iterator to iterate on every non viewed delivery
+	 * @param nonViewed
+	 * @param currentDelivery
+	 * TODO refactor to guaranty to see the non viewed deliveries in the good order 
 	 */
-	public IteratorSeq(Collection<Delivery> nonVus, Delivery sommetCrt){
-		this.candidates = new Delivery[nonVus.size()];
+	public IteratorSeq(Collection<Delivery> nonViewed, Delivery currentDelivery){
+		this.candidates = new Delivery[nonViewed.size()];
 		nbCandidates = 0;
-		for (Delivery s : nonVus){
+		for (Delivery s : nonViewed){
 			candidates[nbCandidates++] = s;
 		}
 	}

@@ -22,12 +22,10 @@ public abstract class TemplateTSP implements TSP {
 		ArrayList<Delivery> nonViewed = new ArrayList<Delivery>();
 		nonViewed.addAll(allPaths.keySet());
 		nonViewed.remove(repository);
-		//for (int indexListDeliveries=1; indexListDeliveries<deliveries.size(); indexListDeliveries++) nonViewed.add(indexListDeliveries, deliveries.get(indexListDeliveries));
 		ArrayList<Delivery> viewed = new ArrayList<Delivery>(deliveries.size());
-		viewed.add(0, repository); // le premier sommet visite est l'entrepot
-		///duration must be sent with maxValue for each node to visit --> find an adaptation for our model
-		    ///HashMap<Delivery,ShortestAtomicPathToGoToThisDelivery> ?     
+		viewed.add(0, repository); // the first "node" visited in the repository 
 		branchAndBound(0, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
+		// TODO need to consider the time spent delivering the order at each delivery point.
 	}
 	
 	public Delivery getDeliveryInBestSolutionAtIndex(int index){
@@ -50,23 +48,22 @@ public abstract class TemplateTSP implements TSP {
 	}
 	
 	/**
-	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
+	 * Method to redefine in the classes that extend TemplateTSP
 	 * @param delivery
-	 * @param nonViewed : tableau des sommets restant a visiter
-	 * @param allPaths : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
-	 * @param duree : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
-	 * @return une borne inferieure du cout des permutations commencant par sommetCourant, 
-	 * contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0
+	 * @param nonViewed : list of the deliveries we still need to visit
+	 * @param allPaths : used as cost to go from every delivery to every other
+	 * @param duration : time spent to visit a delivery
+	 * @return the minimum path starting and finishing by the repository, passing by every other delivery
 	 */
-	protected abstract int bound(Delivery delivery, ArrayList<Delivery> nonViewed, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duree);
+	protected abstract int bound(Delivery delivery, ArrayList<Delivery> nonViewed, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration);
 	
 	/**
-	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
+	 * Method to redefine in the classes that extend TemplateTSP
 	 * @param currentDelivery
-	 * @param nonViewed : tableau des sommets restant a visiter
-	 * @param allPaths : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
-	 * @param duration : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
-	 * @return un iterateur permettant d'iterer sur tous les sommets de nonVus
+	 * @param nonViewed : list of the deliveries we still need to visit
+	 * @param allPaths : used as cost to go from every delivery to every other
+	 * @param duration : time spent to visit a delivery
+	 * @return iterator for the non viewed deliveries
 	 */
 	protected abstract Iterator<Delivery> iterator(Delivery currentDelivery, ArrayList<Delivery> nonViewed,
 			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration);
@@ -74,23 +71,23 @@ public abstract class TemplateTSP implements TSP {
 	/**
 	 * Methode definissant le patron (template) d'une resolution par separation et evaluation (branch and bound) du TSP
 	 * @param indexCurrentDelivery le dernier sommet visite
-	 * @param nonViewed la liste des sommets qui n'ont pas encore ete visites
-	 * @param viewed la liste des sommets visites (y compris sommetCrt)
-	 * @param viewedCost la somme des couts des arcs du chemin passant par tous les sommets de vus + la somme des duree des sommets de vus
-	 * @param allPathes : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
-	 * @param duration : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
-	 * @param startingTime : moment ou la resolution a commence
-	 * @param limitTime : limite de temps pour la resolution
+	 * @param nonViewed : list of the deliveries we still need to visit
+	 * @param viewed : list of the deliveries we have already visited
+	 * @param viewedCost : cost of the path we are building
+	 * @param allPathes : used as cost to go from every delivery to every other
+	 * @param duration : time spent to visit a delivery
+	 * @param startingTime : time when the resolution started
+	 * @param limitTime : maximum time that the resolution is allowed to take
 	 */	
 	 void branchAndBound(int indexCurrentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes, int[] duration, long startingTime, int limitTime){
 		 if (System.currentTimeMillis() - startingTime > limitTime){
 			 limitTimeReached = true;
 			 return;
 		 }
-	    if (nonViewed.size() == 0){ // tous les sommets ont ete visites
+	    if (nonViewed.size() == 0){ // all the deliveries have been visited 
 	    	AtomicPath returnToRepository = allPathes.get(viewed.get(indexCurrentDelivery)).get(viewed.get(0)); //may be split for more readability
 	    	viewedCost += returnToRepository.getLength();
-	    	if (viewedCost < costBestSolution){ // on a trouve une solution meilleure que meilleureSolution
+	    	if (viewedCost < costBestSolution){ // we found a better solution than bestSolution
 	    		viewed.toArray(bestSolution);
 	    		costBestSolution = viewedCost;
 	    	}
@@ -102,7 +99,7 @@ public abstract class TemplateTSP implements TSP {
 	        	viewed.add(nextDelivery);
 	        	nonViewed.remove(nextDelivery);
 	        	
-	        	// Y A DU NULL ICI
+	        	// Some bullshit there
 	        	/*
 	        	System.out.println("");
 	        	System.out.println("Deliveries currentDelivery : "+viewed.get(indexCurrentDelivery).getPosition().getId());

@@ -29,6 +29,7 @@ public class CalcState extends DefaultState {
 		try {
 			controller.circuitManagement.loadDeliveryList(filename);
 			controller.setCurrentState(controller.deliveryLoadedState);
+			window.drawDeliveries();
 		} catch (LoadDeliveryException l)
 		{
 			l.printStackTrace();
@@ -39,6 +40,7 @@ public class CalcState extends DefaultState {
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan){
 		try {
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan);
+			window.drawCircuits();
 		} catch (ClusteringException e)
 		{
 			e.printStackTrace();

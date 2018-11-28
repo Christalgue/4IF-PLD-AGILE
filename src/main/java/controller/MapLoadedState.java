@@ -13,7 +13,6 @@ public class MapLoadedState extends DefaultState{
 			controller.circuitManagement.loadMap(filename);
 			System.out.println(filename);
 			window.drawMap();
-			System.out.println("Chargement Map déclenché");
 		} catch (LoadMapException l)
 		{
 			l.printStackTrace();
@@ -25,7 +24,6 @@ public class MapLoadedState extends DefaultState{
 		try {
 			controller.circuitManagement.loadDeliveryList(filename);
 			controller.setCurrentState(controller.deliveryLoadedState);
-			System.out.println("deliveries charged");
 			window.drawDeliveries();
 		} catch (LoadDeliveryException l)
 		{

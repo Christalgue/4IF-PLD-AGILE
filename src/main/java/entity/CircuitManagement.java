@@ -110,7 +110,7 @@ public class CircuitManagement extends Observable{
      */
     public List<ArrayList<Delivery>> cluster() throws ClusteringException {
     	
-        // process Kmeansclustering multiple times and keep the best one
+        // process the Kmeansclustering method multiple times and keep the best one
     	
     	List<Delivery> deliveriesToDistribute = new ArrayList<Delivery>(deliveryList);
     	try {
@@ -122,7 +122,7 @@ public class CircuitManagement extends Observable{
 		}
     	
     	List<ArrayList<Delivery>> distribution = KmeansClustering(nbDeliveryMan, deliveriesToDistribute);
-    	// REEQUILIBRER LA DISTRIBUTION
+    	// REBALANCE THE DISTRIBUTION
     	int iteration = 1;
     	while (iteration<1000 && !checkClusterValidity(distribution)) {
     		/*
@@ -193,7 +193,7 @@ public class CircuitManagement extends Observable{
     	*/
 		
     	List<ArrayList<Delivery>> newDistribution = KmeansClusteringStep(barycenters, deliveriesToCluster);
-    	List<ArrayList<Delivery>> oldDistribution = null; //// COMMENT INITIALISER????
+    	List<ArrayList<Delivery>> oldDistribution = null; //// HOW TO INITIALIZE????
     	    	
     	while (evaluateCluster(newDistribution, oldDistribution)) {
     		
@@ -321,7 +321,7 @@ public class CircuitManagement extends Observable{
     }
 
     /**
-     * generic method to call when calculation of the circuits is asked by GUI
+     * generic method to call when calculation of the circuits is asked by HCI
      * call the cluster method and create the circuits one by one after having 
      *      calculated the atomic path between each delivery
      * @param nbDeliveryman
@@ -338,11 +338,9 @@ public class CircuitManagement extends Observable{
     	}
     	List<ArrayList<Delivery>> groupedDeliveries;
     	if(this.currentMap.getNodeMap().isEmpty()){
-    		throw new MapNotChargedException("Impossible to calculate the circuits"
-    				+ "if there is not any Map in the system");
+    		throw new MapNotChargedException("Impossible to calculate the circuits if there is not any Map in the system");
     	} else if (this.deliveryList.isEmpty()){
-    		throw new DeliveryListNotCharged("Impossible to calculate the circuits"
-    				+ "if there is not any Delivery in the system");
+    		throw new DeliveryListNotCharged("Impossible to calculate the circuits if there is not any Delivery in the system");
     	} else {
     		try {
 				groupedDeliveries = cluster();
@@ -380,26 +378,6 @@ public class CircuitManagement extends Observable{
     			this.circuitsList.add(new Circuit(arrivalDeliveries, repository, allPaths));
     		}
     	}
-    	
-    	// refactor multimap atomic path
-    	/*if(groupedDeliveries.length>0){
-    		this.circuitsList = new Circuit[groupedDeliveries.length];
-    		for(int indexCircuits=0; indexCircuits<groupedDeliveries.length; indexCircuits++){
-    			List<Delivery> deliveryList = groupedDeliveries[indexCircuits];
-    			AtomicPath allPaths[][] = new AtomicPath[deliveryList.size()][deliveryList.size()];
-
-    			for(int indexDeliveryStart=0; indexDeliveryStart< deliveryList.size(); indexDeliveryStart++){
-    				Delivery start = deliveryList.get(indexDeliveryStart);
-    				try {
-						allPaths[indexDeliveryStart] = this.currentMap.findShortestPath(start, deliveryList);
-					} catch (DijkstraException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-    			}
-    			circuitsList[indexCircuits] = new Circuit(deliveryList, allPaths);
-    		}
-    	}*/
     }
 
 	public boolean checkNodeInDeliveryList(Node nodeTested){

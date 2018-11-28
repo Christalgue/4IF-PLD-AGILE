@@ -12,7 +12,6 @@ public class InitialState extends DefaultState {
 			System.out.println(filename);
 			controller.circuitManagement.loadMap(filename);
 			window.drawMap();
-			System.out.println("Map Chargée");
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
 		{

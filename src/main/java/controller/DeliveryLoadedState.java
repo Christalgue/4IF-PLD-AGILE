@@ -14,7 +14,6 @@ public class DeliveryLoadedState extends DefaultState {
 		
 		try {
 			controller.circuitManagement.loadDeliveryList(filename);
-			System.out.println("Chargement Livraison déclenché");
 			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
 		{
@@ -40,7 +39,6 @@ public class DeliveryLoadedState extends DefaultState {
 		try {
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan);
 			controller.setCurrentState(controller.calcState);
-			System.out.println("Circuits Calculated");
 			window.drawCircuits();
 		} catch (ClusteringException e)
 		{

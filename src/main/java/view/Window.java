@@ -55,7 +55,6 @@ public class Window extends JFrame{
 		final int buttonPanelHeight = 50;
 		final int graphicWidth = 1080;
 		
-		//CircuitManagement aCircuitManagement = new CircuitManagement();
 		Controller controller = new Controller(new CircuitManagement());
 		
 		//Window window = new Window(aCircuitManagement, aController);
@@ -155,9 +154,6 @@ public class Window extends JFrame{
 		controller.getWindow().graphicView.setSize(graphicWidth, windowHeight-buttonPanelHeight);
 		
 		
-		//////////////////////////////CREATE THE CIRCUIT///////////////////////////////////
-		//CircuitView circuitView = new CircuitView (graphicView, 5);
-		
 		//////////////////////////////CREATE THE TEXTUAL PANEL/////////////////////////////
 		JPanel textualPanel = new JPanel();
 		textualPanel.setSize(windowWidth-graphicWidth, windowHeight-buttonPanelHeight);
@@ -169,7 +165,7 @@ public class Window extends JFrame{
 		controller.getWindow().getContentPane().add(textualPanel);
 		controller.getWindow().getContentPane().add(controller.getWindow().graphicView);
 		
-		//////////////////////////////PAINT THE GRAPHIC VIEW////////////////////////////////
+		////////////////////////////// MAKE THE FRAME VISBLE AND PAINTABLE ////////////////////////////////
 		controller.getWindow().setVisible(true);
 		
 		controller.getWindow().graphicView.setGraphics();
@@ -195,7 +191,6 @@ public class Window extends JFrame{
 	}
 	
 	public void drawMap() {
-		//System.out.println(graphicView);
 		graphicView.paintComponentMap();
 	}
 	

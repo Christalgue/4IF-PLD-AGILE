@@ -1,1 +1,1 @@
-Ce package contient l'ensemble des classes pour l'IHM
+This package contains the classes that implement the view of our app, designed using the MVC architecture.

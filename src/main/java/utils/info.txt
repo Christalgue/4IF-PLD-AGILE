@@ -1,1 +1,0 @@
-Ce package contient l'ensemble des classes utilisables de n'importe où

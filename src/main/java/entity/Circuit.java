@@ -32,10 +32,6 @@ public class Circuit extends Observable {
 	/**
 	 * Constructor
 	 * 
-	 * @param repository
-	 *            TODO
-	 * @param ListDelivery
-	 * @param AtomicPath[][]
 	 */
 	public Circuit(List<Delivery> deliveries, Repository repository,
 			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
@@ -48,7 +44,6 @@ public class Circuit extends Observable {
 	 * 
 	 */
 	protected double calculateLength() {
-		// TODO implement here
 		double result = 0;
 		for (AtomicPath segment : this.path) {
 			result += segment.getLength();
@@ -57,8 +52,6 @@ public class Circuit extends Observable {
 	}
 
 	/**
-	 * @param repository
-	 * @param AtomicPath[][]
 	 */
 	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
 		TSP1 tsp = new TSP1();

@@ -71,7 +71,8 @@ public class Map extends Observable{
 	 * @throws DijkstraException 
      */
 	
-	// A METTRE EN NODE
+	// use nodes instead of deliveries ? -> if we have the type it could be a good idea to generalize the algorithm
+	// from any departureNode any List of arrivalNodes
     public HashMap<Delivery,AtomicPath> findShortestPath(Delivery startDelivery, List<Delivery> arrivalDeliveries) throws DijkstraException {
         if (!arrivalDeliveries.contains(startDelivery)) {
         	throw new DijkstraException("Deliveries does not contains startDelivery.");
@@ -135,7 +136,7 @@ public class Map extends Observable{
         			Set<Bow> currentNodeBows = bowMap.get(precedentNode.getId());
         			Bow bowToAddToAtomicPath = null;
         			for (Bow currentBow : currentNodeBows) {
-        				if (currentBow.getEndNode().equals(currentNode)) {			////////////////////////////////////////////////////////////////////////////
+        				if (currentBow.getEndNode().equals(currentNode)) {
         					bowToAddToAtomicPath = currentBow;
         				}
         			}
