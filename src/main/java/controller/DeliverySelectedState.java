@@ -78,11 +78,12 @@ public class DeliverySelectedState extends DefaultState {
 	
 	}
 	
-	public void deleteDelivery (Controller controller, Window window) {
+	public void deleteDelivery (Controller controller, Window window, Node node) {
 		controller.setCurrentState(controller.deliveryDeletedState);
 	}
 	
-	public void moveDelivery (Controller controller, Window window) {
+	public void moveDelivery (Controller controller, Window window, Node node, Node previousNode) {
+		//contoller.circuitManagement
 		controller.setCurrentState(controller.deliveryMovedState);
 	}
 
