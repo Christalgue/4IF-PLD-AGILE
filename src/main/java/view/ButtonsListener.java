@@ -14,7 +14,24 @@ public class ButtonsListener implements ActionListener {
 	 * 
 	 */
 	private Controller controller;
-
+	
+	private String map;
+	private String deliveryList; 
+	private int deliveryMenNumber;
+	
+	public void setMap( String map) {
+		this.map = map;
+	}
+	
+	public void setDeliveryList( String deliveryList) {
+		this.deliveryList = deliveryList;
+	}
+	
+	public void setDeliveryMenNumber( int deliveryMenNumber) {
+		this.deliveryMenNumber = deliveryMenNumber;
+	}
+	
+	
 	/**
 	 * 
 	 * @param controller
@@ -28,9 +45,15 @@ public class ButtonsListener implements ActionListener {
 		// Method called by the button listener each time a button is clicked
 		// Send to controller a message associated to the clicked button
 		switch (e.getActionCommand()){
-		//case Window.LOAD_MAP: controller.loadMap(); break;
-		//case Window.LOAD_DELIVERY_OFFER: controller.loadDeliveryOffer(); break;
-		//case Window.CALCULATE_CIRCUITS: controller.calculateCircuits(); break;
+		case Window.LOAD_MAP: 
+			Window.getMapName();
+			controller.loadMap(map); break;
+		case Window.LOAD_DELIVERY_OFFER: 
+			Window.getDeliveryListName();
+			controller.loadDeliveryOffer(deliveryList); break;
+		case Window.CALCULATE_CIRCUITS: 
+			Window.getDeliveryMenNumber();
+			controller.calculateCircuits(deliveryMenNumber); break;
 		//case Window.UNDO: controller.undo(); break;
 		/*case Window.ADD_DELIVERY: controller.addDelivery(); break;
 		case Window.VALIDATE_ADD: controller.validateAdd(); break;
