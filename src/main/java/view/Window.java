@@ -27,6 +27,9 @@ public class Window extends JFrame{
 	protected static TextField setNameOfDeliveryList;
 	protected static TextField numberOfDeliveryMen;
 	
+	protected static JButton loadDeliveryList;
+	protected static JButton calculateCircuitButton;
+	
 	protected static ButtonsListener buttonsListener;
 	
 	protected static final int windowWidth = 1280;
@@ -162,8 +165,9 @@ public class Window extends JFrame{
 		setNameOfDeliveryList.setText("resources/xml/dl-petit-3.xml");
 		buttonPanel.add(setNameOfDeliveryList);
 		
-		JButton loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
+		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
 		loadDeliveryList.addActionListener(buttonsListener);
+		loadDeliveryList.setEnabled(false);
 		buttonPanel.add(loadDeliveryList);
 		
 		
@@ -180,8 +184,9 @@ public class Window extends JFrame{
 		buttonPanel.add(undoButton);
 		undoButton.addActionListener(buttonsListener);*/
 		
-		JButton calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
+		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
 		calculateCircuitButton.addActionListener(buttonsListener);
+		calculateCircuitButton.setEnabled(false);
 		buttonPanel.add(calculateCircuitButton);
 	}
 	
