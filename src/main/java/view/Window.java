@@ -2,25 +2,14 @@ package main.java.view;
 
 import java.awt.Color;
 import java.awt.TextField;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
 import main.java.controller.Controller;
-import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
-import main.java.exception.ClusteringException;
-import main.java.exception.DeliveryListNotCharged;
-import main.java.exception.DijkstraException;
-import main.java.exception.LoadDeliveryException;
-import main.java.exception.LoadMapException;
-import main.java.exception.MapNotChargedException;
-import main.java.exception.NoRepositoryException;
 
 
 // https://examples.javacodegeeks.com/desktop-java/ide/eclipse/eclipse-windowbuilder-tutorial/
@@ -66,8 +55,8 @@ public class Window extends JFrame{
 		final int buttonPanelHeight = 50;
 		final int graphicWidth = 1080;
 		
-		CircuitManagement aCircuitManagement = new CircuitManagement();
-		Controller controller = new Controller(aCircuitManagement);
+		//CircuitManagement aCircuitManagement = new CircuitManagement();
+		Controller controller = new Controller(new CircuitManagement());
 		
 		//Window window = new Window(aCircuitManagement, aController);
 		
@@ -117,6 +106,7 @@ public class Window extends JFrame{
 		
 		buttonsListener = new ButtonsListener(controller.getWindow().controller);
 		
+		
 		//////////////////////////////CREATE THE HEADER PANEL/////////////////////////////
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setSize(windowWidth, buttonPanelHeight);
@@ -146,7 +136,7 @@ public class Window extends JFrame{
 		buttonPanel.add(labelNumberOfDeliveryMen);
 		
 		numberOfDeliveryMen = new TextField();
-		numberOfDeliveryMen.setText("12");
+		numberOfDeliveryMen.setText("2");
 		buttonPanel.add(numberOfDeliveryMen);
 		
 		/*JButton undoButton = new JButton("Retour");
@@ -179,22 +169,10 @@ public class Window extends JFrame{
 		controller.getWindow().getContentPane().add(textualPanel);
 		controller.getWindow().getContentPane().add(controller.getWindow().graphicView);
 		
-		//System.out.println(controller.getWindow().getContentPane().);
-		
 		//////////////////////////////PAINT THE GRAPHIC VIEW////////////////////////////////
 		controller.getWindow().setVisible(true);
-		/*try {
-			java.lang.Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		controller.getWindow().graphicView.setGraphics();
-		/*graphicView.paintComponentMap();
-		graphicView.paintComponentDeliveries();
-		graphicView.paintComponentCircuits();*/
 		
-		//graphicView.paintComponent();
+		controller.getWindow().graphicView.setGraphics();
 		
 	}
 	

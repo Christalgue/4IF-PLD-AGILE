@@ -185,7 +185,7 @@ public class GraphicView extends JPanel implements Observer {
 	}
 	public void paintMap (Graphics2D g2D) {
 		calculateScale(circuitManagement);
-		mapView = new MapView (Color.WHITE, 7,15, this);
+		mapView = new MapView (Color.WHITE, 3,7, this);
 		mapView.paintMap(g2D, circuitManagement.getCurrentMap());
 	}
 	
@@ -203,7 +203,7 @@ public class GraphicView extends JPanel implements Observer {
 		paintCircuits(g);
 	}
 	public void paintCircuits(Graphics2D g2D) {
-		circuitView = new CircuitView(this, 10);
+		circuitView = new CircuitView(this, 5);
 		int colorIndex =0;
 		
 		for( Circuit entry : circuitManagement.getCircuitsList() ) {
