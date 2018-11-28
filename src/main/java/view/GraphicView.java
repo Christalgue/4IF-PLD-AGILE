@@ -100,12 +100,12 @@ public class GraphicView extends JPanel implements Observer {
 		originLat = maxLat;
 		originLong = minLong;
 		
-		/*System.out.println("heightScale " + heightScale);
+		System.out.println("heightScale " + heightScale);
 		System.out.println("widthScale " + widthScale);
 		System.out.println("originLat " + originLat);
 		System.out.println("originLong " + originLong);
 		System.out.println("minLat " + minLat);
-		System.out.println("maxLong " + maxLong);*/
+		System.out.println("maxLong " + maxLong);
 	}
 
 
@@ -118,8 +118,9 @@ public class GraphicView extends JPanel implements Observer {
 	
 	public Point pointToLatLong( Point point ) {
 		
-		
-		Point p = new Point ( point.getX()*widthScale + originLong, -point.getY()*heightScale + originLat);
+		System.out.println("Appel de pointToLatLong");
+		Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY()-50)*heightScale + originLat);
+		System.out.println(p.getX() + "  " + p.getY());
 		return p;
 		
 	}
@@ -134,7 +135,11 @@ public class GraphicView extends JPanel implements Observer {
 		    
 			Node currentNode = entry.getValue();
 			
-			if ( currentNode.getLongitude() == point.getX() && currentNode.getLatitude() == point.getY()  )
+			/*if (currentNode.getLongitude() == point.getX() && currentNode.getLatitude() == point.getY())
+				return currentNode;*/
+			final double range = 0.0005;
+			if (currentNode.getLongitude() <= point.getX()+range && point.getX()-range <= currentNode.getLongitude() && 
+				currentNode.getLatitude() <= point.getY()+range && point.getY()-range <= currentNode.getLatitude())
 				return currentNode;
 				
 		}
