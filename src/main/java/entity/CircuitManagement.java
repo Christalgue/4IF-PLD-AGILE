@@ -431,5 +431,42 @@ public class CircuitManagement extends Observable{
 		}
 		
 	}
+	
+	public void removeDelivery (Node nodeDelivery) {		
+		int position;
+		for (Circuit circuit : this.circuitsList) {
+			if ((position=circuit.checkNodeInCircuit(nodeDelivery))!=-1) {
+				if (position != 0) {
+					
+					circuit.removeDelivery(position);
+					circuit.removeAtomicPath(position-1);
+					circuit.removeAtomicPath(position);
+					
+					// on recupere le delivery precedent et suivant
+					Delivery previousDelivery = circuit.getDeliveryList().get(position-1);
+					Delivery nextDelivery = circuit.getDeliveryList().get(position);
+					
+					//on setup des listes pour pouvoir utiliser le findShortestPath
+					List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
+					nextDeliveryList.add(nextDelivery);
+					
+					
+					try {
+						HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(previousDelivery, nextDeliveryList);
+						circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position-1));
+					} catch (DijkstraException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					// cas où c'est un entrepot
+				}
+			}
+			
+		}
+		
+	}
+	
+	
 
 }
