@@ -22,6 +22,7 @@ public class Window extends JFrame{
 	protected final static String LOAD_MAP = "Charger un plan";
 	protected static final String LOAD_DELIVERY_OFFER = "Charger une demande de livraison";
 	protected static final String CALCULATE_CIRCUITS = "Calculer les tournees";
+	protected static final String ADD_DELIVERY = "Ajouter une livraison";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
@@ -29,8 +30,10 @@ public class Window extends JFrame{
 	
 	protected static JButton loadDeliveryList;
 	protected static JButton calculateCircuitButton;
+	protected static JButton addDeliveryButton;
 	
 	protected static ButtonsListener buttonsListener;
+	protected static MouseListener mouseListener;
 	
 	protected static final int windowWidth = 1280;
 	protected static final int windowHeight = 720;
@@ -71,10 +74,12 @@ public class Window extends JFrame{
 		fillButtonPanel(buttonPanel);
 		
 		//////////////////////////////CREATE THE GRAPHIC VIEW//////////////////////////////
-			
+		
 		controller.getWindow().graphicView = new GraphicView (controller.getWindow().circuitManagement, windowHeight-buttonPanelHeight, graphicWidth, pathWidth);
 		setGraphicView(controller.getWindow().graphicView);
-	
+		mouseListener = new MouseListener(controller, controller.getWindow().graphicView,controller.getWindow());
+		controller.getWindow().addMouseListener(mouseListener);
+		
 		//////////////////////////////CREATE THE TEXTUAL PANEL/////////////////////////////
 		JPanel textualPanel = new JPanel();
 		fillTextualPanel(textualPanel);
@@ -195,6 +200,10 @@ public class Window extends JFrame{
 		textualPanel.setLocation(graphicWidth, buttonPanelHeight);
 		textualPanel.setBackground(Color.GREEN);
 		
+		addDeliveryButton = new JButton(ADD_DELIVERY);
+		addDeliveryButton.addActionListener(buttonsListener);
+		addDeliveryButton.setVisible(false);
+		textualPanel.add(addDeliveryButton);
 	}
 
 }

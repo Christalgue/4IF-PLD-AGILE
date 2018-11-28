@@ -13,15 +13,15 @@ public interface State {
 	
 	//public void undo();
 	
-	public void addDelivery(Controller controler, Window window);
+	public void addDelivery(Controller controler, Window window, Node node, int duration, Node previousNode);
 	
-	public void validate(Controller controler, Window window);
+	//spublic void validate(Controller controler, Window window);
 	
 	public void cancel(Controller controler, Window window);
 	
-	public void moveDelivery (Controller controler, Window window);
+	public void moveDelivery (Controller controler, Window window, Node node,  Node previousNode);
 	
-	public void deleteDelivery(Controller controler, Window window);
+	public void deleteDelivery(Controller controler, Window window, Node node);
 	
 	
 	public void rightClick(Controller controler, Window window);

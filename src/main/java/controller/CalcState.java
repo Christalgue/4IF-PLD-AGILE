@@ -79,5 +79,4 @@ public class CalcState extends DefaultState {
 		}
 		
 	}
-
 }

@@ -13,15 +13,15 @@ public abstract class DefaultState implements State {
 	
 	//public void undo();
 	
-	public void addDelivery(Controller controller, Window window){}
+	public void addDelivery(Controller controller, Window window, Node node , int duration, Node previousNode){}
 	
-	public void validate(Controller controller, Window window){}
+	//public void validate(Controller controller, Window window){}
 	
 	public void cancel(Controller controller, Window window){}
 	
-	public void moveDelivery (Controller controller, Window window){}
+	public void moveDelivery (Controller controller, Window window, Node node, Node previousNode){}
 	
-	public void deleteDelivery(Controller controller, Window window){}
+	public void deleteDelivery(Controller controller, Window window, Node node){}
 	
 	
 	public void rightClick(Controller controller, Window window){}
