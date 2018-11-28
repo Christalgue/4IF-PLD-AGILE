@@ -108,14 +108,18 @@ public class Window extends JFrame{
 	}
 	
 	public void drawMap() {
+		graphicView.removeAll();
+		graphicView.update(graphicView.getGraphic());
 		graphicView.paintMap(graphicView.getGraphic());
 	}
 	
 	public void drawDeliveries() {
+		drawMap();
 		graphicView.paintDeliveries(graphicView.getGraphic());
 	}
 	
 	public void drawCircuits() {
+		drawDeliveries();
 		graphicView.paintCircuits(graphicView.getGraphic());
 	}
 	
