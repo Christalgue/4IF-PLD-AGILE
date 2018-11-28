@@ -34,6 +34,7 @@ public class DeliverySelectedState extends DefaultState {
 		
 		try {
 			controller.circuitManagement.loadMap(filename);
+			window.drawMap();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
 		{
@@ -46,6 +47,7 @@ public class DeliverySelectedState extends DefaultState {
 		try {
 			controller.circuitManagement.loadDeliveryList(filename);
 			controller.setCurrentState(controller.deliveryLoadedState);
+			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
 		{
 			e.printStackTrace();
@@ -56,6 +58,7 @@ public class DeliverySelectedState extends DefaultState {
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan){
 		try {
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan);
+			window.drawCircuits();
 		} catch (ClusteringException e)
 		{
 			e.printStackTrace();

@@ -22,12 +22,23 @@ public class Controller {
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
 		currentState = initState;
-		//this.window = new Window(circuitManagement, this);
+		this.window = new Window(circuitManagement, this);
 	}
 	
 	protected void setCurrentState(State state){
 		currentState = state;
 	}
+	
+	
+	
+	public Window getWindow() {
+		return window;
+	}
+
+	/*public void setWindow(Window window) {
+		this.window = window;
+	}*/
+
 	public void loadMap(String filename) {
 		currentState.loadMap(this, window, filename);
 		

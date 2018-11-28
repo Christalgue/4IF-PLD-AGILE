@@ -35,11 +35,6 @@ public class CircuitView extends JPanel {
     private int roadWidth;
     
     /**
-     * 
-     */
-    private Graphics2D g;
-    
-    /**
      * @param graphicView The graphic view where the circuit is drawn
      * @param color The color of the circuit
      * @param width The width of the circuit
@@ -57,7 +52,7 @@ public class CircuitView extends JPanel {
     	return roadWidth;
     }
 
-	protected void paintCircuit (Circuit circuit, Color color) {
+	protected void paintCircuit ( Graphics2D g, Circuit circuit, Color color ) {
 		
 		
 		super.paintComponent(g);
@@ -85,10 +80,6 @@ public class CircuitView extends JPanel {
 		g.setStroke(new BasicStroke(roadWidth));
         g.draw(new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()));
 		
-	}
-	
-	protected void setGraphics() {
-		g = (Graphics2D) this.getGraphics();
 	}
 
 }

@@ -16,6 +16,7 @@ public class CalcState extends DefaultState {
 		
 		try {
 			controller.circuitManagement.loadMap(filename);
+			window.drawMap();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
 		{
