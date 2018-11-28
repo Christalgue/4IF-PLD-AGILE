@@ -3,6 +3,7 @@ package main.java.tsp;
 import java.util.*;
 
 import main.java.entity.*;
+import main.java.exception.TSPLimitTimeReachedException;
 
 public abstract class TemplateTSP implements TSP {
 	
@@ -14,7 +15,7 @@ public abstract class TemplateTSP implements TSP {
 		return limitTimeReached;
 	}
 	
-	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration){
+	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration) throws TSPLimitTimeReachedException{
 		limitTimeReached = false;
 		costBestSolution = Integer.MAX_VALUE;
 		Set<Delivery> deliveries = allPaths.keySet();
@@ -25,6 +26,7 @@ public abstract class TemplateTSP implements TSP {
 		ArrayList<Delivery> viewed = new ArrayList<Delivery>(deliveries.size());
 		viewed.add(0, repository); // the first "node" visited in the repository 
 		branchAndBound(0, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
+		
 		// TODO need to consider the time spent delivering the order at each delivery point.
 	}
 	
@@ -78,11 +80,12 @@ public abstract class TemplateTSP implements TSP {
 	 * @param duration : time spent to visit a delivery
 	 * @param startingTime : time when the resolution started
 	 * @param limitTime : maximum time that the resolution is allowed to take
+	 * @throws TSPLimitTimeReachedException 
 	 */	
-	 void branchAndBound(int indexCurrentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes, int[] duration, long startingTime, int limitTime){
+	 void branchAndBound(int indexCurrentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathes, int[] duration, long startingTime, int limitTime) throws TSPLimitTimeReachedException{
 		 if (System.currentTimeMillis() - startingTime > limitTime){
 			 limitTimeReached = true;
-			 return;
+			 throw new TSPLimitTimeReachedException("Branch and Bound of the circuit : " + allPathes.keySet().toString());
 		 }
 	    if (nonViewed.size() == 0){ // all the deliveries have been visited 
 	    	AtomicPath returnToRepository = allPathes.get(viewed.get(indexCurrentDelivery)).get(viewed.get(0)); //may be split for more readability

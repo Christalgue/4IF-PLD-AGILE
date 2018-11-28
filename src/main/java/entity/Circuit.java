@@ -1,6 +1,8 @@
 package main.java.entity;
 
 import java.util.*;
+
+import main.java.exception.TSPLimitTimeReachedException;
 import main.java.tsp.*;
 
 /**
@@ -55,24 +57,30 @@ public class Circuit extends Observable {
 	 */
 	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
 		TSP1 tsp = new TSP1();
-		tsp.searchSolution(Integer.MAX_VALUE, repository, allPaths, null);
-		Delivery bestSolution[];
-		bestSolution = tsp.getBestSolution();
-		List<Delivery> deliveriesOrdered = new ArrayList<Delivery>();
-		List<AtomicPath> finalPath = new ArrayList<AtomicPath>();
-		// add the first Delivery to the deliveryList
-		deliveriesOrdered.add(bestSolution[0]);
-		for (int indexBestSolution = 1; indexBestSolution < bestSolution.length; indexBestSolution++) {
-			deliveriesOrdered.add(bestSolution[indexBestSolution]);
-			HashMap<Delivery, AtomicPath> pathsFromLastDelivery = allPaths.get(bestSolution[indexBestSolution - 1]);
-			finalPath.add(pathsFromLastDelivery.get(bestSolution[indexBestSolution]));
-		}
-		// add the last AtomicPath to the finalPath
-		HashMap<Delivery, AtomicPath> pathsFromLastDeliveryOfTheList = allPaths.get(bestSolution[bestSolution.length-1]);
-		finalPath.add(pathsFromLastDeliveryOfTheList.get(bestSolution[0]));
+		try {
+			tsp.searchSolution(10000, repository, allPaths, null);
+		} catch (TSPLimitTimeReachedException e) {
+			// TODO Auto-generated catch block
+			///e.printStackTrace();
+		} finally {
+			Delivery bestSolution[];
+			bestSolution = tsp.getBestSolution();
+			List<Delivery> deliveriesOrdered = new ArrayList<Delivery>();
+			List<AtomicPath> finalPath = new ArrayList<AtomicPath>();
+			// add the first Delivery to the deliveryList
+			deliveriesOrdered.add(bestSolution[0]);
+			for (int indexBestSolution = 1; indexBestSolution < bestSolution.length; indexBestSolution++) {
+				deliveriesOrdered.add(bestSolution[indexBestSolution]);
+				HashMap<Delivery, AtomicPath> pathsFromLastDelivery = allPaths.get(bestSolution[indexBestSolution - 1]);
+				finalPath.add(pathsFromLastDelivery.get(bestSolution[indexBestSolution]));
+			}
+			// add the last AtomicPath to the finalPath
+			HashMap<Delivery, AtomicPath> pathsFromLastDeliveryOfTheList = allPaths.get(bestSolution[bestSolution.length-1]);
+			finalPath.add(pathsFromLastDeliveryOfTheList.get(bestSolution[0]));
 
-		this.deliveryList = deliveriesOrdered;
-		this.path = finalPath;
+			this.deliveryList = deliveriesOrdered;
+			this.path = finalPath;
+		}
 	}
 
 	/**
