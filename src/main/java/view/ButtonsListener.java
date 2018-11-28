@@ -62,7 +62,7 @@ public class ButtonsListener implements ActionListener {
 			break;
 		//case Window.UNDO: controller.undo(); break;
 		case Window.ADD_DELIVERY: 
-			controller.addDelivery(); 
+			//controller.addDelivery(); 
 			break;
 		/*case Window.VALIDATE_ADD: controller.validateAdd(); break;
 		case Window.CANCEL_ADD: controller.cancelAdd(); break;

@@ -44,7 +44,14 @@ public class Circuit extends Observable {
 	public Circuit(List<Delivery> deliveries, Repository repository,
 			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) throws TSPLimitTimeReachedException {
 		this.deliveryList = deliveries;
-		calculateTrackTSP(repository, allPaths, false);
+		try {
+			calculateTrackTSP(repository, allPaths, false);
+		} catch (TSPLimitTimeReachedException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			//System.out.println(e.getMessage());
+			throw e;
+		}
 		this.circuitLength = calculateLength();
 	}
 
@@ -65,15 +72,20 @@ public class Circuit extends Observable {
 	 */
 	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException {
 		TSP1 tsp = new TSP1();
+		TSPLimitTimeReachedException timeException = null;
 		try {
+			//System.out.println("debut try");
 			tsp.searchSolution(10000, repository, allPaths, null, continueInterruptedCalculation);
+			//System.out.println("fin try");
 		} catch (TSPLimitTimeReachedException e) {
 			// TODO Auto-generated catch block
 			///e.printStackTrace();
+			//System.out.println(e.getMessage());
 			saveCurrentStateForCalculation(repository, allPaths);
-			
-			throw e;
+			timeException = e;
+			//throw e;
 		} finally {
+			//System.out.println("debut finally");
 			Delivery bestSolution[];
 			bestSolution = tsp.getBestSolution();
 			List<Delivery> deliveriesOrdered = new ArrayList<Delivery>();
@@ -88,10 +100,18 @@ public class Circuit extends Observable {
 			// add the last AtomicPath to the finalPath
 			HashMap<Delivery, AtomicPath> pathsFromLastDeliveryOfTheList = allPaths.get(bestSolution[bestSolution.length-1]);
 			finalPath.add(pathsFromLastDeliveryOfTheList.get(bestSolution[0]));
-
+			//System.out.println(finalPath.toString());
 			this.deliveryList = deliveriesOrdered;
 			this.path = finalPath;
+			//System.out.println("//////////////////////////////////////////////////salut////////////////////////////////////////////////////////////////////////////////////////////////");
+			
+			//System.out.println(this.path.toString());
 		}
+		if (timeException!= null) {
+			throw timeException;
+		}
+		
+		
 	}
 	private void saveCurrentStateForCalculation(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
 		this.allPathsSVG = allPaths;

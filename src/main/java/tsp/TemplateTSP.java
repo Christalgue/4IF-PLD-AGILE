@@ -37,7 +37,12 @@ public abstract class TemplateTSP implements TSP {
 			nonViewed.remove(repository);
 			ArrayList<Delivery> viewed = new ArrayList<Delivery>(deliveries.size());
 			viewed.add(0, repository); // the first "node" visited in the repository 
-			branchAndBound(0, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
+			/*try {*/
+				branchAndBound(0, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
+			/*} catch (TSPLimitTimeReachedException e) {
+				System.out.println(e.getMessage());
+			}*/
+			
 		} else {
 			branchAndBound(indexCurrentDeliverySVG, nonViewedSVG, viewedSVG, viewedCostSVG, allPathesSVG, durationSVG, startingTimeSVG, limitTimeSVG);
 		}

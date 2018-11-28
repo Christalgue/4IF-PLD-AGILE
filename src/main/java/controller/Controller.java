@@ -57,11 +57,11 @@ public class Controller {
 	}*/
 	
 	public void addDelivery(Node node, int duration) {
-		currentState.addDelivery(this, window, node, duration);
+		//currentState.addDelivery(this, window, node, duration);
 	}
 	
 	public void validateAdd() {
-		currentState.validate(this, window);
+		//currentState.validate(this, window);
 	}
 	
 	public void cancelAdd() {
@@ -71,11 +71,11 @@ public class Controller {
 	}
 	
 	public void moveDelivery (Node node) {
-		currentState.moveDelivery(this, window, node);
+		//currentState.moveDelivery(this, window, node);
 	}
 	
 	public void validateMove() {
-		currentState.validate(this, window);
+		//currentState.validate(this, window);
 	}
 	
 	public void cancelMove() {
@@ -87,7 +87,7 @@ public class Controller {
 	}
 	
 	public void validateDelete() {
-		currentState.validate(this, window);
+		//currentState.validate(this, window);
 	}
 	
 	public void cancelDelete() {

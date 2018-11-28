@@ -157,7 +157,7 @@ public class Window extends JFrame{
 		buttonPanel.setBackground(Color.WHITE);
 		
 		setNameOfMap = new TextField();
-		setNameOfMap.setText("resources/xml/petitPlan.xml");
+		setNameOfMap.setText("resources/xml/grandPlan.xml");
 		buttonPanel.add(setNameOfMap);
 		
 		JButton loadMapButton = new JButton(LOAD_MAP);
@@ -167,7 +167,7 @@ public class Window extends JFrame{
 		loadMapButton.setSize(100, 30);*/
 		
 		setNameOfDeliveryList = new TextField();
-		setNameOfDeliveryList.setText("resources/xml/dl-petit-3.xml");
+		setNameOfDeliveryList.setText("resources/xml/dl-grand-20.xml");
 		buttonPanel.add(setNameOfDeliveryList);
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
@@ -182,7 +182,7 @@ public class Window extends JFrame{
 		buttonPanel.add(labelNumberOfDeliveryMen);
 		
 		numberOfDeliveryMen = new TextField();
-		numberOfDeliveryMen.setText("2");
+		numberOfDeliveryMen.setText("1");
 		buttonPanel.add(numberOfDeliveryMen);
 	
 		/*JButton undoButton = new JButton("Retour");

@@ -379,7 +379,21 @@ public class CircuitManagement extends Observable{
     						throw e;
     					}
         			}
-        			this.circuitsList.add(new Circuit(arrivalDeliveries, repository, allPaths));
+        			try {
+        				/////GROS PBM ICI, IL FINIT PAS SON CIRCUIT PSK IL Y A UNE EXCEPTION !!!!!!!!!!!!!!!
+        				/////////////////////////////////////////////////////////////////////////////////////
+        				////////////////////////////////////////////////////////////////////////////////////
+        				//////////////////////////////////////////////////////////////::
+						//this.circuitsList.add(new Circuit(arrivalDeliveries, repository, allPaths));
+        				Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths);
+        				this.circuitsList.add(circuit);
+        				System.out.println("salut");
+        				System.out.println(circuit.getPath().toString());
+					} catch (TSPLimitTimeReachedException e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+						System.out.println(e.getMessage());
+					}
         		}
         	}
     	} else {

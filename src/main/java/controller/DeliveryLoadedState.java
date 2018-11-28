@@ -41,6 +41,8 @@ public class DeliveryLoadedState extends DefaultState {
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			controller.setCurrentState(controller.calcState);
 			window.drawCircuits();
+			System.out.println(controller.circuitManagement.getCircuitsList().toString());
+			System.out.println("coucou");
 		} catch (ClusteringException e)
 		{
 			e.printStackTrace();
@@ -59,6 +61,8 @@ public class DeliveryLoadedState extends DefaultState {
 		} catch (TSPLimitTimeReachedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println(e.getMessage());
+			window.drawCircuits();
 			////if user want to continue then a while in there
 			//// else just end the algorithm.
 		}
