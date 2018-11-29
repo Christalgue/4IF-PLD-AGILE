@@ -20,5 +20,6 @@ public class DeliveryAddedState extends DefaultState{
 	public void cancel (Controller controller, Window window) {
 		controller.setCurrentState(controller.calcState);
 	}
+	
 
 }
