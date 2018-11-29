@@ -108,7 +108,9 @@ public class Circuit extends Observable {
 			//System.out.println(this.path.toString());
 		}
 		if (timeException!= null) {
-			throw timeException;
+			System.out.println("temps limite atteint");
+			//throw timeException;
+			
 		}
 		
 		
