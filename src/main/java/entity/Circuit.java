@@ -41,9 +41,13 @@ public class Circuit extends Observable {
 	 * @throws TSPLimitTimeReachedException 
 	 * 
 	 */
-	public Circuit(List<Delivery> deliveries, Repository repository,
-			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) throws TSPLimitTimeReachedException {
+	public Circuit(List<Delivery> deliveries) {
 		this.deliveryList = deliveries;
+	}
+	
+	public void createCircuit(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) 
+			throws TSPLimitTimeReachedException {
+		
 		try {
 			calculateTrackTSP(repository, allPaths, false);
 		} catch (TSPLimitTimeReachedException e) {
@@ -109,7 +113,7 @@ public class Circuit extends Observable {
 		}
 		if (timeException!= null) {
 			System.out.println("temps limite atteint");
-			//throw timeException;
+			throw timeException;
 			
 		}
 		
@@ -185,5 +189,23 @@ public class Circuit extends Observable {
 		return -1;
 		
 	}
+
+	protected Repository getRepositorySVG() {
+		return repositorySVG;
+	}
+
+	protected void setRepositorySVG(Repository repositorySVG) {
+		this.repositorySVG = repositorySVG;
+	}
+
+	protected HashMap<Delivery, HashMap<Delivery, AtomicPath>> getAllPathsSVG() {
+		return allPathsSVG;
+	}
+
+	protected void setAllPathsSVG(HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathsSVG) {
+		this.allPathsSVG = allPathsSVG;
+	}
+	
+	
 
 }

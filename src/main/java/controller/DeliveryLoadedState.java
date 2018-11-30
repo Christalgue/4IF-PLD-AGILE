@@ -41,8 +41,6 @@ public class DeliveryLoadedState extends DefaultState {
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			controller.setCurrentState(controller.calcState);
 			window.drawCircuits();
-			System.out.println(controller.circuitManagement.getCircuitsList().toString());
-			System.out.println("coucou");
 		} catch (ClusteringException e)
 		{
 			e.printStackTrace();

@@ -60,6 +60,8 @@ public class CalcState extends DefaultState {
 		} catch (TSPLimitTimeReachedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println(e.getMessage());
+			window.drawCircuits();
 			////if user want to continue then a while in there
 			//// else just end the algorithm.
 		}
