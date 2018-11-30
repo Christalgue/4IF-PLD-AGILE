@@ -385,12 +385,10 @@ public class CircuitManagement extends Observable{
         				System.out.println("salut");
         				System.out.println(circuit.getPath().toString());
 					} catch (TSPLimitTimeReachedException e) {
-						// TODO Auto-generated catch block
-						//e.printStackTrace();
 						System.out.println(e.getMessage());
+						throw e;
 					} finally {
 						this.circuitsList.add(circuit);
-						System.out.println("salut toi");
 					}
         		}
         	}
@@ -399,6 +397,8 @@ public class CircuitManagement extends Observable{
     		{
     			if(circuitTested.getRepositorySVG() != null && circuitTested.getAllPathsSVG() != null) {
     				circuitTested.continueCalculation();
+    				circuitTested.setRepositorySVG(null);
+    				circuitTested.setAllPathsSVG(null);
     			}
     		}
     	}

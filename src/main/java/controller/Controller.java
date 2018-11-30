@@ -18,6 +18,7 @@ public class Controller {
 	protected final DeliverySelectedState deliverySelectedState  = new DeliverySelectedState ();
 	protected final MapLoadedState mapLoadedState = new MapLoadedState();
 	protected final DeliveryMovedState deliveryMovedState = new DeliveryMovedState();
+	protected final CalculatingState calculatingState = new CalculatingState();
 
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
@@ -102,6 +103,10 @@ public class Controller {
 	 */
 	public void leftClick(Node node, boolean exist){
 		currentState.leftClick(this, window, node, exist);
+	}
+	
+	public void continueCalculation(boolean keepCalculating) {
+		currentState.continueCalculation(this, window, keepCalculating);
 	}
 
 	/**
