@@ -144,7 +144,6 @@ public class Circuit extends Observable {
 	
 	protected void addAtomicPath(AtomicPath pathToAdd, int position) {
 		this.path.add(position, pathToAdd);
-		
 	}
 	
 	protected void removeAtomicPath(int position) {

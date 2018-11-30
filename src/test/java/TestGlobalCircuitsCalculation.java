@@ -69,9 +69,6 @@ class TestGlobalCircuitsCalculation {
 			e.printStackTrace();
 		} catch (LoadMapException e) {
 			e.printStackTrace();
-		} catch (TSPLimitTimeReachedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
