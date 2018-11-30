@@ -28,6 +28,8 @@ public abstract class DefaultState implements State {
 	
 	public void leftClick(Controller controller, Window window, Node node, boolean exist){}
 	
+	public void continueCalculation(Controller controller, Window window, boolean keepCalculating){}
+	
 	public void movedMouse(Controller controller, Window window){}
 
 	@Override

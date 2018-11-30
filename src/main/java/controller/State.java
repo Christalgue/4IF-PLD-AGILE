@@ -30,5 +30,5 @@ public interface State {
 	
 	public void movedMouse(Controller controler, Window window);
 	
-	
+	public void continueCalculation(Controller controller, Window window, boolean keepCalculating);
 }

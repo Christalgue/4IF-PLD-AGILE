@@ -379,27 +379,27 @@ public class CircuitManagement extends Observable{
     						throw e;
     					}
         			}
+        			Circuit circuit = new Circuit(arrivalDeliveries);
         			try {
-        				/////GROS PBM ICI, IL FINIT PAS SON CIRCUIT PSK IL Y A UNE EXCEPTION !!!!!!!!!!!!!!!
-        				/////////////////////////////////////////////////////////////////////////////////////
-        				////////////////////////////////////////////////////////////////////////////////////
-        				//////////////////////////////////////////////////////////////::
-						//this.circuitsList.add(new Circuit(arrivalDeliveries, repository, allPaths));
-        				Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths);
-        				this.circuitsList.add(circuit);
+        				circuit.createCircuit( repository, allPaths);
         				System.out.println("salut");
         				System.out.println(circuit.getPath().toString());
 					} catch (TSPLimitTimeReachedException e) {
-						// TODO Auto-generated catch block
-						//e.printStackTrace();
 						System.out.println(e.getMessage());
+						throw e;
+					} finally {
+						this.circuitsList.add(circuit);
 					}
         		}
         	}
     	} else {
     		for(Circuit circuitTested : this.circuitsList)
     		{
-    			//if circuit have its save attributes non null then continue calculation circuit from them
+    			if(circuitTested.getRepositorySVG() != null && circuitTested.getAllPathsSVG() != null) {
+    				circuitTested.continueCalculation();
+    				circuitTested.setRepositorySVG(null);
+    				circuitTested.setAllPathsSVG(null);
+    			}
     		}
     	}
     	

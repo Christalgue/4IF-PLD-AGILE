@@ -33,7 +33,12 @@ class TestGlobalCircuitsCalculation {
 			//CircuitManager.loadMap("resources/tests/Global/xml/plan.xml");
 			//CircuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
 			
-			CircuitManager.calculateCircuits(3, false);
+			try {
+				CircuitManager.calculateCircuits(3, false);
+			} catch (TSPLimitTimeReachedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			
 			for (Circuit c : CircuitManager.getCircuitsList()) {

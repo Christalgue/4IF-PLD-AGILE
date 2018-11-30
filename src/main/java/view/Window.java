@@ -23,6 +23,8 @@ public class Window extends JFrame{
 	protected static final String LOAD_DELIVERY_OFFER = "Charger une demande de livraison";
 	protected static final String CALCULATE_CIRCUITS = "Calculer les tournees";
 	protected static final String ADD_DELIVERY = "Ajouter une livraison";
+	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des chemins";
+	protected static final String STOP_CALCULATION = "Arrêter le calcul des chemins";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;

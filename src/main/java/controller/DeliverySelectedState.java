@@ -76,10 +76,9 @@ public class DeliverySelectedState extends DefaultState {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			////if user want to continue then a while in there
-			//// else just end the algorithm.
+			System.out.println(e.getMessage());
+			controller.setCurrentState(controller.calculatingState);
+			window.drawCircuits();
 		}
 	
 	}
