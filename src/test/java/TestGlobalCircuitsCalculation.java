@@ -19,6 +19,7 @@ import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
 import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
+import main.java.exception.TSPLimitTimeReachedException;
 import main.java.utils.Deserializer;
 
 class TestGlobalCircuitsCalculation {
@@ -62,6 +63,9 @@ class TestGlobalCircuitsCalculation {
 		} catch (LoadDeliveryException e) {
 			e.printStackTrace();
 		} catch (LoadMapException e) {
+			e.printStackTrace();
+		} catch (TSPLimitTimeReachedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
