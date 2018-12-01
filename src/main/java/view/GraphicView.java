@@ -120,6 +120,7 @@ public class GraphicView extends JPanel implements Observer {
 		
 		System.out.println("Appel de pointToLatLong");
 		Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY()-80)*heightScale + originLat);
+		//Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY()-originLat)*heightScale);
 		System.out.println(p.getX() + "  " + p.getY());
 		return p;
 		
