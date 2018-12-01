@@ -142,7 +142,7 @@ class TestDeserializer {
 		assertTrue(first.getStartNode().getId()==1,"7) wrong start node (1) : "+first.getStartNode().getId());
 		assertTrue(first.getEndNode().getId()==2,"7) wrong end node (2) : "+first.getEndNode().getId());
 		assertTrue(first.getLength()==79.801414,"7) wrong length (79.801414) : "+first.getLength());
-		assertTrue(first.getStreetName().contains("Rue Édouard Aynard"),"7) wrong street name (Rue Édouard Aynard) : "+first.getStreetName());
+		assertTrue(first.getStreetName().contains("Rue Edouard Aynard"),"7) wrong street name (Rue Edouard Aynard) : "+first.getStreetName());
 		
 	}
 

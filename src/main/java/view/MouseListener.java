@@ -31,24 +31,23 @@ public class MouseListener extends MouseAdapter {
 		if ( evt.getButton() == MouseEvent.BUTTON1) { 
 			Point p = graphicView.pointToLatLong(new Point (evt.getX(), evt.getY()));
 			Node n = graphicView.pointToNode(p);
-			if (p != null) {
+			System.out.println(n);
+			/*if (p != null) {
 				
 				if(this.controller.circuitManagement.checkNodeInDeliveryList(n))
 				{
 					this.controller.leftClick(n, true);
 				} else {
-						this.controller.leftClick(n, false);
+					this.controller.leftClick(n, false);
 				}
-			}
+			}*/
 				//controleur.clic(p);*/
 		}
 	}
 
-/*	public void mouseReleased(MouseEvent evt) {
-		// Called each time the mouse is released
-		// Send ....... to controller
-
-	}*/
+	public void mouseReleased(MouseEvent evt) {
+		window.addDeliveryButton.setVisible(true);
+	}
 	
 /*	private Point coordinates(MouseEvent evt){
 		MouseEvent e = SwingUtilities.convertMouseEvent(fenetre, evt, vueGraphique);

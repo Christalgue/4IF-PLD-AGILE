@@ -13,12 +13,12 @@ import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
 import main.java.exception.ClusteringException;
-import main.java.exception.DeliveryListNotCharged;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
 import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
+import main.java.exception.TSPLimitTimeReachedException;
 import main.java.utils.Deserializer;
 
 class TestGlobalCircuitsCalculation {
@@ -31,10 +31,9 @@ class TestGlobalCircuitsCalculation {
 			CircuitManager.loadDeliveryList("resources/xml/dl-grand-20.xml");
 			//CircuitManager.loadMap("resources/tests/Global/xml/plan.xml");
 			//CircuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
+			CircuitManager.calculateCircuits(3, false);
 			
-			CircuitManager.calculateCircuits(3);
 			
-			/*
 			for (Circuit c : CircuitManager.getCircuitsList()) {
 				System.out.println("");
 				System.out.println("Tournee");
@@ -47,13 +46,9 @@ class TestGlobalCircuitsCalculation {
 					}
 				}
 				System.out.println("");
-			}*/
+			}
 			
 		} catch (MapNotChargedException e) {
-			e.printStackTrace();
-		} catch (DeliveryListNotCharged e) {
-			e.printStackTrace();
-		} catch (ClusteringException e) {
 			e.printStackTrace();
 		} catch (DijkstraException e) {
 			e.printStackTrace();
@@ -62,6 +57,12 @@ class TestGlobalCircuitsCalculation {
 		} catch (LoadDeliveryException e) {
 			e.printStackTrace();
 		} catch (LoadMapException e) {
+			e.printStackTrace();
+		} catch (ClusteringException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TSPLimitTimeReachedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

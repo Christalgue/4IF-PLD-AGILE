@@ -68,8 +68,7 @@ public class Delivery extends Observable{
 
 	@Override
 	public String toString() {
-		return "Delivery [position=" + position.getId() + ", duration=" + duration + /*", hourOfArrival=" + hourOfArrival.toString()
-				+ ", hourOfDeparture=" + hourOfDeparture.toString() + */"]";
+		return "Delivery [position=" + position.getId() + ", duration=" + duration +"]";
 	}
 	
 	

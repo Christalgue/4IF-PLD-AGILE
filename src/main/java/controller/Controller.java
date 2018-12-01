@@ -18,6 +18,7 @@ public class Controller {
 	protected final DeliverySelectedState deliverySelectedState  = new DeliverySelectedState ();
 	protected final MapLoadedState mapLoadedState = new MapLoadedState();
 	protected final DeliveryMovedState deliveryMovedState = new DeliveryMovedState();
+	protected final CalculatingState calculatingState = new CalculatingState();
 
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
@@ -56,12 +57,12 @@ public class Controller {
 		
 	}*/
 	
-	public void addDelivery() {
-		currentState.addDelivery(this, window);
+	public void addDelivery(Node node, int duration) {
+		//currentState.addDelivery(this, window, node, duration);
 	}
 	
 	public void validateAdd() {
-		currentState.validate(this, window);
+		//currentState.validate(this, window);
 	}
 	
 	public void cancelAdd() {
@@ -70,24 +71,24 @@ public class Controller {
 		
 	}
 	
-	public void moveDelivery () {
-		currentState.moveDelivery(this, window);
+	public void moveDelivery (Node node) {
+		//currentState.moveDelivery(this, window, node);
 	}
 	
 	public void validateMove() {
-		currentState.validate(this, window);
+		//currentState.validate(this, window);
 	}
 	
 	public void cancelMove() {
 		currentState.cancel(this, window);
 	}
 	
-	public void deleteDelivery() {
-		currentState.deleteDelivery(this, window);
+	public void deleteDelivery(Node node) {
+		currentState.deleteDelivery(this, window, node);
 	}
 	
 	public void validateDelete() {
-		currentState.validate(this, window);
+		//currentState.validate(this, window);
 	}
 	
 	public void cancelDelete() {
@@ -102,6 +103,10 @@ public class Controller {
 	 */
 	public void leftClick(Node node, boolean exist){
 		currentState.leftClick(this, window, node, exist);
+	}
+	
+	public void continueCalculation(boolean keepCalculating) {
+		currentState.continueCalculation(this, window, keepCalculating);
 	}
 
 	/**
