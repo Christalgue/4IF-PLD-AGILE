@@ -3,18 +3,13 @@ package main.java.view;
 import main.java.entity.Circuit;
 
 import java.awt.geom.Line2D;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.swing.JPanel;
 
 import main.java.entity.AtomicPath;
 import main.java.entity.Bow;
 import main.java.entity.Node;
-import main.java.entity.Point;
-
+import main.java.entity.Point;  
 
 import java.awt.*;
 
@@ -34,6 +29,10 @@ public class CircuitView extends JPanel {
      */
     private int roadWidth;
     
+    private int arrowLength;
+    
+    private int arrowWidth;
+    
     /**
      * @param graphicView The graphic view where the circuit is drawn
      * @param color The color of the circuit
@@ -42,6 +41,8 @@ public class CircuitView extends JPanel {
     public CircuitView( GraphicView graphicView, int width) {
     	this.graphicView= graphicView;
     	this.roadWidth = width;
+    	this.arrowLength = 2*width;
+    	this.arrowWidth = 2*width;
     }
     
     /**
@@ -79,6 +80,47 @@ public class CircuitView extends JPanel {
 		
 		g.setStroke(new BasicStroke(roadWidth));
         g.draw(new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()));
+		
+        drawArrow( g, start, end);
+	}
+	
+	public void drawArrow( Graphics2D g, Point start, Point end) {
+		
+		int xPoints [] = new int[3];
+		int yPoints[] = new int[3];
+		
+		double startX = start.getX();
+		double startY = start.getY();	
+		double endX = end.getX();
+		double endY = end.getY();
+		
+		double deltaX = startX - endX;
+		double deltaY = startY - endY;
+		
+		double cosinus = deltaX / Math.sqrt(Math.pow(deltaX, 2)+ Math.pow(deltaY, 2) );
+		double sinus = deltaY / Math.sqrt(Math.pow(deltaX, 2)+ Math.pow(deltaY, 2) );
+		
+		double orthoPointX = endX + cosinus*arrowLength;
+		double orthoPointY= endY + sinus*arrowLength;
+		
+		double point1X = orthoPointX - sinus*arrowWidth;
+		double point1Y = orthoPointY + cosinus*arrowWidth;
+		
+		double point2X = orthoPointX + sinus*arrowWidth;
+		double point2Y = orthoPointY - cosinus*arrowWidth;
+		
+		xPoints[0] =(int) endX;
+		yPoints[0] = (int) endY;
+		
+		xPoints[1]= (int) point1X; 
+		yPoints[1]= (int)point1Y;
+		
+		xPoints[2]= (int) point2X;
+		yPoints[2]= (int) point2Y;
+		
+		g.fillPolygon( xPoints, yPoints, 3);
+		
+		
 		
 	}
 

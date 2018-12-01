@@ -54,7 +54,7 @@ public class DeliveryView extends JPanel {
 	public DeliveryView (Color deliveryColor, Color repositoryColor, int deliveryRadius, GraphicView graphicView) {
 		this.deliveryColor = deliveryColor;
 		this.repositoryColor = repositoryColor;
-		this.deliveryRadius = deliveryRadius;
+		this.deliveryRadius = deliveryRadius*3;
 		this.graphicView = graphicView;
 	}
 	

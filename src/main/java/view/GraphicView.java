@@ -40,7 +40,7 @@ public class GraphicView extends JPanel implements Observer {
 	
 	private int width;
 	
-	Color color [] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.GREEN, Color.PINK };
+	Color color [] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.ORANGE, Color.PINK };
 	
 	/**
 	 * Create the graphic view where the map will be drawn in Window windows
@@ -58,9 +58,9 @@ public class GraphicView extends JPanel implements Observer {
 	
 		this.circuitManagement = circuitManagement;
 	
-		mapView = new MapView (Color.WHITE, width, 2*width, this);
+		mapView = new MapView (Color.WHITE, width, this);
 		circuitView = new CircuitView(this, width);
-		deliveryView = new DeliveryView (Color.RED, Color.ORANGE, 3*width, this);
+		deliveryView = new DeliveryView (Color.RED, Color.ORANGE, width, this);
 		
 	}
 	
@@ -205,6 +205,12 @@ public class GraphicView extends JPanel implements Observer {
 				+ ", originLong=" + originLong + ", viewHeight=" + viewHeight + ", viewWidth=" + viewWidth
 				+ ", circuitManagement=" + circuitManagement + ", g=" + g + ", mapView=" + mapView + ", circuitView="
 				+ circuitView + ", deliveryView=" + deliveryView + ", color=" + Arrays.toString(color) + "]";
+	}
+
+
+	public void paintSelectedNode(Graphics2D graphic, Node node, Color selectedColor) {
+		g.setColor(selectedColor);
+		mapView.drawNode(g, node);		
 	}
 	
 	

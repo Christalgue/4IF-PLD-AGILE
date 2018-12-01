@@ -10,6 +10,7 @@ import javax.swing.JTextArea;
 
 import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
+import main.java.entity.Node;
 
 
 // https://examples.javacodegeeks.com/desktop-java/ide/eclipse/eclipse-windowbuilder-tutorial/
@@ -35,6 +36,8 @@ public class Window extends JFrame{
 	protected static final int graphicWidth = 1080;
 	
 	protected static final int pathWidth = 3;
+	
+	protected static final Color selectedColor = Color.GREEN;
 
 	/**
 	 * Default constructor
@@ -121,6 +124,10 @@ public class Window extends JFrame{
 	public void drawCircuits() {
 		drawDeliveries();
 		graphicView.paintCircuits(graphicView.getGraphic());
+	}
+	
+	public void nodeSelected( Node node) {
+		graphicView.paintSelectedNode(graphicView.getGraphic(), node, selectedColor);
 	}
 	
 	public static void setControllerWindow( Window window) {
