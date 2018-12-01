@@ -2,8 +2,11 @@ package main.java.view;
 
 import java.awt.Color;
 import java.awt.TextField;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -12,14 +15,12 @@ import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
 
 
-// https://examples.javacodegeeks.com/desktop-java/ide/eclipse/eclipse-windowbuilder-tutorial/
-
 public class Window extends JFrame{
 	
 	private Controller controller;
 	private CircuitManagement circuitManagement;
 	private GraphicView graphicView;
-	protected final static String LOAD_MAP = "Charger un plan";
+	protected static final String LOAD_MAP = "Charger un plan";
 	protected static final String LOAD_DELIVERY_OFFER = "Charger une demande de livraison";
 	protected static final String CALCULATE_CIRCUITS = "Calculer les tournees";
 	protected static final String ADD_DELIVERY = "Ajouter une livraison";
@@ -33,6 +34,8 @@ public class Window extends JFrame{
 	protected static JButton loadDeliveryList;
 	protected static JButton calculateCircuitButton;
 	protected static JButton addDeliveryButton;
+	
+	private static JFileChooser chooser;
 	
 	protected static ButtonsListener buttonsListener;
 	protected static MouseListener mouseListener;
@@ -97,19 +100,6 @@ public class Window extends JFrame{
 		controller.getWindow().graphicView.setGraphics();
 		
 	}
-
-
-	public static void getMapName() {
-		
-		buttonsListener.setMap(setNameOfMap.getText());
-		
-	}
-	
-	public static void getDeliveryListName() {
-		
-		buttonsListener.setDeliveryList(setNameOfDeliveryList.getText());
-		
-	}
 	
 	public static void getDeliveryMenNumber() {
 		
@@ -153,30 +143,19 @@ public class Window extends JFrame{
 		
 	}
 	
-	public static void fillButtonPanel( JPanel buttonPanel) {
+	public static void fillButtonPanel(JPanel buttonPanel) {
 		
 		buttonPanel.setSize(windowWidth, buttonPanelHeight);
 		buttonPanel.setBackground(Color.WHITE);
 		
-		setNameOfMap = new TextField();
-		setNameOfMap.setText("resources/xml/grandPlan.xml");
-		buttonPanel.add(setNameOfMap);
-		
 		JButton loadMapButton = new JButton(LOAD_MAP);
 		loadMapButton.addActionListener(buttonsListener);
 		buttonPanel.add(loadMapButton);
-		/*loadMapButton.setLocation(10, 10);
-		loadMapButton.setSize(100, 30);*/
-		
-		setNameOfDeliveryList = new TextField();
-		setNameOfDeliveryList.setText("resources/xml/dl-grand-20.xml");
-		buttonPanel.add(setNameOfDeliveryList);
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
 		loadDeliveryList.addActionListener(buttonsListener);
 		loadDeliveryList.setEnabled(false);
 		buttonPanel.add(loadDeliveryList);
-		
 		
 		JTextArea labelNumberOfDeliveryMen = new JTextArea();
 		labelNumberOfDeliveryMen.setText("Nombre de livreurs :");
@@ -206,6 +185,18 @@ public class Window extends JFrame{
 		addDeliveryButton.addActionListener(buttonsListener);
 		addDeliveryButton.setVisible(false);
 		textualPanel.add(addDeliveryButton);
+	}
+	
+	protected String getFile () {
+			
+		chooser = new JFileChooser();
+		int returnValue = chooser.showOpenDialog(controller.getWindow());
+		String filePath = "";
+		
+		if(returnValue == JFileChooser.APPROVE_OPTION){
+			filePath = chooser.getSelectedFile().getAbsolutePath();
+		}
+		return filePath;
 	}
 
 }

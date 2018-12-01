@@ -3,6 +3,8 @@ package main.java.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFileChooser;
+
 import main.java.controller.Controller;
 
 /*
@@ -46,15 +48,13 @@ public class ButtonsListener implements ActionListener {
 		// Send to controller a message associated to the clicked button
 		switch (e.getActionCommand()){
 		case Window.LOAD_MAP: 
-			Window.getMapName();
+			controller.loadMap(controller.getWindow().getFile());
 			Window.loadDeliveryList.setEnabled(true);
 			Window.calculateCircuitButton.setEnabled(false);
-			controller.loadMap(map); 
 			break;
 		case Window.LOAD_DELIVERY_OFFER: 
-			Window.getDeliveryListName();
+			controller.loadDeliveryOffer(controller.getWindow().getFile()); 
 			Window.calculateCircuitButton.setEnabled(true);
-			controller.loadDeliveryOffer(deliveryList); 
 			break;
 		case Window.CALCULATE_CIRCUITS: 
 			Window.getDeliveryMenNumber();
