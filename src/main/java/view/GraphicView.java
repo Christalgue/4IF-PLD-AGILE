@@ -119,7 +119,7 @@ public class GraphicView extends JPanel implements Observer {
 	public Point pointToLatLong( Point point ) {
 		
 		System.out.println("Appel de pointToLatLong");
-		Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY()-50)*heightScale + originLat);
+		Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY()-80)*heightScale + originLat);
 		System.out.println(p.getX() + "  " + p.getY());
 		return p;
 		
@@ -135,9 +135,7 @@ public class GraphicView extends JPanel implements Observer {
 		    
 			Node currentNode = entry.getValue();
 			
-			/*if (currentNode.getLongitude() == point.getX() && currentNode.getLatitude() == point.getY())
-				return currentNode;*/
-			final double range = 0.0005;
+			final double range = 0.0001;
 			if (currentNode.getLongitude() <= point.getX()+range && point.getX()-range <= currentNode.getLongitude() && 
 				currentNode.getLatitude() <= point.getY()+range && point.getY()-range <= currentNode.getLatitude())
 				return currentNode;

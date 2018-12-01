@@ -41,8 +41,8 @@ public class CircuitView extends JPanel {
     public CircuitView( GraphicView graphicView, int width) {
     	this.graphicView= graphicView;
     	this.roadWidth = width;
-    	this.arrowLength = 2*width;
-    	this.arrowWidth = 2*width;
+    	this.arrowLength = 3*width;
+    	this.arrowWidth = 3*width;
     }
     
     /**
@@ -55,6 +55,9 @@ public class CircuitView extends JPanel {
 
 	protected void paintCircuit ( Graphics2D g, Circuit circuit, Color color ) {
 		
+		int atomicPathIndex = 0;
+		Point start;
+		Point end;
 		
 		super.paintComponent(g);
 		g.setColor(color);
@@ -64,11 +67,20 @@ public class CircuitView extends JPanel {
 			for ( Bow bow: entry.getPath()) {
 				
 				drawBow(g, bow);
+				atomicPathIndex++;
+				
+				if ( atomicPathIndex == entry.getPath().size() ) {	
+					
+					start = graphicView.nodeToPoint( bow.getStartNode());
+				 	end = graphicView.nodeToPoint ( bow.getEndNode());
+					drawArrow(g, start, end);
+					atomicPathIndex =0;
+				}
 				
 			}
-		}
 		
-	}
+		}
+	}	
 	
 	public void drawBow( Graphics2D g, Bow bow) {
 		
@@ -81,7 +93,6 @@ public class CircuitView extends JPanel {
 		g.setStroke(new BasicStroke(roadWidth));
         g.draw(new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()));
 		
-        drawArrow( g, start, end);
 	}
 	
 	public void drawArrow( Graphics2D g, Point start, Point end) {
