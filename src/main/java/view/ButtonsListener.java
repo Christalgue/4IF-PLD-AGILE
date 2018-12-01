@@ -48,13 +48,22 @@ public class ButtonsListener implements ActionListener {
 		// Send to controller a message associated to the clicked button
 		switch (e.getActionCommand()){
 		case Window.LOAD_MAP: 
-			controller.loadMap(controller.getWindow().getFile());
+			Window.getMapName();
+			controller.loadMap(map);
 			Window.loadDeliveryList.setEnabled(true);
 			Window.calculateCircuitButton.setEnabled(false);
+			
+			/*controller.loadMap(controller.getWindow().getFile());
+			Window.loadDeliveryList.setEnabled(true);
+			Window.calculateCircuitButton.setEnabled(false);*/
 			break;
 		case Window.LOAD_DELIVERY_OFFER: 
-			controller.loadDeliveryOffer(controller.getWindow().getFile()); 
+			Window.getDeliveryListName();
 			Window.calculateCircuitButton.setEnabled(true);
+			controller.loadDeliveryOffer(deliveryList); 
+			
+			/*controller.loadDeliveryOffer(controller.getWindow().getFile());
+			Window.calculateCircuitButton.setEnabled(true);*/
 			break;
 		case Window.CALCULATE_CIRCUITS: 
 			Window.getDeliveryMenNumber();

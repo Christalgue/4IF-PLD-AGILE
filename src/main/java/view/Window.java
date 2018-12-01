@@ -110,6 +110,18 @@ public class Window extends JFrame{
 		
 	}
 	
+	public static void getMapName() {
+		
+		buttonsListener.setMap(setNameOfMap.getText());
+		
+	}
+	
+	public static void getDeliveryListName() {
+		
+		buttonsListener.setDeliveryList(setNameOfDeliveryList.getText());
+		
+	}
+	
 	public void drawMap() {
 		graphicView.removeAll();
 		graphicView.update(graphicView.getGraphic());
@@ -155,14 +167,31 @@ public class Window extends JFrame{
 		buttonPanel.setSize(windowWidth, buttonPanelHeight);
 		buttonPanel.setBackground(Color.WHITE);
 		
+		setNameOfMap = new TextField();
+		setNameOfMap.setText("resources/xml/grandPlan.xml");
+		buttonPanel.add(setNameOfMap);
+		
 		JButton loadMapButton = new JButton(LOAD_MAP);
 		loadMapButton.addActionListener(buttonsListener);
 		buttonPanel.add(loadMapButton);
+		
+		/*JButton loadMapButton = new JButton(LOAD_MAP);
+		loadMapButton.addActionListener(buttonsListener);
+		buttonPanel.add(loadMapButton);*/
+		
+		setNameOfDeliveryList = new TextField();
+		setNameOfDeliveryList.setText("resources/xml/dl-grand-20.xml");
+		buttonPanel.add(setNameOfDeliveryList);
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
 		loadDeliveryList.addActionListener(buttonsListener);
 		loadDeliveryList.setEnabled(false);
 		buttonPanel.add(loadDeliveryList);
+		
+		/*loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
+		loadDeliveryList.addActionListener(buttonsListener);
+		loadDeliveryList.setEnabled(false);
+		buttonPanel.add(loadDeliveryList);*/
 		
 		JTextArea labelNumberOfDeliveryMen = new JTextArea();
 		labelNumberOfDeliveryMen.setText("Nombre de livreurs :");
