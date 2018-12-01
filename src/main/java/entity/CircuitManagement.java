@@ -333,7 +333,7 @@ public class CircuitManagement extends Observable{
      * @throws NoRepositoryException 
      * @throws TSPLimitTimeReachedException 
      */
-    public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, DeliveryListNotCharged, ClusteringException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException {
+    public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, LoadDeliveryException, ClusteringException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException {
     	
     	if(continueInterruptedCalculation == false) {
 
@@ -344,7 +344,7 @@ public class CircuitManagement extends Observable{
         	if(this.currentMap.getNodeMap().isEmpty()){
         		throw new MapNotChargedException("Impossible to calculate the circuits if there is not any Map in the system");
         	} else if (this.deliveryList.isEmpty()){
-        		throw new DeliveryListNotCharged("Impossible to calculate the circuits if there is not any Delivery in the system");
+        		throw new LoadDeliveryException("Impossible to calculate the circuits if there is not any Delivery in the system");
         	} else {
         		try {
     				groupedDeliveries = cluster();
@@ -473,28 +473,34 @@ public class CircuitManagement extends Observable{
 					}
 				}
 			}
-			
 		}
 		deliveryList.add(delivery);
 		
 	}
 	
-	public void removeDelivery (Node nodeDelivery) {		
+	public void removeDelivery (Node nodeDelivery) throws ManagementException {		
 		int position;
 		for (Circuit circuit : this.circuitsList) {
 			if ((position=circuit.checkNodeInCircuit(nodeDelivery))!=-1) {
 				if (position != 0) {
-					
+					Delivery delivery = circuit.getDeliveryList().get(position);
 					circuit.removeDelivery(position);
-					circuit.removeAtomicPath(position-1);
 					circuit.removeAtomicPath(position);
+					circuit.removeAtomicPath(position-1);
 					
 					// on recupere le delivery precedent et suivant
 					Delivery previousDelivery = circuit.getDeliveryList().get(position-1);
-					Delivery nextDelivery = circuit.getDeliveryList().get(position);
+					Delivery nextDelivery;
+					if(position != circuit.getDeliveryList().size()){ //Not last delivery
+						nextDelivery = circuit.getDeliveryList().get(position);
+					}
+					else{												//Last delivery
+						nextDelivery = circuit.getDeliveryList().get(0);
+					}
 					
 					//on setup des listes pour pouvoir utiliser le findShortestPath
 					List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
+					nextDeliveryList.add(previousDelivery);
 					nextDeliveryList.add(nextDelivery);
 					
 					
@@ -505,11 +511,11 @@ public class CircuitManagement extends Observable{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					deliveryList.remove(delivery);
 				} else {
-					// case when it's a repository
+					throw new ManagementException("You cannot remove a repository");
 				}
 			}
-			
 		}
 		
 	}

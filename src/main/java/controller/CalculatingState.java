@@ -1,7 +1,6 @@
 package main.java.controller;
 
 import main.java.exception.ClusteringException;
-import main.java.exception.DeliveryListNotCharged;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.MapNotChargedException;
@@ -21,7 +20,7 @@ public class CalculatingState extends DefaultState {
 			} catch (MapNotChargedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (DeliveryListNotCharged e) {
+			} catch (LoadDeliveryException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClusteringException e) {

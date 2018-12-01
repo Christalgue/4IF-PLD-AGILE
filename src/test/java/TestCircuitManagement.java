@@ -2,17 +2,13 @@ package test.java;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.jupiter.api.Test;
-import org.xml.sax.SAXException;
 
-import javafx.util.Pair;
 import main.java.entity.Bow;
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
@@ -20,15 +16,13 @@ import main.java.entity.Delivery;
 import main.java.entity.Map;
 import main.java.entity.Node;
 import main.java.exception.ClusteringException;
-import main.java.exception.DeliveryListNotCharged;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
+import main.java.exception.ManagementException;
 import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
 import main.java.exception.TSPLimitTimeReachedException;
-import main.java.exception.XMLException;
-import main.java.utils.Deserializer;
 
 class TestCircuitManagement {
 
@@ -116,6 +110,29 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	void checkNodeInDeliveryList() {
+		try {
+			CircuitManagement circuitManager = new CircuitManagement();
+			circuitManager.loadMap("resources/tests/Global/xml/plan.xml");
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
+			
+			Node inList = circuitManager.getCurrentMap().getNodeMap().get((long)5);
+			Node notInList = circuitManager.getCurrentMap().getNodeMap().get((long)7);
+			
+			assertTrue(circuitManager.checkNodeInDeliveryList(inList),"Error, expected True for the delivery 5");
+			assertFalse(circuitManager.checkNodeInDeliveryList(notInList),"Error, expected False for the delivery 7");
+			
+
+		} catch (LoadMapException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LoadDeliveryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
 	void testCalculateCircuits() {
 		
 		try {
@@ -141,9 +158,6 @@ class TestCircuitManagement {
 		} catch (MapNotChargedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (DeliveryListNotCharged e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (ClusteringException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -163,13 +177,14 @@ class TestCircuitManagement {
 	@Test
 	void testAddDelivery() {
 		try {
+			//Trying to put a delivery at the beginning or in the middle
 			CircuitManagement circuitManager = new CircuitManagement();
 			circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
 			circuitManager.calculateCircuits(1, false);
 			
 			Node newDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
-			Node previousDelivery = circuitManager.getDeliveryList().get(1).getPosition();
+			Node previousDelivery = circuitManager.getDeliveryList().get(0).getPosition();
 			circuitManager.addDelivery(newDelivery, 20, previousDelivery);
 			
 			//Assert new delivery has been added to the list
@@ -180,11 +195,40 @@ class TestCircuitManagement {
 			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=20]"),"Error, expected : {Delivery [position=3, duration=20]}, got : "+deliveries.get(2).toString());
 			
 			//Assert new circuit has been correctly calculated
-			String s01 = "Route :\n0 => 1 (1.0)";
-			String s13 = "Route :\n1 => 2 (1.0)\n2 => 3 (1.0)";
-			String s30 = "Route :\n3 => 0 (1.0)";
+			String s01 = "Route :\n0 => 3 (2.0)";
+			String s13 = "Route :\n3 => 0 (1.0)\n0 => 1 (1.0)";
+			String s30 = "Route :\n1 => 0 (1.0)";
 			
 			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been added to the list (expected 3, got "+circuit.getPath().size()+")");
+			assertTrue(circuit.getPath().get(0).toString().contains(s01),"Error, expected : {"+s01+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s30),"Error, expected : {"+s30+"}, got : "+circuit.getPath().get(2).toString());
+			
+			
+			//Trying to put a delivery at the end
+			circuitManager = new CircuitManagement();
+			circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
+			circuitManager.calculateCircuits(1, false);
+			
+			newDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
+			previousDelivery = circuitManager.getDeliveryList().get(1).getPosition();
+			circuitManager.addDelivery(newDelivery, 20, previousDelivery);
+			
+			//Assert new delivery has been added to the list
+			deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==3, "delivery has not been added to the list (expected 3, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=20]"),"Error, expected : {Delivery [position=3, duration=20]}, got : "+deliveries.get(2).toString());
+			
+			//Assert new circuit has been correctly calculated
+			s01 = "Route :\n0 => 1 (1.0)";
+			s13 = "Route :\n1 => 2 (1.0)\n2 => 3 (1.0)";
+			s30 = "Route :\n3 => 0 (1.0)";
+			
+			circuit = circuitManager.getCircuitsList().get(0);
 			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been added to the list (expected 3, got "+circuit.getPath().size()+")");
 			assertTrue(circuit.getPath().get(0).toString().contains(s01),"Error, expected : {"+s01+"}, got : "+circuit.getPath().get(0).toString());
 			assertTrue(circuit.getPath().get(1).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(1).toString());
@@ -195,9 +239,6 @@ class TestCircuitManagement {
 		} catch (LoadDeliveryException e) {
 			fail("LoadDeliveryException"+e.getMessage());
 		} catch (MapNotChargedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DeliveryListNotCharged e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClusteringException e) {
@@ -212,6 +253,93 @@ class TestCircuitManagement {
 		} catch (TSPLimitTimeReachedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	void testRemoveDelivery() {
+		try {
+			//Trying to remove a delivery
+			CircuitManagement circuitManager = new CircuitManagement();
+			circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_remove.xml");
+			circuitManager.calculateCircuits(1, false);
+			
+			Node oldDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
+			circuitManager.removeDelivery(oldDelivery);
+			
+			//Assert new delivery has been removed from the list
+			List<Delivery> deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==2, "delivery has not been removed from the list (expected 2, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			
+			//Assert new circuit has been correctly calculated
+			String s01 = "Route :\n0 => 1 (1.0)";
+			String s13 = "Route :\n1 => 0 (1.0)";
+			
+			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==2, "AtomicPath has not been removed from the list (expected 2, got "+circuit.getPath().size()+")");
+			assertTrue(circuit.getPath().get(0).toString().contains(s01),"Error, expected : {"+s01+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(1).toString());
+		} catch (LoadMapException e) {
+			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException"+e.getMessage());
+		} catch (MapNotChargedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClusteringException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DijkstraException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoRepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TSPLimitTimeReachedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+
+			//Trying to remove the repository
+			CircuitManagement circuitManager = new CircuitManagement();
+			circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
+			circuitManager.calculateCircuits(1, false);
+			
+			Node oldDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)0);
+			circuitManager.removeDelivery(oldDelivery);
+			
+			fail("No error were sent for removing the repository");
+
+		} catch (LoadMapException e) {
+			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException"+e.getMessage());
+		} catch (MapNotChargedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClusteringException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DijkstraException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoRepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TSPLimitTimeReachedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ManagementException e) {
+			assertTrue(e.getMessage().contains("You cannot remove a repository"),"The ManagementException is not the one expected, got : "+e.getMessage());
 		}
 	}
 
