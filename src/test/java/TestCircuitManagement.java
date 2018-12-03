@@ -3,9 +3,7 @@ package test.java;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.TimeZone;
 
 
@@ -197,11 +195,9 @@ class TestCircuitManagement {
 			
 
 		} catch (LoadMapException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("LoadMapException : "+e.getMessage());
 		} catch (LoadDeliveryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("LoadDeliveryException : "+e.getMessage());
 		}
 	}
 	
@@ -226,26 +222,19 @@ class TestCircuitManagement {
 			assertTrue(circuit.getPath().get(2).toString().contains(s21),"Error, expected : {"+s21+"}, got : "+circuit.getPath().get(2).toString());
 
 		} catch (LoadMapException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("LoadMapException : "+e.getMessage());
 		} catch (LoadDeliveryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("LoadDeliveryException : "+e.getMessage());
 		} catch (MapNotChargedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("MapNotChargedException : "+e.getMessage());
 		} catch (ClusteringException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("ClusteringException : "+e.getMessage());
 		} catch (DijkstraException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("DijkstraException : "+e.getMessage());
 		} catch (NoRepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("NoRepositoryException : "+e.getMessage());
 		} catch (TSPLimitTimeReachedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
 		}
 		
 	}
@@ -315,20 +304,15 @@ class TestCircuitManagement {
 		} catch (LoadDeliveryException e) {
 			fail("LoadDeliveryException"+e.getMessage());
 		} catch (MapNotChargedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("MapNotChargedException : "+e.getMessage());
 		} catch (ClusteringException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("ClusteringException : "+e.getMessage());
 		} catch (DijkstraException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("DijkstraException : "+e.getMessage());
 		} catch (NoRepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("NoRepositoryException : "+e.getMessage());
 		} catch (TSPLimitTimeReachedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
 		}
 	}
 	
@@ -363,23 +347,17 @@ class TestCircuitManagement {
 		} catch (LoadDeliveryException e) {
 			fail("LoadDeliveryException"+e.getMessage());
 		} catch (MapNotChargedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("MapNotChargedException : "+e.getMessage());
 		} catch (ClusteringException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("ClusteringException : "+e.getMessage());
 		} catch (DijkstraException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("DijkstraException : "+e.getMessage());
 		} catch (NoRepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("NoRepositoryException : "+e.getMessage());
 		} catch (TSPLimitTimeReachedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
 		} catch (ManagementException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("ManagementException : "+e.getMessage());
 		}
 		
 		try {
@@ -400,20 +378,15 @@ class TestCircuitManagement {
 		} catch (LoadDeliveryException e) {
 			fail("LoadDeliveryException"+e.getMessage());
 		} catch (MapNotChargedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("MapNotChargedException : "+e.getMessage());
 		} catch (ClusteringException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("ClusteringException : "+e.getMessage());
 		} catch (DijkstraException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("DijkstraException : "+e.getMessage());
 		} catch (NoRepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("NoRepositoryException : "+e.getMessage());
 		} catch (TSPLimitTimeReachedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
 		} catch (ManagementException e) {
 			assertTrue(e.getMessage().contains("You cannot remove a repository"),"The ManagementException is not the one expected, got : "+e.getMessage());
 		}
