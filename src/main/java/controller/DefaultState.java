@@ -20,7 +20,7 @@ public abstract class DefaultState implements State {
 	
 	public void cancel(Controller controller, Window window){}
 	
-	public void moveDelivery (Controller controller, Window window, Point point, Point previousPoint){}
+	public void moveDelivery (Controller controller, Window window){}
 	
 	public void deleteDelivery(Controller controller, Window window){}
 	
