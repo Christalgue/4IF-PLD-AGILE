@@ -60,6 +60,7 @@ public class Window extends JFrame{
 	protected static final int pathWidth = 3;
 	
 	protected static final Color selectedColor = Color.GREEN;
+	protected final static Color messageColor = Color.GREEN; 
 
 	/**
 	 * Default constructor
@@ -120,11 +121,15 @@ public class Window extends JFrame{
 		
 		controller.getWindow().graphicView.setGraphics();
 		
+		controller.getWindow().setMessage("Coucou");
 	}	
 	
 	private static void setMessageField(JLabel messageField) {
 		messageField.setSize( graphicWidth, messageFieldHeight);
 		messageField.setLocation(0, buttonPanelHeight);
+		messageField.setOpaque(true);
+		messageField.setBackground(messageColor);
+		messageField.setForeground(Color.WHITE);
 		
 	}
 
@@ -141,10 +146,10 @@ public class Window extends JFrame{
 	
 	private static void setGraphicView(GraphicView graphicView) {
 		
-		graphicView.setLocation(0, buttonPanelHeight);
+		graphicView.setLocation(0, buttonPanelHeight+messageFieldHeight);
 		graphicView.setLayout(null);
 		graphicView.setBackground(Color.LIGHT_GRAY);
-		graphicView.setSize(graphicWidth, windowHeight-buttonPanelHeight);
+		graphicView.setSize(graphicWidth, windowHeight-buttonPanelHeight-messageFieldHeight);
 		
 	}
 	
@@ -250,10 +255,8 @@ public class Window extends JFrame{
 		textualView.setBorder(BorderFactory.createTitledBorder(string));
 	}
 	
-	public void setMessage( String string, Color color) {
+	public void setMessage( String string) {
 		messageField.setText(string);
-		//messageField.setBackground(color);
-		messageField.setForeground(color);
 	}
 	
 	public void drawMap() {
