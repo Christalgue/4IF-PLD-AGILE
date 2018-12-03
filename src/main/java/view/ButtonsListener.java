@@ -50,6 +50,8 @@ public class ButtonsListener implements ActionListener {
 		case Window.LOAD_MAP: 
 			Window.getMapName();
 			controller.loadMap(map);
+			
+			//SEULEMENT POUR TEST
 			Window.loadDeliveryList.setEnabled(true);
 			Window.calculateCircuitButton.setEnabled(false);
 			

@@ -1,5 +1,6 @@
 package main.java.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.TextField;
 import java.io.File;
@@ -11,7 +12,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
@@ -39,7 +43,7 @@ public class Window extends JFrame{
 	protected static final String DELETE_DELIVERY = "Supprimer la livraison";
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
-	protected static final String STOP_CALCULATION = "Arrêter le calcul des tournees";
+	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
@@ -60,8 +64,11 @@ public class Window extends JFrame{
 	protected static final int pathWidth = 3;
 	
 	protected static final Color selectedColor = Color.GREEN;
-	protected final static Color messageColor = Color.GREEN; 
-
+	
+	protected JTree textualViewTree;
+	protected DefaultMutableTreeNode treeRoot;
+	protected JScrollPane treeView;
+	
 	/**
 	 * Default constructor
 	 */
@@ -75,6 +82,7 @@ public class Window extends JFrame{
 	public Window (CircuitManagement circuitManagement, Controller controller){
 		this.circuitManagement = circuitManagement;
 		this.controller = controller;
+		
 	}
 	
 	/**
@@ -102,7 +110,9 @@ public class Window extends JFrame{
 		
 		//////////////////////////////CREATE THE TEXTUAL VIEW/////////////////////////////
 		
-		controller.getWindow().textualView = new TextualView (controller.getWindow().circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth);
+		controller.getWindow().treeRoot = createTree();
+		controller.getWindow().textualViewTree = new JTree (controller.getWindow().treeRoot);
+		controller.getWindow().textualView = new TextualView (controller.getWindow().circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, controller.getWindow().textualViewTree);
 		setTextualView(controller.getWindow().textualView);
 		
 		//////////////////////////////CREATE THE MESSAGE FIELD/////////////////////////////
@@ -122,15 +132,23 @@ public class Window extends JFrame{
 		controller.getWindow().graphicView.setGraphics();
 		
 		controller.getWindow().setMessage("Coucou");
+
 	}	
 	
+	private static DefaultMutableTreeNode createTree() {
+		
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Livraisons");
+		root.add(new DefaultMutableTreeNode("Panda"));
+		return root;
+	}
+
+	//////////////////////////////PUT COMPOSANTS IN PLACE/////////////////////////////
 	private static void setMessageField(JLabel messageField) {
 		messageField.setSize( graphicWidth, messageFieldHeight);
 		messageField.setLocation(0, buttonPanelHeight);
 		messageField.setOpaque(true);
-		messageField.setBackground(messageColor);
 		messageField.setForeground(Color.WHITE);
-		
+	
 	}
 
 	public static void setControllerWindow( Window window) {
@@ -156,15 +174,12 @@ public class Window extends JFrame{
 	private static void setTextualView(TextualView textualView) {
 		
 		textualView.setLocation(graphicWidth, buttonPanelHeight);
-		textualView.setLayout(null);
 		textualView.setBackground(Color.WHITE);
 		textualView.setSize(windowWidth-graphicWidth, windowHeight-buttonPanelHeight);
 		
-		textualView.setBorder(BorderFactory.createTitledBorder("Vue Textuelle"));
-		
 		addDeliveryButton = new JButton(ADD_DELIVERY);
 		addDeliveryButton.addActionListener(buttonsListener);
-		addDeliveryButton.setVisible(false);
+		addDeliveryButton.setVisible(true);
 		textualView.add(addDeliveryButton);
 	
 		deleteDeliveryButton = new JButton(DELETE_DELIVERY);
@@ -175,8 +190,8 @@ public class Window extends JFrame{
 		moveDeliveryButton = new JButton(MOVE_DELIVERY);
 		moveDeliveryButton.addActionListener(buttonsListener);
 		moveDeliveryButton.setVisible(false);
-		textualView.add(moveDeliveryButton);	
-	
+		textualView.add(moveDeliveryButton);
+			
 	}
 	
 	public static void fillButtonPanel(JPanel buttonPanel) {
@@ -220,7 +235,7 @@ public class Window extends JFrame{
 		buttonPanel.add(calculateCircuitButton);
 	}
 	
-	
+	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
 	protected String getFile () {
 			
 		chooser = new JFileChooser();
@@ -233,6 +248,7 @@ public class Window extends JFrame{
 		return filePath;
 	}
 
+	//// Alternatives aux gestionnaires de fichiers
 	public static void getDeliveryMenNumber() {
 		
 		buttonsListener.setDeliveryMenNumber(Integer.parseInt(numberOfDeliveryMen.getText()));
@@ -244,6 +260,7 @@ public class Window extends JFrame{
 		buttonsListener.setMap(setNameOfMap.getText());
 		
 	}
+	/////
 	
 	public static void getDeliveryListName() {
 		
@@ -251,14 +268,21 @@ public class Window extends JFrame{
 		
 	}
 	
+	//////////////////////////////CHANGE DISPLAYED TEXT/////////////////////////////
 	public void setTextualViewBorderTitle( String string) {	
 		textualView.setBorder(BorderFactory.createTitledBorder(string));
 	}
 	
 	public void setMessage( String string) {
+		messageField.setBackground(Color.GREEN);
 		messageField.setText(string);
 	}
 	
+	public void setErrorMessage( String string) {
+		messageField.setBackground(Color.RED);
+		messageField.setText(string);
+	}
+	//////////////////////////////DRAW COMPOSANTS/////////////////////////////
 	public void drawMap() {
 		graphicView.removeAll();
 		graphicView.update(graphicView.getGraphic());
@@ -268,6 +292,7 @@ public class Window extends JFrame{
 	public void drawDeliveries() {
 		drawMap();
 		graphicView.paintDeliveries(graphicView.getGraphic());
+		textualView.fillDeliveryTree();
 	}
 	
 	public void drawCircuits() {
@@ -279,4 +304,56 @@ public class Window extends JFrame{
 		graphicView.paintSelectedNode(graphicView.getGraphic(), node, selectedColor);
 	}
 	
+	public void fillDeliveryTree() {
+		textualView.fillDeliveryTree();
+	}
+	
+	
+	//////////////////////////////BUTTON ACTIVATION/////////////////////////////
+	public void enableButtonLoadDeliveriesList() {
+		loadDeliveryList.setEnabled(true);
+	}
+	
+	public void enableButtonCalculateCircuit() {
+		calculateCircuitButton.setEnabled(true);
+	}	
+	
+	public void enableButtonAddDelivery() {
+		addDeliveryButton.setVisible(true);
+		addDeliveryButton.setEnabled(true);
+	}
+	
+	public void enableButtonDeleteDelivery() {
+		deleteDeliveryButton.setVisible(true);;
+		deleteDeliveryButton.setEnabled(true);
+	}
+	
+	public void enableButtonMoveDelivery() {
+		moveDeliveryButton.setVisible(true);;
+		moveDeliveryButton.setEnabled(true);
+	}
+	
+	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
+	public void disableButtonLoadDeliveriesList() {
+		loadDeliveryList.setEnabled(false);
+	}
+	
+	public void disableButtonCalculateCircuit() {
+		calculateCircuitButton.setEnabled(false);
+	}	
+	
+	public void disableButtonAddDelivery() {
+		addDeliveryButton.setVisible(false);
+		addDeliveryButton.setEnabled(false);
+	}
+	
+	public void disableButtonDeleteDelivery() {
+		deleteDeliveryButton.setVisible(false);;
+		deleteDeliveryButton.setEnabled(false);
+	}
+	
+	public void disableButtonMoveDelivery() {
+		moveDeliveryButton.setVisible(false);
+		moveDeliveryButton.setEnabled(false);
+	}
 }

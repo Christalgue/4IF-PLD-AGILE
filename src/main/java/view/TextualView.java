@@ -1,8 +1,19 @@
 package main.java.view;
 
+import java.awt.BorderLayout;
+import java.awt.Graphics2D;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import main.java.entity.CircuitManagement;
+import main.java.entity.Delivery;
+import main.java.entity.Node;
 
 public class TextualView extends JPanel{
 
@@ -10,68 +21,47 @@ public class TextualView extends JPanel{
 	private int viewHeight;
 	private int viewWidth;	
 	
+	private JTree deliveryTree;
+	private DefaultMutableTreeNode treeRoot;
+	
+	JScrollPane scrollPane;
+	
 	public TextualView () {
 		
 	}
 	
-	public TextualView(CircuitManagement circuitManagement, int viewHeight, int viewWidth) {
+	public TextualView(CircuitManagement circuitManagement, int viewHeight, int viewWidth, JTree deliveryTree) {
 		
 		super();
 		
 		this.circuitManagement = circuitManagement;
 		this.viewHeight = viewHeight;
 		this.viewWidth = viewWidth;
-	
+		this.deliveryTree = deliveryTree;
+		this.treeRoot = (DefaultMutableTreeNode) deliveryTree.getModel().getRoot();
+		
+		this.scrollPane = new JScrollPane(deliveryTree); 
+		this.add(scrollPane);
+		this.setVisible(true);
+		
 	}
 
+	public void fillDeliveryTree() {
+		
+		setBorder(BorderFactory.createTitledBorder("Livraisons"));
+		
+		int deliveryListIndex = 1;
+			
+		for( Delivery entry : circuitManagement.getDeliveryList() ) {
+			    
+			treeRoot.add(new DefaultMutableTreeNode("Livraison "+ deliveryListIndex +": Dur�e "+entry.getDuration()+" s"));
+			System.out.println(deliveryListIndex);
+			deliveryListIndex++;
+			
+		}
 	
-	
-	
-	
-/*		//To change icons for the tree
-		//https://stackoverflow.com/questions/20691946/set-icon-to-each-node-in-jtree
-		JTree tree = new JTree();
-		tree.setBorder(new LineBorder(new Color(0, 0, 0)));
-		tree.setModel(new DefaultTreeModel(
-			new DefaultMutableTreeNode("Liste des tournées") {
-				{
-					DefaultMutableTreeNode node_1;
-					DefaultMutableTreeNode node_2;
-					node_1 = new DefaultMutableTreeNode("Tournée 1");
-						node_2 = new DefaultMutableTreeNode("Informations ");
-							node_2.add(new DefaultMutableTreeNode("Durée totale : 1h45min"));
-						node_1.add(node_2);
-						node_2 = new DefaultMutableTreeNode("Livraisons");
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 1"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 2"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 3"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 4"));
-						node_1.add(node_2);
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("Tournée 2");
-						node_2 = new DefaultMutableTreeNode("Informations ");
-							node_2.add(new DefaultMutableTreeNode("Durée totale : 2h"));
-						node_1.add(node_2);
-						node_2 = new DefaultMutableTreeNode("Livraisons");
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 1"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 2"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 3"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 4"));
-						node_1.add(node_2);
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("Tournée 3");
-						node_2 = new DefaultMutableTreeNode("Informations ");
-							node_2.add(new DefaultMutableTreeNode("Durée totale : 1h53min"));
-						node_1.add(node_2);
-						node_2 = new DefaultMutableTreeNode("Livraisons");
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 1"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 2"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 3"));
-						node_1.add(node_2);
-					add(node_1);
-				}
-			}
-		));
-		frame.getContentPane().add(tree, BorderLayout.EAST);*/
+		
+		
+	}
 	
 }
