@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -39,11 +40,13 @@ public class Window extends JFrame{
 	protected static final String DELETE_DELIVERY = "Supprimer la livraison";
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
-	protected static final String STOP_CALCULATION = "Arrêter le calcul des tournees";
+	protected static final String STOP_CALCULATION = "Arrï¿½ter le calcul des tournees";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
 	protected static TextField numberOfDeliveryMen;
+	
+	protected static PopUp popUp;
 	
 	protected static JButton loadDeliveryList;
 	protected static JButton calculateCircuitButton;
@@ -276,4 +279,7 @@ public class Window extends JFrame{
 		graphicView.paintSelectedNode(graphicView.getGraphic(), node, selectedColor);
 	}
 	
+	public int getPopUpValue(String message, Window window) {
+		return popUp.displayPopUp(message, window);
+	}
 }
