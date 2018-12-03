@@ -80,8 +80,6 @@ public class CalcState extends DefaultState {
 				controller.durationChoiceState.setNode(node);
 				controller.setCurrentState(controller.durationChoiceState);
 			}
-		} else {
-			// IHM error
 		}
 		
 	}

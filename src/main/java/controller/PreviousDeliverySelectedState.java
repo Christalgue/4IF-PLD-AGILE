@@ -30,7 +30,6 @@ public class PreviousDeliverySelectedState extends DefaultState {
 				// rajouter erreur IHM
 			}
 		}
-		// rajouter erreur IHM
 	}
 	
 	public void cancel (Controller controller, Window window) {

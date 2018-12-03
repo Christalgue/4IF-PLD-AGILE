@@ -22,7 +22,7 @@ public class Controller {
 	protected final CalculatingState calculatingState = new CalculatingState();
 	protected final DurationChoiceState durationChoiceState = new DurationChoiceState ();
 	protected final PreviousDeliverySelectedState previousDeliverySelectedState = new PreviousDeliverySelectedState ();
-
+	protected final DeletedChoiceState deletedChoiceState = new DeletedChoiceState();
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
 		currentState = initState;
@@ -60,8 +60,8 @@ public class Controller {
 		
 	}*/
 	
-	public void addDelivery(Point point, int duration, Point previousPoint) {
-		currentState.addDelivery(this, window, point, duration, previousPoint);
+	public void addDelivery() {
+		currentState.addDelivery(this, window);
 	}
 	
 	public void validateAdd() {
@@ -86,8 +86,8 @@ public class Controller {
 		currentState.cancel(this, window);
 	}
 	
-	public void deleteDelivery(Point point) {
-		currentState.deleteDelivery(this, window, point);
+	public void deleteDelivery() {
+		currentState.deleteDelivery(this, window);
 	}
 	
 	public void validateDelete() {

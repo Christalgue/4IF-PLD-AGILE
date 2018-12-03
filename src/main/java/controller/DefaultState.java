@@ -14,7 +14,7 @@ public abstract class DefaultState implements State {
 	
 	//public void undo();
 	
-	public void addDelivery(Controller controller, Window window, Point point, int duration, Point previousPoint){}
+	public void addDelivery(Controller controller, Window window){}
 	
 	//public void validate(Controller controller, Window window){}
 	
@@ -22,7 +22,7 @@ public abstract class DefaultState implements State {
 	
 	public void moveDelivery (Controller controller, Window window, Point point, Point previousPoint){}
 	
-	public void deleteDelivery(Controller controller, Window window, Point point){}
+	public void deleteDelivery(Controller controller, Window window){}
 	
 	
 	public void rightClick(Controller controller, Window window){}

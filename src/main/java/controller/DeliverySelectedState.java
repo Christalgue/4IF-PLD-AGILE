@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import main.java.entity.Node;
+import main.java.entity.Point;
 import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
@@ -8,6 +9,7 @@ import main.java.exception.LoadMapException;
 import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
 import main.java.exception.TSPLimitTimeReachedException;
+import main.java.utils.PointUtil;
 import main.java.view.Window;
 
 public class DeliverySelectedState extends DefaultState {
@@ -18,14 +20,19 @@ public class DeliverySelectedState extends DefaultState {
 		this.node =  node;
 	}
 	
-	public void leftClick(Controller controller, Window window, Node node, boolean exist) {
-		
-		if (exist)
+	public void leftClick(Controller controller, Window window, Point point) {
+		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		if (node != null)
 		{
-			controller.deliverySelectedState.setNode(node);
-		} else {
-			controller.deliveryAddedState.setNode(node);
-			controller.setCurrentState(controller.deliveryAddedState);
+			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+				controller.deliverySelectedState.setNode(node);
+				controller.setCurrentState(controller.deliverySelectedState);
+			} else {
+				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
+				Node newNode = new Node (id, point.getX(), point.getY());
+				controller.durationChoiceState.setNode(node);
+				controller.setCurrentState(controller.durationChoiceState);
+			}
 		}
 		
 	}
@@ -82,9 +89,9 @@ public class DeliverySelectedState extends DefaultState {
 	
 	}
 	
-	public void deleteDelivery (Controller controller, Window window, Node node) {
-		controller.deliveryDeletedState.setNode(node);
-		controller.setCurrentState(controller.deliveryDeletedState);
+	public void deleteDelivery (Controller controller, Window window) {
+		controller.deletedChoiceState.setNode(node);
+		controller.setCurrentState(controller.deletedChoiceState);
 	}
 	
 	public void moveDelivery (Controller controller, Window window, Node node, Node previousNode) {
