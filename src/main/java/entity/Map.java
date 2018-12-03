@@ -2,6 +2,7 @@ package main.java.entity;
 
 
 import java.util.*;
+import java.util.HashMap;
 import javafx.util.Pair;
 
 import main.java.exception.DijkstraException;
@@ -189,6 +190,18 @@ public class Map extends Observable{
     		}
     	}
     	return minimumDistanceNodeEntry; 
+    }
+    
+    public long getIdFromNode (double longitude, double latitude) {
+
+		for( HashMap.Entry<Long, Node> entry : nodeMap.entrySet()) {
+		    
+			Node currentNode = entry.getValue();
+			if (currentNode.getLongitude() == longitude && currentNode.getLatitude() == latitude)	{
+				return currentNode.getId();
+			}
+		}
+		return 0;
     }
     
     

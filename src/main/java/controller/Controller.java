@@ -2,6 +2,7 @@ package main.java.controller;
 
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
+import main.java.entity.Point;
 import main.java.view.Window;
 
 public class Controller {
@@ -19,6 +20,8 @@ public class Controller {
 	protected final MapLoadedState mapLoadedState = new MapLoadedState();
 	protected final DeliveryMovedState deliveryMovedState = new DeliveryMovedState();
 	protected final CalculatingState calculatingState = new CalculatingState();
+	protected final DurationChoiceState durationChoiceState = new DurationChoiceState ();
+	protected final PreviousDeliverySelectedState previousDeliverySelectedState = new PreviousDeliverySelectedState ();
 
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
@@ -57,8 +60,8 @@ public class Controller {
 		
 	}*/
 	
-	public void addDelivery(Node node, int duration) {
-		//currentState.addDelivery(this, window, node, duration);
+	public void addDelivery(Point point, int duration, Point previousPoint) {
+		currentState.addDelivery(this, window, point, duration, previousPoint);
 	}
 	
 	public void validateAdd() {
@@ -71,8 +74,8 @@ public class Controller {
 		
 	}
 	
-	public void moveDelivery (Node node) {
-		//currentState.moveDelivery(this, window, node);
+	public void moveDelivery (double longitude, Point point, Point previousPoint) {
+		currentState.moveDelivery(this, window, point, previousPoint);
 	}
 	
 	public void validateMove() {
@@ -83,8 +86,8 @@ public class Controller {
 		currentState.cancel(this, window);
 	}
 	
-	public void deleteDelivery(Node node) {
-		currentState.deleteDelivery(this, window, node);
+	public void deleteDelivery(Point point) {
+		currentState.deleteDelivery(this, window, point);
 	}
 	
 	public void validateDelete() {
@@ -101,8 +104,8 @@ public class Controller {
 	/**
 	 * 
 	 */
-	public void leftClick(Node node, boolean exist){
-		currentState.leftClick(this, window, node, exist);
+	public void leftClick(Point point){
+		currentState.leftClick(this, window, point);
 	}
 	
 	public void continueCalculation(boolean keepCalculating) {

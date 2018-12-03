@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import main.java.entity.Node;
+import main.java.entity.Point;
 import main.java.view.Window;
 
 public interface State {
@@ -13,20 +14,20 @@ public interface State {
 	
 	//public void undo();
 	
-	public void addDelivery(Controller controler, Window window, Node node, int duration, Node previousNode);
+	public void addDelivery(Controller controler, Window window, Point point, int duration, Point previousPoint);
 	
 	//spublic void validate(Controller controler, Window window);
 	
 	public void cancel(Controller controler, Window window);
 	
-	public void moveDelivery (Controller controler, Window window, Node node,  Node previousNode);
+	public void moveDelivery (Controller controler, Window window, Point point, Point previousPoint);
 	
-	public void deleteDelivery(Controller controler, Window window, Node node);
+	public void deleteDelivery(Controller controler, Window window, Point point);
 	
 	
 	public void rightClick(Controller controler, Window window);
 	
-	public void leftClick(Controller controler, Window window, Node node, boolean exist);
+	public void leftClick(Controller controler, Window window, Point point);
 	
 	public void movedMouse(Controller controler, Window window);
 	
