@@ -46,6 +46,7 @@ public class CalculatingState extends DefaultState {
 		try {
 			controller.circuitManagement.loadDeliveryList(filename);
 			window.drawDeliveries();
+			controller.setCurrentState(controller.deliveryLoadedState);
 		} catch (LoadDeliveryException e)
 		{
 			e.printStackTrace();
