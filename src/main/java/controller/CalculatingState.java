@@ -36,6 +36,8 @@ public class CalculatingState extends DefaultState {
 				System.out.println(e.getMessage());
 				controller.setCurrentState(controller.calculatingState);
 			}
+		} else {
+			controller.setCurrentState(controller.calcState);
 		}
 	}
 	
