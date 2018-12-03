@@ -111,6 +111,10 @@ public class Controller {
 	public void continueCalculation(boolean keepCalculating) {
 		currentState.continueCalculation(this, window, keepCalculating);
 	}
+	
+	public void validateDuration (Controller controller, Window window, int duration) {
+		currentState.validateDuration(this, window, duration);
+	}
 
 	/**
 	 * Method called by window after the mouse has moved in the graphical view of the plan

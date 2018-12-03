@@ -6,30 +6,32 @@ import main.java.view.Window;
 
 public interface State {
 	
-	public void loadMap(Controller controler, Window window, String filename);
+	public void loadMap(Controller controller, Window window, String filename);
 	
-	public void loadDeliveryOffer(Controller controler, Window window, String filename);
+	public void loadDeliveryOffer(Controller controller, Window window, String filename);
 	
-	public void calculateCircuits(Controller controler, Window window, int nbDeliveryMan);
+	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan);
 	
 	//public void undo();
 	
-	public void addDelivery(Controller controler, Window window, Point point, int duration, Point previousPoint);
+	public void addDelivery(Controller controller, Window window, Point point, int duration, Point previousPoint);
 	
 	//spublic void validate(Controller controler, Window window);
 	
-	public void cancel(Controller controler, Window window);
+	public void cancel(Controller controller, Window window);
 	
-	public void moveDelivery (Controller controler, Window window, Point point, Point previousPoint);
+	public void moveDelivery (Controller controller, Window window, Point point, Point previousPoint);
 	
-	public void deleteDelivery(Controller controler, Window window, Point point);
+	public void deleteDelivery(Controller controller, Window window, Point point);
 	
 	
-	public void rightClick(Controller controler, Window window);
+	public void rightClick(Controller controller, Window window);
 	
-	public void leftClick(Controller controler, Window window, Point point);
+	public void leftClick(Controller controller, Window window, Point point);
 	
-	public void movedMouse(Controller controler, Window window);
+	public void movedMouse(Controller controller, Window window);
+	
+	public void validateDuration (Controller controller, Window window, int duration);
 	
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating);
 }

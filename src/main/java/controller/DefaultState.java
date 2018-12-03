@@ -31,6 +31,8 @@ public abstract class DefaultState implements State {
 	
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating){}
 	
+	public void validateDuration (Controller controller, Window window, int duration) {}
+	
 	public void movedMouse(Controller controller, Window window){}
 
 	@Override

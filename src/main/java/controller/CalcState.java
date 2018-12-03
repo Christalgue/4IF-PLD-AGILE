@@ -71,13 +71,17 @@ public class CalcState extends DefaultState {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (node != null)
 		{
-			controller.deliverySelectedState.setNode(node);
-			controller.setCurrentState(controller.deliverySelectedState);
+			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+				controller.deliverySelectedState.setNode(node);
+				controller.setCurrentState(controller.deliverySelectedState);
+			} else {
+				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
+				Node newNode = new Node (id, point.getX(), point.getY());
+				controller.durationChoiceState.setNode(node);
+				controller.setCurrentState(controller.durationChoiceState);
+			}
 		} else {
-			long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
-			Node newNode = new Node (id, point.getX(), point.getY());
-			controller.durationChoiceState.setNode(node);
-			controller.setCurrentState(controller.durationChoiceState);
+			// IHM error
 		}
 		
 	}
