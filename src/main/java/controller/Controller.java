@@ -112,7 +112,7 @@ public class Controller {
 		currentState.continueCalculation(this, window, keepCalculating);
 	}
 	
-	public void validateDuration (Controller controller, Window window, int duration) {
+	public void validateDuration (int duration) {
 		currentState.validateDuration(this, window, duration);
 	}
 
