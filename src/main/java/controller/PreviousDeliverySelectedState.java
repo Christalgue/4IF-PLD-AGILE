@@ -33,6 +33,10 @@ public class PreviousDeliverySelectedState extends DefaultState {
 		// rajouter erreur IHM
 	}
 	
+	public void cancel (Controller controller, Window window) {
+		controller.setCurrentState(controller.calcState);
+	}
+	
 	
 
 }

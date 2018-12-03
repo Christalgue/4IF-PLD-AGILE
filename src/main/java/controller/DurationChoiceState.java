@@ -17,5 +17,9 @@ public class DurationChoiceState extends DefaultState {
 		controller.setCurrentState(controller.previousDeliverySelectedState);
 		
 	}
+	
+	public void cancel (Controller controller, Window window) {
+		controller.setCurrentState(controller.calcState);
+	}
 
 }
