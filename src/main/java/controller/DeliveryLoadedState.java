@@ -26,7 +26,7 @@ public class DeliveryLoadedState extends DefaultState {
 	public void loadMap(Controller controller, Window window, String filename) {
 		
 		try {
-			window.enableButtonLoadDeliveriesList();
+			//window.enableButtonLoadDeliveriesList();
 			window.disableButtonCalculateCircuit();
 			controller.circuitManagement.loadMap(filename);
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
