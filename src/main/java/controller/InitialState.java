@@ -8,7 +8,7 @@ public class InitialState extends DefaultState {
 	public void loadMap(Controller controller, Window window, String filename) {
 		
 		try {
-			window.enableButtonAddDelivery();
+			window.enableButtonLoadDeliveriesList();
 			System.out.println(filename);
 			controller.circuitManagement.loadMap(filename);
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");

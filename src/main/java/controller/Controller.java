@@ -24,7 +24,7 @@ public class Controller {
 	protected final DurationChoiceState durationChoiceState = new DurationChoiceState ();
 	protected final PreviousDeliverySelectedState previousDeliverySelectedState = new PreviousDeliverySelectedState ();
 	protected final SelectedPreviousMovedState selectedPreviousMovedState = new SelectedPreviousMovedState (); 
-	protected final NewDeliverySelectedState newDeliverySelectedState = new NewDeliverySelectedState();
+	protected final NodeSelectedState nodeSelectedState = new NodeSelectedState();
 	
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;

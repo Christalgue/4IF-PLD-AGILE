@@ -12,12 +12,17 @@ import main.java.exception.TSPLimitTimeReachedException;
 import main.java.utils.PointUtil;
 import main.java.view.Window;
 
-public class DeliverySelectedState extends DefaultState {
+public class NodeSelectedState extends DefaultState {
 	
-
 	Node node;
+	
 	protected void setNode (Node node) {
 		this.node =  node;
+	}
+	
+	public void addDelivery(Controller controller, Window window) {
+		controller.durationChoiceState.setNode(node);
+		controller.setCurrentState(controller.durationChoiceState);
 	}
 	
 	public void leftClick(Controller controller, Window window, Point point) {
@@ -101,21 +106,5 @@ public class DeliverySelectedState extends DefaultState {
 	
 	}
 	
-	public void deleteDelivery (Controller controller, Window window) {
-		
-		controller.deliveryDeletedState.setNode(node);
-		controller.setCurrentState(controller.deliveryDeletedState);
-	}
-	
-	public void moveDelivery (Controller controller, Window window) {
-		window.disableButtonMoveDelivery();
-		window.disableButtonDeleteDelivery();
-		window.setMessage("Veuillez selectionner le point de livraison precedent");
-		controller.selectedPreviousMovedState.setNode(node);
-		controller.setCurrentState(controller.selectedPreviousMovedState);
-	}
-
-	
-
 
 }

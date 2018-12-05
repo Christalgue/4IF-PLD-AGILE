@@ -10,7 +10,7 @@ public class MapLoadedState extends DefaultState{
 	public void loadMap(Controller controller, Window window, String filename) {
 		
 		try {
-			window.enableButtonAddDelivery();
+			window.enableButtonLoadDeliveriesList();
 			window.disableButtonCalculateCircuit();
 			controller.circuitManagement.loadMap(filename);
 			System.out.println(filename);

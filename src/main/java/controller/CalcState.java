@@ -85,8 +85,8 @@ public class CalcState extends DefaultState {
 				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
 				window.enableButtonAddDelivery();
-				controller.newDeliverySelectedState.setNode(node);
-				controller.setCurrentState(controller.newDeliverySelectedState);
+				controller.nodeSelectedState.setNode(node);
+				controller.setCurrentState(controller.nodeSelectedState);
 				
 			}
 		}
