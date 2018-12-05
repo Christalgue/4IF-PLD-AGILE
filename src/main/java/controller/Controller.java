@@ -2,6 +2,7 @@ package main.java.controller;
 
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
+import main.java.entity.Point;
 import main.java.view.Window;
 
 public class Controller {
@@ -19,7 +20,9 @@ public class Controller {
 	protected final MapLoadedState mapLoadedState = new MapLoadedState();
 	protected final DeliveryMovedState deliveryMovedState = new DeliveryMovedState();
 	protected final CalculatingState calculatingState = new CalculatingState();
-
+	protected final DurationChoiceState durationChoiceState = new DurationChoiceState ();
+	protected final PreviousDeliverySelectedState previousDeliverySelectedState = new PreviousDeliverySelectedState ();
+	protected final SelectedPreviousMovedState selectedPreviousMovedState = new SelectedPreviousMovedState (); 
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
 		currentState = initState;
@@ -57,8 +60,8 @@ public class Controller {
 		
 	}*/
 	
-	public void addDelivery(Node node, int duration) {
-		//currentState.addDelivery(this, window, node, duration);
+	public void addDelivery() {
+		currentState.addDelivery(this, window);
 	}
 	
 	public void validateAdd() {
@@ -71,8 +74,8 @@ public class Controller {
 		
 	}
 	
-	public void moveDelivery (Node node) {
-		//currentState.moveDelivery(this, window, node);
+	public void moveDelivery () {
+		currentState.moveDelivery(this, window);
 	}
 	
 	public void validateMove() {
@@ -83,8 +86,8 @@ public class Controller {
 		currentState.cancel(this, window);
 	}
 	
-	public void deleteDelivery(Node node) {
-		currentState.deleteDelivery(this, window, node);
+	public void deleteDelivery() {
+		currentState.deleteDelivery(this, window);
 	}
 	
 	public void validateDelete() {
@@ -101,12 +104,16 @@ public class Controller {
 	/**
 	 * 
 	 */
-	public void leftClick(Node node, boolean exist){
-		currentState.leftClick(this, window, node, exist);
+	public void leftClick(Point point){
+		currentState.leftClick(this, window, point);
 	}
 	
 	public void continueCalculation(boolean keepCalculating) {
 		currentState.continueCalculation(this, window, keepCalculating);
+	}
+	
+	public void validateDuration (int duration) {
+		currentState.validateDuration(this, window, duration);
 	}
 
 	/**

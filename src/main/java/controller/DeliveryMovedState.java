@@ -22,6 +22,7 @@ public class DeliveryMovedState extends DefaultState {
 	}
 	
 	public void validate (Controller controller, Window window) {
+	//	controller.circuitManagement.move
 		controller.setCurrentState(controller.calcState);
 	}
 

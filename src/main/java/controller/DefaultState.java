@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import main.java.entity.Node;
+import main.java.entity.Point;
 import main.java.view.Window;
 
 public abstract class DefaultState implements State {
@@ -13,22 +14,24 @@ public abstract class DefaultState implements State {
 	
 	//public void undo();
 	
-	public void addDelivery(Controller controller, Window window, Node node , int duration, Node previousNode){}
+	public void addDelivery(Controller controller, Window window){}
 	
 	//public void validate(Controller controller, Window window){}
 	
 	public void cancel(Controller controller, Window window){}
 	
-	public void moveDelivery (Controller controller, Window window, Node node, Node previousNode){}
+	public void moveDelivery (Controller controller, Window window){}
 	
-	public void deleteDelivery(Controller controller, Window window, Node node){}
+	public void deleteDelivery(Controller controller, Window window){}
 	
 	
 	public void rightClick(Controller controller, Window window){}
 	
-	public void leftClick(Controller controller, Window window, Node node, boolean exist){}
+	public void leftClick(Controller controller, Window window, Point point){}
 	
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating){}
+	
+	public void validateDuration (Controller controller, Window window, int duration) {}
 	
 	public void movedMouse(Controller controller, Window window){}
 

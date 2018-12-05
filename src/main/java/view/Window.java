@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -48,6 +49,8 @@ public class Window extends JFrame{
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
 	protected static TextField numberOfDeliveryMen;
+	
+	protected static PopUp popUp;
 	
 	protected static JButton loadDeliveryList;
 	protected static JButton calculateCircuitButton;
@@ -355,5 +358,9 @@ public class Window extends JFrame{
 	public void disableButtonMoveDelivery() {
 		moveDeliveryButton.setVisible(false);
 		moveDeliveryButton.setEnabled(false);
+	}
+
+	public int getPopUpValue(String message, Window window) {
+		return popUp.displayPopUp(message, window);
 	}
 }
