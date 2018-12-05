@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
@@ -22,9 +24,10 @@ public class TextualView extends JPanel{
 	private int viewWidth;	
 	
 	private JTree deliveryTree;
+	private DefaultTreeModel treeModel;
 	private DefaultMutableTreeNode treeRoot;
 	
-	JScrollPane scrollPane;
+	private JScrollPane scrollPane;
 	
 	public TextualView () {
 		
@@ -37,10 +40,18 @@ public class TextualView extends JPanel{
 		this.circuitManagement = circuitManagement;
 		this.viewHeight = viewHeight;
 		this.viewWidth = viewWidth;
+		
 		this.deliveryTree = deliveryTree;
 		this.treeRoot = (DefaultMutableTreeNode) deliveryTree.getModel().getRoot();
 		
-		this.scrollPane = new JScrollPane(deliveryTree); 
+		this.deliveryTree.setRootVisible(true);
+		this.deliveryTree.setShowsRootHandles(true);
+		
+		this.treeModel = (DefaultTreeModel) this.deliveryTree.getModel();
+		
+		this.scrollPane = new JScrollPane(this.deliveryTree);
+		scrollPane.setSize(viewWidth-20, viewHeight-220);
+		scrollPane.setLocation(10, 20);
 		this.add(scrollPane);
 		this.setVisible(true);
 		
@@ -53,8 +64,10 @@ public class TextualView extends JPanel{
 		int deliveryListIndex = 1;
 			
 		for( Delivery entry : circuitManagement.getDeliveryList() ) {
-			    
-			treeRoot.add(new DefaultMutableTreeNode("Livraison "+ deliveryListIndex +": Durée "+entry.getDuration()+" s"));
+		
+			treeModel.insertNodeInto(new DefaultMutableTreeNode("Livraison "+ deliveryListIndex +": Durée "+entry.getDuration()+" s"),
+	                  treeRoot,
+	                  deliveryListIndex-1);
 			System.out.println(deliveryListIndex);
 			deliveryListIndex++;
 			

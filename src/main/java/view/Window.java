@@ -61,8 +61,11 @@ public class Window extends JFrame{
 	protected static final int windowWidth = 1280;
 	protected static final int windowHeight = 720;
 	protected static final int buttonPanelHeight =50;
-	protected static final int graphicWidth = 1080;
+	protected static final int graphicWidth = 1030;
 	protected static final int messageFieldHeight = 40;
+	protected static final int buttonHeight = 40;
+	protected static final int buttonSpace = 10;
+	
 	
 	protected static final int pathWidth = 3;
 	
@@ -70,7 +73,6 @@ public class Window extends JFrame{
 	
 	protected JTree textualViewTree;
 	protected DefaultMutableTreeNode treeRoot;
-	protected JScrollPane treeView;
 	
 	/**
 	 * Default constructor
@@ -133,15 +135,12 @@ public class Window extends JFrame{
 		controller.getWindow().setVisible(true);
 		
 		controller.getWindow().graphicView.setGraphics();
-		
-		controller.getWindow().setMessage("Coucou");
 
 	}	
 	
 	private static DefaultMutableTreeNode createTree() {
 		
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Livraisons");
-		root.add(new DefaultMutableTreeNode("Panda"));
 		return root;
 	}
 
@@ -151,6 +150,8 @@ public class Window extends JFrame{
 		messageField.setLocation(0, buttonPanelHeight);
 		messageField.setOpaque(true);
 		messageField.setForeground(Color.WHITE);
+		messageField.setBackground(Color.GREEN);
+		messageField.setText("Veuillez selectionner un plan a charger");
 	
 	}
 
@@ -179,20 +180,30 @@ public class Window extends JFrame{
 		textualView.setLocation(graphicWidth, buttonPanelHeight);
 		textualView.setBackground(Color.WHITE);
 		textualView.setSize(windowWidth-graphicWidth, windowHeight-buttonPanelHeight);
+		textualView.setLayout(null);
 		
 		addDeliveryButton = new JButton(ADD_DELIVERY);
 		addDeliveryButton.addActionListener(buttonsListener);
 		addDeliveryButton.setVisible(true);
+		addDeliveryButton.setEnabled(false);
+		addDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight*3+2*buttonSpace+50));
+		addDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
 		textualView.add(addDeliveryButton);
 	
 		deleteDeliveryButton = new JButton(DELETE_DELIVERY);
 		deleteDeliveryButton.addActionListener(buttonsListener);
-		deleteDeliveryButton.setVisible(false);
+		deleteDeliveryButton.setVisible(true);
+		deleteDeliveryButton.setEnabled(false);
+		deleteDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight*2+buttonSpace+50));
+		deleteDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
 		textualView.add(deleteDeliveryButton);	
 	
 		moveDeliveryButton = new JButton(MOVE_DELIVERY);
 		moveDeliveryButton.addActionListener(buttonsListener);
-		moveDeliveryButton.setVisible(false);
+		moveDeliveryButton.setVisible(true);
+		moveDeliveryButton.setEnabled(false);
+		moveDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight+50));
+		moveDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
 		textualView.add(moveDeliveryButton);
 			
 	}
@@ -212,6 +223,7 @@ public class Window extends JFrame{
 		
 		setNameOfDeliveryList = new TextField();
 		setNameOfDeliveryList.setText("resources/xml/dl-grand-20.xml");
+		setNameOfDeliveryList.setEditable(false);
 		buttonPanel.add(setNameOfDeliveryList);
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
@@ -226,6 +238,7 @@ public class Window extends JFrame{
 		
 		numberOfDeliveryMen = new TextField();
 		numberOfDeliveryMen.setText("1");
+		numberOfDeliveryMen.setEditable(false);
 		buttonPanel.add(numberOfDeliveryMen);
 	
 		/*JButton undoButton = new JButton("Retour");
@@ -346,17 +359,14 @@ public class Window extends JFrame{
 	}	
 	
 	public void disableButtonAddDelivery() {
-		addDeliveryButton.setVisible(false);
 		addDeliveryButton.setEnabled(false);
 	}
 	
 	public void disableButtonDeleteDelivery() {
-		deleteDeliveryButton.setVisible(false);;
 		deleteDeliveryButton.setEnabled(false);
 	}
 	
 	public void disableButtonMoveDelivery() {
-		moveDeliveryButton.setVisible(false);
 		moveDeliveryButton.setEnabled(false);
 	}
 
