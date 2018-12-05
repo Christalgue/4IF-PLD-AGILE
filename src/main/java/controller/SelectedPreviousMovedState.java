@@ -15,6 +15,7 @@ public class SelectedPreviousMovedState extends DefaultState {
 	
 	
 	public void leftClick(Controller controller, Window window, Point point) {
+	
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (previousNode != null) {
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {

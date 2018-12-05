@@ -23,6 +23,7 @@ public class DeliveryMovedState extends DefaultState {
 	}
 	
 	public void validate (Controller controller, Window window) throws ManagementException {
+		window.setMessage("");
 		controller.circuitManagement.moveDelivery(node, previousNode);
 		controller.setCurrentState(controller.calcState);
 	}

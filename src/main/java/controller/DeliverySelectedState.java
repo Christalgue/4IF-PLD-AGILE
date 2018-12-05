@@ -28,9 +28,12 @@ public class DeliverySelectedState extends DefaultState {
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
 			} else {
+				window.disableButtonMoveDelivery();
+				window.disableButtonDeleteDelivery();
+				window.enableButtonAddDelivery();
 				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
-				controller.durationChoiceState.setNode(node);
+				controller.newDeliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.durationChoiceState);
 			}
 		}
@@ -40,7 +43,11 @@ public class DeliverySelectedState extends DefaultState {
 	public void loadMap(Controller controller, Window window, String filename) {
 		
 		try {
+			window.disableButtonMoveDelivery();
+			window.disableButtonDeleteDelivery();
+			window.disableButtonCalculateCircuit();
 			controller.circuitManagement.loadMap(filename);
+			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			window.drawMap();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
@@ -52,8 +59,11 @@ public class DeliverySelectedState extends DefaultState {
 	public void loadDeliveryOffer(Controller controller, Window window, String filename){
 	
 		try {
+			window.disableButtonMoveDelivery();
+			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.loadDeliveryList(filename);
 			controller.setCurrentState(controller.deliveryLoadedState);
+			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
 		{
@@ -64,6 +74,8 @@ public class DeliverySelectedState extends DefaultState {
 
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan){
 		try {
+			window.disableButtonMoveDelivery();
+			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 		} catch (ClusteringException e)
@@ -90,11 +102,15 @@ public class DeliverySelectedState extends DefaultState {
 	}
 	
 	public void deleteDelivery (Controller controller, Window window) {
+		
 		controller.deliveryDeletedState.setNode(node);
 		controller.setCurrentState(controller.deliveryDeletedState);
 	}
 	
 	public void moveDelivery (Controller controller, Window window) {
+		window.disableButtonMoveDelivery();
+		window.disableButtonDeleteDelivery();
+		window.setMessage("Veuillez selectionner le point de livraison precedent");
 		controller.selectedPreviousMovedState.setNode(node);
 		controller.setCurrentState(controller.selectedPreviousMovedState);
 	}

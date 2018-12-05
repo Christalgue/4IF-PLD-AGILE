@@ -26,7 +26,6 @@ import main.java.entity.Node;
 public class Window extends JFrame{
 	
 	private Controller controller;
-	private CircuitManagement circuitManagement;
 	private GraphicView graphicView;
 	private TextualView textualView;
 	
@@ -84,23 +83,15 @@ public class Window extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public Window (CircuitManagement circuitManagement, Controller controller){
-		this.circuitManagement = circuitManagement;
+	public Window (Controller controller){
+		
 		this.controller = controller;
 		
-	}
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		
-		Controller controller = new Controller(new CircuitManagement());
 		buttonsListener = new ButtonsListener(controller);
+		CircuitManagement circuitManagement = controller.getCircuitManagement();
 		
 		//////////////////////////////CREATE THE MAIN WINDOW//////////////////////////////
-		
-		setControllerWindow(controller.getWindow());	
+		setControllerWindow(this);
 		
 		//////////////////////////////CREATE THE HEADER PANEL/////////////////////////////
 		JPanel buttonPanel = new JPanel();
@@ -108,35 +99,35 @@ public class Window extends JFrame{
 		
 		//////////////////////////////CREATE THE GRAPHIC VIEW//////////////////////////////
 		
-		controller.getWindow().graphicView = new GraphicView (controller.getWindow().circuitManagement, windowHeight-buttonPanelHeight, graphicWidth, pathWidth);
-		setGraphicView(controller.getWindow().graphicView);
-		mouseListener = new MouseListener(controller, controller.getWindow().graphicView,controller.getWindow());
-		controller.getWindow().addMouseListener(mouseListener);
+		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight, graphicWidth, pathWidth);
+		setGraphicView(this.graphicView);
+		mouseListener = new MouseListener(controller, this.graphicView, this);
+		this.addMouseListener(mouseListener);
 		
 		//////////////////////////////CREATE THE TEXTUAL VIEW/////////////////////////////
 		
-		controller.getWindow().treeRoot = createTree();
-		controller.getWindow().textualViewTree = new JTree (controller.getWindow().treeRoot);
-		controller.getWindow().textualView = new TextualView (controller.getWindow().circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, controller.getWindow().textualViewTree);
-		setTextualView(controller.getWindow().textualView);
+		this.treeRoot = createTree();
+		this.textualViewTree = new JTree (this.treeRoot);
+		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this.textualViewTree);
+		setTextualView(this.textualView);
 		
 		//////////////////////////////CREATE THE MESSAGE FIELD/////////////////////////////
 		
-		controller.getWindow().messageField = new JLabel();
-		setMessageField(controller.getWindow().messageField);
+		this.messageField = new JLabel();
+		setMessageField(this.messageField);
 		
 		//////////////////////////////ADD PANELS TO THE WINDOW//////////////////////////////
-		controller.getWindow().getContentPane().add(buttonPanel);
-		controller.getWindow().getContentPane().add(controller.getWindow().textualView);
-		controller.getWindow().getContentPane().add(controller.getWindow().messageField);
-		controller.getWindow().getContentPane().add(controller.getWindow().graphicView);
+		this.getContentPane().add(buttonPanel);
+		this.getContentPane().add(this.textualView);
+		this.getContentPane().add(this.messageField);
+		this.getContentPane().add(this.graphicView);
 		
 		////////////////////////////// MAKE THE FRAME VISBLE AND PAINTABLE ////////////////////////////////
-		controller.getWindow().setVisible(true);
+		this.setVisible(true);
 		
-		controller.getWindow().graphicView.setGraphics();
-
-	}	
+		this.graphicView.setGraphics();
+		
+	}
 	
 	private static DefaultMutableTreeNode createTree() {
 		
@@ -155,7 +146,7 @@ public class Window extends JFrame{
 	
 	}
 
-	public static void setControllerWindow( Window window) {
+	public static void setControllerWindow(Window window) {
 		
 		window.setLayout(null);
 		window.setSize(windowWidth, windowHeight);
