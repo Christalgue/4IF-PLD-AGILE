@@ -125,6 +125,10 @@ public class Controller {
 	public void validateDuration (int duration) {
 		currentState.validateDuration(this, window, duration);
 	}
+	
+	public void cancelDuration() {
+		currentState.cancel(this, window);
+	}
 
 	/**
 	 * Method called by window after the mouse has moved in the graphical view of the plan

@@ -146,6 +146,8 @@ class TestDeserializer {
 		assertTrue(first.getLength()==79.801414,"7) wrong length (79.801414) : "+first.getLength());
 		assertTrue(first.getStreetName().contains("Rue Edouard Aynard"),"7) wrong street name (Rue Edouard Aynard) : "+first.getStreetName());
 		
+		//8
+		
 	}
 
 	@Test
