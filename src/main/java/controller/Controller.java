@@ -24,6 +24,7 @@ public class Controller {
 	protected final DurationChoiceState durationChoiceState = new DurationChoiceState ();
 	protected final PreviousDeliverySelectedState previousDeliverySelectedState = new PreviousDeliverySelectedState ();
 	protected final SelectedPreviousMovedState selectedPreviousMovedState = new SelectedPreviousMovedState (); 
+	
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
 		currentState = initState;
@@ -64,6 +65,15 @@ public class Controller {
 	/*public void addDelivery() {
 		currentState.addDelivery(this, window);
 	}*/
+	
+	
+	public void deleteDelivery() {
+		currentState.deleteDelivery(this, window);
+	}
+	
+	public void moveDelivery() {
+		currentState.moveDelivery(this, window);
+	}
 	
 	public void validateAdd() throws ManagementException {
 		currentState.validate(this, window);

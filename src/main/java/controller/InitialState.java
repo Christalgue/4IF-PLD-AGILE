@@ -10,6 +10,7 @@ public class InitialState extends DefaultState {
 		try {
 			System.out.println(filename);
 			controller.circuitManagement.loadMap(filename);
+			window.setMessage("Veuillez sélectionner un fichier de demande de livraisons");
 			window.drawMap();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)

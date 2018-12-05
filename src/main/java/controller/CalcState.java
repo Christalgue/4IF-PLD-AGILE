@@ -19,6 +19,7 @@ public class CalcState extends DefaultState {
 		try {
 			controller.circuitManagement.loadMap(filename);
 			window.drawMap();
+			window.setMessage("Veuillez sélectionner un fichier de demande de livraisons");
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
 		{
@@ -31,6 +32,7 @@ public class CalcState extends DefaultState {
 		try {
 			controller.circuitManagement.loadDeliveryList(filename);
 			controller.setCurrentState(controller.deliveryLoadedState);
+			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournées\"");
 			window.drawDeliveries();
 		} catch (LoadDeliveryException l)
 		{
