@@ -30,8 +30,6 @@ class TestDeserializer {
 	 * 5) The length of a bow is negative
 	 * 6) Duplicate bow detected
 	 * 7) Everything is good
-	 * 8) A node has no bow connected to it
-	 * 9) You can't get out of a node (no bow for leaving it)
 	 */
 	void testLoadMap() {
 		Map map = new Map();
@@ -116,7 +114,7 @@ class TestDeserializer {
 		} catch (IOException e) {
 			fail("6) IO Exception");
 		} catch (XMLException e) {
-			assertTrue(e.getMessage().contains("Duplicate bow detected"),"5) Wrong XMLException"+e.getMessage());
+			assertTrue(e.getMessage().contains("Duplicate bow detected"),"6) Wrong XMLException"+e.getMessage());
 		}
 		
 		//7
@@ -145,9 +143,6 @@ class TestDeserializer {
 		assertTrue(first.getEndNode().getId()==2,"7) wrong end node (2) : "+first.getEndNode().getId());
 		assertTrue(first.getLength()==79.801414,"7) wrong length (79.801414) : "+first.getLength());
 		assertTrue(first.getStreetName().contains("Rue Edouard Aynard"),"7) wrong street name (Rue Edouard Aynard) : "+first.getStreetName());
-		
-		//8
-		
 	}
 
 	@Test
