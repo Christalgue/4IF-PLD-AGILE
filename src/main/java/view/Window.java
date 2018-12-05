@@ -214,12 +214,12 @@ public class Window extends JFrame{
 		
 		setNameOfDeliveryList = new TextField();
 		setNameOfDeliveryList.setText("resources/xml/dl-grand-20.xml");
-		setNameOfDeliveryList.setEditable(false);
+		setNameOfDeliveryList.setEditable(true);
 		buttonPanel.add(setNameOfDeliveryList);
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
 		loadDeliveryList.addActionListener(buttonsListener);
-		loadDeliveryList.setEnabled(true);
+		loadDeliveryList.setEnabled(false);
 		buttonPanel.add(loadDeliveryList);
 		
 		JTextArea labelNumberOfDeliveryMen = new JTextArea();
