@@ -413,6 +413,15 @@ public class CircuitManagement extends Observable{
 		return false;
 	}
 	
+	public Delivery getDeliveryByNode (Node nodeTested) {
+		for (Delivery deliveryTested : this.deliveryList) {
+			if (deliveryTested.getPosition() == nodeTested) {
+				return deliveryTested;
+			}
+		}
+		return null;
+	}
+	
 	
 	public void addDelivery (Node nodeDelivery, int duration, Node previousNode) {
 		Delivery delivery = new Delivery (nodeDelivery, duration);
@@ -517,6 +526,14 @@ public class CircuitManagement extends Observable{
 				}
 			}
 		}
+		
+	}
+	
+	public void moveDelivery(Node node, Node previousNode) throws ManagementException {
+		
+		Delivery delivery = getDeliveryByNode(node);
+		removeDelivery(node);
+		addDelivery(node, delivery.getDuration(), previousNode);
 		
 	}
 	
