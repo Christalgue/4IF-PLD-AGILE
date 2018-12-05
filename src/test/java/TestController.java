@@ -18,6 +18,7 @@ class TestController {
 	void testChangeState() {
 		CircuitManagement cm = new CircuitManagement();
 		Controller c = new Controller (cm);
+		
 		Point newDelivery = new Point(4.877902,45.748894);
 		Point previousDelivery = new Point(4.8593636,45.753654);
 		Point delivery = new Point(4.8756394,45.759773);
@@ -73,7 +74,7 @@ class TestController {
 		c.leftClick(newDelivery);
 		c.validateDuration(20);
 		c.leftClick(previousDelivery);
-		c.addDelivery();
+		c.validateAdd();
 		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");
 		
 		c.leftClick(delivery);
@@ -132,8 +133,7 @@ class TestController {
 		c.moveDelivery();
 		c.leftClick(previousDelivery);
 		c.validateMove();
-		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");
-		
+		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");	
 	}
 
 }

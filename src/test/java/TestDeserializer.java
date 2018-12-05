@@ -30,6 +30,8 @@ class TestDeserializer {
 	 * 5) The length of a bow is negative
 	 * 6) Duplicate bow detected
 	 * 7) Everything is good
+	 * 8) A node has no bow connected to it
+	 * 9) You can't get out of a node (no bow for leaving it)
 	 */
 	void testLoadMap() {
 		Map map = new Map();
