@@ -9,8 +9,6 @@ public class Main {
 		
 		Controller controller = new Controller(new CircuitManagement());
 		
-		controller.getWindow().initialize(controller);
-		
 	}
 
 }
