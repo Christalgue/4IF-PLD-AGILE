@@ -47,7 +47,6 @@ public class MouseListener extends MouseAdapter {
 	}
 
 	public void mouseReleased(MouseEvent evt) {
-		window.addDeliveryButton.setVisible(true);
 	}
 	
 /*	private Point coordinates(MouseEvent evt){

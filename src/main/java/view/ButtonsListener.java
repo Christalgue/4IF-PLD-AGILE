@@ -51,21 +51,14 @@ public class ButtonsListener implements ActionListener {
 			Window.getMapName();
 			controller.loadMap(map);
 			
-			//SEULEMENT POUR TEST
-			Window.loadDeliveryList.setEnabled(true);
-			Window.calculateCircuitButton.setEnabled(false);
-			
-			/*controller.loadMap(controller.getWindow().getFile());
-			Window.loadDeliveryList.setEnabled(true);
-			Window.calculateCircuitButton.setEnabled(false);*/
+			/*controller.loadMap(controller.getWindow().getFile());*/
 			break;
 		case Window.LOAD_DELIVERY_OFFER: 
+			
 			Window.getDeliveryListName();
-			Window.calculateCircuitButton.setEnabled(true);
 			controller.loadDeliveryOffer(deliveryList); 
 			
-			/*controller.loadDeliveryOffer(controller.getWindow().getFile());
-			Window.calculateCircuitButton.setEnabled(true);*/
+			/*controller.loadDeliveryOffer(controller.getWindow().getFile());*/
 			break;
 		case Window.CALCULATE_CIRCUITS: 
 			Window.getDeliveryMenNumber();

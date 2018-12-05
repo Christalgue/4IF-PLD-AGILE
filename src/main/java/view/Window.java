@@ -140,7 +140,7 @@ public class Window extends JFrame{
 	
 	private static DefaultMutableTreeNode createTree() {
 		
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Livraisons");
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
 		return root;
 	}
 
@@ -228,7 +228,7 @@ public class Window extends JFrame{
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
 		loadDeliveryList.addActionListener(buttonsListener);
-		loadDeliveryList.setEnabled(false);
+		loadDeliveryList.setEnabled(true);
 		buttonPanel.add(loadDeliveryList);
 		
 		JTextArea labelNumberOfDeliveryMen = new JTextArea();
@@ -238,7 +238,7 @@ public class Window extends JFrame{
 		
 		numberOfDeliveryMen = new TextField();
 		numberOfDeliveryMen.setText("1");
-		numberOfDeliveryMen.setEditable(false);
+		numberOfDeliveryMen.setEditable(true);
 		buttonPanel.add(numberOfDeliveryMen);
 	
 		/*JButton undoButton = new JButton("Retour");
@@ -314,6 +314,7 @@ public class Window extends JFrame{
 	public void drawCircuits() {
 		drawDeliveries();
 		graphicView.paintCircuits(graphicView.getGraphic());
+		textualView.fillCircuitTree();
 	}
 	
 	public void nodeSelected( Node node) {
@@ -323,7 +324,6 @@ public class Window extends JFrame{
 	public void fillDeliveryTree() {
 		textualView.fillDeliveryTree();
 	}
-	
 	
 	//////////////////////////////BUTTON ACTIVATION/////////////////////////////
 	public void enableButtonLoadDeliveriesList() {
@@ -349,6 +349,7 @@ public class Window extends JFrame{
 		moveDeliveryButton.setEnabled(true);
 	}
 	
+	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
 	public void disableButtonLoadDeliveriesList() {
 		loadDeliveryList.setEnabled(false);
@@ -370,7 +371,10 @@ public class Window extends JFrame{
 		moveDeliveryButton.setEnabled(false);
 	}
 
+	
+	
 	public int getPopUpValue(String message, Window window) {
 		return popUp.displayPopUp(message, window);
 	}
+
 }
