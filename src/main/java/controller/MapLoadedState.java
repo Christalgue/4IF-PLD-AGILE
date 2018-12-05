@@ -14,7 +14,7 @@ public class MapLoadedState extends DefaultState{
 			window.disableButtonCalculateCircuit();
 			controller.circuitManagement.loadMap(filename);
 			System.out.println(filename);
-			window.setMessage("Veuillez sélectionner un fichier de demande de livraisons");
+			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			window.drawMap();
 		} catch (LoadMapException l)
 		{
@@ -27,7 +27,7 @@ public class MapLoadedState extends DefaultState{
 		try {
 			window.enableButtonCalculateCircuit();
 			controller.circuitManagement.loadDeliveryList(filename);
-			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournées\"");
+			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.drawDeliveries();
 		} catch (LoadDeliveryException l)

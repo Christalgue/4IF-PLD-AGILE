@@ -21,7 +21,7 @@ public class CalcState extends DefaultState {
 			window.disableButtonCalculateCircuit();
 			controller.circuitManagement.loadMap(filename);
 			window.drawMap();
-			window.setMessage("Veuillez sélectionner un fichier de demande de livraisons");
+			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
 		{
@@ -35,7 +35,7 @@ public class CalcState extends DefaultState {
 			window.enableButtonCalculateCircuit();
 			controller.circuitManagement.loadDeliveryList(filename);
 			controller.setCurrentState(controller.deliveryLoadedState);
-			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournées\"");
+			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			window.drawDeliveries();
 		} catch (LoadDeliveryException l)
 		{
