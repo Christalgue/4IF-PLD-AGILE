@@ -17,6 +17,8 @@ public class CalcState extends DefaultState {
 	public void loadMap(Controller controller, Window window, String filename) {
 		
 		try {
+			window.enableButtonAddDelivery();
+			window.disableButtonCalculateCircuit();
 			controller.circuitManagement.loadMap(filename);
 			window.drawMap();
 			window.setMessage("Veuillez sélectionner un fichier de demande de livraisons");
@@ -30,6 +32,7 @@ public class CalcState extends DefaultState {
 	public void loadDeliveryOffer(Controller controller, Window window, String filename){
 		
 		try {
+			window.enableButtonCalculateCircuit();
 			controller.circuitManagement.loadDeliveryList(filename);
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournées\"");
@@ -74,13 +77,17 @@ public class CalcState extends DefaultState {
 		if (node != null)
 		{
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+				window.enableButtonDeleteDelivery();
+				window.enableButtonMoveDelivery();
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
 			} else {
 				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
-				controller.durationChoiceState.setNode(node);
-				controller.setCurrentState(controller.durationChoiceState);
+				window.enableButtonAddDelivery();
+				controller.newDeliverySelectedState.setNode(node);
+				controller.setCurrentState(controller.newDeliverySelectedState);
+				
 			}
 		}
 		

@@ -15,7 +15,7 @@ public interface State {
 	
 	//public void undo();
 	
-	//public void addDelivery(Controller controller, Window window);
+	public void addDelivery(Controller controller, Window window);
 	
 	public void validate(Controller controler, Window window) throws ManagementException;
 	

@@ -10,6 +10,8 @@ public class MapLoadedState extends DefaultState{
 	public void loadMap(Controller controller, Window window, String filename) {
 		
 		try {
+			window.enableButtonAddDelivery();
+			window.disableButtonCalculateCircuit();
 			controller.circuitManagement.loadMap(filename);
 			System.out.println(filename);
 			window.setMessage("Veuillez sélectionner un fichier de demande de livraisons");
@@ -23,6 +25,7 @@ public class MapLoadedState extends DefaultState{
 	public void loadDeliveryOffer(Controller controller, Window window, String filename){
 		
 		try {
+			window.enableButtonCalculateCircuit();
 			controller.circuitManagement.loadDeliveryList(filename);
 			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournées\"");
 			controller.setCurrentState(controller.deliveryLoadedState);
