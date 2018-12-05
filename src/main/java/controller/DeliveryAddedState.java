@@ -26,7 +26,7 @@ public class DeliveryAddedState extends DefaultState{
 		this.duration =  duration;
 	}
 	
-	public void addDelivery(Controller controller, Window window){
+	public void validate(Controller controller, Window window){
 		controller.circuitManagement.addDelivery(node, duration, previousNode);
 		controller.setCurrentState(controller.calcState);
 		// rajouter appelle de fonction vue

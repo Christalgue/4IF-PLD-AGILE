@@ -2,6 +2,7 @@ package main.java.controller;
 
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.exception.ManagementException;
 import main.java.view.Window;
 
 public interface State {
@@ -14,15 +15,15 @@ public interface State {
 	
 	//public void undo();
 	
-	public void addDelivery(Controller controller, Window window);
+	//public void addDelivery(Controller controller, Window window);
 	
-	//spublic void validate(Controller controler, Window window);
+	public void validate(Controller controler, Window window) throws ManagementException;
 	
 	public void cancel(Controller controller, Window window);
 	
-	public void moveDelivery (Controller controller, Window window);
+	//public void moveDelivery (Controller controller, Window window);
 	
-	public void deleteDelivery(Controller controller, Window window);
+	//public void deleteDelivery(Controller controller, Window window);
 	
 	
 	public void rightClick(Controller controller, Window window);

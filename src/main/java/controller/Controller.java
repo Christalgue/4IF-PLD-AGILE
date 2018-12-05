@@ -3,6 +3,7 @@ package main.java.controller;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.exception.ManagementException;
 import main.java.view.Window;
 
 public class Controller {
@@ -60,12 +61,12 @@ public class Controller {
 		
 	}*/
 	
-	public void addDelivery() {
+	/*public void addDelivery() {
 		currentState.addDelivery(this, window);
-	}
+	}*/
 	
-	public void validateAdd() {
-		//currentState.validate(this, window);
+	public void validateAdd() throws ManagementException {
+		currentState.validate(this, window);
 	}
 	
 	public void cancelAdd() {
@@ -74,24 +75,20 @@ public class Controller {
 		
 	}
 	
-	public void moveDelivery () {
-		currentState.moveDelivery(this, window);
-	}
 	
-	public void validateMove() {
-		//currentState.validate(this, window);
+	
+	public void validateMove() throws ManagementException {
+		currentState.validate(this, window);
 	}
 	
 	public void cancelMove() {
 		currentState.cancel(this, window);
 	}
 	
-	public void deleteDelivery() {
-		currentState.deleteDelivery(this, window);
-	}
 	
-	public void validateDelete() {
-		//currentState.validate(this, window);
+	
+	public void validateDelete() throws ManagementException {
+		currentState.validate(this, window);
 	}
 	
 	public void cancelDelete() {
