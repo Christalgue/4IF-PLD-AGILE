@@ -26,7 +26,6 @@ import main.java.entity.Node;
 public class Window extends JFrame{
 	
 	private Controller controller;
-	private CircuitManagement circuitManagement;
 	private GraphicView graphicView;
 	private TextualView textualView;
 	
@@ -84,22 +83,66 @@ public class Window extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public Window (CircuitManagement circuitManagement, Controller controller){
-		this.circuitManagement = circuitManagement;
+	public Window (Controller controller){
 		this.controller = controller;
 		
+	}
+	
+	public static void initialize (Controller controller) {
+		
+		buttonsListener = new ButtonsListener(controller);
+		Window window = controller.getWindow();
+		CircuitManagement circuitManagement = controller.getCircuitManagement();
+		
+		
+		//////////////////////////////CREATE THE MAIN WINDOW//////////////////////////////
+		setControllerWindow(window);
+		
+		//////////////////////////////CREATE THE HEADER PANEL/////////////////////////////
+		JPanel buttonPanel = new JPanel();
+		fillButtonPanel(buttonPanel);
+		
+		//////////////////////////////CREATE THE GRAPHIC VIEW//////////////////////////////
+		
+		window.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight, graphicWidth, pathWidth);
+		setGraphicView(window.graphicView);
+		mouseListener = new MouseListener(controller, window.graphicView, window);
+		window.addMouseListener(mouseListener);
+		
+		//////////////////////////////CREATE THE TEXTUAL VIEW/////////////////////////////
+		
+		window.treeRoot = createTree();
+		window.textualViewTree = new JTree (window.treeRoot);
+		window.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, window.textualViewTree);
+		setTextualView(window.textualView);
+		
+		//////////////////////////////CREATE THE MESSAGE FIELD/////////////////////////////
+		
+		window.messageField = new JLabel();
+		setMessageField(controller.getWindow().messageField);
+		
+		//////////////////////////////ADD PANELS TO THE WINDOW//////////////////////////////
+		window.getContentPane().add(buttonPanel);
+		window.getContentPane().add(window.textualView);
+		window.getContentPane().add(window.messageField);
+		window.getContentPane().add(window.graphicView);
+		
+		////////////////////////////// MAKE THE FRAME VISBLE AND PAINTABLE ////////////////////////////////
+		window.setVisible(true);
+		
+		window.graphicView.setGraphics();
 	}
 	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		
 		Controller controller = new Controller(new CircuitManagement());
 		buttonsListener = new ButtonsListener(controller);
 		
 		//////////////////////////////CREATE THE MAIN WINDOW//////////////////////////////
-		
+		System.out.println("WINDOOOOOOOOOW " + controller.getWindow());
 		setControllerWindow(controller.getWindow());	
 		
 		//////////////////////////////CREATE THE HEADER PANEL/////////////////////////////
@@ -108,7 +151,7 @@ public class Window extends JFrame{
 		
 		//////////////////////////////CREATE THE GRAPHIC VIEW//////////////////////////////
 		
-		controller.getWindow().graphicView = new GraphicView (controller.getWindow().circuitManagement, windowHeight-buttonPanelHeight, graphicWidth, pathWidth);
+		controller.getWindow().graphicView = new GraphicView (controller.getCircuitManagement(), windowHeight-buttonPanelHeight, graphicWidth, pathWidth);
 		setGraphicView(controller.getWindow().graphicView);
 		mouseListener = new MouseListener(controller, controller.getWindow().graphicView,controller.getWindow());
 		controller.getWindow().addMouseListener(mouseListener);
@@ -117,7 +160,7 @@ public class Window extends JFrame{
 		
 		controller.getWindow().treeRoot = createTree();
 		controller.getWindow().textualViewTree = new JTree (controller.getWindow().treeRoot);
-		controller.getWindow().textualView = new TextualView (controller.getWindow().circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, controller.getWindow().textualViewTree);
+		controller.getWindow().textualView = new TextualView (controller.getCircuitManagement(), windowHeight-buttonPanelHeight, windowWidth-graphicWidth, controller.getWindow().textualViewTree);
 		setTextualView(controller.getWindow().textualView);
 		
 		//////////////////////////////CREATE THE MESSAGE FIELD/////////////////////////////
@@ -135,8 +178,7 @@ public class Window extends JFrame{
 		controller.getWindow().setVisible(true);
 		
 		controller.getWindow().graphicView.setGraphics();
-
-	}	
+	}*/
 	
 	private static DefaultMutableTreeNode createTree() {
 		
@@ -155,7 +197,7 @@ public class Window extends JFrame{
 	
 	}
 
-	public static void setControllerWindow( Window window) {
+	public static void setControllerWindow(Window window) {
 		
 		window.setLayout(null);
 		window.setSize(windowWidth, windowHeight);
