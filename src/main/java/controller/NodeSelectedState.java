@@ -83,6 +83,7 @@ public class NodeSelectedState extends DefaultState {
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
+			controller.setCurrentState(controller.calcState);
 		} catch (ClusteringException e)
 		{
 			e.printStackTrace();

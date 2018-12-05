@@ -78,8 +78,8 @@ public class DeliverySelectedState extends DefaultState {
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
-		} catch (ClusteringException e)
-		{
+			controller.setCurrentState(controller.calcState);
+		} catch (ClusteringException e){
 			e.printStackTrace();
 		} catch (MapNotChargedException e) {
 			// TODO Auto-generated catch block

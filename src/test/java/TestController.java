@@ -8,6 +8,7 @@ import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.exception.ManagementException;
 
 class TestController {
 
@@ -51,12 +52,40 @@ class TestController {
 		
 		c.calculateCircuits(1);
 		c.leftClick(newDelivery);
+		assertTrue(c.currentState.toString().contains("State : NodeSelectedState"),"Expected <State : NodeSelectedState>, got <"+c.currentState.toString()+">");
+		
+		c.loadMap("resources/xml/petitPlan.xml");
+		assertTrue(c.currentState.toString().contains("State : MapLoadedState"),"Expected <State : MapLoadedState>, got <"+c.currentState.toString()+">");
+		
+		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
+		c.calculateCircuits(1);
+		c.leftClick(newDelivery);
+		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
+		assertTrue(c.currentState.toString().contains("State : DeliveryLoadedState"),"Expected <State : DeliveryLoadedState>, got <"+c.currentState.toString()+">");
+		
+		c.calculateCircuits(1);
+		c.leftClick(newDelivery);
+		c.leftClick(newDelivery);
+		assertTrue(c.currentState.toString().contains("State : NodeSelectedState"),"Expected <State : NodeSelectedState>, got <"+c.currentState.toString()+">");
+		
+		c.calculateCircuits(1);
+		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");
+		
+		c.leftClick(newDelivery);
+		c.leftClick(delivery);
+		assertTrue(c.currentState.toString().contains("State : DeliverySelectedState"),"Expected <State : DeliverySelectedState>, got <"+c.currentState.toString()+">");
+		
+		c.leftClick(newDelivery);
+		assertTrue(c.currentState.toString().contains("State : NodeSelectedState"),"Expected <State : NodeSelectedState>, got <"+c.currentState.toString()+">");
+		
+		c.addDelivery();
 		assertTrue(c.currentState.toString().contains("State : DurationChoiceState"),"Expected <State : DurationChoiceState>, got <"+c.currentState.toString()+">");
 		
 		c.cancelAdd();
 		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");
 		
 		c.leftClick(newDelivery);
+		c.addDelivery();
 		c.validateDuration(20);
 		assertTrue(c.currentState.toString().contains("State : PreviousDeliverySelectedState"),"Expected <State : PreviousDeliverySelectedState>, got <"+c.currentState.toString()+">");
 		
@@ -64,6 +93,7 @@ class TestController {
 		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");
 		
 		c.leftClick(newDelivery);
+		c.addDelivery();
 		c.validateDuration(20);
 		c.leftClick(previousDelivery);
 		assertTrue(c.currentState.toString().contains("State : DeliveryAddedState"),"Expected <State : DeliveryAddedState>, got <"+c.currentState.toString()+">");
@@ -72,9 +102,14 @@ class TestController {
 		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");
 		
 		c.leftClick(newDelivery);
+		c.addDelivery();
 		c.validateDuration(20);
 		c.leftClick(previousDelivery);
-		c.validateAdd();
+		try {
+			c.validateAdd();
+		} catch (ManagementException e) {
+			fail("Management exception for add : "+e.getMessage());
+		}
 		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");
 		
 		c.leftClick(delivery);
@@ -99,21 +134,26 @@ class TestController {
 		assertTrue(c.currentState.toString().contains("State : DeliverySelectedState"),"Expected <State : DeliverySelectedState>, got <"+c.currentState.toString()+">");
 		
 		c.leftClick(newDelivery);
-		assertTrue(c.currentState.toString().contains("State : DurationChoiceState"),"Expected <State : DurationChoiceState>, got <"+c.currentState.toString()+">");
+		assertTrue(c.currentState.toString().contains("State : NodeSelectedState"),"Expected <State : NodeSelectedState>, got <"+c.currentState.toString()+">");
 		
-		c.cancelAdd();
 		c.leftClick(delivery);
 		c.deleteDelivery();
-		assertTrue(c.currentState.toString().contains("State : DeletedChoiceState"),"Expected <State : DeletedChoiceState>, got <"+c.currentState.toString()+">");
+		assertTrue(c.currentState.toString().contains("State : DeliveryDeletedState"),"Expected <State : DeliveryDeletedState>, got <"+c.currentState.toString()+">");
 		
 		c.cancelDelete();
 		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");
 		
 		c.leftClick(delivery);
 		c.deleteDelivery();
-		c.validateDelete();
+		try {
+			c.validateDelete();
+		} catch (ManagementException e) {
+			fail("Management exception for delete : "+e.getMessage());
+		}
 		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");
 		
+		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
+		c.calculateCircuits(1);
 		c.leftClick(delivery);
 		c.moveDelivery();
 		assertTrue(c.currentState.toString().contains("State : SelectedPreviousMovedState"),"Expected <State : SelectedPreviousMovedState>, got <"+c.currentState.toString()+">");
@@ -132,7 +172,11 @@ class TestController {
 		c.leftClick(delivery);
 		c.moveDelivery();
 		c.leftClick(previousDelivery);
-		c.validateMove();
+		try {
+			c.validateMove();
+		} catch (ManagementException e) {
+			fail("Management exception for move : "+e.getMessage());
+		}
 		assertTrue(c.currentState.toString().contains("State : CalcState"),"Expected <State : CalcState>, got <"+c.currentState.toString()+">");	
 	}
 

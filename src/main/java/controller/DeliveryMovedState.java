@@ -19,7 +19,7 @@ public class DeliveryMovedState extends DefaultState {
 	
 	
 	public void cancel (Controller controller, Window window) {
-		controller.setCurrentState(controller.deliverySelectedState);
+		controller.setCurrentState(controller.calcState);
 	}
 	
 	public void validate (Controller controller, Window window) throws ManagementException {

@@ -532,7 +532,9 @@ public class CircuitManagement extends Observable{
 	public void moveDelivery(Node node, Node previousNode) throws ManagementException {
 		
 		Delivery delivery = getDeliveryByNode(node);
+		System.out.println(delivery);
 		removeDelivery(node);
+		System.out.println(delivery);
 		addDelivery(node, delivery.getDuration(), previousNode);
 		
 	}
