@@ -13,6 +13,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 
+import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Node;
@@ -59,17 +60,27 @@ public class TextualView extends JPanel{
 
 	public void fillDeliveryTree() {
 		
+		treeRoot.removeAllChildren();
+		
 		setBorder(BorderFactory.createTitledBorder("Livraisons"));
 		
 		int deliveryListIndex = 0;
 			
 		for( Delivery entry : circuitManagement.getDeliveryList() ) {
 		
-			treeModel.insertNodeInto(new DefaultMutableTreeNode("Livraison "+ deliveryListIndex +": Duree "+entry.getDuration()+" s"),
-	                  treeRoot,
-	                  deliveryListIndex);
-			System.out.println(deliveryListIndex);
-			deliveryListIndex++;
+			if (deliveryListIndex == 0) {
+				
+				treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
+					+ "Duree "+entry.getDuration()+" s"),
+						treeRoot, deliveryListIndex++);
+			
+			}else {
+			
+				treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
+						deliveryListIndex +": Duree "+entry.getDuration()+" s"),
+							treeRoot, deliveryListIndex++);				
+		
+			}
 			
 		}
 			
@@ -82,16 +93,36 @@ public class TextualView extends JPanel{
 		int deliveryIndex =0;
 		int circuitIndex= 0;
 		
-		for( Delivery entry : circuitManagement.getDeliveryList() ) {
+		DefaultMutableTreeNode circuit;
+		
+		
+		for( Circuit entry : circuitManagement.getCircuitsList() ) {
+		
+			circuit = new DefaultMutableTreeNode("Tournee "+ 
+					(circuitIndex+1) +": Duree "+entry.getCircuitLength()+" s");
+			treeModel.insertNodeInto(circuit, treeRoot, circuitIndex++);
 			
-			//treeModel.insertNodeInto(new DefaultMutableTreeNode("Livraison "+ deliveryListIndex +": Duree "+entry.getDuration()+" s"),
-	        //          treeRoot,
-	        //          deliveryListIndex-1);
-			//System.out.println(deliveryListIndex);
-			//deliveryListIndex++;
+			
+			for ( Delivery delivery : entry.getDeliveryList()) {
+				
+				if (deliveryIndex == 0) {
+					
+					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
+						+ "Duree "+delivery.getDuration()+" s"),
+							circuit, deliveryIndex++);
+				
+				}else {
+				
+					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
+							(deliveryIndex) +": Duree "+delivery.getDuration()+" s"),
+								circuit, deliveryIndex++);				
+			
+				}
+			}
+			
+			deliveryIndex =0;
 			
 		}
-		
 		
 	}
 	

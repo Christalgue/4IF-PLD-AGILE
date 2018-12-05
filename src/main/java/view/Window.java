@@ -361,8 +361,6 @@ public class Window extends JFrame{
 	public void disableButtonMoveDelivery() {
 		moveDeliveryButton.setEnabled(false);
 	}
-
-	
 	
 	public int getPopUpValue(String message, Window window) {
 		return popUp.displayPopUp(message, window);
