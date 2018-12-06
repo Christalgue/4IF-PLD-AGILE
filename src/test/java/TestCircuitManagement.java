@@ -407,23 +407,31 @@ class TestCircuitManagement {
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_move.xml");
 			circuitManager.calculateCircuits(1, false);
 			
+			//Assert initial deliveries have been correctly placed in the list
+			List<Delivery> deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==3, "delivery list has not the expected size (expected 3, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=40]"),"Error, expected : {Delivery [position=3, duration=40]}, got : "+deliveries.get(2).toString());
+			
 			//Assert initial circuit has been correctly calculated
 			String s12 = "Route :\n0 => 1 (1.0)";
 			String s23 = "Route :\n1 => 3 (1.0)";
 			String s31 = "Route :\n3 => 0 (1.0)";
-			
+
 			Circuit circuit = circuitManager.getCircuitsList().get(0);
 			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been correctly initialized (expected 3, got "+circuit.getPath().size()+")");
 			assertTrue(circuit.getPath().get(0).toString().contains(s12),"Error, expected : {"+s12+"}, got : "+circuit.getPath().get(0).toString());
 			assertTrue(circuit.getPath().get(1).toString().contains(s23),"Error, expected : {"+s23+"}, got : "+circuit.getPath().get(1).toString());
 			assertTrue(circuit.getPath().get(2).toString().contains(s31),"Error, expected : {"+s31+"}, got : "+circuit.getPath().get(2).toString());
 			
-			Node previousDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)0);
-			Node moveDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
+			
+			Node previousDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
+			Node moveDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)1);
 			circuitManager.moveDelivery(moveDelivery, previousDelivery);
 			
-			//Assert new delivery has been removed from the list
-			List<Delivery> deliveries = circuitManager.getDeliveryList();
+			//Assert new delivery has not been moved in the list
+			deliveries = circuitManager.getDeliveryList();
 			assertTrue(deliveries.size()==3, "delivery list has not the expected size (expected 3, got "+deliveries.size()+")");
 			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
 			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());

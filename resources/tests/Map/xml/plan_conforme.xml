@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<reseau>
+<noeud id="1" latitude="1" longitude="1"/>
+<noeud id="2" latitude="2" longitude="2"/>
+<noeud id="3" latitude="3" longitude="3"/>
+<noeud id="4" latitude="4" longitude="4"/>
+<troncon destination="2" longueur="79.801414" nomRue="Rue Edouard Aynard" origine="1"/>
+<troncon destination="1" longueur="79.801414" nomRue="Rue Edouard Aynard" origine="2"/>
+<troncon destination="3" longueur="79.801414" nomRue="Rue Edouard Aynard" origine="2"/>
+<troncon destination="4" longueur="79.801414" nomRue="Rue Edouard Aynard" origine="2"/>
+<troncon destination="1" longueur="79.801414" nomRue="Rue Edouard Aynard" origine="3"/>
+</reseau>
