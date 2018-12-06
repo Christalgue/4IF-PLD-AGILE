@@ -93,7 +93,6 @@ public class Deserializer {
 			}
 			tempBowMap.get(origin).add(new Bow(tempNodeMap.get(origin),tempNodeMap.get(arrival),streetName,length));
 		}
-
 		map.setNodeMap(tempNodeMap);
 		map.setBowMap(tempBowMap);
 	}
