@@ -52,6 +52,19 @@ public class MouseListener extends MouseAdapter {
 	public void mouseReleased(MouseEvent evt) {
 	}
 	
+	/**
+	@Override
+	public void mouseMoved(MouseEvent evt) {
+		System.out.println("x : "+evt.getX()+"; y : "+evt.getY());
+		Point p = graphicView.pointToLatLong(new Point (evt.getX(), evt.getY()));
+		Node n = graphicView.pointToNode(p);
+		
+		if(n!=null) {
+			window.nodeSelected(n);
+		}
+	}
+	*/
+	
 /*	private Point coordinates(MouseEvent evt){
 		MouseEvent e = SwingUtilities.convertMouseEvent(fenetre, evt, vueGraphique);
 		int x = Math.round((float)e.getX()/(float)vueGraphique.getEchelle());

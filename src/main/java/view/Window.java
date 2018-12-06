@@ -102,7 +102,8 @@ public class Window extends JFrame{
 		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth);
 		setGraphicView(this.graphicView);
 		mouseListener = new MouseListener(controller, this.graphicView, this);
-		this.addMouseListener(mouseListener);
+		this.graphicView.addMouseListener(mouseListener);
+		//this.graphicView.addMouseMotionListener(mouseListener);
 		
 		//////////////////////////////CREATE THE TEXTUAL VIEW/////////////////////////////
 		
