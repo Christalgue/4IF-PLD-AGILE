@@ -79,7 +79,7 @@ public class Circuit extends Observable {
 		TSPLimitTimeReachedException timeException = null;
 		try {
 			//System.out.println("debut try");
-			tsp.searchSolution(3000, repository, allPaths, null, continueInterruptedCalculation);
+			tsp.searchSolution(Integer.MAX_VALUE, repository, allPaths, null, continueInterruptedCalculation);
 			//System.out.println("fin try");
 		} catch (TSPLimitTimeReachedException e) {
 			// TODO Auto-generated catch block

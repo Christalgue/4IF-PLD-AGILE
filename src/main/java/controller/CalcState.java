@@ -73,15 +73,18 @@ public class CalcState extends DefaultState {
 	
 	
 	public void leftClick(Controller controller, Window window, Point point) {
+		System.out.println("vfdjkfjhrguigreui");
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (node != null)
 		{
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+				System.out.println("HEYYOUYOUEXIST");
 				window.enableButtonDeleteDelivery();
 				window.enableButtonMoveDelivery();
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
 			} else {
+				System.out.println("wesh t'es un nouveau");
 				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
 				window.enableButtonAddDelivery();
@@ -89,6 +92,8 @@ public class CalcState extends DefaultState {
 				controller.setCurrentState(controller.nodeSelectedState);
 				
 			}
+		} else {
+			System.out.println("RIEN LOL");
 		}
 		
 	}

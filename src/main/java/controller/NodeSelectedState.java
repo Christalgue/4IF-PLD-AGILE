@@ -30,6 +30,9 @@ public class NodeSelectedState extends DefaultState {
 		if (node != null)
 		{
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+				window.enableButtonMoveDelivery();
+				window.enableButtonDeleteDelivery();
+				window.disableButtonAddDelivery();
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
 			} else {

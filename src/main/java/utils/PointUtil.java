@@ -18,7 +18,7 @@ public class PointUtil {
 		    
 			Node currentNode = entry.getValue();
 			
-			final double range = 0.0001;
+			final double range = 0.0005;
 			if (currentNode.getLongitude() <= point.getX()+range && point.getX()-range <= currentNode.getLongitude() && 
 				currentNode.getLatitude() <= point.getY()+range && point.getY()-range <= currentNode.getLatitude())
 				return currentNode;
