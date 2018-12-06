@@ -99,7 +99,7 @@ public class Window extends JFrame{
 		
 		//////////////////////////////CREATE THE GRAPHIC VIEW//////////////////////////////
 		
-		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight, graphicWidth, pathWidth);
+		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth);
 		setGraphicView(this.graphicView);
 		mouseListener = new MouseListener(controller, this.graphicView, this);
 		this.addMouseListener(mouseListener);
@@ -205,7 +205,7 @@ public class Window extends JFrame{
 		buttonPanel.setBackground(Color.WHITE);
 		
 		setNameOfMap = new TextField();
-		setNameOfMap.setText("resources/xml/grandPlan.xml");
+		setNameOfMap.setText("resources/xml/petitPlan.xml");
 		buttonPanel.add(setNameOfMap);
 		
 		JButton loadMapButton = new JButton(LOAD_MAP);
@@ -213,7 +213,7 @@ public class Window extends JFrame{
 		buttonPanel.add(loadMapButton);
 		
 		setNameOfDeliveryList = new TextField();
-		setNameOfDeliveryList.setText("resources/xml/dl-grand-20.xml");
+		setNameOfDeliveryList.setText("resources/xml/dl-petit-23.xml");
 		setNameOfDeliveryList.setEditable(true);
 		buttonPanel.add(setNameOfDeliveryList);
 		
