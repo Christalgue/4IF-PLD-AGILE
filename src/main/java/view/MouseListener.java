@@ -31,6 +31,9 @@ public class MouseListener extends MouseAdapter {
 		if ( evt.getButton() == MouseEvent.BUTTON1) { 
 			Point p = graphicView.pointToLatLong(new Point (evt.getX(), evt.getY()));
 			Node n = graphicView.pointToNode(p);
+			
+			controller.leftClick(p);
+			
 			window.nodeSelected(n);
 			System.out.println(n);
 			/*if (p != null) {
