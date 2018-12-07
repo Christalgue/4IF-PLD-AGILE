@@ -21,6 +21,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
+import main.java.utils.PopUpType;
 
 
 public class Window extends JFrame{
@@ -69,9 +70,14 @@ public class Window extends JFrame{
 	protected static final int pathWidth = 3;
 	
 	protected static final Color selectedColor = Color.GREEN;
+	protected static final Color hoverColor = Color.BLUE;
+	protected static final Color unselectedColor = Color.WHITE;
 	
 	protected JTree textualViewTree;
 	protected DefaultMutableTreeNode treeRoot;
+	
+	protected Node selectedNode;
+	protected Node hoverNode;
 	
 	/**
 	 * Default constructor
@@ -103,7 +109,7 @@ public class Window extends JFrame{
 		setGraphicView(this.graphicView);
 		mouseListener = new MouseListener(controller, this.graphicView, this);
 		this.graphicView.addMouseListener(mouseListener);
-		//this.graphicView.addMouseMotionListener(mouseListener);
+		this.graphicView.addMouseMotionListener(mouseListener);
 		
 		//////////////////////////////CREATE THE TEXTUAL VIEW/////////////////////////////
 		
@@ -309,8 +315,35 @@ public class Window extends JFrame{
 		textualView.fillCircuitTree();
 	}
 	
-	public void nodeSelected( Node node) {
+	public void nodeSelected(Node node) {
+		if(selectedNode!=null){
+			graphicView.paintSelectedNode(graphicView.getGraphic(), selectedNode, unselectedColor);
+		}
+		
 		graphicView.paintSelectedNode(graphicView.getGraphic(), node, selectedColor);
+		hoverNode = null;
+		selectedNode = node;
+	}
+	
+	public void nodeHover(Node node) {
+		//Mouse exit a node
+		if(node == null && hoverNode!=null) {
+			graphicView.paintSelectedNode(graphicView.getGraphic(), hoverNode, unselectedColor);
+			hoverNode = node;
+		}
+		//Cannot hover a selected node
+		else if (selectedNode == null || (node != null && node.getId()!=selectedNode.getId())){
+			//Mouse enter a node
+			if(node!=null && hoverNode == null) {
+				graphicView.paintSelectedNode(graphicView.getGraphic(), node, hoverColor);
+			}
+			//Mouse pass from one node to another
+			else if(node!=null && node.getId()!=hoverNode.getId()) {
+				graphicView.paintSelectedNode(graphicView.getGraphic(), hoverNode, unselectedColor);
+				graphicView.paintSelectedNode(graphicView.getGraphic(), node, hoverColor);
+			}
+			hoverNode = node;
+		}
 	}
 	
 	public void fillDeliveryTree() {
@@ -363,7 +396,7 @@ public class Window extends JFrame{
 		moveDeliveryButton.setEnabled(false);
 	}
 	
-	public int getPopUpValue(String message, Window window) {
+	public int getPopUpValue(PopUpType message, Window window) {
 		return popUp.displayPopUp(message, window);
 	}
 

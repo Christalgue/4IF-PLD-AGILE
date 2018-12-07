@@ -18,6 +18,7 @@ public class SelectedPreviousMovedState extends DefaultState {
 	
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (previousNode != null) {
+			window.nodeSelected(previousNode);
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
 				controller.deliveryMovedState.setNode(node);
 				controller.deliveryMovedState.setPreviousNode(previousNode);

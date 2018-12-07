@@ -1,5 +1,7 @@
 package main.java.controller;
 
+import javax.swing.JOptionPane;
+
 import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.exception.ClusteringException;
@@ -10,6 +12,7 @@ import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
 import main.java.exception.TSPLimitTimeReachedException;
 import main.java.utils.PointUtil;
+import main.java.utils.PopUpType;
 import main.java.view.Window;
 
 public class DeliverySelectedState extends DefaultState {
@@ -24,6 +27,7 @@ public class DeliverySelectedState extends DefaultState {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (node != null)
 		{
+			window.nodeSelected(node);
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
@@ -95,8 +99,16 @@ public class DeliverySelectedState extends DefaultState {
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
 			System.out.println(e.getMessage());
-			controller.setCurrentState(controller.calculatingState);
-			window.drawCircuits();
+			int popUpValue = controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+			if(popUpValue == JOptionPane.NO_OPTION) {
+				window.drawCircuits();
+				controller.setCurrentState(controller.calculatingState);
+				System.out.println("*********************************************************************");
+			}
+			else {
+				window.drawCircuits();
+				controller.setCurrentState(controller.calcState);
+			}
 		}
 	
 	}

@@ -1,11 +1,14 @@
 package main.java.controller;
 
+import javax.swing.JOptionPane;
+
 import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
 import main.java.exception.TSPLimitTimeReachedException;
+import main.java.utils.PopUpType;
 import main.java.view.Window;
 
 public class CalculatingState extends DefaultState {
@@ -34,7 +37,16 @@ public class CalculatingState extends DefaultState {
 				e.printStackTrace();
 			} catch (TSPLimitTimeReachedException e) {
 				System.out.println(e.getMessage());
-				controller.setCurrentState(controller.calculatingState);
+				int popUpValue = controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+				if(popUpValue == JOptionPane.NO_OPTION) {
+					window.drawCircuits();
+					controller.setCurrentState(controller.calculatingState);
+					System.out.println("*********************************************************************");
+				}
+				else {
+					window.drawCircuits();
+					controller.setCurrentState(controller.calcState);
+				}
 			}
 		} else {
 			controller.setCurrentState(controller.calcState);

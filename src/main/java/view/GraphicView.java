@@ -20,6 +20,7 @@ import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.utils.PointUtil;
 
 public class GraphicView extends JPanel implements Observer {
 	
@@ -124,6 +125,12 @@ public class GraphicView extends JPanel implements Observer {
 		System.out.println("originLong " + originLong);
 		System.out.println("minLat " + minLat);
 		System.out.println("maxLong " + maxLong);
+		
+		PointUtil.range = 5.0*Math.min(heightScale, widthScale);
+	}
+	
+	public Node pointToNode (Point point) {
+		return PointUtil.pointToNode(point, circuitManagement);
 	}
 
 
@@ -144,28 +151,6 @@ public class GraphicView extends JPanel implements Observer {
 		return p;
 		
 	}
-	
-	
-	public Node pointToNode( Point point ) {
-		
-		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();
-		
-		
-		for( Map.Entry<Long, Node> entry : nodeMap.entrySet()) {
-		    
-			Node currentNode = entry.getValue();
-			
-			final double range = 0.0005;
-			if (currentNode.getLongitude() <= point.getX()+range && point.getX()-range <= currentNode.getLongitude() && 
-				currentNode.getLatitude() <= point.getY()+range && point.getY()-range <= currentNode.getLatitude())
-				return currentNode;
-				
-		}
-		 return null;
-		
-	}
-	
-	
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {

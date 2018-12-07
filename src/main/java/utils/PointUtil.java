@@ -9,16 +9,17 @@ import main.java.entity.CircuitManagement;
 
 public class PointUtil {
 	
-	public static Node pointToNode( Point point, CircuitManagement circuitManagement ) {
+	public static double range;
+	
+	public static Node pointToNode( Point point, CircuitManagement circuitManagement) {
 		
 		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();
-		
+
+	    System.out.println(range);
 		
 		for( Map.Entry<Long, Node> entry : nodeMap.entrySet()) {
-		    
 			Node currentNode = entry.getValue();
 			
-			final double range = 0.0005;
 			if (currentNode.getLongitude() <= point.getX()+range && point.getX()-range <= currentNode.getLongitude() && 
 				currentNode.getLatitude() <= point.getY()+range && point.getY()-range <= currentNode.getLatitude())
 				return currentNode;
