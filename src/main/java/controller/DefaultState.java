@@ -34,7 +34,7 @@ public abstract class DefaultState implements State {
 	
 	public void validateDuration (Controller controller, Window window, int duration) {}
 	
-	public void movedMouse(Controller controller, Window window){}
+	public void mouseMoved(Controller controller, Window window, Point point){}
 
 	@Override
 	public String toString() {

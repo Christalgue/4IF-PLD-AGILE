@@ -2,6 +2,7 @@ package main.java.controller;
 
 import javax.swing.JOptionPane;
 
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.exception.ClusteringException;
@@ -32,7 +33,10 @@ public class NodeSelectedState extends DefaultState {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (node != null)
 		{
-			//window.nodeSelected(node);
+			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+			window.nodeSelected(isDelivery);
+			window.circuitSelected(isDelivery);
+			
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
 				window.enableButtonMoveDelivery();
 				window.enableButtonDeleteDelivery();
@@ -50,6 +54,14 @@ public class NodeSelectedState extends DefaultState {
 			}
 		}
 		
+	}
+	
+	public void mouseMoved(Controller controller, Window window, Point point) {
+		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		if(node!=null) {
+			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+			window.nodeHover(isDelivery);
+		}
 	}
 	
 	public void loadMap(Controller controller, Window window, String filename) {

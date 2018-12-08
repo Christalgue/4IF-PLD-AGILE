@@ -32,6 +32,7 @@ public class MouseListener extends MouseAdapter {
 		// If it's a left click, the controller is worn
 		if ( evt.getButton() == MouseEvent.BUTTON1) { 
 			Point p = new Point (evt.getX(), evt.getY());
+			p = graphicView.pointToLatLong(p);
 			controller.leftClick(p);
 
 		}
@@ -45,6 +46,7 @@ public class MouseListener extends MouseAdapter {
 	public void mouseMoved(MouseEvent evt) {
 		
 		Point p = new Point ( evt.getX(), evt.getY());
+		p = graphicView.pointToLatLong(p);
 		controller.mouseMoved(p);
 	}
 

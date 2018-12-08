@@ -2,6 +2,7 @@ package main.java.controller;
 
 import javax.swing.JOptionPane;
 
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.exception.ClusteringException;
@@ -86,19 +87,19 @@ public class CalcState extends DefaultState {
 	
 	
 	public void leftClick(Controller controller, Window window, Point point) {
-		System.out.println("vfdjkfjhrguigreui");
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
-		if (node != null)
-		{
-			//window.nodeSelected(node);
+		
+		if (node != null){
+			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+			window.nodeSelected(isDelivery);
+			window.circuitSelected(isDelivery);
+			
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
-				System.out.println("HEYYOUYOUEXIST");
 				window.enableButtonDeleteDelivery();
 				window.enableButtonMoveDelivery();
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
 			} else {
-				System.out.println("wesh t'es un nouveau");
 				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
 				window.enableButtonAddDelivery();
@@ -106,9 +107,16 @@ public class CalcState extends DefaultState {
 				controller.setCurrentState(controller.nodeSelectedState);
 				
 			}
-		} else {
-			System.out.println("RIEN LOL");
+		} 
+	}
+	
+	public void mouseMoved(Controller controller, Window window, Point point) {
+		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		if(node!=null) {
+			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+			window.nodeHover(isDelivery);
+		}else {
+			window.nodeHover(null);
 		}
-		
 	}
 }

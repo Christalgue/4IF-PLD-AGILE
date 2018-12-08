@@ -2,6 +2,9 @@ package main.java.controller;
 
 import javax.swing.JOptionPane;
 
+import main.java.entity.Delivery;
+import main.java.entity.Node;
+import main.java.entity.Point;
 import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
@@ -9,6 +12,7 @@ import main.java.exception.LoadMapException;
 import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
 import main.java.exception.TSPLimitTimeReachedException;
+import main.java.utils.PointUtil;
 import main.java.utils.PopUpType;
 import main.java.view.Window;
 
@@ -70,7 +74,25 @@ public class DeliveryLoadedState extends DefaultState {
 			//System.err.println("*********************************************************************");
 			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		}
-		
+	}
+	
+	public void leftClick(Controller controller, Window window, Point point) {
+		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+
+		if(node!=null) {
+			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+			window.nodeSelected(isDelivery);
+		}
+	}
+	
+	public void mouseMoved(Controller controller, Window window, Point point) {
+		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		if(node!=null) {
+			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+			window.nodeHover(isDelivery);
+		}else {
+			window.nodeHover(null);
+		}
 	}
 
 }

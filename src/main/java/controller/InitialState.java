@@ -13,6 +13,7 @@ public class InitialState extends DefaultState {
 			controller.circuitManagement.loadMap(filename);
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			window.drawMap();
+			window.setMouseListener(window);
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
 		{

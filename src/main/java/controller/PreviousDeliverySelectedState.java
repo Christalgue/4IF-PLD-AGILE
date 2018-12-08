@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.utils.PointUtil;
@@ -21,6 +22,10 @@ public class PreviousDeliverySelectedState extends DefaultState {
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (previousNode != null) {
+			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+			window.nodeSelected(isDelivery);
+			window.circuitSelected(isDelivery);
+			
 			if (controller.circuitManagement.checkNodeInDeliveryList(previousNode)) {
 				controller.deliveryAddedState.setNode(node);
 				controller.deliveryAddedState.setPreviousNode(previousNode);
@@ -29,6 +34,16 @@ public class PreviousDeliverySelectedState extends DefaultState {
 			} else {
 				// rajouter erreur IHM
 			}
+		}
+	}
+	
+	public void mouseMoved(Controller controller, Window window, Point point) {
+		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		if(node!=null) {
+			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+			window.nodeHover(isDelivery);
+		}else {
+			window.nodeHover(null);
 		}
 	}
 	

@@ -14,6 +14,8 @@ import java.util.Set;
 
 import javax.swing.JPanel;
 
+import com.sun.corba.se.spi.activation.Repository;
+
 import main.java.entity.Bow;
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
@@ -140,9 +142,6 @@ public class GraphicView extends JPanel {
 	}
 
 	public Point pointToLatLong(Point point) {
-
-		System.out.println("Appel de pointToLatLong");
-		System.out.println(point.getX() + "  " + point.getY());
 		Point p = new Point(point.getX() * widthScale + originLong, -(point.getY()) * heightScale + originLat);
 		return p;
 
@@ -219,12 +218,12 @@ public class GraphicView extends JPanel {
 
 	public void unPaintNode ( Delivery delivery) {
 		
-		if (delivery.getDuration() != -1){
-			g.setColor(deliveryColor);
-		} else if (delivery.getDuration() == 0) {
+		if (delivery.getClass() == Repository.class){
 			g.setColor(repositoryColor);
-		} else {
+		} else if (delivery.getDuration() == -1) {
 			g.setColor(nodeColor);
+		} else {
+			g.setColor(deliveryColor);
 		}
 		
 		mapView.drawNode(g, delivery.getPosition());

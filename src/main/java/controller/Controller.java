@@ -132,7 +132,7 @@ public class Controller {
 	}
 	
 	public void mouseMoved( Point point) {
-		//currentState.mouseMoved( this, window, point);
+		currentState.mouseMoved( this, window, point);
 		
 		//Point point = graphicView.pointToLatLong(point);
 		//Node node = graphicView.pointToNode(point);
@@ -150,14 +150,5 @@ public class Controller {
 	
 	public void cancelDuration() {
 		currentState.cancel(this, window);
-	}
-
-	/**
-	 * Method called by window after the mouse has moved in the graphical view of the plan
-	 * Precondition : p != null
-	 * @param p = coordinates in the plan of the mouse position
-	 */
-	public void movedMouse() {
-		currentState.movedMouse(this, window);
 	}
 }

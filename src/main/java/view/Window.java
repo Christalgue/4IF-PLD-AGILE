@@ -109,8 +109,6 @@ public class Window extends JFrame{
 		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth);
 		setGraphicView(this.graphicView);
 		mouseListener = new MouseListener(controller, this.graphicView, this);
-		this.graphicView.addMouseListener(mouseListener);
-		this.graphicView.addMouseMotionListener(mouseListener);
 		
 		//////////////////////////////CREATE THE TEXTUAL VIEW/////////////////////////////
 		
@@ -172,6 +170,11 @@ public class Window extends JFrame{
 		graphicView.setBackground(Color.LIGHT_GRAY);
 		graphicView.setSize(graphicWidth, windowHeight-buttonPanelHeight-messageFieldHeight);
 		
+	}
+	
+	public static void setMouseListener(Window window) {
+		window.graphicView.addMouseListener(mouseListener);
+		window.graphicView.addMouseMotionListener(mouseListener);
 	}
 	
 	private static void setTextualView(TextualView textualView) {
@@ -411,6 +414,7 @@ public class Window extends JFrame{
 		moveDeliveryButton.setEnabled(false);
 	}
 	
+	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
 	public int getPopUpValue(PopUpType message, Window window) {
 		
 		return popUp.displayPopUp(message, window);

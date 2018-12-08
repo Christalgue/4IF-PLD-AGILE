@@ -30,7 +30,7 @@ public interface State {
 	
 	public void leftClick(Controller controller, Window window, Point point);
 	
-	public void movedMouse(Controller controller, Window window);
+	public void mouseMoved(Controller controller, Window window, Point point);
 	
 	public void validateDuration (Controller controller, Window window, int duration);
 	
