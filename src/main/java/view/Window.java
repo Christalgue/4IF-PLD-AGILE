@@ -21,6 +21,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
+import main.java.exception.ManagementException;
 import main.java.utils.PopUpType;
 
 
@@ -220,7 +221,7 @@ public class Window extends JFrame{
 		buttonPanel.add(loadMapButton);
 		
 		setNameOfDeliveryList = new TextField();
-		setNameOfDeliveryList.setText("resources/xml/dl-petit-23.xml");
+		setNameOfDeliveryList.setText("resources/xml/dl-petit-3.xml");
 		setNameOfDeliveryList.setEditable(true);
 		buttonPanel.add(setNameOfDeliveryList);
 		
@@ -397,7 +398,65 @@ public class Window extends JFrame{
 	}
 	
 	public int getPopUpValue(PopUpType message, Window window) {
+		
 		return popUp.displayPopUp(message, window);
 	}
+	
+	public void manageAddPopUpValue(int userChoice) {
+		if (userChoice == 0) {
+			try {
+				controller.validateAdd();
+			} catch (ManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void manageDeletePopUpValue(int userChoice) {
+		if (userChoice == 0) {
+			try {
+				controller.validateDelete();
+			} catch (ManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/* Need to change the signature of validateDuration with a string 
+	 * public void manageDurationPopUpValue(String inputValue) {
+		if (inputValue != "") {
+			try {
+				controller.validateDuration(inputValue);
+			} catch (ManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}*/
+	
+	public void manageMovePopUpValue(int userChoice) {
+		if (userChoice == 0) {
+			try {
+				controller.validateMove();
+			} catch (ManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/* Need to create the validateContinue() method in the controller
+	 * public void manageContinuePopUpValue(int userChoice) {
+		if (userChoice == 0) {
+			try {
+				controller.validateContinue();
+			} catch (ManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}*/
 
 }
