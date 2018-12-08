@@ -469,18 +469,12 @@ public class Window extends JFrame{
 		}
 	}
 	
-	/* Need to create the validateContinue() method in the controller
-	 * public void manageContinuePopUpValue(int userChoice) {
+	 public void manageContinuePopUpValue(int userChoice) {
 		if (userChoice == 0) {
-			try {
-				controller.validateContinue();
-			} catch (ManagementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			controller.cancelContinue();
+			controller.continueCalculation(false);
+		} else if (userChoice == 1) {
+			controller.continueCalculation(true);
 		}
-	}*/
+	}
 
 }
