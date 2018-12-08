@@ -81,6 +81,7 @@ public class DeliverySelectedState extends DefaultState {
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
+			controller.setCurrentState(controller.calcState);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
 		} catch (ClusteringException e){

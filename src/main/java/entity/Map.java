@@ -155,7 +155,11 @@ public class Map extends Observable{
         		AtomicPath optimalPath = new AtomicPath(bowList);
         		AtomicPaths.put(currentDelivery, optimalPath);
     		}
-    	}    	
+    	}  
+    	/*if(arrivalDeliveries.size() != AtomicPaths.keySet().size()-1 ) {
+    		throw new DijkstraException("All pathes not calculated for delivery : " + startDelivery.toString()
+    					+ "\n arrival deliveries : " + arrivalDeliveries.toString() + " \n AtomicPaths keySet : " + AtomicPaths.keySet().toString() + "\n \n \n");
+    	}*/
         return AtomicPaths;
     }
     

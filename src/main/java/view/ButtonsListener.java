@@ -3,6 +3,8 @@ package main.java.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import main.java.utils.PopUpType;
+
 import javax.swing.JFileChooser;
 
 import main.java.controller.Controller;
@@ -51,6 +53,8 @@ public class ButtonsListener implements ActionListener {
 			Window.getMapName();
 			controller.loadMap(map);
 			
+			int testAddPopUp = controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
+			
 			/*controller.loadMap(controller.getWindow().getFile());*/
 			break;
 		case Window.LOAD_DELIVERY_OFFER: 
@@ -58,10 +62,13 @@ public class ButtonsListener implements ActionListener {
 			Window.getDeliveryListName();
 			controller.loadDeliveryOffer(deliveryList); 
 			
+			int testDurationPopUp = controller.getWindow().getPopUpValue(PopUpType.DURATION, controller.getWindow());
+			
 			/*controller.loadDeliveryOffer(controller.getWindow().getFile());*/
 			break;
 		case Window.CALCULATE_CIRCUITS: 
 			Window.getDeliveryMenNumber();
+			//int popUpValue = controller.getWindow().getPopUpValue(controller.getWindow().popUp.CONTINUE, controller.getWindow());
 			controller.calculateCircuits(deliveryMenNumber); 
 			break;
 		//case Window.UNDO: controller.undo(); break;
