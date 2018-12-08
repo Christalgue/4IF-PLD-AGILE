@@ -22,205 +22,216 @@ import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.utils.PointUtil;
 
-public class GraphicView extends JPanel implements Observer {
-	
+public class GraphicView extends JPanel {
+
 	private double heightScale;
 	private double widthScale;
-	
+
 	private double originLat;
 	private double originLong;
-	
+
 	private int viewHeight;
 	private int viewWidth;
-	
+
 	private main.java.entity.CircuitManagement circuitManagement;
 	private Graphics2D g;
-	
+
 	private MapView mapView;
 	private CircuitView circuitView;
 	private DeliveryView deliveryView;
-	
+
 	private int width;
-	
-	Color color [] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.ORANGE, Color.PINK };
-	
+
+	private static Color nodeColor = Color.WHITE;
+	private static Color selectedColor = Color.GREEN;
+	private static Color hoverColor = Color.BLUE;
+	private static Color deliveryColor = Color.RED;
+	private static Color repositoryColor = Color.ORANGE;
+
+	private Color color[] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.ORANGE, Color.PINK };
+
 	/**
 	 * Create the graphic view where the map will be drawn in Window windows
+	 * 
 	 * @param circuitManagement the CircuitManagement
 	 */
 	public GraphicView(main.java.entity.CircuitManagement circuitManagement, int viewHeight, int viewWidth, int width) {
-		
+
 		super();
-		
-		circuitManagement.addObserver(this); // this observe circuitManagement
-		
+
 		this.viewHeight = viewHeight;
 		this.viewWidth = viewWidth;
 		this.width = width;
-	
+
 		this.circuitManagement = circuitManagement;
-	
-		mapView = new MapView (Color.WHITE, width, this);
+
+		mapView = new MapView(nodeColor, width, this);
 		circuitView = new CircuitView(this, width);
-		deliveryView = new DeliveryView (Color.RED, Color.ORANGE, width, this);
-		
+		deliveryView = new DeliveryView(deliveryColor, repositoryColor, width, this);
+
 	}
-	
-	
-	protected void calculateScale (CircuitManagement circuitManagement) {
+
+	protected void calculateScale(CircuitManagement circuitManagement) {
 
 		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();
-		
-		
-		
+
 		double minLat = 0;
 		double maxLat = 0;
 		double minLong = 0;
 		double maxLong = 0;
-		
+
 		boolean firstNode = true;
-		
+
 		double currentLat;
 		double currentLong;
-		
-		for(Map.Entry<Long, Node> entry : nodeMap.entrySet()) {
-		    Node node = entry.getValue();
-		    
-		    if (firstNode) {
-		    	minLat = node.getLatitude();
-		    	maxLat = node.getLatitude();
-		    	minLong = node.getLongitude();
-		    	maxLong = node.getLongitude();
-		    	firstNode = false;
-		    }
-		    
-		    currentLat = node.getLatitude();
-		    currentLong = node.getLongitude();
-		    
-		    if ( currentLat > maxLat )
-		    	maxLat = currentLat;
-		    if (currentLat < minLat )
-		    	minLat = currentLat;
-		    	
-		    if ( currentLong > maxLong )
-		    	maxLong = currentLong;
-		    if ( currentLong < minLong)
-		    	minLong = currentLong; 
-		    
-		    //System.out.println("maxLat " + maxLat);
-		    //System.out.println("minLat " + minLat);
-		    //System.out.println("maxLong " + maxLong);
-		    //System.out.println("minLong " + minLong);
+
+		for (Map.Entry<Long, Node> entry : nodeMap.entrySet()) {
+			Node node = entry.getValue();
+
+			if (firstNode) {
+				minLat = node.getLatitude();
+				maxLat = node.getLatitude();
+				minLong = node.getLongitude();
+				maxLong = node.getLongitude();
+				firstNode = false;
+			}
+
+			currentLat = node.getLatitude();
+			currentLong = node.getLongitude();
+
+			if (currentLat > maxLat)
+				maxLat = currentLat;
+			if (currentLat < minLat)
+				minLat = currentLat;
+
+			if (currentLong > maxLong)
+				maxLong = currentLong;
+			if (currentLong < minLong)
+				minLong = currentLong;
+
 		}
-		
-		heightScale = (double) ((maxLat - minLat) /(double) viewHeight);
-		widthScale = (double) ((maxLong-minLong)/ (double) viewWidth);
-		
+
+		heightScale = (double) ((maxLat - minLat) / (double) viewHeight);
+		widthScale = (double) ((maxLong - minLong) / (double) viewWidth);
+
 		originLat = maxLat;
 		originLong = minLong;
-		
+
 		System.out.println("heightScale " + heightScale);
 		System.out.println("widthScale " + widthScale);
 		System.out.println("originLat " + originLat);
 		System.out.println("originLong " + originLong);
 		System.out.println("minLat " + minLat);
 		System.out.println("maxLong " + maxLong);
-		
-		PointUtil.range = 5.0*Math.min(heightScale, widthScale);
+
+		PointUtil.range = 5.0 * Math.min(heightScale, widthScale);
 	}
-	
-	public Node pointToNode (Point point) {
+
+	public Node pointToNode(Point point) {
 		return PointUtil.pointToNode(point, circuitManagement);
 	}
 
+	public Point nodeToPoint(Node node) {
 
-	public Point nodeToPoint( Node node ) {
-		
-		Point p = new Point ((node.getLongitude()- originLong)/widthScale, (originLat - node.getLatitude())/heightScale );
+		Point p = new Point((node.getLongitude() - originLong) / widthScale,
+				(originLat - node.getLatitude()) / heightScale);
 		return p;
-	
+
 	}
-	
-	public Point pointToLatLong( Point point ) {
-		
+
+	public Point pointToLatLong(Point point) {
+
 		System.out.println("Appel de pointToLatLong");
 		System.out.println(point.getX() + "  " + point.getY());
-		Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY())*heightScale + originLat);
-		//Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY()-originLat)*heightScale);
-		System.out.println(p.getX() + "  " + p.getY());
+		Point p = new Point(point.getX() * widthScale + originLong, -(point.getY()) * heightScale + originLat);
 		return p;
-		
-	}
-	
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		repaint();
+
 	}
 
-	
 	/**
 	 * Methode appelee a chaque fois que VueGraphique doit etre redessinee
 	 */
-	public void paintComponent(Graphics2D g2D) {
-		
-		paintMap (g);
-		
-		paintCircuits(g);
-		
-		paintDeliveries(g);
-		
+	public void paintComponent() {
+
+		paintMap();
+
+		paintCircuits();
+
+		paintDeliveries();
+
 	}
-	
-	public void paintMap (Graphics2D g2D) {
+
+	public void paintMap() {
 		calculateScale(circuitManagement);
 		System.out.println(widthScale);
-		mapView.paintMap(g2D, circuitManagement.getCurrentMap());
+		mapView.paintMap(g, circuitManagement.getCurrentMap());
 	}
-	
-	public void paintDeliveries (Graphics2D g2D) {
-		deliveryView.paintDeliveries(g2D,circuitManagement.getDeliveryList());
-	}
-	
-	public void paintCircuits(Graphics2D g2D) {
 
-		int colorIndex =0;
-		
-		for( Circuit entry : circuitManagement.getCircuitsList() ) {
-		    
-			circuitView.paintCircuit(g2D, entry, color[colorIndex%color.length]);
+	public void paintDeliveries() {
+		deliveryView.paintDeliveries(g, circuitManagement.getDeliveryList());
+	}
+
+	public void paintCircuits() {
+
+		int colorIndex = 0;
+
+		for (Circuit entry : circuitManagement.getCircuitsList()) {
+
+			circuitView.paintCircuit(g, entry, color[colorIndex % color.length]);
 			colorIndex++;
-			
+
 		}
-		
-		paintDeliveries(g);
-	}
-	
-	protected Graphics2D getGraphic() {
-		return g;
-	}
-	
-	protected void setGraphics() {
-		System.out.println("setGraphics : " + this.getGraphics());
-		g = (Graphics2D) this.getGraphics();
-		System.out.println(g);
+
+		paintDeliveries();
 	}
 
+	/*
+	 * protected Graphics2D getGraphic() { return g; }
+	 */
+
+	/*
+	 * protected void setGraphics() { System.out.println("setGraphics : " +
+	 * this.getGraphics()); g = (Graphics2D) this.getGraphics();
+	 * System.out.println(g); }
+	 */
+
+	protected void setGraphics() {
+		g = (Graphics2D) this.getGraphics();
+	}
 
 	@Override
 	public String toString() {
 		return "GraphicView [heightScale=" + heightScale + ", widthScale=" + widthScale + ", originLat=" + originLat
 				+ ", originLong=" + originLong + ", viewHeight=" + viewHeight + ", viewWidth=" + viewWidth
-				+ ", circuitManagement=" + circuitManagement + ", g=" + g + ", mapView=" + mapView + ", circuitView="
-				+ circuitView + ", deliveryView=" + deliveryView + ", color=" + Arrays.toString(color) + "]";
+				+ ", circuitManagement=" + circuitManagement + ", mapView=" + mapView + ", circuitView=" + circuitView
+				+ ", deliveryView=" + deliveryView + ", color=" + Arrays.toString(color) + "]";
 	}
 
+	public void paintSelectedNode(Delivery delivery, boolean clicked) {
 
-	public void paintSelectedNode(Graphics2D graphic, Node node, Color selectedColor) {
-		g.setColor(selectedColor);
-		mapView.drawNode(g, node);		
+		if (clicked) {
+			g.setColor(selectedColor);
+		} else {
+			g.setColor(hoverColor);
+		}
+		mapView.drawNode(g, delivery.getPosition());
 	}
-	
-	
+
+	public void unPaintNode ( Delivery delivery) {
+		
+		if (delivery.getDuration() != -1){
+			g.setColor(deliveryColor);
+		} else if (delivery.getDuration() == 0) {
+			g.setColor(repositoryColor);
+		} else {
+			g.setColor(nodeColor);
+		}
+		
+		mapView.drawNode(g, delivery.getPosition());
+	}
+
+	public void paintSelectedCircuit(Circuit circuit) {
+		circuitView.paintCircuit(g, circuit, selectedColor);
+	}
 
 }

@@ -116,6 +116,23 @@ public class Controller {
 	 */
 	public void leftClick(Point point){
 		currentState.leftClick(this, window, point);
+		
+		//Point point = graphicView.pointToLatLong(point);
+		//Node node = graphicView.pointToNode(point);
+		//Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+		//window.nodeSelected(isDelivery);
+		
+		//si tournees deja calculees
+		// window.circuitSelected(isDelivery);
+	}
+	
+	public void mouseMoved( Point point) {
+		//currentState.mouseMoved( this, window, point);
+		
+		//Point point = graphicView.pointToLatLong(point);
+		//Node node = graphicView.pointToNode(point);
+		//Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
+		//window.nodeHover(isDelivery);
 	}
 	
 	public void continueCalculation(boolean keepCalculating) {

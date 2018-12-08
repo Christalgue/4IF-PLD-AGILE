@@ -413,6 +413,14 @@ public class CircuitManagement extends Observable{
 		return false;
 	}
 	
+	public Delivery isDelivery(Node nodeTested){
+		for(Delivery deliveryTested : this.deliveryList){
+			if(deliveryTested.getPosition() == nodeTested)
+				return deliveryTested;
+		}
+		return new Delivery (nodeTested, -1);
+	}
+	
 	public Delivery getDeliveryByNode (Node nodeTested) {
 		for (Delivery deliveryTested : this.deliveryList) {
 			if (deliveryTested.getPosition() == nodeTested) {

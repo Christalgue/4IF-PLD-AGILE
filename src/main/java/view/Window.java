@@ -19,7 +19,11 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import main.java.controller.Controller;
+import main.java.entity.AtomicPath;
+import main.java.entity.Bow;
+import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.utils.PopUpType;
 
@@ -69,15 +73,11 @@ public class Window extends JFrame{
 	
 	protected static final int pathWidth = 3;
 	
-	protected static final Color selectedColor = Color.GREEN;
-	protected static final Color hoverColor = Color.BLUE;
-	protected static final Color unselectedColor = Color.WHITE;
-	
 	protected JTree textualViewTree;
 	protected DefaultMutableTreeNode treeRoot;
 	
-	protected Node selectedNode;
-	protected Node hoverNode;
+	protected Delivery selectedNode;
+	protected Delivery hoverNode;
 	
 	/**
 	 * Default constructor
@@ -299,50 +299,64 @@ public class Window extends JFrame{
 	//////////////////////////////DRAW COMPOSANTS/////////////////////////////
 	public void drawMap() {
 		graphicView.removeAll();
-		graphicView.update(graphicView.getGraphic());
-		graphicView.paintMap(graphicView.getGraphic());
+		graphicView.update(graphicView.getGraphics());
+		graphicView.paintMap();
 	}
 	
 	public void drawDeliveries() {
 		drawMap();
-		graphicView.paintDeliveries(graphicView.getGraphic());
+		graphicView.paintDeliveries();
 		textualView.fillDeliveryTree();
 	}
 	
 	public void drawCircuits() {
 		drawDeliveries();
-		graphicView.paintCircuits(graphicView.getGraphic());
+		graphicView.paintCircuits();
 		textualView.fillCircuitTree();
 	}
 	
-	public void nodeSelected(Node node) {
+	public void nodeSelected(Delivery delivery) {
 		if(selectedNode!=null){
-			graphicView.paintSelectedNode(graphicView.getGraphic(), selectedNode, unselectedColor);
+			graphicView.unPaintNode( selectedNode);
 		}
 		
-		graphicView.paintSelectedNode(graphicView.getGraphic(), node, selectedColor);
+		graphicView.paintSelectedNode( delivery, true);
 		hoverNode = null;
-		selectedNode = node;
+		selectedNode = delivery;
 	}
 	
-	public void nodeHover(Node node) {
+	public void circuitSelected(Delivery selectedDelivery) {
+
+		if ( selectedDelivery.getDuration() != -1 ) {
+			for (Circuit circuit : controller.getCircuitManagement().getCircuitsList()) {
+					
+				for ( Delivery delivery :circuit.getDeliveryList()) {
+					if ( selectedDelivery.getPosition()== delivery.getPosition()) {
+						graphicView.paintSelectedCircuit(circuit); 
+					}
+				}
+			}
+		}
+	}
+	
+	public void nodeHover(Delivery delivery) {
 		//Mouse exit a node
-		if(node == null && hoverNode!=null) {
-			graphicView.paintSelectedNode(graphicView.getGraphic(), hoverNode, unselectedColor);
-			hoverNode = node;
+		if(delivery == null && hoverNode!=null) {
+			graphicView.unPaintNode( hoverNode);
+			hoverNode = delivery;
 		}
 		//Cannot hover a selected node
-		else if (selectedNode == null || (node != null && node.getId()!=selectedNode.getId())){
+		else if (selectedNode == null || (delivery != null && delivery.getPosition().getId()!=selectedNode.getPosition().getId())){
 			//Mouse enter a node
-			if(node!=null && hoverNode == null) {
-				graphicView.paintSelectedNode(graphicView.getGraphic(), node, hoverColor);
+			if(delivery!=null && hoverNode == null) {
+				graphicView.paintSelectedNode( delivery, false);
 			}
 			//Mouse pass from one node to another
-			else if(node!=null && node.getId()!=hoverNode.getId()) {
-				graphicView.paintSelectedNode(graphicView.getGraphic(), hoverNode, unselectedColor);
-				graphicView.paintSelectedNode(graphicView.getGraphic(), node, hoverColor);
+			else if(delivery!=null && delivery.getPosition().getId()!=hoverNode.getPosition().getId()) {
+				graphicView.unPaintNode( hoverNode);
+				graphicView.paintSelectedNode( delivery, false);
 			}
-			hoverNode = node;
+			hoverNode = delivery;
 		}
 	}
 	
