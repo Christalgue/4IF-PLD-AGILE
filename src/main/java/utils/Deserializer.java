@@ -20,6 +20,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+
 public class Deserializer {
 	
 	
@@ -72,10 +73,10 @@ public class Deserializer {
 			double length = Double.parseDouble(element.getAttribute("longueur"));
 			
 			if(!tempNodeMap.containsKey(origin) || !tempNodeMap.containsKey(arrival)) {
-				throw new XMLException("The node of a bow does not exist");
+				throw new XMLException("The node of a bow does not exist : bow ("+origin+" - "+arrival+")");
 			}
 			if (length < 0) {
-				throw new XMLException("The length of a bow is negative");
+				throw new XMLException("The length of a bow is negative : bow ("+origin+" - "+arrival+")");
 			}
 			String streetName = element.getAttribute("nomRue");
 			
@@ -86,13 +87,12 @@ public class Deserializer {
 			{
 				for(Bow b : tempBowMap.get(origin)) {
 					if(b.getEndNode().getId()==arrival) {
-						throw new XMLException("Duplicate bow detected");
+						throw new XMLException("Duplicate bow detected : bow ("+origin+" - "+arrival+")");
 					}
 				}
 			}
 			tempBowMap.get(origin).add(new Bow(tempNodeMap.get(origin),tempNodeMap.get(arrival),streetName,length));
 		}
-		
 		map.setNodeMap(tempNodeMap);
 		map.setBowMap(tempBowMap);
 	}
@@ -146,34 +146,4 @@ public class Deserializer {
 		
 		return tempDeliveriesList;
 	}
-	
-	/*
-	public static void main (String[] args)
-	{
-		try {
-			Map map = new Map();
-			List<Delivery> deliveries = new ArrayList<Delivery>();
-			loadMap("resources/xml/petitPlan.xml",map);
-			loadDeliveries("resources/xml/dl-petit-3.xml",deliveries,map);
-			
-			System.out.println(map.toString());
-			
-			for(Delivery d : deliveries){
-				System.out.println(d.toString());
-			}
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XMLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	*/
 }

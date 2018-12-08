@@ -1,8 +1,22 @@
 package main.java.view;
 
-import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Graphics2D;
+import java.util.List;
 
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+
+import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
+import main.java.entity.Delivery;
+import main.java.entity.Node;
 
 public class TextualView extends JPanel{
 
@@ -10,68 +24,106 @@ public class TextualView extends JPanel{
 	private int viewHeight;
 	private int viewWidth;	
 	
+	private JTree deliveryTree;
+	private DefaultTreeModel treeModel;
+	private DefaultMutableTreeNode treeRoot;
+	
+	private JScrollPane scrollPane;
+	
 	public TextualView () {
 		
 	}
 	
-	public TextualView(CircuitManagement circuitManagement, int viewHeight, int viewWidth) {
+	public TextualView(CircuitManagement circuitManagement, int viewHeight, int viewWidth, JTree deliveryTree) {
 		
 		super();
 		
 		this.circuitManagement = circuitManagement;
 		this.viewHeight = viewHeight;
 		this.viewWidth = viewWidth;
-	
+		
+		this.deliveryTree = deliveryTree;
+		this.treeRoot = (DefaultMutableTreeNode) deliveryTree.getModel().getRoot();
+		
+		this.deliveryTree.setRootVisible(true);
+		this.deliveryTree.setShowsRootHandles(true);
+		
+		this.treeModel = (DefaultTreeModel) this.deliveryTree.getModel();
+		
+		this.scrollPane = new JScrollPane(this.deliveryTree);
+		scrollPane.setSize(viewWidth-20, viewHeight-220);
+		scrollPane.setLocation(10, 20);
+		this.add(scrollPane);
+		this.setVisible(true);
+		
 	}
 
+	public void fillDeliveryTree() {
+		
+		treeRoot.removeAllChildren();
+		
+		setBorder(BorderFactory.createTitledBorder("Livraisons"));
+		
+		int deliveryListIndex = 0;
+			
+		for( Delivery entry : circuitManagement.getDeliveryList() ) {
+		
+			if (deliveryListIndex == 0) {
+				
+				treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
+					+ "Duree "+entry.getDuration()+" s"),
+						treeRoot, deliveryListIndex++);
+			
+			}else {
+			
+				treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
+						deliveryListIndex +": Duree "+entry.getDuration()+" s"),
+							treeRoot, deliveryListIndex++);				
+		
+			}
+			
+		}
+			
+	}
 	
-	
-	
-	
-/*		//To change icons for the tree
-		//https://stackoverflow.com/questions/20691946/set-icon-to-each-node-in-jtree
-		JTree tree = new JTree();
-		tree.setBorder(new LineBorder(new Color(0, 0, 0)));
-		tree.setModel(new DefaultTreeModel(
-			new DefaultMutableTreeNode("Liste des tournées") {
-				{
-					DefaultMutableTreeNode node_1;
-					DefaultMutableTreeNode node_2;
-					node_1 = new DefaultMutableTreeNode("Tournée 1");
-						node_2 = new DefaultMutableTreeNode("Informations ");
-							node_2.add(new DefaultMutableTreeNode("Durée totale : 1h45min"));
-						node_1.add(node_2);
-						node_2 = new DefaultMutableTreeNode("Livraisons");
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 1"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 2"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 3"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 4"));
-						node_1.add(node_2);
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("Tournée 2");
-						node_2 = new DefaultMutableTreeNode("Informations ");
-							node_2.add(new DefaultMutableTreeNode("Durée totale : 2h"));
-						node_1.add(node_2);
-						node_2 = new DefaultMutableTreeNode("Livraisons");
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 1"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 2"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 3"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 4"));
-						node_1.add(node_2);
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("Tournée 3");
-						node_2 = new DefaultMutableTreeNode("Informations ");
-							node_2.add(new DefaultMutableTreeNode("Durée totale : 1h53min"));
-						node_1.add(node_2);
-						node_2 = new DefaultMutableTreeNode("Livraisons");
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 1"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 2"));
-							node_2.add(new DefaultMutableTreeNode("Point de livraison 3"));
-						node_1.add(node_2);
-					add(node_1);
+	public void fillCircuitTree() {
+		
+		treeRoot.removeAllChildren();
+		
+		int deliveryIndex =0;
+		int circuitIndex= 0;
+		
+		DefaultMutableTreeNode circuit;
+		
+		
+		for( Circuit entry : circuitManagement.getCircuitsList() ) {
+		
+			circuit = new DefaultMutableTreeNode("Tournee "+ 
+					(circuitIndex+1) +": Duree "+entry.getCircuitLength()+" s");
+			treeModel.insertNodeInto(circuit, treeRoot, circuitIndex++);
+			
+			
+			for ( Delivery delivery : entry.getDeliveryList()) {
+				
+				if (deliveryIndex == 0) {
+					
+					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
+						+ "Duree "+delivery.getDuration()+" s"),
+							circuit, deliveryIndex++);
+				
+				}else {
+				
+					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
+							(deliveryIndex) +": Duree "+delivery.getDuration()+" s"),
+								circuit, deliveryIndex++);				
+			
 				}
 			}
-		));
-		frame.getContentPane().add(tree, BorderLayout.EAST);*/
+			
+			deliveryIndex =0;
+			
+		}
+		
+	}
 	
 }

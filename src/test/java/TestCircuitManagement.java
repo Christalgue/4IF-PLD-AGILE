@@ -248,6 +248,9 @@ class TestCircuitManagement {
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
 			circuitManager.calculateCircuits(1, false);
 			
+			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==2, "AtomicPath has not been added to the list (expected 2, got "+circuit.getPath().size()+")");
+			
 			Node newDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
 			Node previousDelivery = circuitManager.getDeliveryList().get(0).getPosition();
 			circuitManager.addDelivery(newDelivery, 20, previousDelivery);
@@ -260,11 +263,11 @@ class TestCircuitManagement {
 			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=20]"),"Error, expected : {Delivery [position=3, duration=20]}, got : "+deliveries.get(2).toString());
 			
 			//Assert new circuit has been correctly calculated
-			String s01 = "Route :\n0 => 3 (2.0)";
-			String s13 = "Route :\n3 => 0 (1.0)\n0 => 1 (1.0)";
+			String s01 = "Route :\n0 => 1 (1.0)\n1 => 3 (1.0)";
+			String s13 = "Route :\n3 => 1 (1.0)";
 			String s30 = "Route :\n1 => 0 (1.0)";
 			
-			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			circuit = circuitManager.getCircuitsList().get(0);
 			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been added to the list (expected 3, got "+circuit.getPath().size()+")");
 			assertTrue(circuit.getPath().get(0).toString().contains(s01),"Error, expected : {"+s01+"}, got : "+circuit.getPath().get(0).toString());
 			assertTrue(circuit.getPath().get(1).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(1).toString());
@@ -290,7 +293,7 @@ class TestCircuitManagement {
 			
 			//Assert new circuit has been correctly calculated
 			s01 = "Route :\n0 => 1 (1.0)";
-			s13 = "Route :\n1 => 2 (1.0)\n2 => 3 (1.0)";
+			s13 = "Route :\n1 => 3 (1.0)";
 			s30 = "Route :\n3 => 0 (1.0)";
 			
 			circuit = circuitManager.getCircuitsList().get(0);
@@ -321,9 +324,12 @@ class TestCircuitManagement {
 		try {
 			//Trying to remove a delivery
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			circuitManager.loadMap("resources/tests/Global/xml/plan_remove.xml");
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_remove.xml");
 			circuitManager.calculateCircuits(1, false);
+
+			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been removed from the list (expected 3, got "+circuit.getPath().size()+")");
 			
 			Node oldDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
 			circuitManager.removeDelivery(oldDelivery);
@@ -338,7 +344,7 @@ class TestCircuitManagement {
 			String s01 = "Route :\n0 => 1 (1.0)";
 			String s13 = "Route :\n1 => 0 (1.0)";
 			
-			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			circuit = circuitManager.getCircuitsList().get(0);
 			assertTrue(circuit.getPath().size()==2, "AtomicPath has not been removed from the list (expected 2, got "+circuit.getPath().size()+")");
 			assertTrue(circuit.getPath().get(0).toString().contains(s01),"Error, expected : {"+s01+"}, got : "+circuit.getPath().get(0).toString());
 			assertTrue(circuit.getPath().get(1).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(1).toString());
@@ -389,6 +395,74 @@ class TestCircuitManagement {
 			fail("TSPLimitTimeReachedException : "+e.getMessage());
 		} catch (ManagementException e) {
 			assertTrue(e.getMessage().contains("You cannot remove a repository"),"The ManagementException is not the one expected, got : "+e.getMessage());
+		}
+	}
+	
+	@Test
+	void testMoveDelivery() {
+		try {
+			//Trying to remove a delivery
+			CircuitManagement circuitManager = new CircuitManagement();
+			circuitManager.loadMap("resources/tests/Global/xml/plan_move.xml");
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_move.xml");
+			circuitManager.calculateCircuits(1, false);
+			
+			//Assert initial deliveries have been correctly placed in the list
+			List<Delivery> deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==3, "delivery list has not the expected size (expected 3, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=40]"),"Error, expected : {Delivery [position=3, duration=40]}, got : "+deliveries.get(2).toString());
+			
+			//Assert initial circuit has been correctly calculated
+			String s12 = "Route :\n0 => 1 (1.0)";
+			String s23 = "Route :\n1 => 3 (1.0)";
+			String s31 = "Route :\n3 => 0 (1.0)";
+
+			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been correctly initialized (expected 3, got "+circuit.getPath().size()+")");
+			assertTrue(circuit.getPath().get(0).toString().contains(s12),"Error, expected : {"+s12+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s23),"Error, expected : {"+s23+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s31),"Error, expected : {"+s31+"}, got : "+circuit.getPath().get(2).toString());
+			
+			
+			Node previousDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
+			Node moveDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)1);
+			circuitManager.moveDelivery(moveDelivery, previousDelivery);
+			
+			//Assert new delivery has not been moved in the list
+			deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==3, "delivery list has not the expected size (expected 3, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=40]"),"Error, expected : {Delivery [position=3, duration=40]}, got : "+deliveries.get(2).toString());
+			
+			//Assert new circuit has been correctly calculated
+			String s13 = "Route :\n0 => 1 (1.0)\n1 => 3 (1.0)";
+			String s32 = "Route :\n3 => 1 (1.0)";
+			String s21 = "Route :\n1 => 0 (1.0)";
+			
+			circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been correctly calculated(expected 3, got "+circuit.getPath().size()+")");
+			assertTrue(circuit.getPath().get(0).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s32),"Error, expected : {"+s32+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s21),"Error, expected : {"+s21+"}, got : "+circuit.getPath().get(2).toString());
+		} catch (LoadMapException e) {
+			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException"+e.getMessage());
+		} catch (MapNotChargedException e) {
+			fail("MapNotChargedException : "+e.getMessage());
+		} catch (ClusteringException e) {
+			fail("ClusteringException : "+e.getMessage());
+		} catch (DijkstraException e) {
+			fail("DijkstraException : "+e.getMessage());
+		} catch (NoRepositoryException e) {
+			fail("NoRepositoryException : "+e.getMessage());
+		} catch (TSPLimitTimeReachedException e) {
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
+		} catch (ManagementException e) {
+			fail("ManagementException : "+e.getMessage());
 		}
 	}
 

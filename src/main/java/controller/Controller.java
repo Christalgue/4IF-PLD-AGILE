@@ -3,6 +3,7 @@ package main.java.controller;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.exception.ManagementException;
 import main.java.view.Window;
 
 public class Controller {
@@ -23,18 +24,21 @@ public class Controller {
 	protected final DurationChoiceState durationChoiceState = new DurationChoiceState ();
 	protected final PreviousDeliverySelectedState previousDeliverySelectedState = new PreviousDeliverySelectedState ();
 	protected final SelectedPreviousMovedState selectedPreviousMovedState = new SelectedPreviousMovedState (); 
+	protected final NodeSelectedState nodeSelectedState = new NodeSelectedState();
 	
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
 		currentState = initState;
-		this.window = new Window(circuitManagement, this);
+		this.window = new Window(this);
 	}
 	
 	protected void setCurrentState(State state){
 		currentState = state;
 	}
 	
-	
+	public CircuitManagement getCircuitManagement() {
+		return circuitManagement;
+	}
 	
 	public Window getWindow() {
 		return window;
@@ -65,8 +69,17 @@ public class Controller {
 		currentState.addDelivery(this, window);
 	}
 	
-	public void validateAdd() {
-		//currentState.validate(this, window);
+	
+	public void deleteDelivery() {
+		currentState.deleteDelivery(this, window);
+	}
+	
+	public void moveDelivery() {
+		currentState.moveDelivery(this, window);
+	}
+	
+	public void validateAdd() throws ManagementException {
+		currentState.validate(this, window);
 	}
 	
 	public void cancelAdd() {
@@ -75,24 +88,20 @@ public class Controller {
 		
 	}
 	
-	public void moveDelivery () {
-		currentState.moveDelivery(this, window);
-	}
 	
-	public void validateMove() {
-		//currentState.validate(this, window);
+	
+	public void validateMove() throws ManagementException {
+		currentState.validate(this, window);
 	}
 	
 	public void cancelMove() {
 		currentState.cancel(this, window);
 	}
 	
-	public void deleteDelivery() {
-		currentState.deleteDelivery(this, window);
-	}
 	
-	public void validateDelete() {
-		//currentState.validate(this, window);
+	
+	public void validateDelete() throws ManagementException {
+		currentState.validate(this, window);
 	}
 	
 	public void cancelDelete() {
@@ -115,6 +124,10 @@ public class Controller {
 	
 	public void validateDuration (int duration) {
 		currentState.validateDuration(this, window, duration);
+	}
+	
+	public void cancelDuration() {
+		currentState.cancel(this, window);
 	}
 
 	/**

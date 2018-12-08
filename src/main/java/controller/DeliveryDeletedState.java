@@ -15,7 +15,7 @@ public class DeliveryDeletedState extends DefaultState{
 		this.node = node;
 	}
 	
-	public void deletedDelivery (Controller controller, Window window) throws ManagementException {
+	public void validate (Controller controller, Window window) throws ManagementException{
 		controller.circuitManagement.removeDelivery(node);
 		controller.setCurrentState(controller.calcState);
 	}

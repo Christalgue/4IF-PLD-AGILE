@@ -16,9 +16,11 @@ import javax.swing.JPanel;
 
 import main.java.entity.Bow;
 import main.java.entity.Circuit;
+import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.utils.PointUtil;
 
 public class GraphicView extends JPanel implements Observer {
 	
@@ -65,33 +67,50 @@ public class GraphicView extends JPanel implements Observer {
 	}
 	
 	
-	protected void calculateScale (main.java.entity.CircuitManagement circuitManagement) {
+	protected void calculateScale (CircuitManagement circuitManagement) {
 
-		double minLat = Double.MAX_VALUE;
-		double maxLat = Double.MIN_VALUE;
-		double minLong = Double.MAX_VALUE;
-		double maxLong = Double.MIN_VALUE;
+		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();
+		
+		
+		
+		double minLat = 0;
+		double maxLat = 0;
+		double minLong = 0;
+		double maxLong = 0;
+		
+		boolean firstNode = true;
 		
 		double currentLat;
 		double currentLong;
 		
-		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();
-		
 		for(Map.Entry<Long, Node> entry : nodeMap.entrySet()) {
 		    Node node = entry.getValue();
+		    
+		    if (firstNode) {
+		    	minLat = node.getLatitude();
+		    	maxLat = node.getLatitude();
+		    	minLong = node.getLongitude();
+		    	maxLong = node.getLongitude();
+		    	firstNode = false;
+		    }
 		    
 		    currentLat = node.getLatitude();
 		    currentLong = node.getLongitude();
 		    
 		    if ( currentLat > maxLat )
 		    	maxLat = currentLat;
-		    else if (currentLat < minLat )
+		    if (currentLat < minLat )
 		    	minLat = currentLat;
 		    	
 		    if ( currentLong > maxLong )
 		    	maxLong = currentLong;
-		    else if ( currentLong < minLong)
+		    if ( currentLong < minLong)
 		    	minLong = currentLong; 
+		    
+		    //System.out.println("maxLat " + maxLat);
+		    //System.out.println("minLat " + minLat);
+		    //System.out.println("maxLong " + maxLong);
+		    //System.out.println("minLong " + minLong);
 		}
 		
 		heightScale = (double) ((maxLat - minLat) /(double) viewHeight);
@@ -106,6 +125,12 @@ public class GraphicView extends JPanel implements Observer {
 		System.out.println("originLong " + originLong);
 		System.out.println("minLat " + minLat);
 		System.out.println("maxLong " + maxLong);
+		
+		PointUtil.range = 5.0*Math.min(heightScale, widthScale);
+	}
+	
+	public Node pointToNode (Point point) {
+		return PointUtil.pointToNode(point, circuitManagement);
 	}
 
 
@@ -119,34 +144,13 @@ public class GraphicView extends JPanel implements Observer {
 	public Point pointToLatLong( Point point ) {
 		
 		System.out.println("Appel de pointToLatLong");
-		Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY()-80)*heightScale + originLat);
+		System.out.println(point.getX() + "  " + point.getY());
+		Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY())*heightScale + originLat);
 		//Point p = new Point ( point.getX()*widthScale + originLong, -(point.getY()-originLat)*heightScale);
 		System.out.println(p.getX() + "  " + p.getY());
 		return p;
 		
 	}
-	
-	
-	public Node pointToNode( Point point ) {
-		
-		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();
-		
-		
-		for( Map.Entry<Long, Node> entry : nodeMap.entrySet()) {
-		    
-			Node currentNode = entry.getValue();
-			
-			final double range = 0.0001;
-			if (currentNode.getLongitude() <= point.getX()+range && point.getX()-range <= currentNode.getLongitude() && 
-				currentNode.getLatitude() <= point.getY()+range && point.getY()-range <= currentNode.getLatitude())
-				return currentNode;
-				
-		}
-		 return null;
-		
-	}
-	
-	
 	
 	@Override
 	public void update(Observable arg0, Object arg1) {

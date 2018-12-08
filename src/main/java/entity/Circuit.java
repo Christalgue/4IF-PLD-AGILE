@@ -187,7 +187,7 @@ public class Circuit extends Observable {
 		this.path.remove(position);
 	}
 
-	protected double getCircuitLength() {
+	public double getCircuitLength() {
 		return circuitLength;
 	}
 

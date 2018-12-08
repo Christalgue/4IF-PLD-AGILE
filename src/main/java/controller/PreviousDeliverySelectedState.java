@@ -21,7 +21,7 @@ public class PreviousDeliverySelectedState extends DefaultState {
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (previousNode != null) {
-			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+			if (controller.circuitManagement.checkNodeInDeliveryList(previousNode)) {
 				controller.deliveryAddedState.setNode(node);
 				controller.deliveryAddedState.setPreviousNode(previousNode);
 				controller.deliveryAddedState.setDuration(duration);

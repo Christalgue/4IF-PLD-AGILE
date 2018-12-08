@@ -3,11 +3,13 @@ package main.java.view;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import main.java.utils.PopUpType;
+
 public class PopUp extends JFrame{
-	
-	public static final String VALIDATE_ADD = "Voulez-vous vraiment ajouter ce point de livraison ?";
-	public static final String VALIDATE_DELETE = "Voulez-vous vraiment supprimer ce point de livraison ?";
-	public static final String CONTINUE = "Voulez-vous continuer la recherche de chemins ?";
+
+	protected static final String VALIDATE_ADD = "Voulez-vous vraiment ajouter ce point de livraison ?";
+	protected static final String VALIDATE_DELETE = "Voulez-vous vraiment supprimer ce point de livraison ?";
+	protected static final String VALIDATE_CONTINUE = "Voulez-vous continuer la recherche de chemins ?";
 	
 	protected static JOptionPane popUp;
 	
@@ -15,13 +17,13 @@ public class PopUp extends JFrame{
 		popUp = new JOptionPane();
 	}
 	
-	public static int displayPopUp (String message, Window window) {
+	public static int displayPopUp (PopUpType message, Window window) {
 		int userChoice = 0;
 		switch (message){
-			case VALIDATE_ADD: 
-				Object[] validateOptions = {"Valider", "Anuler"};
-				userChoice = popUp.showOptionDialog(window,
-													CONTINUE,
+			case ADD: 
+				Object[] validateOptions = {"Valider", "Annuler"};
+				userChoice = JOptionPane.showOptionDialog(window,
+													VALIDATE_ADD,
 													"Valider ajout de la livraison",
 													JOptionPane.YES_NO_OPTION,
 													JOptionPane.QUESTION_MESSAGE,
@@ -30,10 +32,10 @@ public class PopUp extends JFrame{
 													validateOptions[0]//default button title
 													); 
 			break;
-			case VALIDATE_DELETE: 
-				Object[] deleteOptions = {"Valider", "Anuler"};
-				userChoice = popUp.showOptionDialog(window,
-													CONTINUE,
+			case DELETE: 
+				Object[] deleteOptions = {"Valider", "Annuler"};
+				userChoice = JOptionPane.showOptionDialog(window,
+													VALIDATE_DELETE,
 													"Valider la suppression de la livraison",
 													JOptionPane.YES_NO_OPTION,
 													JOptionPane.QUESTION_MESSAGE,
@@ -44,9 +46,9 @@ public class PopUp extends JFrame{
 			break;
 			case CONTINUE: 
 				Object[] continueOptions = {"Garder", "Continuer"};
-				userChoice = popUp.showOptionDialog(window,
-											CONTINUE,
-											"Meilleure tournee actuelle",
+				userChoice = JOptionPane.showOptionDialog(window,
+											VALIDATE_CONTINUE,
+											"Meilleure tourneee actuelle",
 											JOptionPane.YES_NO_CANCEL_OPTION,
 											JOptionPane.QUESTION_MESSAGE,
 											null,     //do not use a custom Icon

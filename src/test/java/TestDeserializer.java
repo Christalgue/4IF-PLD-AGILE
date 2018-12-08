@@ -114,7 +114,7 @@ class TestDeserializer {
 		} catch (IOException e) {
 			fail("6) IO Exception");
 		} catch (XMLException e) {
-			assertTrue(e.getMessage().contains("Duplicate bow detected"),"5) Wrong XMLException"+e.getMessage());
+			assertTrue(e.getMessage().contains("Duplicate bow detected"),"6) Wrong XMLException"+e.getMessage());
 		}
 		
 		//7
@@ -143,7 +143,6 @@ class TestDeserializer {
 		assertTrue(first.getEndNode().getId()==2,"7) wrong end node (2) : "+first.getEndNode().getId());
 		assertTrue(first.getLength()==79.801414,"7) wrong length (79.801414) : "+first.getLength());
 		assertTrue(first.getStreetName().contains("Rue Edouard Aynard"),"7) wrong street name (Rue Edouard Aynard) : "+first.getStreetName());
-		
 	}
 
 	@Test

@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import main.java.entity.Node;
+import main.java.exception.ManagementException;
 import main.java.view.Window;
 
 public class DeliveryMovedState extends DefaultState {
@@ -18,11 +19,12 @@ public class DeliveryMovedState extends DefaultState {
 	
 	
 	public void cancel (Controller controller, Window window) {
-		controller.setCurrentState(controller.deliverySelectedState);
+		controller.setCurrentState(controller.calcState);
 	}
 	
-	public void validate (Controller controller, Window window) {
-	//	controller.circuitManagement.move
+	public void validate (Controller controller, Window window) throws ManagementException {
+		window.setMessage("");
+		controller.circuitManagement.moveDelivery(node, previousNode);
 		controller.setCurrentState(controller.calcState);
 	}
 

@@ -14,11 +14,13 @@ public class DurationChoiceState extends DefaultState {
 	public void validateDuration (Controller controller, Window window, int duration) {
 		controller.previousDeliverySelectedState.setNode(node);
 		controller.previousDeliverySelectedState.setDuration(duration);
+		window.disableButtonAddDelivery();
 		controller.setCurrentState(controller.previousDeliverySelectedState);
 		
 	}
 	
 	public void cancel (Controller controller, Window window) {
+		window.disableButtonAddDelivery();
 		controller.setCurrentState(controller.calcState);
 	}
 

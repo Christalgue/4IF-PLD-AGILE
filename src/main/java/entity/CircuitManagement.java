@@ -417,8 +417,20 @@ public class CircuitManagement extends Observable{
 		return false;
 	}
 	
+	public Delivery getDeliveryByNode (Node nodeTested) {
+		for (Delivery deliveryTested : this.deliveryList) {
+			if (deliveryTested.getPosition() == nodeTested) {
+				return deliveryTested;
+			}
+		}
+		return null;
+	}
 	
 	public void addDelivery (Node nodeDelivery, int duration, Node previousNode) {
+		addDelivery(nodeDelivery, duration, previousNode, true);
+	}
+	
+	private void addDelivery (Node nodeDelivery, int duration, Node previousNode, boolean changeDeliveryList) {
 		Delivery delivery = new Delivery (nodeDelivery, duration);
 		
 		int position;
@@ -478,11 +490,17 @@ public class CircuitManagement extends Observable{
 				}
 			}
 		}
-		deliveryList.add(delivery);
+		
+		if(changeDeliveryList)
+			deliveryList.add(delivery);
 		
 	}
 	
-	public void removeDelivery (Node nodeDelivery) throws ManagementException {		
+	public void removeDelivery (Node nodeDelivery) throws ManagementException {	
+		removeDelivery (nodeDelivery, true);
+	}
+	
+	private void removeDelivery (Node nodeDelivery, boolean changeDeliveryList) throws ManagementException {		
 		int position;
 		for (Circuit circuit : this.circuitsList) {
 			if ((position=circuit.checkNodeInCircuit(nodeDelivery))!=-1) {
@@ -515,12 +533,25 @@ public class CircuitManagement extends Observable{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					deliveryList.remove(delivery);
+					
+					if(changeDeliveryList)
+						deliveryList.remove(delivery);
+					
 				} else {
 					throw new ManagementException("You cannot remove a repository");
 				}
 			}
 		}
+		
+	}
+	
+	public void moveDelivery(Node node, Node previousNode) throws ManagementException {
+		
+		Delivery delivery = getDeliveryByNode(node);
+		System.out.println(delivery);
+		removeDelivery(node,false);
+		System.out.println(delivery);
+		addDelivery(node, delivery.getDuration(), previousNode,false);
 		
 	}
 	

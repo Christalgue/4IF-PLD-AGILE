@@ -1,5 +1,6 @@
 package main.java.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.TextField;
 import java.io.File;
@@ -12,17 +13,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
+import main.java.utils.PopUpType;
 
 
 public class Window extends JFrame{
 	
 	private Controller controller;
-	private CircuitManagement circuitManagement;
 	private GraphicView graphicView;
 	private TextualView textualView;
 	
@@ -57,14 +61,24 @@ public class Window extends JFrame{
 	protected static final int windowWidth = 1280;
 	protected static final int windowHeight = 720;
 	protected static final int buttonPanelHeight =50;
-	protected static final int graphicWidth = 1080;
+	protected static final int graphicWidth = 1030;
 	protected static final int messageFieldHeight = 40;
+	protected static final int buttonHeight = 40;
+	protected static final int buttonSpace = 10;
+	
 	
 	protected static final int pathWidth = 3;
 	
 	protected static final Color selectedColor = Color.GREEN;
-	protected final static Color messageColor = Color.GREEN; 
-
+	protected static final Color hoverColor = Color.BLUE;
+	protected static final Color unselectedColor = Color.WHITE;
+	
+	protected JTree textualViewTree;
+	protected DefaultMutableTreeNode treeRoot;
+	
+	protected Node selectedNode;
+	protected Node hoverNode;
+	
 	/**
 	 * Default constructor
 	 */
@@ -75,22 +89,15 @@ public class Window extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public Window (CircuitManagement circuitManagement, Controller controller){
-		this.circuitManagement = circuitManagement;
-		this.controller = controller;
-	}
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
+	public Window (Controller controller){
 		
-		Controller controller = new Controller(new CircuitManagement());
+		this.controller = controller;
+		
 		buttonsListener = new ButtonsListener(controller);
+		CircuitManagement circuitManagement = controller.getCircuitManagement();
 		
 		//////////////////////////////CREATE THE MAIN WINDOW//////////////////////////////
-		
-		setControllerWindow(controller.getWindow());	
+		setControllerWindow(this);
 		
 		//////////////////////////////CREATE THE HEADER PANEL/////////////////////////////
 		JPanel buttonPanel = new JPanel();
@@ -98,45 +105,55 @@ public class Window extends JFrame{
 		
 		//////////////////////////////CREATE THE GRAPHIC VIEW//////////////////////////////
 		
-		controller.getWindow().graphicView = new GraphicView (controller.getWindow().circuitManagement, windowHeight-buttonPanelHeight, graphicWidth, pathWidth);
-		setGraphicView(controller.getWindow().graphicView);
-		mouseListener = new MouseListener(controller, controller.getWindow().graphicView,controller.getWindow());
-		controller.getWindow().addMouseListener(mouseListener);
+		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth);
+		setGraphicView(this.graphicView);
+		mouseListener = new MouseListener(controller, this.graphicView, this);
+		this.graphicView.addMouseListener(mouseListener);
+		this.graphicView.addMouseMotionListener(mouseListener);
 		
 		//////////////////////////////CREATE THE TEXTUAL VIEW/////////////////////////////
 		
-		controller.getWindow().textualView = new TextualView (controller.getWindow().circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth);
-		setTextualView(controller.getWindow().textualView);
+		this.treeRoot = createTree();
+		this.textualViewTree = new JTree (this.treeRoot);
+		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this.textualViewTree);
+		setTextualView(this.textualView);
 		
 		//////////////////////////////CREATE THE MESSAGE FIELD/////////////////////////////
 		
-		controller.getWindow().messageField = new JLabel();
-		setMessageField(controller.getWindow().messageField);
+		this.messageField = new JLabel();
+		setMessageField(this.messageField);
 		
 		//////////////////////////////ADD PANELS TO THE WINDOW//////////////////////////////
-		controller.getWindow().getContentPane().add(buttonPanel);
-		controller.getWindow().getContentPane().add(controller.getWindow().textualView);
-		controller.getWindow().getContentPane().add(controller.getWindow().messageField);
-		controller.getWindow().getContentPane().add(controller.getWindow().graphicView);
+		this.getContentPane().add(buttonPanel);
+		this.getContentPane().add(this.textualView);
+		this.getContentPane().add(this.messageField);
+		this.getContentPane().add(this.graphicView);
 		
 		////////////////////////////// MAKE THE FRAME VISBLE AND PAINTABLE ////////////////////////////////
-		controller.getWindow().setVisible(true);
+		this.setVisible(true);
 		
-		controller.getWindow().graphicView.setGraphics();
+		this.graphicView.setGraphics();
 		
-		controller.getWindow().setMessage("Coucou");
-	}	
+	}
 	
+	private static DefaultMutableTreeNode createTree() {
+		
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
+		return root;
+	}
+
+	//////////////////////////////PUT COMPOSANTS IN PLACE/////////////////////////////
 	private static void setMessageField(JLabel messageField) {
 		messageField.setSize( graphicWidth, messageFieldHeight);
 		messageField.setLocation(0, buttonPanelHeight);
 		messageField.setOpaque(true);
-		messageField.setBackground(messageColor);
 		messageField.setForeground(Color.WHITE);
-		
+		messageField.setBackground(Color.GREEN);
+		messageField.setText("Veuillez selectionner un plan a charger");
+	
 	}
 
-	public static void setControllerWindow( Window window) {
+	public static void setControllerWindow(Window window) {
 		
 		window.setLayout(null);
 		window.setSize(windowWidth, windowHeight);
@@ -159,27 +176,34 @@ public class Window extends JFrame{
 	private static void setTextualView(TextualView textualView) {
 		
 		textualView.setLocation(graphicWidth, buttonPanelHeight);
-		textualView.setLayout(null);
 		textualView.setBackground(Color.WHITE);
 		textualView.setSize(windowWidth-graphicWidth, windowHeight-buttonPanelHeight);
-		
-		textualView.setBorder(BorderFactory.createTitledBorder("Vue Textuelle"));
+		textualView.setLayout(null);
 		
 		addDeliveryButton = new JButton(ADD_DELIVERY);
 		addDeliveryButton.addActionListener(buttonsListener);
-		addDeliveryButton.setVisible(false);
+		addDeliveryButton.setVisible(true);
+		addDeliveryButton.setEnabled(false);
+		addDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight*3+2*buttonSpace+50));
+		addDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
 		textualView.add(addDeliveryButton);
 	
 		deleteDeliveryButton = new JButton(DELETE_DELIVERY);
 		deleteDeliveryButton.addActionListener(buttonsListener);
-		deleteDeliveryButton.setVisible(false);
+		deleteDeliveryButton.setVisible(true);
+		deleteDeliveryButton.setEnabled(false);
+		deleteDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight*2+buttonSpace+50));
+		deleteDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
 		textualView.add(deleteDeliveryButton);	
 	
 		moveDeliveryButton = new JButton(MOVE_DELIVERY);
 		moveDeliveryButton.addActionListener(buttonsListener);
-		moveDeliveryButton.setVisible(false);
-		textualView.add(moveDeliveryButton);	
-	
+		moveDeliveryButton.setVisible(true);
+		moveDeliveryButton.setEnabled(false);
+		moveDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight+50));
+		moveDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
+		textualView.add(moveDeliveryButton);
+			
 	}
 	
 	public static void fillButtonPanel(JPanel buttonPanel) {
@@ -197,6 +221,8 @@ public class Window extends JFrame{
 		
 		setNameOfDeliveryList = new TextField();
 		setNameOfDeliveryList.setText("resources/xml/dl-moyen-9.xml");
+		//setNameOfDeliveryList.setText("resources/xml/dl-petit-23.xml");
+		setNameOfDeliveryList.setEditable(true);
 		buttonPanel.add(setNameOfDeliveryList);
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
@@ -211,6 +237,7 @@ public class Window extends JFrame{
 		
 		numberOfDeliveryMen = new TextField();
 		numberOfDeliveryMen.setText("1");
+		numberOfDeliveryMen.setEditable(true);
 		buttonPanel.add(numberOfDeliveryMen);
 	
 		/*JButton undoButton = new JButton("Retour");
@@ -223,7 +250,7 @@ public class Window extends JFrame{
 		buttonPanel.add(calculateCircuitButton);
 	}
 	
-	
+	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
 	protected String getFile () {
 			
 		chooser = new JFileChooser();
@@ -236,6 +263,7 @@ public class Window extends JFrame{
 		return filePath;
 	}
 
+	//// Alternatives aux gestionnaires de fichiers
 	public static void getDeliveryMenNumber() {
 		
 		buttonsListener.setDeliveryMenNumber(Integer.parseInt(numberOfDeliveryMen.getText()));
@@ -247,6 +275,7 @@ public class Window extends JFrame{
 		buttonsListener.setMap(setNameOfMap.getText());
 		
 	}
+	/////
 	
 	public static void getDeliveryListName() {
 		
@@ -254,14 +283,21 @@ public class Window extends JFrame{
 		
 	}
 	
+	//////////////////////////////CHANGE DISPLAYED TEXT/////////////////////////////
 	public void setTextualViewBorderTitle( String string) {	
 		textualView.setBorder(BorderFactory.createTitledBorder(string));
 	}
 	
 	public void setMessage( String string) {
+		messageField.setBackground(Color.GREEN);
 		messageField.setText(string);
 	}
 	
+	public void setErrorMessage( String string) {
+		messageField.setBackground(Color.RED);
+		messageField.setText(string);
+	}
+	//////////////////////////////DRAW COMPOSANTS/////////////////////////////
 	public void drawMap() {
 		graphicView.removeAll();
 		graphicView.update(graphicView.getGraphic());
@@ -271,33 +307,98 @@ public class Window extends JFrame{
 	public void drawDeliveries() {
 		drawMap();
 		graphicView.paintDeliveries(graphicView.getGraphic());
+		textualView.fillDeliveryTree();
 	}
 	
 	public void drawCircuits() {
 		drawDeliveries();
 		graphicView.paintCircuits(graphicView.getGraphic());
+		textualView.fillCircuitTree();
 	}
 	
-	public void nodeSelected( Node node) {
+	public void nodeSelected(Node node) {
+		if(selectedNode!=null){
+			graphicView.paintSelectedNode(graphicView.getGraphic(), selectedNode, unselectedColor);
+		}
+		
 		graphicView.paintSelectedNode(graphicView.getGraphic(), node, selectedColor);
+		hoverNode = null;
+		selectedNode = node;
 	}
 	
-	public void generatePopUpContinueCalc(String message, Window window) {
-		int result = popUp.displayPopUp(message, window);
-		if(result == 0) {
-			controller.continueCalculation(false);
-		} else {
-			controller.continueCalculation(true);
+	public void nodeHover(Node node) {
+		//Mouse exit a node
+		if(node == null && hoverNode!=null) {
+			graphicView.paintSelectedNode(graphicView.getGraphic(), hoverNode, unselectedColor);
+			hoverNode = node;
+		}
+		//Cannot hover a selected node
+		else if (selectedNode == null || (node != null && node.getId()!=selectedNode.getId())){
+			//Mouse enter a node
+			if(node!=null && hoverNode == null) {
+				graphicView.paintSelectedNode(graphicView.getGraphic(), node, hoverColor);
+			}
+			//Mouse pass from one node to another
+			else if(node!=null && node.getId()!=hoverNode.getId()) {
+				graphicView.paintSelectedNode(graphicView.getGraphic(), hoverNode, unselectedColor);
+				graphicView.paintSelectedNode(graphicView.getGraphic(), node, hoverColor);
+			}
+			hoverNode = node;
 		}
 	}
-
-	public static PopUp getPopUp() {
-		return popUp;
-	}
-
-	protected static void setPopUp(PopUp popUp) {
-		Window.popUp = popUp;
+	
+	public void fillDeliveryTree() {
+		textualView.fillDeliveryTree();
 	}
 	
+	//////////////////////////////BUTTON ACTIVATION/////////////////////////////
+	public void enableButtonLoadDeliveriesList() {
+		loadDeliveryList.setEnabled(true);
+	}
 	
+	public void enableButtonCalculateCircuit() {
+		calculateCircuitButton.setEnabled(true);
+	}	
+	
+	public void enableButtonAddDelivery() {
+		addDeliveryButton.setVisible(true);
+		addDeliveryButton.setEnabled(true);
+	}
+	
+	public void enableButtonDeleteDelivery() {
+		deleteDeliveryButton.setVisible(true);;
+		deleteDeliveryButton.setEnabled(true);
+	}
+	
+	public void enableButtonMoveDelivery() {
+		moveDeliveryButton.setVisible(true);;
+		moveDeliveryButton.setEnabled(true);
+	}
+
+	
+	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
+	public void disableButtonLoadDeliveriesList() {
+		loadDeliveryList.setEnabled(false);
+	}
+	
+	public void disableButtonCalculateCircuit() {
+		calculateCircuitButton.setEnabled(false);
+	}	
+	
+	public void disableButtonAddDelivery() {
+		addDeliveryButton.setEnabled(false);
+	}
+	
+	public void disableButtonDeleteDelivery() {
+		deleteDeliveryButton.setEnabled(false);
+	}
+	
+	public void disableButtonMoveDelivery() {
+		moveDeliveryButton.setEnabled(false);
+	}
+	
+	public int getPopUpValue(PopUpType message, Window window) {
+		return popUp.displayPopUp(message, window);
+	}
+
 }

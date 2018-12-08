@@ -2,6 +2,7 @@ package main.java.controller;
 
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.exception.ManagementException;
 import main.java.view.Window;
 
 public abstract class DefaultState implements State {
@@ -16,7 +17,7 @@ public abstract class DefaultState implements State {
 	
 	public void addDelivery(Controller controller, Window window){}
 	
-	//public void validate(Controller controller, Window window){}
+	public void validate(Controller controller, Window window) throws ManagementException{}
 	
 	public void cancel(Controller controller, Window window){}
 	
