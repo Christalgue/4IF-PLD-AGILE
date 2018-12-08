@@ -5,9 +5,9 @@ import javax.swing.JOptionPane;
 
 public class PopUp extends JFrame{
 	
-	protected static final String VALIDATE_ADD = "Voulez-vous vraiment ajouter ce point de livraison ?";
-	protected static final String VALIDATE_DELETE = "Voulez-vous vraiment supprimer ce point de livraison ?";
-	protected static final String CONTINUE = "Voulez-vous continuer la recherche de chemins ?";
+	public static final String VALIDATE_ADD = "Voulez-vous vraiment ajouter ce point de livraison ?";
+	public static final String VALIDATE_DELETE = "Voulez-vous vraiment supprimer ce point de livraison ?";
+	public static final String CONTINUE = "Voulez-vous continuer la recherche de chemins ?";
 	
 	protected static JOptionPane popUp;
 	
@@ -46,7 +46,7 @@ public class PopUp extends JFrame{
 				Object[] continueOptions = {"Garder", "Continuer"};
 				userChoice = popUp.showOptionDialog(window,
 											CONTINUE,
-											"Meilleure tournée actuelle",
+											"Meilleure tournee actuelle",
 											JOptionPane.YES_NO_CANCEL_OPTION,
 											JOptionPane.QUESTION_MESSAGE,
 											null,     //do not use a custom Icon

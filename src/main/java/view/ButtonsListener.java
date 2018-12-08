@@ -67,7 +67,7 @@ public class ButtonsListener implements ActionListener {
 			break;
 		case Window.CALCULATE_CIRCUITS: 
 			Window.getDeliveryMenNumber();
-			int popUpValue = controller.getWindow().getPopUpValue(controller.getWindow().popUp.CONTINUE, controller.getWindow());
+			//int popUpValue = controller.getWindow().getPopUpValue(controller.getWindow().popUp.CONTINUE, controller.getWindow());
 			controller.calculateCircuits(deliveryMenNumber); 
 			break;
 		//case Window.UNDO: controller.undo(); break;

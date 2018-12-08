@@ -336,7 +336,7 @@ public class CircuitManagement extends Observable{
     public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, LoadDeliveryException, ClusteringException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException {
     	
     	if(continueInterruptedCalculation == false) {
-
+    		this.circuitsList = null;
         	if(nbDeliveryman>0){
         		this.nbDeliveryMan = nbDeliveryman;
         	}
@@ -379,29 +379,33 @@ public class CircuitManagement extends Observable{
     						throw e;
     					}
         			}
-        			Circuit circuit = new Circuit(arrivalDeliveries);
+        			Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths);
+        			this.circuitsList.add(circuit);
+        			System.out.println("circuit créé");
+        		}
+        		for(Circuit circuit : this.circuitsList) {
         			try {
-        				circuit.createCircuit( repository, allPaths);
-        				System.out.println("salut");
-        				System.out.println(circuit.getPath().toString());
-					} catch (TSPLimitTimeReachedException e) {
-						System.out.println(e.getMessage());
-						throw e;
-					} finally {
-						this.circuitsList.add(circuit);
-					}
+        				circuit.createCircuit();
+        				//System.out.println(circuit.getPath().toString());
+    				} catch (TSPLimitTimeReachedException e) {
+    					//System.out.println(e.getMessage());
+    					throw e;
+    				} 
         		}
         	}
     	} else {
+    		System.out.println("passage par CM_calculateCircuits");
     		for(Circuit circuitTested : this.circuitsList)
     		{
-    			if(circuitTested.getRepositorySVG() != null && circuitTested.getAllPathsSVG() != null) {
+    			if(circuitTested.calculationIsFinished == false) {
     				circuitTested.continueCalculation();
-    				circuitTested.setRepositorySVG(null);
-    				circuitTested.setAllPathsSVG(null);
     			}
     		}
     	}
+    	
+    }
+    
+    public void cleanExecutionStacks() {
     	
     }
 

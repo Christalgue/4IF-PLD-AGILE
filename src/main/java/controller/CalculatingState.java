@@ -13,8 +13,6 @@ public class CalculatingState extends DefaultState {
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating) {
 		if(keepCalculating == true) {
 			try {
-				System.out.println(keepCalculating);
-				System.out.println("///////////////////////////////////////////////////////////////////////////////////////////////////////");
 				controller.circuitManagement.calculateCircuits(controller.circuitManagement.getNbDeliveryMan(), keepCalculating);
 				controller.setCurrentState(controller.calcState);
 			} catch (MapNotChargedException e) {
@@ -33,8 +31,9 @@ public class CalculatingState extends DefaultState {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (TSPLimitTimeReachedException e) {
-				System.out.println(e.getMessage());
 				controller.setCurrentState(controller.calculatingState);
+				window.drawCircuits();
+				window.generatePopUpContinueCalc(window.getPopUp().CONTINUE, window);
 			}
 		} else {
 			controller.setCurrentState(controller.calcState);
@@ -43,7 +42,7 @@ public class CalculatingState extends DefaultState {
 	
 	// just to have a gateway while the implementation is not finished
 	// to delete afterwards
-	public void loadDeliveryOffer(Controller controller, Window window, String filename){
+	/*public void loadDeliveryOffer(Controller controller, Window window, String filename){
 		
 		try {
 			controller.circuitManagement.loadDeliveryList(filename);
@@ -54,5 +53,5 @@ public class CalculatingState extends DefaultState {
 			e.printStackTrace();
 		}
 		
-	}
+	}*/
 }

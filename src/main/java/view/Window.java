@@ -40,7 +40,7 @@ public class Window extends JFrame{
 	protected static final String DELETE_DELIVERY = "Supprimer la livraison";
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
-	protected static final String STOP_CALCULATION = "Arr�ter le calcul des tournees";
+	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
@@ -188,7 +188,7 @@ public class Window extends JFrame{
 		buttonPanel.setBackground(Color.WHITE);
 		
 		setNameOfMap = new TextField();
-		setNameOfMap.setText("resources/xml/grandPlan.xml");
+		setNameOfMap.setText("resources/xml/moyenPlan.xml");
 		buttonPanel.add(setNameOfMap);
 		
 		JButton loadMapButton = new JButton(LOAD_MAP);
@@ -196,7 +196,7 @@ public class Window extends JFrame{
 		buttonPanel.add(loadMapButton);
 		
 		setNameOfDeliveryList = new TextField();
-		setNameOfDeliveryList.setText("resources/xml/dl-grand-20.xml");
+		setNameOfDeliveryList.setText("resources/xml/dl-moyen-9.xml");
 		buttonPanel.add(setNameOfDeliveryList);
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
@@ -282,7 +282,22 @@ public class Window extends JFrame{
 		graphicView.paintSelectedNode(graphicView.getGraphic(), node, selectedColor);
 	}
 	
-	public int getPopUpValue(String message, Window window) {
-		return popUp.displayPopUp(message, window);
+	public void generatePopUpContinueCalc(String message, Window window) {
+		int result = popUp.displayPopUp(message, window);
+		if(result == 0) {
+			controller.continueCalculation(false);
+		} else {
+			controller.continueCalculation(true);
+		}
 	}
+
+	public static PopUp getPopUp() {
+		return popUp;
+	}
+
+	protected static void setPopUp(PopUp popUp) {
+		Window.popUp = popUp;
+	}
+	
+	
 }

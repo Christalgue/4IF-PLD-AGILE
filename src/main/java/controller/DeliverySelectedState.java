@@ -65,6 +65,7 @@ public class DeliverySelectedState extends DefaultState {
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan){
 		try {
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
+			controller.setCurrentState(controller.calcState);
 			window.drawCircuits();
 		} catch (ClusteringException e)
 		{
@@ -84,7 +85,9 @@ public class DeliverySelectedState extends DefaultState {
 		} catch (TSPLimitTimeReachedException e) {
 			System.out.println(e.getMessage());
 			controller.setCurrentState(controller.calculatingState);
+			System.out.println("*********************************************************************");
 			window.drawCircuits();
+			window.generatePopUpContinueCalc(window.getPopUp().CONTINUE, window);
 		}
 	
 	}

@@ -60,6 +60,7 @@ public class DeliveryLoadedState extends DefaultState {
 			controller.setCurrentState(controller.calculatingState);
 			System.out.println("*********************************************************************");
 			window.drawCircuits();
+			window.generatePopUpContinueCalc(window.getPopUp().CONTINUE, window);
 		}
 		
 	}
