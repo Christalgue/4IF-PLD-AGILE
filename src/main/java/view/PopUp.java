@@ -81,7 +81,7 @@ public class PopUp extends JFrame{
 											continueOptions,
 											continueOptions[0]
 											);
-				//window.manageContinuePopUpValue(userChoice);
+				window.manageContinuePopUpValue(userChoice);
 				break;
 		}
 		return userChoice;

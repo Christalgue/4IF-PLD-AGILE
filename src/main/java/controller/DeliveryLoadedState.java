@@ -65,16 +65,10 @@ public class DeliveryLoadedState extends DefaultState {
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
 			System.out.println(e.getMessage());
-			int popUpValue = controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
-			if(popUpValue == JOptionPane.NO_OPTION) {
-				window.drawCircuits();
-				controller.setCurrentState(controller.calculatingState);
-				System.out.println("*********************************************************************");
-			}
-			else {
-				window.drawCircuits();
-				controller.setCurrentState(controller.calcState);
-			}
+			window.drawCircuits();
+			controller.setCurrentState(controller.calculatingState);
+			//System.err.println("*********************************************************************");
+			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		}
 		
 	}

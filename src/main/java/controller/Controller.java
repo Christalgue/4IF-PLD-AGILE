@@ -108,6 +108,11 @@ public class Controller {
 		currentState.cancel(this, window);
 	}
 	
+	public void validateContinue() throws ManagementException {
+		currentState.validate(this, window);
+	}
+	
+	
 	public void rightClick() {
 		currentState.rightClick(this, window);
 	}

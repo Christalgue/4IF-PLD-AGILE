@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
+import main.java.exception.ManagementException;
 import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
 import main.java.exception.TSPLimitTimeReachedException;
@@ -35,34 +36,13 @@ public class CalculatingState extends DefaultState {
 				e.printStackTrace();
 			} catch (TSPLimitTimeReachedException e) {
 				System.out.println(e.getMessage());
-				int popUpValue = controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
-				if(popUpValue == JOptionPane.NO_OPTION) {
-					window.drawCircuits();
-					controller.setCurrentState(controller.calculatingState);
-					System.out.println("*********************************************************************");
-				}
-				else {
-					window.drawCircuits();
-					controller.setCurrentState(controller.calcState);
-				}
+				window.drawCircuits();
+				//controller.setCurrentState(controller.calculatingState);
+				//System.err.println("*********************************************************************");
+				controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 			}
 		} else {
 			controller.setCurrentState(controller.calcState);
 		}
 	}
-	
-	// just to have a gateway while the implementation is not finished
-	// to delete afterwards
-	/*public void loadDeliveryOffer(Controller controller, Window window, String filename){
-		
-		try {
-			controller.circuitManagement.loadDeliveryList(filename);
-			window.drawDeliveries();
-			controller.setCurrentState(controller.deliveryLoadedState);
-		} catch (LoadDeliveryException e)
-		{
-			e.printStackTrace();
-		}
-		
-	}*/
 }
