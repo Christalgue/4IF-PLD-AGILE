@@ -410,6 +410,8 @@ public class Window extends JFrame{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			controller.cancelAdd();
 		}
 	}
 	
@@ -421,6 +423,8 @@ public class Window extends JFrame{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			controller.cancelDelete();
 		}
 	}
 	
@@ -433,6 +437,8 @@ public class Window extends JFrame{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			controller.cancelDuration();
 		}
 	}*/
 	
@@ -444,6 +450,8 @@ public class Window extends JFrame{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			controller.cancelMove();
 		}
 	}
 	
@@ -456,6 +464,8 @@ public class Window extends JFrame{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			controller.cancelContinue();
 		}
 	}*/
 
