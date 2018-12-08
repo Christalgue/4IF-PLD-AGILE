@@ -27,7 +27,7 @@ public class DeliverySelectedState extends DefaultState {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (node != null)
 		{
-			window.nodeSelected(node);
+			//window.nodeSelected(node);
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);

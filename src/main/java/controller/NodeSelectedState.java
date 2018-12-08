@@ -32,7 +32,7 @@ public class NodeSelectedState extends DefaultState {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (node != null)
 		{
-			window.nodeSelected(node);
+			//window.nodeSelected(node);
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
 				window.enableButtonMoveDelivery();
 				window.enableButtonDeleteDelivery();
