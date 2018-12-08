@@ -213,7 +213,7 @@ public class Window extends JFrame{
 		buttonPanel.setBackground(Color.WHITE);
 		
 		setNameOfMap = new TextField();
-		setNameOfMap.setText("resources/xml/petitPlan.xml");
+		setNameOfMap.setText("resources/xml/moyenPlan.xml");
 		buttonPanel.add(setNameOfMap);
 		
 		JButton loadMapButton = new JButton(LOAD_MAP);
@@ -221,7 +221,7 @@ public class Window extends JFrame{
 		buttonPanel.add(loadMapButton);
 		
 		setNameOfDeliveryList = new TextField();
-		setNameOfDeliveryList.setText("resources/xml/dl-petit-3.xml");
+		setNameOfDeliveryList.setText("resources/xml/dl-moyen-9.xml");
 		setNameOfDeliveryList.setEditable(true);
 		buttonPanel.add(setNameOfDeliveryList);
 		
@@ -374,7 +374,7 @@ public class Window extends JFrame{
 		moveDeliveryButton.setVisible(true);;
 		moveDeliveryButton.setEnabled(true);
 	}
-	
+
 	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
 	public void disableButtonLoadDeliveriesList() {

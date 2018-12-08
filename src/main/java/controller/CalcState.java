@@ -50,6 +50,7 @@ public class CalcState extends DefaultState {
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan){
 		try {
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
+			controller.setCurrentState(controller.calcState);
 			window.drawCircuits();
 		} catch (ClusteringException e)
 		{
@@ -68,6 +69,7 @@ public class CalcState extends DefaultState {
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
 			System.out.println(e.getMessage());
+
 			int popUpValue = controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 			if(popUpValue == JOptionPane.NO_OPTION) {
 				window.drawCircuits();

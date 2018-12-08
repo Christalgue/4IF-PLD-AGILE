@@ -63,36 +63,39 @@ public class CircuitView extends JPanel {
 		super.paintComponent(g);
 		g.setColor(color);
 		
-		for( AtomicPath entry : circuit.getPath()) {
-		    
-			for ( Bow bow: entry.getPath()) {
-				
-				drawBow(g, bow);
-				
-				
-				if (arrow) {
-					start = graphicView.nodeToPoint( bow.getStartNode());
-					end = graphicView.nodeToPoint ( bow.getEndNode());
-					drawArrow(g, start, end);
-				}
-				
-				arrow = !arrow;
-				
-				/*atomicPathIndex++;
-				
-				if ( atomicPathIndex == entry.getPath().size() ) {	
+		if(circuit.getPath() != null) {
+			for( AtomicPath entry : circuit.getPath()) {
+			    
+				for ( Bow bow: entry.getPath()) {
 					
-					start = graphicView.nodeToPoint( bow.getStartNode());
-				 	end = graphicView.nodeToPoint ( bow.getEndNode());
-					drawArrow(g, start, end);
-					atomicPathIndex =0;
-				}*/
-				
-				
-				
+					drawBow(g, bow);
+					
+					
+					if (arrow) {
+						start = graphicView.nodeToPoint( bow.getStartNode());
+						end = graphicView.nodeToPoint ( bow.getEndNode());
+						drawArrow(g, start, end);
+					}
+					
+					arrow = !arrow;
+					
+					/*atomicPathIndex++;
+					
+					if ( atomicPathIndex == entry.getPath().size() ) {	
+						
+						start = graphicView.nodeToPoint( bow.getStartNode());
+					 	end = graphicView.nodeToPoint ( bow.getEndNode());
+						drawArrow(g, start, end);
+						atomicPathIndex =0;
+					}*/
+					
+					
+				}
 			}
-		
 		}
+		
+		
+		
 	}	
 	
 	public void drawBow( Graphics2D g, Bow bow) {

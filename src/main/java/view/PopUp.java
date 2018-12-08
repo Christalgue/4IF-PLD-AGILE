@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 import main.java.utils.PopUpType;
 
 public class PopUp extends JFrame{
-	
+
 	protected static final String VALIDATE_ADD = "Voulez-vous vraiment ajouter ce point de livraison ?";
 	protected static final String VALIDATE_ADD_DURATION = "Veuillez entrer la durée de la livraison.";
 	protected static final String VALIDATE_MOVE = "Voulez-vous vraiment déplacer cette livraison ?";
@@ -74,7 +74,7 @@ public class PopUp extends JFrame{
 				Object[] continueOptions = {"Garder", "Continuer"};
 				userChoice = JOptionPane.showOptionDialog(window,
 											VALIDATE_CONTINUE,
-											"Meilleure tournée actuelle",
+											"Meilleure tourneee actuelle",
 											JOptionPane.YES_NO_CANCEL_OPTION,
 											JOptionPane.QUESTION_MESSAGE,
 											null,
