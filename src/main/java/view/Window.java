@@ -97,6 +97,7 @@ public class Window extends JFrame{
 		
 		buttonsListener = new ButtonsListener(controller);
 		keyListener = new KeyListener(controller);
+		this.setFocusable(true);
 		this.addKeyListener(keyListener);
 		CircuitManagement circuitManagement = controller.getCircuitManagement();
 		
