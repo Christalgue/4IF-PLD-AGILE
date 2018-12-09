@@ -14,7 +14,6 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import main.java.controller.Controller;
 import main.java.entity.Circuit;
@@ -114,8 +113,8 @@ public class Window extends JFrame{
 		this.treeRoot = createTree();
 		this.textualViewTree = new JTree (this.treeRoot);
 		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this.textualViewTree);
-		this.getDeliveryByTextualView(textualViewTree);
 		setTextualView(this.textualView);
+		addTreeListener();
 		
 		//////////////////////////////CREATE THE MESSAGE FIELD/////////////////////////////
 		
@@ -209,6 +208,36 @@ public class Window extends JFrame{
 		textualView.add(moveDeliveryButton);
 			
 	}
+	
+	 public void addTreeListener () {
+		 
+		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
+		    public void valueChanged(TreeSelectionEvent e) {
+		        DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
+		        
+		        String deliveryInfo = (String) deliveryPoint.getUserObject();
+		        
+		        if (!deliveryInfo.startsWith("Entrepot")) {
+		        	
+		        	if (!deliveryInfo.startsWith("Tournee")) {
+		        		String secondPart = deliveryInfo.substring(10);
+		        		String[] split = secondPart.split(":");
+		        		String deliveryNumber = split[0];
+		        		int deliveryIndex = Integer.parseInt(deliveryNumber);
+		        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
+		        		nodeSelected(delivery);
+		        		controller.treeDeliverySelected(delivery);
+		        	} else {
+		        		String secondPart = deliveryInfo.substring(8);
+		        		String[] split = secondPart.split(":");
+		        		String circuitNumber = split[0];
+		        		int circuitIndex = Integer.parseInt(circuitNumber);	
+		        		textualCircuitSelected(circuitIndex);
+		        	}
+		        }
+		    }     
+});
+		}
 	
 	public static void fillButtonPanel(JPanel buttonPanel) {
 		
@@ -329,6 +358,8 @@ public class Window extends JFrame{
 		selectedNode = delivery;
 	}
 	
+	
+	
 	public void circuitSelected(Delivery selectedDelivery) {
 
 		if ( selectedDelivery.getDuration() != -1 ) {
@@ -342,6 +373,10 @@ public class Window extends JFrame{
 			}
 		}
 	}
+	
+	public void textualCircuitSelected(int circuitIndex) {
+		graphicView.paintSelectedCircuit(circuitIndex);
+	}	
 	
 	public void nodeHover(Delivery delivery) {
 		//Mouse exit a node
@@ -485,20 +520,4 @@ public class Window extends JFrame{
 		}
 	 }
 	 
-	 public void getDeliveryByTextualView (JTree textualViewTree) {
-		 
-		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
-		    public void valueChanged(TreeSelectionEvent e) {
-		        DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
-		        
-		        String deliveryInfo = (String) deliveryPoint.getUserObject();
-		        
-		        if (!deliveryInfo.startsWith("Entrepot")) {
-		        	String deliveryNumber = deliveryInfo.substring(10, 11);
-		        	int deliveryIndex = Integer.parseInt(deliveryNumber);
-		        	System.out.println(deliveryIndex);
-		        }
-		    }
-});
-		}
 }

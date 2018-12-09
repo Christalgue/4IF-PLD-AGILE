@@ -1,11 +1,6 @@
 package main.java.view;
 
-import java.awt.BorderLayout;
-import java.awt.Graphics2D;
-import java.util.List;
-
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -13,13 +8,10 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreePath;
 
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
-import main.java.entity.Node;
 
 public class TextualView extends JPanel{
 
@@ -48,7 +40,10 @@ public class TextualView extends JPanel{
 		this.deliveryTree = deliveryTree;
 		this.treeRoot = (DefaultMutableTreeNode) deliveryTree.getModel().getRoot();
 		
-		this.deliveryTree.setRootVisible(true);
+		//this.addTreeListener();
+		
+		this.deliveryTree.expandRow(0);
+		this.deliveryTree.setRootVisible(false);
 		this.deliveryTree.setShowsRootHandles(true);
 		
 		this.treeModel = (DefaultTreeModel) this.deliveryTree.getModel();
@@ -60,6 +55,32 @@ public class TextualView extends JPanel{
 		this.setVisible(true);
 		
 	}
+	
+/*	 public void addTreeListener () {
+		 
+		 deliveryTree.addTreeSelectionListener(new TreeSelectionListener() {
+		    public void valueChanged(TreeSelectionEvent e) {
+		        DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) deliveryTree.getLastSelectedPathComponent();
+		        
+		        String deliveryInfo = (String) deliveryPoint.getUserObject();
+		        
+		        if (!deliveryInfo.startsWith("Entrepot")) {
+		        	
+		        	if (!deliveryInfo.startsWith("Tournee")) {
+		        		String secondPart = deliveryInfo.substring(10);
+		        		String[] split = secondPart.split(":");
+		        		String deliveryNumber = split[0];
+		        		int deliveryIndex = Integer.parseInt(deliveryNumber);
+		        	} else {
+		        		String secondPart = deliveryInfo.substring(8);
+		        		String[] split = secondPart.split(":");
+		        		String circuitNumber = split[0];
+		        		int circuitIndex = Integer.parseInt(circuitNumber);	        		
+		        	}
+		        }
+		    }     
+});
+		}*/
 
 	public void fillDeliveryTree() {
 		
@@ -88,6 +109,7 @@ public class TextualView extends JPanel{
 			}
 			
 		}
+		treeModel.nodeStructureChanged( treeRoot );
 			
 	}
 	
@@ -131,6 +153,8 @@ public class TextualView extends JPanel{
 			deliveryIndex =0;
 			
 		}
+		
+		treeModel.nodeStructureChanged( treeRoot );
 		
 	}
 	

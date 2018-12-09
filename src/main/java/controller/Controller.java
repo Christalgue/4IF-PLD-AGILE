@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import main.java.entity.CircuitManagement;
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.exception.ManagementException;
@@ -143,6 +144,10 @@ public class Controller {
 		
 		//si tournees deja calculees
 		// window.circuitSelected(isDelivery);
+	}
+	
+	public void treeDeliverySelected(Delivery deliverySelected) {
+		
 	}
 	
 	public void mouseMoved( Point point) {

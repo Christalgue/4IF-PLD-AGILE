@@ -1,22 +1,13 @@
 package main.java.view;
 
-import java.util.Map;
-import java.util.Observable;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.*;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Observer;
-import java.util.Set;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
-import com.sun.corba.se.spi.activation.Repository;
-
-import main.java.entity.Bow;
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
@@ -35,7 +26,7 @@ public class GraphicView extends JPanel {
 	private int viewHeight;
 	private int viewWidth;
 
-	private main.java.entity.CircuitManagement circuitManagement;
+	private CircuitManagement circuitManagement;
 	private Graphics2D g;
 
 	private MapView mapView;
@@ -57,7 +48,7 @@ public class GraphicView extends JPanel {
 	 * 
 	 * @param circuitManagement the CircuitManagement
 	 */
-	public GraphicView(main.java.entity.CircuitManagement circuitManagement, int viewHeight, int viewWidth, int width) {
+	public GraphicView(CircuitManagement circuitManagement, int viewHeight, int viewWidth, int width) {
 
 		super();
 
@@ -213,22 +204,32 @@ public class GraphicView extends JPanel {
 		} else {
 			g.setColor(hoverColor);
 		}
-		mapView.drawNode(g, delivery.getPosition());
+		
+		if (delivery.getDuration() == -1) {
+			mapView.drawNode(g, delivery.getPosition());
+		} else {
+			deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery));
+		}
 	}
 
 	public void unPaintNode ( Delivery delivery) {
 		
 		if (delivery.getDuration() == -1) {
 			g.setColor(nodeColor);
+			mapView.drawNode(g, delivery.getPosition());
 		} else {
 			g.setColor(deliveryColor);
+			deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery));
+
 		}
-		
-		mapView.drawNode(g, delivery.getPosition());
 	}
 
 	public void paintSelectedCircuit(Circuit circuit) {
 		circuitView.paintCircuit(g, circuit, selectedColor);
+	}
+
+	public void paintSelectedCircuit(int circuitIndex) {
+		circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuitIndex), selectedColor);
 	}
 
 }
