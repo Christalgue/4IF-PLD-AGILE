@@ -26,6 +26,7 @@ public class DeliveryMovedState extends DefaultState {
 		window.setMessage("");
 		controller.circuitManagement.moveDelivery(node, previousNode);
 		controller.setCurrentState(controller.calcState);
+		window.drawCircuits();
 	}
 
 
