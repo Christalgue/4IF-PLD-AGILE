@@ -1,30 +1,25 @@
 package main.java.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.TextField;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import main.java.controller.Controller;
-import main.java.entity.AtomicPath;
-import main.java.entity.Bow;
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
-import main.java.entity.Node;
 import main.java.exception.ManagementException;
 import main.java.utils.PopUpType;
 
@@ -72,7 +67,7 @@ public class Window extends JFrame{
 	protected static final int buttonSpace = 10;
 	
 	
-	protected static final int pathWidth = 3;
+	protected static final int pathWidth = 2;
 	
 	protected JTree textualViewTree;
 	protected DefaultMutableTreeNode treeRoot;
@@ -115,6 +110,7 @@ public class Window extends JFrame{
 		this.treeRoot = createTree();
 		this.textualViewTree = new JTree (this.treeRoot);
 		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this.textualViewTree);
+		this.getDeliveryByTextualView(textualViewTree);
 		setTextualView(this.textualView);
 		
 		//////////////////////////////CREATE THE MESSAGE FIELD/////////////////////////////
@@ -479,6 +475,22 @@ public class Window extends JFrame{
 		} else if (userChoice == 1) {
 			controller.continueCalculation(true);
 		}
-	}
-
+	 }
+	 
+	 public void getDeliveryByTextualView (JTree textualViewTree) {
+		 
+		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
+		    public void valueChanged(TreeSelectionEvent e) {
+		        DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
+		        
+		        String deliveryInfo = (String) deliveryPoint.getUserObject();
+		        
+		        if (!deliveryInfo.startsWith("Entrepot")) {
+		        	String deliveryNumber = deliveryInfo.substring(10, 11);
+		        	int deliveryIndex = Integer.parseInt(deliveryNumber);
+		        	System.out.println(deliveryIndex);
+		        }
+		    }
+});
+		}
 }
