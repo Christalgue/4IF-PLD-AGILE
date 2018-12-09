@@ -21,7 +21,7 @@ public class DeliveryLoadedState extends DefaultState {
 		
 		try {
 			controller.circuitManagement.loadDeliveryList(filename);
-			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
+		//	window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
 		{
