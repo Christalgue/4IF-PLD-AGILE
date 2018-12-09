@@ -173,14 +173,14 @@ public class GraphicView extends JPanel {
 	public void paintCircuits() {
 
 		int colorIndex = 0;
-
-		for (Circuit entry : circuitManagement.getCircuitsList()) {
-
-			circuitView.paintCircuit(g, entry, color[colorIndex % color.length]);
-			colorIndex++;
-
+		if(circuitManagement.getCircuitsList()!=null) {
+			for (Circuit entry : circuitManagement.getCircuitsList()) {
+	
+				circuitView.paintCircuit(g, entry, color[colorIndex % color.length]);
+				colorIndex++;
+	
+			}
 		}
-
 		paintDeliveries();
 	}
 

@@ -12,12 +12,10 @@ public class DurationChoiceBeforeCalcState extends DefaultState {
 	}
 	
 
-	public void validateDuration (Controller controller, Window window, int duration) {
+	public void validateDuration (Controller controller, Window window, int duration, CommandsList commandsList) {
 		window.disableButtonAddDelivery();
-		controller.circuitManagement.addDeliveryInDeliveryList(node, duration);
+		commandsList.addCommand(new AddDeliveryCommand(window,node,duration,null,controller.circuitManagement));
 		controller.setCurrentState(controller.deliveryLoadedState);
-		window.drawDeliveries();
-		
 	}
 	
 	public void cancel (Controller controller, Window window) {

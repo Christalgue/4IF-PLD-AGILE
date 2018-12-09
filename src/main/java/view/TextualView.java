@@ -95,33 +95,35 @@ public class TextualView extends JPanel{
 		
 		DefaultMutableTreeNode circuit;
 		
-		
-		for( Circuit entry : circuitManagement.getCircuitsList() ) {
-		
-			circuit = new DefaultMutableTreeNode("Tournee "+ 
-					(circuitIndex+1) +": Duree "+entry.getCircuitLength()+" s");
-			treeModel.insertNodeInto(circuit, treeRoot, circuitIndex++);
+		if(circuitManagement.getCircuitsList()!=null)
+		{
+			for( Circuit entry : circuitManagement.getCircuitsList() ) {
 			
-			
-			for ( Delivery delivery : entry.getDeliveryList()) {
+				circuit = new DefaultMutableTreeNode("Tournee "+ 
+						(circuitIndex+1) +": Duree "+entry.getCircuitLength()+" s");
+				treeModel.insertNodeInto(circuit, treeRoot, circuitIndex++);
 				
-				if (deliveryIndex == 0) {
+				
+				for ( Delivery delivery : entry.getDeliveryList()) {
 					
-					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
-						+ "Duree "+delivery.getDuration()+" s"),
-							circuit, deliveryIndex++);
+					if (deliveryIndex == 0) {
+						
+						treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
+							+ "Duree "+delivery.getDuration()+" s"),
+								circuit, deliveryIndex++);
+					
+					}else {
+					
+						treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
+								(deliveryIndex) +": Duree "+delivery.getDuration()+" s"),
+									circuit, deliveryIndex++);				
 				
-				}else {
-				
-					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
-							(deliveryIndex) +": Duree "+delivery.getDuration()+" s"),
-								circuit, deliveryIndex++);				
-			
+					}
 				}
+				
+				deliveryIndex =0;
+				
 			}
-			
-			deliveryIndex =0;
-			
 		}
 		
 	}

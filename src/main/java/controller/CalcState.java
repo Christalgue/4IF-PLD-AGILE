@@ -18,14 +18,18 @@ import main.java.view.Window;
 
 public class CalcState extends DefaultState {
 	
-	public void loadMap(Controller controller, Window window, String filename) {
+	private int nbDeliveryMan;
+	
+	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
+			controller.circuitManagement.getCircuitsList().clear();
 			window.enableButtonAddDelivery();
 			window.disableButtonCalculateCircuit();
 			controller.circuitManagement.loadMap(filename);
 			window.drawMap();
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
+			commandsList.reset();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
 		{
@@ -33,11 +37,13 @@ public class CalcState extends DefaultState {
 		}
 	}
 	
-	public void loadDeliveryOffer(Controller controller, Window window, String filename){
+	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 		
 		try {
+			controller.circuitManagement.getCircuitsList().clear();
 			window.enableButtonCalculateCircuit();
 			controller.circuitManagement.loadDeliveryList(filename);
+			commandsList.reset();
 			controller.setCurrentState(controller.deliveryLoadedState);
 			//window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			window.drawDeliveries();
@@ -48,11 +54,14 @@ public class CalcState extends DefaultState {
 		
 	}
 	
-	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan){
+	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
+		this.nbDeliveryMan = nbDeliveryMan;
+		commandsList.reset();
 		try {
+			window.setMessage("");
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
-			controller.setCurrentState(controller.calcState);
 			window.drawCircuits();
+			controller.setCurrentState(controller.calcState);
 		} catch (ClusteringException e)
 		{
 			e.printStackTrace();
@@ -70,19 +79,10 @@ public class CalcState extends DefaultState {
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
 			System.out.println(e.getMessage());
-
-			int popUpValue = controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
-			if(popUpValue == JOptionPane.NO_OPTION) {
-				window.drawCircuits();
-				controller.setCurrentState(controller.calculatingState);
-				System.out.println("*********************************************************************");
-			}
-			else {
-				window.drawCircuits();
-				controller.setCurrentState(controller.calcState);
-			}
+			window.drawCircuits();
+			controller.setCurrentState(controller.calculatingState);
+			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		}
-		
 	}
 	
 	
@@ -118,5 +118,15 @@ public class CalcState extends DefaultState {
 		}else {
 			window.nodeHover(null);
 		}
+	}
+	
+	@Override
+	public void undo(Controller controller, CommandsList commandsList) {
+		commandsList.undo();
+	}
+
+	@Override
+	public void redo(Controller controller, CommandsList commandsList) {
+		commandsList.redo();
 	}
 }

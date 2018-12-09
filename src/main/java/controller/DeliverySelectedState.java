@@ -58,7 +58,7 @@ public class DeliverySelectedState extends DefaultState {
 		}
 	}
 	
-	public void loadMap(Controller controller, Window window, String filename) {
+	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
 			window.disableButtonMoveDelivery();
@@ -67,6 +67,7 @@ public class DeliverySelectedState extends DefaultState {
 			controller.circuitManagement.loadMap(filename);
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			window.drawMap();
+			commandsList.reset();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
 		{
@@ -74,12 +75,13 @@ public class DeliverySelectedState extends DefaultState {
 		}
 	}
 	
-	public void loadDeliveryOffer(Controller controller, Window window, String filename){
+	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 	
 		try {
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.loadDeliveryList(filename);
+			commandsList.reset();
 			controller.setCurrentState(controller.deliveryLoadedState);
 		//	window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			window.drawDeliveries();
@@ -90,7 +92,8 @@ public class DeliverySelectedState extends DefaultState {
 	
 	}
 
-	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan){
+	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
+		commandsList.reset();
 		try {
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();

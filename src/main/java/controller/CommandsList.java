@@ -13,6 +13,7 @@ public class CommandsList {
 	}
 	
 	public void addCommand(Command command) {
+		System.out.println("add "+index);
 		int i = index+1;
 		while(i<commands.size()) {
 			commands.remove(i);
@@ -23,6 +24,7 @@ public class CommandsList {
 	}
 	
 	public void undo() {
+		System.out.println("undo "+index);
 		if(index >= 0)
 		{
 			commands.get(index).undoCde();
@@ -31,10 +33,11 @@ public class CommandsList {
 	}
 	
 	public void redo() {
+		System.out.println("redo "+index);
 		if(index<commands.size()-1)
 		{
-			commands.get(index).doCde();
 			index++;
+			commands.get(index).doCde();
 		}
 	}
 	

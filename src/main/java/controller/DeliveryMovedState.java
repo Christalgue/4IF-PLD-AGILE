@@ -22,11 +22,10 @@ public class DeliveryMovedState extends DefaultState {
 		controller.setCurrentState(controller.calcState);
 	}
 	
-	public void validate (Controller controller, Window window) throws ManagementException {
+	public void validate (Controller controller, Window window, CommandsList commandsList) throws ManagementException {
 		window.setMessage("");
-		controller.circuitManagement.moveDelivery(node, previousNode);
+		commandsList.addCommand(new MoveDeliveryCommand(window,node,previousNode,controller.circuitManagement));
 		controller.setCurrentState(controller.calcState);
-		window.drawCircuits();
 	}
 
 
