@@ -364,6 +364,10 @@ public class Window extends JFrame{
 		}
 	}
 	
+	public void emptySelectedNode() {
+		selectedNode = null;
+	}
+	
 	public void fillDeliveryTree() {
 		textualView.fillDeliveryTree();
 	}
