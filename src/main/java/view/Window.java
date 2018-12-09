@@ -41,6 +41,7 @@ public class Window extends JFrame{
 
 	protected static ButtonsListener buttonsListener;
 	protected static MouseListener mouseListener;	
+	protected static KeyListener keyListener;
 	
 	protected static final String LOAD_MAP = "Charger un plan";
 	protected static final String LOAD_DELIVERY_OFFER = "Charger une demande de livraison";
@@ -95,6 +96,8 @@ public class Window extends JFrame{
 		this.controller = controller;
 		
 		buttonsListener = new ButtonsListener(controller);
+		keyListener = new KeyListener(controller);
+		this.addKeyListener(keyListener);
 		CircuitManagement circuitManagement = controller.getCircuitManagement();
 		
 		//////////////////////////////CREATE THE MAIN WINDOW//////////////////////////////
