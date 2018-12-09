@@ -71,9 +71,13 @@ public class Controller {
 		currentState.calculateCircuits(this, window, nbDeliveryMan);
 	}
 	
-	/*public void undo() {
-		
-	}*/
+	public void undo() {
+		commandsList.undo();
+	}
+	
+	public void redo() {
+		commandsList.redo();
+	}
 	
 	public void addDelivery() {
 		currentState.addDelivery(this, window);
