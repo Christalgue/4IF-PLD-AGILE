@@ -43,6 +43,8 @@ public class Circuit extends Observable {
 
 	protected boolean calculationIsFinished = false;
 
+	protected int circuitID;
+	
 	/**
 	 * Constructor
 	 * @throws TSPLimitTimeReachedException 
@@ -237,6 +239,10 @@ public class Circuit extends Observable {
 
 	protected void setAllPathsSVG(HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathsSVG) {
 		this.allPathsSVG = allPathsSVG;
+	}
+
+	public int getID() {
+		return this.circuitID;
 	}
 	
 	

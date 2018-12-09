@@ -20,8 +20,8 @@ public class GraphicView extends JPanel {
 	private double heightScale;
 	private double widthScale;
 
-	private double originLat;
-	private double originLong;
+	protected double originLat;
+	protected double originLong;
 
 	private int viewHeight;
 	private int viewWidth;
@@ -42,6 +42,9 @@ public class GraphicView extends JPanel {
 	private static Color repositoryColor = Color.ORANGE;
 
 	private Color color[] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.ORANGE, Color.PINK };
+	
+	protected double minLat;
+	protected double maxLong;
 
 	/**
 	 * Create the graphic view where the map will be drawn in Window windows
@@ -52,8 +55,8 @@ public class GraphicView extends JPanel {
 
 		super();
 
-		this.viewHeight = viewHeight;
-		this.viewWidth = viewWidth;
+		this.viewHeight = viewHeight-50;
+		this.viewWidth = viewWidth-20;
 		this.width = width;
 
 		this.circuitManagement = circuitManagement;
@@ -109,13 +112,13 @@ public class GraphicView extends JPanel {
 
 		originLat = maxLat;
 		originLong = minLong;
+		this.minLat = minLat;
+		this.maxLong = maxLong;
 
-		System.out.println("heightScale " + heightScale);
-		System.out.println("widthScale " + widthScale);
-		System.out.println("originLat " + originLat);
+		/*System.out.println("originLat " + originLat);
 		System.out.println("originLong " + originLong);
 		System.out.println("minLat " + minLat);
-		System.out.println("maxLong " + maxLong);
+		System.out.println("maxLong " + maxLong);*/
 
 		PointUtil.range = 5.0 * Math.min(heightScale, widthScale);
 	}
@@ -126,14 +129,14 @@ public class GraphicView extends JPanel {
 
 	public Point nodeToPoint(Node node) {
 
-		Point p = new Point((node.getLongitude() - originLong) / widthScale,
-				(originLat - node.getLatitude()) / heightScale);
+		Point p = new Point(((node.getLongitude() - originLong) / widthScale)+10,
+				((originLat - node.getLatitude()) / heightScale)+10);
 		return p;
 
 	}
 
 	public Point pointToLatLong(Point point) {
-		Point p = new Point(point.getX() * widthScale + originLong, -(point.getY()) * heightScale + originLat);
+		Point p = new Point((point.getX()-10) * widthScale + originLong, -(point.getY()-10) * heightScale + originLat);
 		return p;
 
 	}
@@ -153,7 +156,6 @@ public class GraphicView extends JPanel {
 
 	public void paintMap() {
 		calculateScale(circuitManagement);
-		System.out.println(widthScale);
 		mapView.paintMap(g, circuitManagement.getCurrentMap());
 	}
 
@@ -230,6 +232,23 @@ public class GraphicView extends JPanel {
 
 	public void paintSelectedCircuit(int circuitIndex) {
 		circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuitIndex), selectedColor);
+	}
+
+	public void unPaintCircuit(Circuit selectedCircuit) {
+
+		g.setColor(deliveryColor);
+		circuitView.paintCircuit(g, selectedCircuit, Color.RED);
+
+	}
+
+	public void paintSelectedCircuit(Circuit circuit, boolean clicked) {
+		
+		if (clicked) {
+			circuitView.paintCircuit(g, circuit,selectedColor);
+		} else {
+			circuitView.paintCircuit(g, circuit,hoverColor);
+		}
+		
 	}
 
 }

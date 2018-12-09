@@ -417,6 +417,20 @@ public class CircuitManagement extends Observable{
 		return false;
 	}
 	
+	public Circuit getCircuitByDelivery( Delivery delivery) {
+		
+		for(Circuit circuitTested : this.circuitsList){
+			
+			for ( Delivery deliveryTested : circuitTested.getDeliveryList()) {
+				if ( deliveryTested.getPosition() == delivery.getPosition())
+					return circuitTested;
+			}
+		}
+		
+		return null;
+		
+	}
+	
 	public Circuit getCircuitByIndex( int index) {
 		
 		int circuitIndex =0;
@@ -430,6 +444,7 @@ public class CircuitManagement extends Observable{
 		
 		return null;
 	}
+
 	
 	public int getDeliveryIndex (Delivery delivery) {
 		
