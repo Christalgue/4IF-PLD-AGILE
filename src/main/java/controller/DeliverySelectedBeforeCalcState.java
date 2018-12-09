@@ -28,7 +28,6 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 		{
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
-			window.circuitSelected(isDelivery);
 			
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
 				controller.deliverySelectedBeforeCalcState.setNode(node);
@@ -123,7 +122,8 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 		
 		controller.deliveryDeletedBeforeCalcState.setNode(node);
 		controller.setCurrentState(controller.deliveryDeletedBeforeCalcState);
-		controller.getWindow().getPopUpValue(PopUpType.DELETE, controller.getWindow());
+		if(controller.getShowPopUp())
+			controller.getWindow().getPopUpValue(PopUpType.DELETE, controller.getWindow());
 	}
 	
 

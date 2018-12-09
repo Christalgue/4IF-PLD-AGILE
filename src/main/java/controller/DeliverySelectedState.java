@@ -126,7 +126,8 @@ public class DeliverySelectedState extends DefaultState {
 		
 		controller.deliveryDeletedState.setNode(node);
 		controller.setCurrentState(controller.deliveryDeletedState);
-		controller.getWindow().getPopUpValue(PopUpType.DELETE, controller.getWindow());
+		if(controller.getShowPopUp())
+			controller.getWindow().getPopUpValue(PopUpType.DELETE, controller.getWindow());
 	}
 	
 	public void moveDelivery (Controller controller, Window window) {

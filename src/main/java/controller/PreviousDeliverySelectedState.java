@@ -32,7 +32,8 @@ public class PreviousDeliverySelectedState extends DefaultState {
 				controller.deliveryAddedState.setPreviousNode(previousNode);
 				controller.deliveryAddedState.setDuration(duration);
 				controller.setCurrentState(controller.deliveryAddedState);
-				controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
+				if(controller.getShowPopUp())
+					controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
 			} else {
 				// rajouter erreur IHM
 			}

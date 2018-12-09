@@ -25,7 +25,8 @@ public class SelectedPreviousMovedState extends DefaultState {
 				controller.deliveryMovedState.setNode(node);
 				controller.deliveryMovedState.setPreviousNode(previousNode);
 				controller.setCurrentState(controller.deliveryMovedState);
-				controller.getWindow().getPopUpValue(PopUpType.MOVE, controller.getWindow());
+				if(controller.getShowPopUp())
+					controller.getWindow().getPopUpValue(PopUpType.MOVE, controller.getWindow());
 			} else {
 				// rajouter erreur IHM
 			}

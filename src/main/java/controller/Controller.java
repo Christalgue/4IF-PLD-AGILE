@@ -30,10 +30,13 @@ public class Controller {
 	protected final DurationChoiceBeforeCalcState durationChoiceBeforeCalcState = new DurationChoiceBeforeCalcState ();
 	protected final DeliveryDeletedBeforeCalcState deliveryDeletedBeforeCalcState = new DeliveryDeletedBeforeCalcState();
 	
+	protected boolean showPopUp;
+	
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
 		currentState = initState;
 		this.window = new Window(this);
+		showPopUp = true;
 	}
 	
 	protected void setCurrentState(State state){
@@ -154,5 +157,13 @@ public class Controller {
 	
 	public void cancelDuration() {
 		currentState.cancel(this, window);
+	}
+	
+	public boolean getShowPopUp() {
+		return showPopUp;
+	}
+	
+	public void setShowPopUp(boolean popUp) {
+		showPopUp = popUp;
 	}
 }

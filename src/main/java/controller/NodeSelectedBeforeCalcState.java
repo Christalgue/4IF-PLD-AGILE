@@ -25,7 +25,8 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 	public void addDelivery(Controller controller, Window window) {
 		controller.durationChoiceBeforeCalcState.setNode(node);
 		controller.setCurrentState(controller.durationChoiceBeforeCalcState);
-		controller.getWindow().getPopUpValue(PopUpType.DURATION, controller.getWindow());
+		if(controller.getShowPopUp())
+			controller.getWindow().getPopUpValue(PopUpType.DURATION, controller.getWindow());
 	}
 	
 	public void leftClick(Controller controller, Window window, Point point) {
@@ -34,7 +35,6 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 		{
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
-			window.circuitSelected(isDelivery);
 			
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
 				window.enableButtonDeleteDelivery();
