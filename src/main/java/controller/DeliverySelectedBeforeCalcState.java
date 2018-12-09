@@ -34,7 +34,6 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 				controller.deliverySelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
 			} else {
-				window.disableButtonMoveDelivery();
 				window.disableButtonDeleteDelivery();
 				window.enableButtonAddDelivery();
 				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());

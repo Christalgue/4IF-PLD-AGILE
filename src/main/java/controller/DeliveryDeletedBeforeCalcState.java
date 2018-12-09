@@ -13,10 +13,12 @@ public class DeliveryDeletedBeforeCalcState extends DefaultState {
 	
 	public void validate (Controller controller, Window window) throws ManagementException{
 		controller.circuitManagement.removeDelivery(node);
+		window.disableButtonDeleteDelivery();
 		controller.setCurrentState(controller.deliveryLoadedState);
 	}
 	
 	public void cancel (Controller controller, Window window) {
+		window.disableButtonDeleteDelivery();
 		controller.setCurrentState(controller.deliveryLoadedState);
 	}
 

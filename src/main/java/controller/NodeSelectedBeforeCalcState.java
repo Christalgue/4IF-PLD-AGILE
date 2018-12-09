@@ -36,13 +36,11 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 			window.circuitSelected(isDelivery);
 			
 			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
-				window.enableButtonMoveDelivery();
 				window.enableButtonDeleteDelivery();
 				window.disableButtonAddDelivery();
 				controller.deliverySelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
 			} else {
-				window.disableButtonMoveDelivery();
 				window.disableButtonDeleteDelivery();
 				window.enableButtonAddDelivery();
 				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
