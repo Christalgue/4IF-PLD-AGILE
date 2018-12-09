@@ -1,30 +1,24 @@
 package main.java.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.TextField;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import main.java.controller.Controller;
-import main.java.entity.AtomicPath;
-import main.java.entity.Bow;
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
-import main.java.entity.Node;
 import main.java.exception.ManagementException;
 import main.java.utils.PopUpType;
 
@@ -73,7 +67,7 @@ public class Window extends JFrame{
 	protected static final int buttonSpace = 10;
 	
 	
-	protected static final int pathWidth = 3;
+	protected static final int pathWidth = 2;
 	
 	protected JTree textualViewTree;
 	protected DefaultMutableTreeNode treeRoot;
@@ -120,6 +114,7 @@ public class Window extends JFrame{
 		this.textualViewTree = new JTree (this.treeRoot);
 		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this.textualViewTree);
 		setTextualView(this.textualView);
+		addTreeListener();
 		
 		//////////////////////////////CREATE THE MESSAGE FIELD/////////////////////////////
 		
@@ -213,6 +208,36 @@ public class Window extends JFrame{
 		textualView.add(moveDeliveryButton);
 			
 	}
+	
+	 public void addTreeListener () {
+		 
+		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
+		    public void valueChanged(TreeSelectionEvent e) {
+		        DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
+		        
+		        String deliveryInfo = (String) deliveryPoint.getUserObject();
+		        
+		        if (!deliveryInfo.startsWith("Entrepot")) {
+		        	
+		        	if (!deliveryInfo.startsWith("Tournee")) {
+		        		String secondPart = deliveryInfo.substring(10);
+		        		String[] split = secondPart.split(":");
+		        		String deliveryNumber = split[0];
+		        		int deliveryIndex = Integer.parseInt(deliveryNumber);
+		        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
+		        		nodeSelected(delivery);
+		        		controller.treeDeliverySelected(delivery);
+		        	} else {
+		        		String secondPart = deliveryInfo.substring(8);
+		        		String[] split = secondPart.split(":");
+		        		String circuitNumber = split[0];
+		        		int circuitIndex = Integer.parseInt(circuitNumber);	
+		        		textualCircuitSelected(circuitIndex);
+		        	}
+		        }
+		    }     
+});
+		}
 	
 	public static void fillButtonPanel(JPanel buttonPanel) {
 		
@@ -333,6 +358,8 @@ public class Window extends JFrame{
 		selectedNode = delivery;
 	}
 	
+	
+	
 	public void circuitSelected(Delivery selectedDelivery) {
 
 		if ( selectedDelivery.getDuration() != -1 ) {
@@ -346,6 +373,10 @@ public class Window extends JFrame{
 			}
 		}
 	}
+	
+	public void textualCircuitSelected(int circuitIndex) {
+		graphicView.paintSelectedCircuit(circuitIndex);
+	}	
 	
 	public void nodeHover(Delivery delivery) {
 		//Mouse exit a node
@@ -366,6 +397,10 @@ public class Window extends JFrame{
 			}
 			hoverNode = delivery;
 		}
+	}
+	
+	public void emptySelectedNode() {
+		selectedNode = null;
 	}
 	
 	public void fillDeliveryTree() {
@@ -483,6 +518,6 @@ public class Window extends JFrame{
 		} else if (userChoice == 1) {
 			controller.continueCalculation(true);
 		}
-	}
-
+	 }
+	 
 }

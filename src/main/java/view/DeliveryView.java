@@ -79,26 +79,28 @@ public class DeliveryView extends JPanel {
 		g.setColor(repositoryColor);
 		
 		boolean b = true;
+		int deliveryIndex = 0;
 		
 		for( Delivery entry : deliveryList ) {
 		    
 			Node node = entry.getPosition();		
-			drawDelivery( g, node);
+			drawDelivery( g, node,deliveryIndex );
 			
 			if (b) {
 				g.setColor(deliveryColor);
 				b = false;
 			}
+			 deliveryIndex++;
 			
 		}
 		
 	}
 
-	public void drawDelivery( Graphics2D g, Node node) {
+	public void drawDelivery( Graphics2D g, Node node, int deliveryIndex) {
 		
 		Point point = graphicView.nodeToPoint( node );
 		g.fillOval((int) (point.getX()- deliveryRadius/2) ,(int) (point.getY()- deliveryRadius/2), deliveryRadius,deliveryRadius);
-		
+		g.drawString(""+deliveryIndex+"", (int) point.getX()-3, (int) point.getY()-5);
 	}
 	
 }

@@ -63,7 +63,7 @@ public class CircuitView extends JPanel {
 		super.paintComponent(g);
 		g.setColor(color);
 		
-		if(circuit.getPath() != null) {
+		if(circuit != null && circuit.getPath() != null) {
 			for( AtomicPath entry : circuit.getPath()) {
 			    
 				for ( Bow bow: entry.getPath()) {
