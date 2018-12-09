@@ -8,8 +8,8 @@ import main.java.utils.PopUpType;
 public class PopUp extends JFrame{
 
 	protected static final String VALIDATE_ADD = "Voulez-vous vraiment ajouter ce point de livraison ?";
-	protected static final String VALIDATE_ADD_DURATION = "Veuillez entrer la durée de la livraison.";
-	protected static final String VALIDATE_MOVE = "Voulez-vous vraiment déplacer cette livraison ?";
+	protected static final String VALIDATE_ADD_DURATION = "Veuillez entrer la duree de la livraison.";
+	protected static final String VALIDATE_MOVE = "Voulez-vous vraiment deplacer cette livraison ?";
 	protected static final String VALIDATE_DELETE = "Voulez-vous vraiment supprimer ce point de livraison ?";
 	protected static final String VALIDATE_CONTINUE = "Voulez-vous continuer la recherche de chemins ?";
 	

@@ -31,6 +31,7 @@ public class PreviousDeliverySelectedState extends DefaultState {
 				controller.deliveryAddedState.setNode(node);
 				controller.deliveryAddedState.setPreviousNode(previousNode);
 				controller.deliveryAddedState.setDuration(duration);
+				window.setMessage("");
 				controller.setCurrentState(controller.deliveryAddedState);
 				controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
 			} else {

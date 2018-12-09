@@ -88,7 +88,7 @@ public class NodeSelectedState extends DefaultState {
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.loadDeliveryList(filename);
 			controller.setCurrentState(controller.deliveryLoadedState);
-			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
+		//	window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
 		{

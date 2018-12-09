@@ -31,7 +31,8 @@ public class MapLoadedState extends DefaultState{
 		try {
 			window.enableButtonCalculateCircuit();
 			controller.circuitManagement.loadDeliveryList(filename);
-			window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
+			window.setMessage("");
+			//window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.drawDeliveries();
 		} catch (LoadDeliveryException l)
