@@ -434,6 +434,11 @@ public class CircuitManagement extends Observable{
 		return null;
 	}
 	
+	public void addDeliveryInDeliveryList(Node nodeDelivery,  int duration) {
+		Delivery delivery = new Delivery (nodeDelivery, duration);
+		deliveryList.add(delivery);
+	}
+	
 	public void addDelivery (Node nodeDelivery, int duration, Node previousNode) {
 		addDelivery(nodeDelivery, duration, previousNode, true);
 	}

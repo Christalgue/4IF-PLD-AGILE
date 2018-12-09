@@ -82,6 +82,20 @@ public class DeliveryLoadedState extends DefaultState {
 		if(node!=null) {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
+			
+			//Rajoute pour ajout/supp depuis la liste de dl loaded
+			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+				window.enableButtonDeleteDelivery();
+				controller.deliverySelectedBeforeCalcState.setNode(node);
+				controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
+			} else {
+				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
+				Node newNode = new Node (id, point.getX(), point.getY());
+				window.enableButtonAddDelivery();
+				controller.nodeSelectedBeforeCalcState.setNode(node);
+				controller.setCurrentState(controller.nodeSelectedBeforeCalcState);
+				
+			}
 		}
 	}
 	
