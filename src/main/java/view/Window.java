@@ -448,7 +448,7 @@ public class Window extends JFrame{
 	
 	/* Need to change the signature of validateDuration with a string */
 	 public void manageDurationPopUpValue(String inputValue) {
-		if (inputValue != "") {
+		if (inputValue != "" && inputValue != null) {
 			try {
 				controller.validateDuration(Integer.parseInt(inputValue));
 			} catch (Exception e) {
