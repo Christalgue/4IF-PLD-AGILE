@@ -7,13 +7,15 @@ import main.java.view.Window;
 
 public interface State {
 	
-	public void loadMap(Controller controller, Window window, String filename);
+	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList);
 	
-	public void loadDeliveryOffer(Controller controller, Window window, String filename);
+	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList);
 	
-	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan);
+	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList);
 	
-	//public void undo();
+	public void undo(Controller controller, CommandsList commandsList);
+	
+	public void redo(Controller controller, CommandsList commandsList);
 	
 	public void addDelivery(Controller controller, Window window);
 	
@@ -25,14 +27,13 @@ public interface State {
 	
 	public void deleteDelivery(Controller controller, Window window);
 	
-	
 	public void rightClick(Controller controller, Window window);
 	
 	public void leftClick(Controller controller, Window window, Point point);
 	
 	public void mouseMoved(Controller controller, Window window, Point point);
 	
-	public void validateDuration (Controller controller, Window window, int duration);
+	public void validateDuration (Controller controller, Window window, int duration, CommandsList commandsList);
 	
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating);
 }

@@ -5,7 +5,7 @@ import main.java.view.Window;
 
 public class InitialState extends DefaultState {
 	
-	public void loadMap(Controller controller, Window window, String filename) {
+	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
 			window.enableButtonLoadDeliveriesList();

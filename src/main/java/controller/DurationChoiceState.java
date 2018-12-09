@@ -11,11 +11,11 @@ public class DurationChoiceState extends DefaultState {
 		this.node =  node;
 	}
 	
-	public void validateDuration (Controller controller, Window window, int duration) {
+	public void validateDuration (Controller controller, Window window, int duration, CommandsList commandsList) {
 		controller.previousDeliverySelectedState.setNode(node);
 		controller.previousDeliverySelectedState.setDuration(duration);
 		window.disableButtonAddDelivery();
-		window.setMessage("Veuillez choisir la livraison précédente");
+		window.setMessage("Veuillez choisir la livraison prï¿½cï¿½dente");
 		controller.setCurrentState(controller.previousDeliverySelectedState);
 		
 	}

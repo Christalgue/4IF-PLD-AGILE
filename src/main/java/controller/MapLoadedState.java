@@ -11,7 +11,7 @@ import main.java.view.Window;
 public class MapLoadedState extends DefaultState{
 	
 	
-	public void loadMap(Controller controller, Window window, String filename) {
+	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
 			window.enableButtonLoadDeliveriesList();
@@ -26,7 +26,7 @@ public class MapLoadedState extends DefaultState{
 		}
 	}
 	
-	public void loadDeliveryOffer(Controller controller, Window window, String filename){
+	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 		
 		try {
 			window.enableButtonCalculateCircuit();

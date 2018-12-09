@@ -381,7 +381,7 @@ public class CircuitManagement extends Observable{
         			}
         			Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths);
         			this.circuitsList.add(circuit);
-        			System.out.println("circuit créé");
+        			System.out.println("circuit crï¿½ï¿½");
         		}
         		for(Circuit circuit : this.circuitsList) {
         			try {
@@ -491,11 +491,6 @@ public class CircuitManagement extends Observable{
 		return null;
 	}
 	
-	public void addDeliveryInDeliveryList(Node nodeDelivery,  int duration) {
-		Delivery delivery = new Delivery (nodeDelivery, duration);
-		deliveryList.add(delivery);
-	}
-	
 	public void addDelivery (Node nodeDelivery, int duration, Node previousNode) {
 		addDelivery(nodeDelivery, duration, previousNode, true);
 	}
@@ -504,70 +499,70 @@ public class CircuitManagement extends Observable{
 		Delivery delivery = new Delivery (nodeDelivery, duration);
 		
 		int position;
-		for (Circuit circuit : this.circuitsList) {
-			if ((position=circuit.checkNodeInCircuit(previousNode))!=-1) {
-				// on rajoute le delivery ï¿½ la liste et on supprime l'atomic path entre le delivery precedent et suivant
-				circuit.addDelivery(delivery, (position+1));
-				circuit.removeAtomicPath(position);
-				
-				// on recupere le delivery precedent et suivant
-				Delivery previousDelivery = circuit.getDeliveryList().get(position);
-				
-				//on setup des listes pour pouvoir utiliser le findShortestPath
-				List<Delivery> newDeliveryList = new ArrayList<Delivery>();
-				newDeliveryList.add(previousDelivery);
-				newDeliveryList.add(delivery);
-				
-				try {
-					HashMap<Delivery,AtomicPath> deliveryPrevious = this.currentMap.findShortestPath(previousDelivery, newDeliveryList);
-					circuit.addAtomicPath(deliveryPrevious.get(delivery), (position));
-				} catch (DijkstraException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				//If a node other than the repository follows the delivery added
-				if(position+2!=circuit.getDeliveryList().size())
-				{
-					Delivery nextDelivery = circuit.getDeliveryList().get((position+2));
+		if(circuitsList!=null && circuitsList.size()!=0) {
+			for (Circuit circuit : this.circuitsList) {
+				if ((position=circuit.checkNodeInCircuit(previousNode))!=-1) {
+					// on rajoute le delivery ï¿½ la liste et on supprime l'atomic path entre le delivery precedent et suivant
+					circuit.addDelivery(delivery, (position+1));
+					circuit.removeAtomicPath(position);
 					
-					List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
-					nextDeliveryList.add(delivery);
-					nextDeliveryList.add(nextDelivery);
+					// on recupere le delivery precedent et suivant
+					Delivery previousDelivery = circuit.getDeliveryList().get(position);
+					
+					//on setup des listes pour pouvoir utiliser le findShortestPath
+					List<Delivery> newDeliveryList = new ArrayList<Delivery>();
+					newDeliveryList.add(previousDelivery);
+					newDeliveryList.add(delivery);
 					
 					try {
-						HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(delivery, nextDeliveryList);
-						circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+1));
+						HashMap<Delivery,AtomicPath> deliveryPrevious = this.currentMap.findShortestPath(previousDelivery, newDeliveryList);
+						circuit.addAtomicPath(deliveryPrevious.get(delivery), (position));
 					} catch (DijkstraException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
-				else {
-					Delivery nextDelivery = circuit.getDeliveryList().get((0));
 					
-					List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
-					nextDeliveryList.add(delivery);
-					nextDeliveryList.add(nextDelivery);
-					
-					try {
-						HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(delivery, nextDeliveryList);
-						circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+1));
-					} catch (DijkstraException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					//If a node other than the repository follows the delivery added
+					if(position+2!=circuit.getDeliveryList().size())
+					{
+						Delivery nextDelivery = circuit.getDeliveryList().get((position+2));
+						
+						List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
+						nextDeliveryList.add(delivery);
+						nextDeliveryList.add(nextDelivery);
+						
+						try {
+							HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(delivery, nextDeliveryList);
+							circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+1));
+						} catch (DijkstraException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					else {
+						Delivery nextDelivery = circuit.getDeliveryList().get((0));
+						
+						List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
+						nextDeliveryList.add(delivery);
+						nextDeliveryList.add(nextDelivery);
+						
+						try {
+							HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(delivery, nextDeliveryList);
+							circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+1));
+						} catch (DijkstraException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
+			if(changeDeliveryList)
+				deliveryList.add(delivery);
+		}
+		else {
+			deliveryList.add(delivery);
 		}
 		
-		if(changeDeliveryList)
-			deliveryList.add(delivery);
-		
-	}
-	
-	public void removeDeliveryInDeliveryList (Node nodeDelivery) throws ManagementException {	
-		deliveryList.remove(getDeliveryByNode(nodeDelivery));
 	}
 	
 	public void removeDelivery (Node nodeDelivery) throws ManagementException {	
@@ -576,47 +571,52 @@ public class CircuitManagement extends Observable{
 	
 	private void removeDelivery (Node nodeDelivery, boolean changeDeliveryList) throws ManagementException {		
 		int position;
-		for (Circuit circuit : this.circuitsList) {
-			if ((position=circuit.checkNodeInCircuit(nodeDelivery))!=-1) {
-				if (position != 0) {
-					Delivery delivery = circuit.getDeliveryList().get(position);
-					circuit.removeDelivery(position);
-					circuit.removeAtomicPath(position);
-					circuit.removeAtomicPath(position-1);
-					
-					// on recupere le delivery precedent et suivant
-					Delivery previousDelivery = circuit.getDeliveryList().get(position-1);
-					Delivery nextDelivery;
-					if(position != circuit.getDeliveryList().size()){ //Not last delivery
-						nextDelivery = circuit.getDeliveryList().get(position);
+		if(circuitsList!=null && circuitsList.size()!=0) {
+			for (Circuit circuit : this.circuitsList) {
+				if ((position=circuit.checkNodeInCircuit(nodeDelivery))!=-1) {
+					if (position != 0) {
+						Delivery delivery = circuit.getDeliveryList().get(position);
+						circuit.removeDelivery(position);
+						circuit.removeAtomicPath(position);
+						circuit.removeAtomicPath(position-1);
+						
+						// on recupere le delivery precedent et suivant
+						Delivery previousDelivery = circuit.getDeliveryList().get(position-1);
+						Delivery nextDelivery;
+						if(position != circuit.getDeliveryList().size()){ //Not last delivery
+							nextDelivery = circuit.getDeliveryList().get(position);
+						}
+						else{												//Last delivery
+							nextDelivery = circuit.getDeliveryList().get(0);
+						}
+						
+						//on setup des listes pour pouvoir utiliser le findShortestPath
+						List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
+						nextDeliveryList.add(previousDelivery);
+						nextDeliveryList.add(nextDelivery);
+						
+						
+						try {
+							HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(previousDelivery, nextDeliveryList);
+							circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position-1));
+						} catch (DijkstraException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						if(changeDeliveryList)
+							deliveryList.remove(delivery);
+						
+					} else {
+						throw new ManagementException("You cannot remove a repository");
 					}
-					else{												//Last delivery
-						nextDelivery = circuit.getDeliveryList().get(0);
-					}
-					
-					//on setup des listes pour pouvoir utiliser le findShortestPath
-					List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
-					nextDeliveryList.add(previousDelivery);
-					nextDeliveryList.add(nextDelivery);
-					
-					
-					try {
-						HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(previousDelivery, nextDeliveryList);
-						circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position-1));
-					} catch (DijkstraException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					if(changeDeliveryList)
-						deliveryList.remove(delivery);
-					
-				} else {
-					throw new ManagementException("You cannot remove a repository");
 				}
 			}
 		}
-		
+		else {
+			System.out.println("bonjour");
+			deliveryList.remove(getDeliveryByNode(nodeDelivery));
+		}
 	}
 	
 	public void moveDelivery(Node node, Node previousNode) throws ManagementException {
@@ -629,6 +629,20 @@ public class CircuitManagement extends Observable{
 		
 	}
 	
-	
+	public Node getPreviousNode(Node node) {
+		int position;
+		if(circuitsList!=null && circuitsList.size()!=0) {
+			for (Circuit circuit : this.circuitsList) {
+				if ((position=circuit.checkNodeInCircuit(node))!=-1) {
+					for(AtomicPath atomicPath : circuit.getPath()) {
+						if(node==atomicPath.getEndNode()) {
+							return atomicPath.getStartNode();
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 }

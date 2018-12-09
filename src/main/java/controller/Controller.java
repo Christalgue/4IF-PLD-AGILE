@@ -60,46 +60,55 @@ public class Controller {
 	}*/
 
 	public void loadMap(String filename) {
-		currentState.loadMap(this, window, filename);
-		
+		currentState.loadMap(this, window, filename, commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	public void loadDeliveryOffer(String filename) {
-		currentState.loadDeliveryOffer(this, window, filename);
+		currentState.loadDeliveryOffer(this, window, filename, commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	public void calculateCircuits(int nbDeliveryMan) {
-		currentState.calculateCircuits(this, window, nbDeliveryMan);
+		currentState.calculateCircuits(this, window, nbDeliveryMan, commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	public void undo() {
-		commandsList.undo();
+		currentState.undo(this, commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	public void redo() {
-		commandsList.redo();
+		currentState.redo(this, commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	public void addDelivery() {
 		currentState.addDelivery(this, window);
+		window.requestFocusInWindow();
 	}
 	
 	
 	public void deleteDelivery() {
 		currentState.deleteDelivery(this, window);
+		window.requestFocusInWindow();
 	}
 	
 	public void moveDelivery() {
 		currentState.moveDelivery(this, window);
+		window.requestFocusInWindow();
 	}
 	
 	public void validateAdd() throws ManagementException {
 		currentState.validate(this, window, commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	public void cancelAdd() {
 		
 		currentState.cancel(this, window);
+		window.requestFocusInWindow();
 		
 	}
 	
@@ -107,35 +116,42 @@ public class Controller {
 	
 	public void validateMove() throws ManagementException {
 		currentState.validate(this, window, commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	public void cancelMove() {
 		currentState.cancel(this, window);
+		window.requestFocusInWindow();
 	}
 	
 	
 	
 	public void validateDelete() throws ManagementException {
 		currentState.validate(this, window,commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	public void cancelDelete() {
 		currentState.cancel(this, window);
+		window.requestFocusInWindow();
 	}
 	
 	public void validateContinue() throws ManagementException {
 		currentState.validate(this, window, commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	
 	public void rightClick() {
 		currentState.rightClick(this, window);
+		window.requestFocusInWindow();
 	}
 	/**
 	 * 
 	 */
 	public void leftClick(Point point){
 		currentState.leftClick(this, window, point);
+		window.requestFocusInWindow();
 		
 		//Point point = graphicView.pointToLatLong(point);
 		//Node node = graphicView.pointToNode(point);
@@ -152,6 +168,7 @@ public class Controller {
 	
 	public void mouseMoved( Point point) {
 		currentState.mouseMoved( this, window, point);
+		window.requestFocusInWindow();
 		
 		//Point point = graphicView.pointToLatLong(point);
 		//Node node = graphicView.pointToNode(point);
@@ -161,14 +178,17 @@ public class Controller {
 	
 	public void continueCalculation(boolean keepCalculating) {
 		currentState.continueCalculation(this, window, keepCalculating);
+		window.requestFocusInWindow();
 	}
 	
 	public void validateDuration (int duration) {
-		currentState.validateDuration(this, window, duration);
+		currentState.validateDuration(this, window, duration, commandsList);
+		window.requestFocusInWindow();
 	}
 	
 	public void cancelDuration() {
 		currentState.cancel(this, window);
+		window.requestFocusInWindow();
 	}
 	
 	public boolean getShowPopUp() {

@@ -61,9 +61,10 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 		}
 	}
 	
-	public void loadMap(Controller controller, Window window, String filename) {
-		
+	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
+
 		try {
+			commandsList.reset();
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			window.disableButtonCalculateCircuit();
@@ -77,12 +78,13 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 		}
 	}
 	
-	public void loadDeliveryOffer(Controller controller, Window window, String filename){
+	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 	
 		try {
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.loadDeliveryList(filename);
+			commandsList.reset();
 			controller.setCurrentState(controller.deliveryLoadedState);
 		//	window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			window.drawDeliveries();
@@ -93,7 +95,9 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 	
 	}
 
-	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan){
+	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
+
+		commandsList.reset();
 		try {
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
@@ -123,6 +127,16 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		}
 	
+	}
+	
+	@Override
+	public void undo(Controller controller, CommandsList commandsList) {
+		commandsList.undo();
+	}
+
+	@Override
+	public void redo(Controller controller, CommandsList commandsList) {
+		commandsList.redo();
 	}
 
 }

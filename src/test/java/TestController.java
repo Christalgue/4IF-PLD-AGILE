@@ -114,6 +114,7 @@ class TestController {
 		} catch (ManagementException e1) {
 			fail("validateDelete in DeliveryDeletedBeforeCalcState");
 		}
+		assertTrue(c.currentState.toString().contains("State : DeliveryLoadedState"),"Expected <State : DeliveryLoadedState>, got <"+c.currentState.toString()+">");
 		
 		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
 		c.calculateCircuits(1);
