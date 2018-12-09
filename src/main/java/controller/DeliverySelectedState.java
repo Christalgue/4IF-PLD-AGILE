@@ -126,6 +126,7 @@ public class DeliverySelectedState extends DefaultState {
 		
 		controller.deliveryDeletedState.setNode(node);
 		controller.setCurrentState(controller.deliveryDeletedState);
+		controller.getWindow().getPopUpValue(PopUpType.DELETE, controller.getWindow());
 	}
 	
 	public void moveDelivery (Controller controller, Window window) {
@@ -134,6 +135,7 @@ public class DeliverySelectedState extends DefaultState {
 		window.setMessage("Veuillez selectionner le point de livraison precedent");
 		controller.selectedPreviousMovedState.setNode(node);
 		controller.setCurrentState(controller.selectedPreviousMovedState);
+		
 	}
 
 	

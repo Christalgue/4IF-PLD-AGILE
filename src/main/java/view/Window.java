@@ -446,19 +446,19 @@ public class Window extends JFrame{
 		}
 	}
 	
-	/* Need to change the signature of validateDuration with a string 
-	 * public void manageDurationPopUpValue(String inputValue) {
+	/* Need to change the signature of validateDuration with a string */
+	 public void manageDurationPopUpValue(String inputValue) {
 		if (inputValue != "") {
 			try {
-				controller.validateDuration(inputValue);
-			} catch (ManagementException e) {
+				controller.validateDuration(Integer.parseInt(inputValue));
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
 			controller.cancelDuration();
 		}
-	}*/
+	}
 	
 	public void manageMovePopUpValue(int userChoice) {
 		if (userChoice == 0) {

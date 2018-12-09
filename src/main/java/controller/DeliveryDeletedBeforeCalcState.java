@@ -15,6 +15,8 @@ public class DeliveryDeletedBeforeCalcState extends DefaultState {
 		controller.circuitManagement.removeDelivery(node);
 		window.disableButtonDeleteDelivery();
 		controller.setCurrentState(controller.deliveryLoadedState);
+		window.drawDeliveries();
+		window.drawCircuits();
 	}
 	
 	public void cancel (Controller controller, Window window) {

@@ -123,6 +123,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 		
 		controller.deliveryDeletedBeforeCalcState.setNode(node);
 		controller.setCurrentState(controller.deliveryDeletedBeforeCalcState);
+		controller.getWindow().getPopUpValue(PopUpType.DELETE, controller.getWindow());
 	}
 	
 

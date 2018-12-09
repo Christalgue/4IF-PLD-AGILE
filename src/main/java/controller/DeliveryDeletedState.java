@@ -18,11 +18,15 @@ public class DeliveryDeletedState extends DefaultState{
 	public void validate (Controller controller, Window window) throws ManagementException{
 		controller.circuitManagement.removeDelivery(node);
 		window.disableButtonDeleteDelivery();
+		window.disableButtonMoveDelivery();
 		controller.setCurrentState(controller.calcState);
+		window.drawDeliveries();
+		window.drawCircuits();
 	}
 	
 	public void cancel (Controller controller, Window window) {
 		window.disableButtonDeleteDelivery();
+		window.disableButtonMoveDelivery();
 		controller.setCurrentState(controller.calcState);
 	}
 

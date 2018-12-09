@@ -4,6 +4,7 @@ import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.utils.PointUtil;
+import main.java.utils.PopUpType;
 import main.java.view.Window;
 
 public class PreviousDeliverySelectedState extends DefaultState {
@@ -31,6 +32,7 @@ public class PreviousDeliverySelectedState extends DefaultState {
 				controller.deliveryAddedState.setPreviousNode(previousNode);
 				controller.deliveryAddedState.setDuration(duration);
 				controller.setCurrentState(controller.deliveryAddedState);
+				controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
 			} else {
 				// rajouter erreur IHM
 			}

@@ -27,6 +27,7 @@ public class NodeSelectedState extends DefaultState {
 	public void addDelivery(Controller controller, Window window) {
 		controller.durationChoiceState.setNode(node);
 		controller.setCurrentState(controller.durationChoiceState);
+		controller.getWindow().getPopUpValue(PopUpType.DURATION, controller.getWindow());
 	}
 	
 	public void leftClick(Controller controller, Window window, Point point) {

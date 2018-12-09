@@ -53,7 +53,7 @@ public class PopUp extends JFrame{
 			case DURATION: 
 				Object[] validateOptionsMove = {"Valider", "Anuler"};
 				String inputValue = JOptionPane.showInputDialog("Duree de la livraison");
-				//window.manageDurationPopUpValue(inputValue);
+				window.manageDurationPopUpValue(inputValue);
 				break;
 				
 			case MOVE: 

@@ -15,6 +15,7 @@ public class DurationChoiceState extends DefaultState {
 		controller.previousDeliverySelectedState.setNode(node);
 		controller.previousDeliverySelectedState.setDuration(duration);
 		window.disableButtonAddDelivery();
+		window.setMessage("Veuillez choisir la livraison précédente");
 		controller.setCurrentState(controller.previousDeliverySelectedState);
 		
 	}

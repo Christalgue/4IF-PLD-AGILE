@@ -53,7 +53,7 @@ public class ButtonsListener implements ActionListener {
 			Window.getMapName();
 			controller.loadMap(map);
 			
-			int testAddPopUp = controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
+			//int testAddPopUp = controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
 			
 			/*controller.loadMap(controller.getWindow().getFile());*/
 			break;
@@ -62,7 +62,7 @@ public class ButtonsListener implements ActionListener {
 			Window.getDeliveryListName();
 			controller.loadDeliveryOffer(deliveryList); 
 			
-			int testDurationPopUp = controller.getWindow().getPopUpValue(PopUpType.DURATION, controller.getWindow());
+			//int testDurationPopUp = controller.getWindow().getPopUpValue(PopUpType.DURATION, controller.getWindow());
 			
 			/*controller.loadDeliveryOffer(controller.getWindow().getFile());*/
 			break;
@@ -73,7 +73,7 @@ public class ButtonsListener implements ActionListener {
 			break;
 		//case Window.UNDO: controller.undo(); break;
 		case Window.ADD_DELIVERY: 
-			//controller.addDelivery(); 
+			controller.addDelivery(); 
 			break;
 		case Window.CONTINUE_CALCULATION:
 			controller.continueCalculation(true);
@@ -85,8 +85,8 @@ public class ButtonsListener implements ActionListener {
 		case Window.CANCEL_ADD: controller.cancelAdd(); break;
 		case Window.MOVE_DELIVERY: controller.moveDelivery();break;
 		case Window.VALIDATE_MOVE: controller.validateMove(); break;
-		case Window.CANCEL_MOVE: controller.cancelMove(); break;
-		case Window.DELETE_DELIVERY: controller.deleteDelivery(); break;
+		case Window.CANCEL_MOVE: controller.cancelMove(); break;*/
+		case Window.DELETE_DELIVERY: controller.deleteDelivery(); break;/*
 		case Window.VALIDATE_DELETE: controller.validateDelete(); break;
 		case Window.CANCEL_DELETE: controller.cancelDelete(); break;*/
 
