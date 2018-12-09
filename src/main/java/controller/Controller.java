@@ -11,6 +11,8 @@ public class Controller {
 	public CircuitManagement circuitManagement;
 	private Window window;
 	public State currentState; // TURN BACK TO PRIVATE
+	private CommandsList commandsList;
+	
 	// Instances associated to each possible state of the controller
 	protected final InitialState initState = new InitialState();
 	protected final CalcState  calcState = new  CalcState();
@@ -30,10 +32,14 @@ public class Controller {
 	protected final DurationChoiceBeforeCalcState durationChoiceBeforeCalcState = new DurationChoiceBeforeCalcState ();
 	protected final DeliveryDeletedBeforeCalcState deliveryDeletedBeforeCalcState = new DeliveryDeletedBeforeCalcState();
 	
+	protected boolean showPopUp;
+	
 	public Controller(CircuitManagement circuitManagement) {
 		this.circuitManagement = circuitManagement;
 		currentState = initState;
 		this.window = new Window(this);
+		showPopUp = true;
+		commandsList = new CommandsList();
 	}
 	
 	protected void setCurrentState(State state){
@@ -65,9 +71,13 @@ public class Controller {
 		currentState.calculateCircuits(this, window, nbDeliveryMan);
 	}
 	
-	/*public void undo() {
-		
-	}*/
+	public void undo() {
+		commandsList.undo();
+	}
+	
+	public void redo() {
+		commandsList.redo();
+	}
 	
 	public void addDelivery() {
 		currentState.addDelivery(this, window);
@@ -83,7 +93,7 @@ public class Controller {
 	}
 	
 	public void validateAdd() throws ManagementException {
-		currentState.validate(this, window);
+		currentState.validate(this, window, commandsList);
 	}
 	
 	public void cancelAdd() {
@@ -95,7 +105,7 @@ public class Controller {
 	
 	
 	public void validateMove() throws ManagementException {
-		currentState.validate(this, window);
+		currentState.validate(this, window, commandsList);
 	}
 	
 	public void cancelMove() {
@@ -105,7 +115,7 @@ public class Controller {
 	
 	
 	public void validateDelete() throws ManagementException {
-		currentState.validate(this, window);
+		currentState.validate(this, window,commandsList);
 	}
 	
 	public void cancelDelete() {
@@ -113,7 +123,7 @@ public class Controller {
 	}
 	
 	public void validateContinue() throws ManagementException {
-		currentState.validate(this, window);
+		currentState.validate(this, window, commandsList);
 	}
 	
 	
@@ -154,5 +164,13 @@ public class Controller {
 	
 	public void cancelDuration() {
 		currentState.cancel(this, window);
+	}
+	
+	public boolean getShowPopUp() {
+		return showPopUp;
+	}
+	
+	public void setShowPopUp(boolean popUp) {
+		showPopUp = popUp;
 	}
 }

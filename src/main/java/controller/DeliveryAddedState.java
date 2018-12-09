@@ -26,11 +26,12 @@ public class DeliveryAddedState extends DefaultState{
 		this.duration =  duration;
 	}
 	
-	public void validate(Controller controller, Window window){
-		controller.circuitManagement.addDelivery(node, duration, previousNode);
+	public void validate(Controller controller, Window window, CommandsList commandsList){
+		commandsList.addCommand(new AddDeliveryCommand(window, node, duration, previousNode, controller.circuitManagement));
+		//controller.circuitManagement.addDelivery(node, duration, previousNode);
 		controller.setCurrentState(controller.calcState);
-		window.drawDeliveries();
-		window.drawCircuits();
+		//window.drawDeliveries();
+		//window.drawCircuits();
 		// rajouter appel de fonction vue
 	}
 	

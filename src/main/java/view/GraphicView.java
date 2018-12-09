@@ -218,9 +218,7 @@ public class GraphicView extends JPanel {
 
 	public void unPaintNode ( Delivery delivery) {
 		
-		if (delivery.getClass() == Repository.class){
-			g.setColor(repositoryColor);
-		} else if (delivery.getDuration() == -1) {
+		if (delivery.getDuration() == -1) {
 			g.setColor(nodeColor);
 		} else {
 			g.setColor(deliveryColor);

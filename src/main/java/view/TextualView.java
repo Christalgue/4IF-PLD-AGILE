@@ -63,14 +63,16 @@ public class TextualView extends JPanel{
 
 	public void fillDeliveryTree() {
 		
+
 		treeRoot.removeAllChildren();
+		treeModel.reload();
 		
 		setBorder(BorderFactory.createTitledBorder("Livraisons"));
 		
 		int deliveryListIndex = 0;
 			
 		for( Delivery entry : circuitManagement.getDeliveryList() ) {
-		
+
 			if (deliveryListIndex == 0) {
 				
 				treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
@@ -92,17 +94,19 @@ public class TextualView extends JPanel{
 	public void fillCircuitTree() {
 		
 		treeRoot.removeAllChildren();
+		treeModel.reload();
 		
 		int deliveryIndex =0;
 		int circuitIndex= 0;
 		
 		DefaultMutableTreeNode circuit;
 		
+		setBorder(BorderFactory.createTitledBorder("Tournees"));
 		
 		for( Circuit entry : circuitManagement.getCircuitsList() ) {
 		
 			circuit = new DefaultMutableTreeNode("Tournee "+ 
-					(circuitIndex+1) +": Duree "+entry.getCircuitLength()+" s");
+					(circuitIndex+1) +": Duree "+(int)entry.getCircuitLength()+" s");
 			treeModel.insertNodeInto(circuit, treeRoot, circuitIndex++);
 			
 			
@@ -117,10 +121,11 @@ public class TextualView extends JPanel{
 				}else {
 				
 					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
-							(deliveryIndex) +": Duree "+delivery.getDuration()+" s"),
+							(circuitManagement.getDeliveryIndex(delivery)) +": Duree "+delivery.getDuration()+" s"),
 								circuit, deliveryIndex++);				
 			
 				}
+				
 			}
 			
 			deliveryIndex =0;

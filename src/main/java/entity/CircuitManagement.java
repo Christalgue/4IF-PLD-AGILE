@@ -417,6 +417,20 @@ public class CircuitManagement extends Observable{
 		return false;
 	}
 	
+	public int getDeliveryIndex (Delivery delivery) {
+		
+		int deliveryIndex =0;
+		
+		for(Delivery deliveryTested : this.deliveryList){
+			if(deliveryTested.getPosition() == delivery.getPosition()) {
+				return deliveryIndex;
+			}
+			deliveryIndex++;
+		}
+		
+		return -1;
+	}
+	
 	public Delivery isDelivery(Node nodeTested){
 		for(Delivery deliveryTested : this.deliveryList){
 			if(deliveryTested.getPosition() == nodeTested)

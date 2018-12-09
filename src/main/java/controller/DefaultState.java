@@ -17,7 +17,7 @@ public abstract class DefaultState implements State {
 	
 	public void addDelivery(Controller controller, Window window){}
 	
-	public void validate(Controller controller, Window window) throws ManagementException{}
+	public void validate(Controller controller, Window window, CommandsList commandsList) throws ManagementException{}
 	
 	public void cancel(Controller controller, Window window){}
 	
