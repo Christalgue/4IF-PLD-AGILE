@@ -509,6 +509,10 @@ public class CircuitManagement extends Observable{
 		
 	}
 	
+	public void removeDeliveryInDeliveryList (Node nodeDelivery) throws ManagementException {	
+		deliveryList.remove(getDeliveryByNode(nodeDelivery));
+	}
+	
 	public void removeDelivery (Node nodeDelivery) throws ManagementException {	
 		removeDelivery (nodeDelivery, true);
 	}

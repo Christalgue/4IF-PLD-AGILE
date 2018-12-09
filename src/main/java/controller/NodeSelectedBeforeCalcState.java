@@ -25,6 +25,7 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 	public void addDelivery(Controller controller, Window window) {
 		controller.durationChoiceBeforeCalcState.setNode(node);
 		controller.setCurrentState(controller.durationChoiceBeforeCalcState);
+		controller.getWindow().getPopUpValue(PopUpType.DURATION, controller.getWindow());
 	}
 	
 	public void leftClick(Controller controller, Window window, Point point) {

@@ -16,6 +16,7 @@ public class DurationChoiceBeforeCalcState extends DefaultState {
 		window.disableButtonAddDelivery();
 		controller.circuitManagement.addDeliveryInDeliveryList(node, duration);
 		controller.setCurrentState(controller.deliveryLoadedState);
+		window.drawDeliveries();
 		
 	}
 	
