@@ -17,7 +17,7 @@ public interface State {
 	
 	public void addDelivery(Controller controller, Window window);
 	
-	public void validate(Controller controler, Window window) throws ManagementException;
+	public void validate(Controller controler, Window window, CommandsList commandsList) throws ManagementException;
 	
 	public void cancel(Controller controller, Window window);
 	

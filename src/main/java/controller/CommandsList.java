@@ -38,4 +38,9 @@ public class CommandsList {
 		}
 	}
 	
+	public void reset() {
+		index = -1;
+		commands.clear();
+	}
+	
 }

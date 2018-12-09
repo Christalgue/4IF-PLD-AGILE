@@ -11,6 +11,8 @@ public class Controller {
 	public CircuitManagement circuitManagement;
 	private Window window;
 	public State currentState; // TURN BACK TO PRIVATE
+	private CommandsList commandsList;
+	
 	// Instances associated to each possible state of the controller
 	protected final InitialState initState = new InitialState();
 	protected final CalcState  calcState = new  CalcState();
@@ -37,6 +39,7 @@ public class Controller {
 		currentState = initState;
 		this.window = new Window(this);
 		showPopUp = true;
+		commandsList = new CommandsList();
 	}
 	
 	protected void setCurrentState(State state){
@@ -68,9 +71,13 @@ public class Controller {
 		currentState.calculateCircuits(this, window, nbDeliveryMan);
 	}
 	
-	/*public void undo() {
-		
-	}*/
+	public void undo() {
+		commandsList.undo();
+	}
+	
+	public void redo() {
+		commandsList.redo();
+	}
 	
 	public void addDelivery() {
 		currentState.addDelivery(this, window);
@@ -86,7 +93,7 @@ public class Controller {
 	}
 	
 	public void validateAdd() throws ManagementException {
-		currentState.validate(this, window);
+		currentState.validate(this, window, commandsList);
 	}
 	
 	public void cancelAdd() {
@@ -98,7 +105,7 @@ public class Controller {
 	
 	
 	public void validateMove() throws ManagementException {
-		currentState.validate(this, window);
+		currentState.validate(this, window, commandsList);
 	}
 	
 	public void cancelMove() {
@@ -108,7 +115,7 @@ public class Controller {
 	
 	
 	public void validateDelete() throws ManagementException {
-		currentState.validate(this, window);
+		currentState.validate(this, window,commandsList);
 	}
 	
 	public void cancelDelete() {
@@ -116,7 +123,7 @@ public class Controller {
 	}
 	
 	public void validateContinue() throws ManagementException {
-		currentState.validate(this, window);
+		currentState.validate(this, window, commandsList);
 	}
 	
 	
