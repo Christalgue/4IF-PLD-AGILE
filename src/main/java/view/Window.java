@@ -61,6 +61,7 @@ public class Window extends JFrame{
 	protected static JButton moveDeliveryButton;
 	protected static JButton undoButton;	
 	protected static JButton redoButton;
+	protected static JButton continueCalculateCircuitButton;
 	
 	protected static final int windowWidth = 1400;
 	protected static final int windowHeight = 720;
@@ -300,6 +301,11 @@ public class Window extends JFrame{
 		calculateCircuitButton.addActionListener(buttonsListener);
 		calculateCircuitButton.setEnabled(false);
 		buttonPanel.add(calculateCircuitButton);
+		
+		continueCalculateCircuitButton = new JButton(CONTINUE_CALCULATION);
+		continueCalculateCircuitButton.addActionListener(buttonsListener);
+		continueCalculateCircuitButton.setEnabled(false);
+		buttonPanel.add(continueCalculateCircuitButton);
 	}
 	
 	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
