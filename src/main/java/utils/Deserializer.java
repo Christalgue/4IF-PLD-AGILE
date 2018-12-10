@@ -21,9 +21,23 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Deserializer.
+ */
 public class Deserializer {
 	
 	
+	/**
+	 * Load map.
+	 *
+	 * @param path the path
+	 * @param map the map
+	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws SAXException the SAX exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws XMLException the XML exception
+	 */
 	public static void loadMap(String path, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    final DocumentBuilder builder = factory.newDocumentBuilder();		
@@ -35,6 +49,17 @@ public class Deserializer {
 	    	throw new XMLException("The file is not valid");
 	}
 	
+	/**
+	 * Load deliveries.
+	 *
+	 * @param path the path
+	 * @param map the map
+	 * @return the list
+	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws SAXException the SAX exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws XMLException the XML exception
+	 */
 	public static List<Delivery> loadDeliveries(String path, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    final DocumentBuilder builder = factory.newDocumentBuilder();		
@@ -46,6 +71,13 @@ public class Deserializer {
 	    	throw new XMLException("The file is not valid");
 	}
 	
+	/**
+	 * Fill map.
+	 *
+	 * @param root the root
+	 * @param map the map
+	 * @throws XMLException the XML exception
+	 */
 	private static void fillMap(Element root, Map map) throws XMLException{
 		final NodeList nodes = root.getElementsByTagName("noeud");
 		final NodeList bows = root.getElementsByTagName("troncon");
@@ -97,6 +129,14 @@ public class Deserializer {
 		map.setBowMap(tempBowMap);
 	}
 	
+	/**
+	 * Fill deliveries.
+	 *
+	 * @param root the root
+	 * @param map the map
+	 * @return the list
+	 * @throws XMLException the XML exception
+	 */
 	private static List<Delivery> fillDeliveries(Element root, Map map) throws XMLException{
 		final NodeList repositories = root.getElementsByTagName("entrepot");
 		final NodeList deliveries = root.getElementsByTagName("livraison");
