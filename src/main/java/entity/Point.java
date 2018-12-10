@@ -1,6 +1,5 @@
 package main.java.entity;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Point.
  */
