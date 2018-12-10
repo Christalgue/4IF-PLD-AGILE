@@ -34,6 +34,7 @@ public class DeliveryLoadedState extends DefaultState {
 			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			e.printStackTrace();
 		}
 		
@@ -121,7 +122,7 @@ public class DeliveryLoadedState extends DefaultState {
 	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
 	 */
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
-		window.setMessage("");
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		window.nodeSelected(deliverySelected);
 		window.enableButtonDeleteDelivery();
 		controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());
