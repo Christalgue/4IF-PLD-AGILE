@@ -50,9 +50,6 @@ public class Circuit extends Observable {
 
 	/** The calculation is finished. */
 	protected boolean calculationIsFinished = false;
-
-	/** The circuit ID. */
-	protected int circuitID;
 	
 	/**
 	 * Constructor.
@@ -316,15 +313,5 @@ public class Circuit extends Observable {
 		this.allPathsSVG = allPathsSVG;
 	}
 
-	/**
-	 * Gets the id.
-	 *
-	 * @return the id
-	 */
-	public int getID() {
-		return this.circuitID;
-	}
-	
-	
 
 }
