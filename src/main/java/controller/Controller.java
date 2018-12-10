@@ -2,14 +2,15 @@ package main.java.controller;
 
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
-import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.exception.ManagementException;
 import main.java.view.Window;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class Controller.
+ * It's the class which controls the application, by changing its currentState depending on
+ * the actions of the user, with a set of methods the View can call.
  */
 public class Controller {
 	
@@ -25,7 +26,8 @@ public class Controller {
 	/** The commands list. */
 	private CommandsList commandsList;
 	
-	/** The init state. */
+	/** The initial state. */
+	
 	// Instances associated to each possible state of the controller
 	protected final InitialState initState = new InitialState();
 	
@@ -77,7 +79,7 @@ public class Controller {
 	/** The delivery deleted before calc state. */
 	protected final DeliveryDeletedBeforeCalcState deliveryDeletedBeforeCalcState = new DeliveryDeletedBeforeCalcState();
 	
-	/** The show pop up. */
+	/** The show pop up boolean . */
 	protected boolean showPopUp;
 	
 	/**
@@ -94,7 +96,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Sets the current state.
+	 * Sets the current state of the controller.
 	 *
 	 * @param state the new current state
 	 */
@@ -120,12 +122,8 @@ public class Controller {
 		return window;
 	}
 
-	/*public void setWindow(Window window) {
-		this.window = window;
-	}*/
-
 	/**
-	 * Load map.
+	 * Load the map.
 	 *
 	 * @param filename the filename
 	 */
@@ -135,7 +133,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Load delivery offer.
+	 * Load the delivery offer.
 	 *
 	 * @param filename the filename
 	 */
@@ -145,9 +143,9 @@ public class Controller {
 	}
 	
 	/**
-	 * Calculate circuits.
+	 * Calculate the circuits.
 	 *
-	 * @param nbDeliveryMan the nb delivery man
+	 * @param nbDeliveryMan the number of delivery man
 	 */
 	public void calculateCircuits(int nbDeliveryMan) {
 		currentState.calculateCircuits(this, window, nbDeliveryMan, commandsList);
@@ -155,7 +153,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Undo.
+	 * Undo the previous action.
 	 */
 	public void undo() {
 		currentState.undo(this, commandsList);
@@ -163,7 +161,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Redo.
+	 * Redo the previous action.
 	 */
 	public void redo() {
 		currentState.redo(this, commandsList);
@@ -180,7 +178,7 @@ public class Controller {
 	
 	
 	/**
-	 * Delete delivery.
+	 * Delete the delivery.
 	 */
 	public void deleteDelivery() {
 		currentState.deleteDelivery(this, window);
@@ -188,7 +186,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Move delivery.
+	 * Move the delivery.
 	 */
 	public void moveDelivery() {
 		currentState.moveDelivery(this, window);
@@ -196,7 +194,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Validate add.
+	 * Validate the addition of the delivery.
 	 *
 	 * @throws ManagementException the management exception
 	 */
@@ -206,7 +204,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Cancel add.
+	 * Cancel the addition of the delivery.
 	 */
 	public void cancelAdd() {
 		
@@ -218,7 +216,7 @@ public class Controller {
 	
 	
 	/**
-	 * Validate move.
+	 * Validate the move of the delivery.
 	 *
 	 * @throws ManagementException the management exception
 	 */
@@ -228,7 +226,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Cancel move.
+	 * Cancel the move of the delivery.
 	 */
 	public void cancelMove() {
 		currentState.cancel(this, window);
@@ -238,7 +236,7 @@ public class Controller {
 	
 	
 	/**
-	 * Validate delete.
+	 * Validate the removal of the delivery.
 	 *
 	 * @throws ManagementException the management exception
 	 */
@@ -248,7 +246,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Cancel delete.
+	 * Cancel the removal of the delivery.
 	 */
 	public void cancelDelete() {
 		currentState.cancel(this, window);
@@ -256,7 +254,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Validate continue.
+	 * Validate the continuation of the circuits calculation.
 	 *
 	 * @throws ManagementException the management exception
 	 */
@@ -267,7 +265,7 @@ public class Controller {
 	
 	
 	/**
-	 * Right click.
+	 * Method called when the user makes a right click.
 	 */
 	public void rightClick() {
 		currentState.rightClick(this, window);
@@ -275,25 +273,17 @@ public class Controller {
 	}
 	
 	/**
-	 * Left click.
+	 * Method called when the user makes a left click.
 	 *
-	 * @param point the point
+	 * @param point the point clicked
 	 */
 	public void leftClick(Point point){
 		currentState.leftClick(this, window, point);
 		window.requestFocusInWindow();
-		
-		//Point point = graphicView.pointToLatLong(point);
-		//Node node = graphicView.pointToNode(point);
-		//Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
-		//window.nodeSelected(isDelivery);
-		
-		//si tournees deja calculees
-		// window.circuitSelected(isDelivery);
 	}
 	
 	/**
-	 * Tree delivery selected.
+	 * Method called when a node from the deliveries tree is selected.
 	 *
 	 * @param deliverySelected the delivery selected
 	 */
@@ -304,24 +294,19 @@ public class Controller {
 	}
 	
 	/**
-	 * Mouse moved.
+	 * Method called when the mouse is moved.
 	 *
-	 * @param point the point
+	 * @param point the point 
 	 */
 	public void mouseMoved( Point point) {
 		currentState.mouseMoved( this, window, point);
 		window.requestFocusInWindow();
-		
-		//Point point = graphicView.pointToLatLong(point);
-		//Node node = graphicView.pointToNode(point);
-		//Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
-		//window.nodeHover(isDelivery);
 	}
 	
 	/**
-	 * Continue calculation.
+	 * Continue the circuits calculation.
 	 *
-	 * @param keepCalculating the keep calculating
+	 * @param keepCalculating the boolean which indicates if the program must continue the circuits calculation
 	 */
 	public void continueCalculation(boolean keepCalculating) {
 		currentState.continueCalculation(this, window, keepCalculating);
@@ -329,9 +314,9 @@ public class Controller {
 	}
 	
 	/**
-	 * Validate duration.
+	 * Validate the duration of a delivery.
 	 *
-	 * @param duration the duration
+	 * @param duration the duration of the delivery
 	 */
 	public void validateDuration (int duration) {
 		currentState.validateDuration(this, window, duration, commandsList);
@@ -339,7 +324,7 @@ public class Controller {
 	}
 	
 	/**
-	 * Cancel duration.
+	 * Cancel the duration of a delivery.
 	 */
 	public void cancelDuration() {
 		currentState.cancel(this, window);
@@ -347,24 +332,26 @@ public class Controller {
 	}
 	
 	/**
-	 * Gets the show pop up.
+	 * Shows the pop up.
 	 *
-	 * @return the show pop up
+	 * @return the pop up
 	 */
 	public boolean getShowPopUp() {
 		return showPopUp;
 	}
 	
 	/**
-	 * Sets the show pop up.
+	 * Sets the shown pop up.
 	 *
-	 * @param popUp the new show pop up
+	 * @param popUp the new shown pop up
 	 */
 	public void setShowPopUp(boolean popUp) {
 		showPopUp = popUp;
 	}
 	
-	/* (non-Javadoc)
+	/**
+	 * Display the current state of the controller
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {

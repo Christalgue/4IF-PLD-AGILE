@@ -2,9 +2,11 @@ package main.java.controller;
 
 import java.util.LinkedList;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class CommandsList.
+ * Used to implement the Design Pattern Command, it represents the list of command the user will be
+ * able to undo or redo.
  */
 public class CommandsList {
 	
@@ -15,7 +17,7 @@ public class CommandsList {
 	private int index;
 	
 	/**
-	 * Instantiates a new commands list.
+	 * Instantiates a new CommandsList.
 	 */
 	public CommandsList() {
 		commands = new LinkedList<Command>();
@@ -23,9 +25,9 @@ public class CommandsList {
 	}
 	
 	/**
-	 * Adds the command.
+	 * Adds a command.
 	 *
-	 * @param command the command
+	 * @param command the command to add
 	 */
 	public void addCommand(Command command) {
 		int i = index+1;
@@ -38,7 +40,7 @@ public class CommandsList {
 	}
 	
 	/**
-	 * Undo.
+	 * Undo the command.
 	 */
 	public void undo() {
 		if(index >= 0)
@@ -49,7 +51,7 @@ public class CommandsList {
 	}
 	
 	/**
-	 * Redo.
+	 * Redo the command.
 	 */
 	public void redo() {
 		if(index<commands.size()-1)
@@ -60,7 +62,7 @@ public class CommandsList {
 	}
 	
 	/**
-	 * Reset.
+	 * Reset the list.
 	 */
 	public void reset() {
 		index = -1;

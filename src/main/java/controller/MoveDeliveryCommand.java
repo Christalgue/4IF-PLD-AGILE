@@ -5,9 +5,10 @@ import main.java.entity.Node;
 import main.java.exception.ManagementException;
 import main.java.view.Window;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class MoveDeliveryCommand.
+ * The Command to move a delivery
  */
 public class MoveDeliveryCommand implements Command {
 	
@@ -17,18 +18,18 @@ public class MoveDeliveryCommand implements Command {
 	/** The circuit management. */
 	private CircuitManagement circuitManagement;
 	
-	/** The node 1. */
+	/** The node to move. */
 	private Node node1;
 	
-	/** The node 2. */
+	/** The previous node. */
 	private Node node2;
 	
 	/**
-	 * Instantiates a new move delivery command.
+	 * Instantiates a new MoveDeliveryCommand.
 	 *
 	 * @param window the window
-	 * @param node1 the node 1
-	 * @param node2 the node 2
+	 * @param node1 the node to move
+	 * @param node2 the previous node
 	 * @param circuitManagement the circuit management
 	 */
 	public MoveDeliveryCommand(Window window, Node node1, Node node2, CircuitManagement circuitManagement) {
@@ -38,7 +39,7 @@ public class MoveDeliveryCommand implements Command {
 		this.circuitManagement = circuitManagement;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.Command#doCde()
 	 */
 	@Override
@@ -47,12 +48,11 @@ public class MoveDeliveryCommand implements Command {
 			circuitManagement.moveDelivery(node1, node2);
 			window.drawCircuits();
 		} catch (ManagementException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.Command#undoCde()
 	 */
 	@Override
@@ -61,7 +61,6 @@ public class MoveDeliveryCommand implements Command {
 			circuitManagement.moveDelivery(node2, node1);
 			window.drawCircuits();
 		} catch (ManagementException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -1,23 +1,21 @@
 package main.java.controller;
 
-import main.java.entity.Delivery;
-import main.java.entity.Node;
-import main.java.entity.Point;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
-import main.java.utils.PointUtil;
 import main.java.view.Window;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class MapLoadedState.
+ * The State when the user has loaded a map.
  */
 public class MapLoadedState extends DefaultState{
 	
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.DefaultState#loadMap(main.java.controller.Controller, main.java.view.Window, java.lang.String, main.java.controller.CommandsList)
 	 */
+	@Override
 	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
@@ -33,9 +31,10 @@ public class MapLoadedState extends DefaultState{
 		}
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.DefaultState#loadDeliveryOffer(main.java.controller.Controller, main.java.view.Window, java.lang.String, main.java.controller.CommandsList)
 	 */
+	@Override
 	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 		
 		try {
@@ -43,7 +42,6 @@ public class MapLoadedState extends DefaultState{
 			window.enableButtonCalculateCircuit();
 			controller.circuitManagement.loadDeliveryList(filename);
 			window.setMessage("");
-			//window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.drawDeliveries();
 

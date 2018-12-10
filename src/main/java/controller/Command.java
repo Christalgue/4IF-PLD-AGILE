@@ -1,19 +1,21 @@
 package main.java.controller;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Interface Command.
+ * Used to implement the Design Pattern Command, it represents a command the user will be able 
+ * to undo or redo.
  */
 public interface Command {
 	
 	
 	/**
-	 * Execute at this command.
+	 * Execute the command.
 	 */
 	void doCde();
 	
 	/**
-	 * Execute the opposite method at this.
+	 * Execute the opposite command.
 	 */
 	void undoCde();
 

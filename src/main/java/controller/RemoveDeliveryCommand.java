@@ -1,14 +1,13 @@
 package main.java.controller;
 
 import main.java.entity.CircuitManagement;
-import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.exception.ManagementException;
 import main.java.view.Window;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class RemoveDeliveryCommand.
+ * The Command to remove a delivery
  */
 public class RemoveDeliveryCommand implements Command {
 
@@ -18,7 +17,7 @@ public class RemoveDeliveryCommand implements Command {
 	/** The circuit management. */
 	private CircuitManagement circuitManagement;
 	
-	/** The node. */
+	/** The node to remove. */
 	private Node node;
 	
 	/** The previous node. */
@@ -28,10 +27,10 @@ public class RemoveDeliveryCommand implements Command {
 	private int duration;
 
 	/**
-	 * Instantiates a new removes the delivery command.
+	 * Instantiates a new RemoveDeliveryCommand.
 	 *
 	 * @param window the window
-	 * @param node the node
+	 * @param node the node to remove
 	 * @param circuitManagement the circuit management
 	 */
 	public RemoveDeliveryCommand(Window window, Node node, CircuitManagement circuitManagement) {
@@ -42,7 +41,7 @@ public class RemoveDeliveryCommand implements Command {
 		this.window = window;
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.Command#doCde()
 	 */
 	@Override
@@ -51,12 +50,11 @@ public class RemoveDeliveryCommand implements Command {
 			circuitManagement.removeDelivery(node);
 			window.drawCircuits();
 		} catch (ManagementException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.Command#undoCde()
 	 */
 	@Override

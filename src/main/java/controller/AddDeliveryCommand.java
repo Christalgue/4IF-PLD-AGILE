@@ -1,14 +1,13 @@
 package main.java.controller;
 
-import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
 import main.java.exception.ManagementException;
 import main.java.view.Window;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AddDeliveryCommand.
+ * The Command to add a delivery.
  */
 public class AddDeliveryCommand implements Command {
 	
@@ -18,7 +17,7 @@ public class AddDeliveryCommand implements Command {
 	/** The circuit management. */
 	private CircuitManagement circuitManagement;
 	
-	/** The node. */
+	/** The node to add. */
 	private Node node;
 	
 	/** The previous node. */
@@ -28,11 +27,11 @@ public class AddDeliveryCommand implements Command {
 	private int duration;
 
 	/**
-	 * Instantiates a new adds the delivery command.
+	 * Instantiates a new AddDeliveryCommand.
 	 *
 	 * @param window the window
-	 * @param node the node
-	 * @param duration the duration
+	 * @param node the node to add
+	 * @param duration the duration of the delivery to add
 	 * @param previousNode the previous node
 	 * @param circuitManagement the circuit management
 	 */
@@ -44,7 +43,7 @@ public class AddDeliveryCommand implements Command {
 		this.window = window;
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.Command#doCde()
 	 */
 	@Override
@@ -53,7 +52,7 @@ public class AddDeliveryCommand implements Command {
 		window.drawCircuits();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.Command#undoCde()
 	 */
 	@Override
