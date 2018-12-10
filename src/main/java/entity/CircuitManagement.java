@@ -8,35 +8,28 @@ import java.lang.Math;
 import main.java.exception.*;
 import main.java.utils.Deserializer;
 
+// TODO: Auto-generated Javadoc
 /**
- * 
+ * The Class CircuitManagement.
  */
 public class CircuitManagement extends Observable{
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     public CircuitManagement() {
     }
 
-    /**
-     * 
-     */
+    /** The current map. */
     private Map currentMap;
 
-    /**
-     * 
-     */
+    /** The nb delivery man. */
     private int nbDeliveryMan;
 
-    /**
-     * 
-     */
+    /** The circuits list. */
     private List<Circuit> circuitsList;
 
-    /**
-     * 
-     */
+    /** The delivery list. */
     private List<Delivery> deliveryList;
 
 
@@ -44,9 +37,10 @@ public class CircuitManagement extends Observable{
 
 
     /**
-     * @param filename 
-     * @return
-     * @throws LoadDeliveryException 
+     * Load delivery list.
+     *
+     * @param filename the filename
+     * @throws LoadDeliveryException the load delivery exception
      */
     public void loadDeliveryList(String filename) throws LoadDeliveryException {
     	try {
@@ -57,23 +51,49 @@ public class CircuitManagement extends Observable{
         
     }
 
+    /**
+     * Gets the current map.
+     *
+     * @return the current map
+     */
     public Map getCurrentMap() {
     	return currentMap;
     }
     
+    /**
+     * Gets the circuits list.
+     *
+     * @return the circuits list
+     */
     public List<Circuit> getCircuitsList(){
     	return circuitsList;
     }
     
     
+    /**
+     * Gets the delivery list.
+     *
+     * @return the delivery list
+     */
     public List<Delivery> getDeliveryList() {
 		return deliveryList;
 	}
 
+	/**
+	 * Sets the delivery list.
+	 *
+	 * @param deliveryList the new delivery list
+	 */
 	public void setDeliveryList(List<Delivery> deliveryList) {
 		this.deliveryList = deliveryList;
 	}
 	
+	/**
+	 * Gets the repository.
+	 *
+	 * @return the repository
+	 * @throws NoRepositoryException the no repository exception
+	 */
 	protected Repository getRepository() throws NoRepositoryException{
 		for(Delivery delivery : this.deliveryList){
 			if(delivery.getClass() == Repository.class){
@@ -84,18 +104,30 @@ public class CircuitManagement extends Observable{
 		throw new NoRepositoryException("CircuitManagement.java : problem when getting the repository in deliveryList");
 	}
 
+	/**
+	 * Gets the nb delivery man.
+	 *
+	 * @return the nb delivery man
+	 */
 	public int getNbDeliveryMan() {
 		return nbDeliveryMan;
 	}
 
+	/**
+	 * Sets the nb delivery man.
+	 *
+	 * @param nbDeliveryMan the new nb delivery man
+	 */
 	public void setNbDeliveryMan(int nbDeliveryMan) {
 		this.nbDeliveryMan = nbDeliveryMan;
 	}
 
 	/**
-     * @param filename
-     * @throws LoadMapException 
-     */
+	 * Load map.
+	 *
+	 * @param filename the filename
+	 * @throws LoadMapException the load map exception
+	 */
     public void loadMap(String filename) throws LoadMapException {
         try {
 			this.currentMap = new Map(filename);
@@ -105,8 +137,10 @@ public class CircuitManagement extends Observable{
     }
 
     /**
-     * K-means clustering algorithm
-     * @return
+     * K-means clustering algorithm.
+     *
+     * @return the list
+     * @throws ClusteringException the clustering exception
      */
     public List<ArrayList<Delivery>> cluster() throws ClusteringException {
     	
@@ -177,6 +211,13 @@ public class CircuitManagement extends Observable{
         return distribution;
     }
     
+    /**
+     * Kmeans clustering.
+     *
+     * @param numberOfClusters the number of clusters
+     * @param deliveriesToCluster the deliveries to cluster
+     * @return the list
+     */
     public List<ArrayList<Delivery>> KmeansClustering(int numberOfClusters, List<Delivery> deliveriesToCluster) {
     	
     	List<Pair<Double,Double>> barycenters = new ArrayList<Pair<Double,Double>>(numberOfClusters);
@@ -214,6 +255,13 @@ public class CircuitManagement extends Observable{
     	return newDistribution;
     }
     
+    /**
+     * Kmeans clustering step.
+     *
+     * @param barycenters the barycenters
+     * @param deliveriesToCluster the deliveries to cluster
+     * @return the list
+     */
     public List<ArrayList<Delivery>> KmeansClusteringStep(List<Pair<Double,Double>> barycenters, List<Delivery> deliveriesToCluster) {
     	List<ArrayList<Delivery>> deliveriesDistribution = new ArrayList<ArrayList<Delivery>>(barycenters.size());
     	for(int distributionIndex = 0 ; distributionIndex <  barycenters.size(); distributionIndex++) {
@@ -237,6 +285,12 @@ public class CircuitManagement extends Observable{
     	return deliveriesDistribution;
     }
     
+    /**
+     * Calculate barycenters.
+     *
+     * @param currentDistribution the current distribution
+     * @return the list
+     */
     protected List<Pair<Double,Double>> calculateBarycenters(List<ArrayList<Delivery>> currentDistribution){
     	List<Pair<Double,Double>> barycenters = new ArrayList<Pair<Double,Double>>(currentDistribution.size());
     	for (ArrayList<Delivery> deliveries : currentDistribution) {
@@ -256,6 +310,13 @@ public class CircuitManagement extends Observable{
     	return barycenters;
     }
     
+    /**
+     * Adds the random barycenter.
+     *
+     * @param barycenters the barycenters
+     * @param numberOfClusters the number of clusters
+     * @param deliveries the deliveries
+     */
     public void addRandomBarycenter(List<Pair<Double,Double>> barycenters, int numberOfClusters, List<Delivery> deliveries) {
     	Random r = new Random();
         Integer randomIndex = r.nextInt(deliveries.size());
@@ -269,6 +330,13 @@ public class CircuitManagement extends Observable{
     	}
     }
     
+    /**
+     * Evaluate cluster.
+     *
+     * @param newDistribution the new distribution
+     * @param oldDistribution the old distribution
+     * @return true, if successful
+     */
     protected boolean evaluateCluster(List<ArrayList<Delivery>> newDistribution, List<ArrayList<Delivery>> oldDistribution) {
     	if (newDistribution.equals(oldDistribution)) {
     		return false;
@@ -278,6 +346,12 @@ public class CircuitManagement extends Observable{
     }
     
     
+    /**
+     * Balance distribution.
+     *
+     * @param distributionToBalance the distribution to balance
+     * @return the list
+     */
     // NOT IN USE RIGHT NOW
     protected List<ArrayList<Delivery>> balanceDistribution(List<ArrayList<Delivery>> distributionToBalance) {
     	
@@ -307,6 +381,12 @@ public class CircuitManagement extends Observable{
     	return balancedDistribution;
     }
     
+    /**
+     * Check cluster validity.
+     *
+     * @param clustersToCheck the clusters to check
+     * @return true, if successful
+     */
     protected boolean checkClusterValidity (List<ArrayList<Delivery>> clustersToCheck) {
     	Integer bottomAverageNumberOfDeliveries = (deliveryList.size()-1)/nbDeliveryMan; // Passer plutot la liste sans l'entrepot
     	Integer topAverageNumberOfDeliveries = bottomAverageNumberOfDeliveries+1;
@@ -323,15 +403,16 @@ public class CircuitManagement extends Observable{
     /**
      * generic method to call when calculation of the circuits is asked by HCI
      * call the cluster method and create the circuits one by one after having 
-     *      calculated the atomic path between each delivery
-     * @param nbDeliveryman
+     *      calculated the atomic path between each delivery.
+     *
+     * @param nbDeliveryman the nb deliveryman
      * @param continueInterruptedCalculation TODO
-     * @throws MapNotChargedException 
-     * @throws DeliveryListNotCharged 
-     * @throws ClusteringException 
-     * @throws DijkstraException 
-     * @throws NoRepositoryException 
-     * @throws TSPLimitTimeReachedException 
+     * @throws MapNotChargedException the map not charged exception
+     * @throws LoadDeliveryException the load delivery exception
+     * @throws ClusteringException the clustering exception
+     * @throws DijkstraException the dijkstra exception
+     * @throws NoRepositoryException the no repository exception
+     * @throws TSPLimitTimeReachedException the TSP limit time reached exception
      */
     public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, LoadDeliveryException, ClusteringException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException {
     	
@@ -405,10 +486,19 @@ public class CircuitManagement extends Observable{
     	
     }
     
+    /**
+     * Clean execution stacks.
+     */
     public void cleanExecutionStacks() {
     	
     }
 
+	/**
+	 * Check node in delivery list.
+	 *
+	 * @param nodeTested the node tested
+	 * @return true, if successful
+	 */
 	public boolean checkNodeInDeliveryList(Node nodeTested){
 		for(Delivery deliveryTested : this.deliveryList){
 			if(deliveryTested.getPosition() == nodeTested)
@@ -417,6 +507,12 @@ public class CircuitManagement extends Observable{
 		return false;
 	}
 	
+	/**
+	 * Gets the circuit by delivery.
+	 *
+	 * @param delivery the delivery
+	 * @return the circuit by delivery
+	 */
 	public Circuit getCircuitByDelivery( Delivery delivery) {
 		
 		for(Circuit circuitTested : this.circuitsList){
@@ -431,6 +527,12 @@ public class CircuitManagement extends Observable{
 		
 	}
 	
+	/**
+	 * Gets the circuit by index.
+	 *
+	 * @param index the index
+	 * @return the circuit by index
+	 */
 	public Circuit getCircuitByIndex( int index) {
 		
 		int circuitIndex =0;
@@ -446,6 +548,12 @@ public class CircuitManagement extends Observable{
 	}
 
 	
+	/**
+	 * Gets the delivery index.
+	 *
+	 * @param delivery the delivery
+	 * @return the delivery index
+	 */
 	public int getDeliveryIndex (Delivery delivery) {
 		
 		int deliveryIndex =0;
@@ -460,6 +568,12 @@ public class CircuitManagement extends Observable{
 		return -1;
 	}
 	
+	/**
+	 * Gets the delivery by index.
+	 *
+	 * @param index the index
+	 * @return the delivery by index
+	 */
 	public Delivery getDeliveryByIndex (int index) {
 		
 		int deliveryIndex =0;
@@ -474,6 +588,12 @@ public class CircuitManagement extends Observable{
 		return null;
 	}
 	
+	/**
+	 * Checks if is delivery.
+	 *
+	 * @param nodeTested the node tested
+	 * @return the delivery
+	 */
 	public Delivery isDelivery(Node nodeTested){
 		for(Delivery deliveryTested : this.deliveryList){
 			if(deliveryTested.getPosition() == nodeTested)
@@ -482,6 +602,12 @@ public class CircuitManagement extends Observable{
 		return new Delivery (nodeTested, -1);
 	}
 	
+	/**
+	 * Gets the delivery by node.
+	 *
+	 * @param nodeTested the node tested
+	 * @return the delivery by node
+	 */
 	public Delivery getDeliveryByNode (Node nodeTested) {
 		for (Delivery deliveryTested : this.deliveryList) {
 			if (deliveryTested.getPosition() == nodeTested) {
@@ -491,10 +617,25 @@ public class CircuitManagement extends Observable{
 		return null;
 	}
 	
+	/**
+	 * Adds the delivery.
+	 *
+	 * @param nodeDelivery the node delivery
+	 * @param duration the duration
+	 * @param previousNode the previous node
+	 */
 	public void addDelivery (Node nodeDelivery, int duration, Node previousNode) {
 		addDelivery(nodeDelivery, duration, previousNode, true);
 	}
 	
+	/**
+	 * Adds the delivery.
+	 *
+	 * @param nodeDelivery the node delivery
+	 * @param duration the duration
+	 * @param previousNode the previous node
+	 * @param changeDeliveryList the change delivery list
+	 */
 	private void addDelivery (Node nodeDelivery, int duration, Node previousNode, boolean changeDeliveryList) {
 		Delivery delivery = new Delivery (nodeDelivery, duration);
 		
@@ -565,10 +706,23 @@ public class CircuitManagement extends Observable{
 		
 	}
 	
+	/**
+	 * Removes the delivery.
+	 *
+	 * @param nodeDelivery the node delivery
+	 * @throws ManagementException the management exception
+	 */
 	public void removeDelivery (Node nodeDelivery) throws ManagementException {	
 		removeDelivery (nodeDelivery, true);
 	}
 	
+	/**
+	 * Removes the delivery.
+	 *
+	 * @param nodeDelivery the node delivery
+	 * @param changeDeliveryList the change delivery list
+	 * @throws ManagementException the management exception
+	 */
 	private void removeDelivery (Node nodeDelivery, boolean changeDeliveryList) throws ManagementException {		
 		int position;
 		if(circuitsList!=null && circuitsList.size()!=0) {
@@ -619,6 +773,13 @@ public class CircuitManagement extends Observable{
 		}
 	}
 	
+	/**
+	 * Move delivery.
+	 *
+	 * @param node the node
+	 * @param previousNode the previous node
+	 * @throws ManagementException the management exception
+	 */
 	public void moveDelivery(Node node, Node previousNode) throws ManagementException {
 		
 		Delivery delivery = getDeliveryByNode(node);
@@ -629,6 +790,12 @@ public class CircuitManagement extends Observable{
 		
 	}
 	
+	/**
+	 * Gets the previous node.
+	 *
+	 * @param node the node
+	 * @return the previous node
+	 */
 	public Node getPreviousNode(Node node) {
 		int position;
 		if(circuitsList!=null && circuitsList.size()!=0) {
