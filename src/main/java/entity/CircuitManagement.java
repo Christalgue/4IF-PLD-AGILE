@@ -137,12 +137,13 @@ public class CircuitManagement extends Observable{
     }
 
     /**
-     * K-means clustering algorithm.
+     * Clustering algorithm, performing K-means clustering algorithm and if the
+     * clusters are unbalanced in terms of cardinality, balance those clusters.
      *
-     * @return the list
-     * @throws ClusteringException the clustering exception
+     * @return a list containing all clusters
+     * @throws ClusteringException when no repository is found
      */
-    public List<ArrayList<Delivery>> cluster() throws ClusteringException {
+    public List<ArrayList<Delivery>> cluster() throws NoRepositoryException {
     	
         // process the Kmeansclustering method multiple times and keep the best one
     	
@@ -151,6 +152,7 @@ public class CircuitManagement extends Observable{
 			deliveriesToDistribute.remove(getRepository());
 		} catch (NoRepositoryException e) {
 			e.printStackTrace();
+			throw new NoRepositoryException("CircuitManagement.java : no repository found in cluster()");
 		}
     	
     	Pair<List<ArrayList<Delivery>>,List<Pair<Double,Double>>> distribution = KmeansClustering(nbDeliveryMan, deliveriesToDistribute);
@@ -168,8 +170,8 @@ public class CircuitManagement extends Observable{
 			try {
 				cluster.add(getRepository());
 			} catch (NoRepositoryException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new NoRepositoryException("CircuitManagement.java : no repository found in cluster()");
 			}
 		} 
         return distribution.getKey();
@@ -513,7 +515,7 @@ public class CircuitManagement extends Observable{
         	} else {
         		try {
     				groupedDeliveries = cluster();
-    			} catch (ClusteringException e) {
+    			} catch (NoRepositoryException e) {
     				throw e;
     			}
         	}

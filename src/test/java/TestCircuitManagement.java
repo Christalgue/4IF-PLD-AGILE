@@ -177,8 +177,8 @@ class TestCircuitManagement {
 
 		} catch (LoadMapException e) {
 			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
-		} catch (ClusteringException e) {
-			fail("ClusteringException"+e.getMessage());
+		} catch (NoRepositoryException e) {
+			fail("NoRepositoryException"+e.getMessage());
 		} catch (LoadDeliveryException e) {
 			fail("LoadDeliveryException"+e.getMessage());
 		}
