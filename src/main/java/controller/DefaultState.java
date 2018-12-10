@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.exception.ManagementException;
@@ -27,6 +28,7 @@ public abstract class DefaultState implements State {
 	
 	public void deleteDelivery(Controller controller, Window window){}
 	
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {}
 	
 	public void rightClick(Controller controller, Window window){}
 	
