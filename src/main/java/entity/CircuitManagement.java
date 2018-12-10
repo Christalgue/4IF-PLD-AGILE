@@ -127,10 +127,14 @@ public class CircuitManagement extends Observable{
 	 *
 	 * @param filename the filename
 	 * @throws LoadMapException the load map exception
+	 * @throws ForgivableXMLException 
 	 */
-    public void loadMap(String filename) throws LoadMapException {
+    public void loadMap(String filename) throws LoadMapException, ForgivableXMLException {
+    	currentMap = new Map();
         try {
-			this.currentMap = new Map(filename);
+			currentMap.load(filename);
+		} catch (ForgivableXMLException e) {
+			throw e; 
 		} catch (LoadMapException e) {
 			throw e; 
 		}
@@ -771,7 +775,7 @@ public class CircuitManagement extends Observable{
 		if(circuitsList!=null && circuitsList.size()!=0) {
 			for (Circuit circuit : this.circuitsList) {
 				if ((position=circuit.checkNodeInCircuit(previousNode))!=-1) {
-					// on rajoute le delivery e¿½ la liste et on supprime l'atomic path entre le delivery precedent et suivant
+					// on rajoute le delivery eï¿½ï¿½ la liste et on supprime l'atomic path entre le delivery precedent et suivant
 					circuit.addDelivery(delivery, (position+1));
 					circuit.removeAtomicPath(position);
 					

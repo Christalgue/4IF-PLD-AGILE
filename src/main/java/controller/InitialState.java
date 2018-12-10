@@ -1,6 +1,8 @@
 package main.java.controller;
 
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadMapException;
+import main.java.utils.PopUpType;
 import main.java.view.Window;
 
 /**
@@ -18,7 +20,13 @@ public class InitialState extends DefaultState {
 		try {
 			window.setMessage("");
 			window.enableButtonLoadDeliveriesList();
-			controller.circuitManagement.loadMap(filename);
+			try {
+				controller.circuitManagement.loadMap(filename);
+			} catch (ForgivableXMLException e) {
+				window.setErrorMessage(e.getMessage());
+				if(controller.getShowPopUp())
+					window.getPopUpValue(PopUpType.ERROR, window);
+			}
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			window.drawMap();
 			Window.setMouseListener(window);

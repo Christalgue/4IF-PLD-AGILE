@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
 import main.java.exception.MapNotChargedException;
@@ -25,7 +26,9 @@ class TestSerializer {
 	void testSerializer() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Serializer/xml/plan.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Serializer/xml/plan.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Serializer/xml/delivery.xml");
 			circuitManager.calculateCircuits(1, false);
 			List<Delivery> deliveries = circuitManager.getDeliveryList();

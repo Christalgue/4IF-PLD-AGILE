@@ -132,13 +132,23 @@ public class PopUp extends JFrame {
 				Object[] continueOptions = {"Garder", "Continuer"};
 				userChoice = JOptionPane.showOptionDialog(window,
 											VALIDATE_CONTINUE,
-											"Meilleure tourneee actuelle",
+											"Meilleure tournee actuelle",
 											JOptionPane.YES_NO_CANCEL_OPTION,
 											JOptionPane.QUESTION_MESSAGE,
 											null,
 											continueOptions,
 											continueOptions[0]
 											);
+				window.manageContinuePopUpValue(userChoice);
+				break;
+				
+			case ERROR:
+				Object[] errorOptions = {"OK"};
+				userChoice = 0;
+				JOptionPane.showMessageDialog(window,
+											"Une erreur dans le fichier XML a été détectée",
+											"Erreur fichier XML",
+											JOptionPane.WARNING_MESSAGE);
 				window.manageContinuePopUpValue(userChoice);
 				break;
 		}
