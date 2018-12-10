@@ -42,7 +42,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
 			
-			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+			if (controller.circuitManagement.checkNodeInDeliveryList(node) && (!controller.circuitManagement.isRepository(node)) ) {
 				controller.deliverySelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
 			} else {

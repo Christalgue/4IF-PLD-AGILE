@@ -23,6 +23,9 @@ public class Circuit extends Observable {
 
 	/** The circuit's length. */
 	private double circuitLength;
+	
+	/** The circuit duration. */
+	private double circuitDuration;
 
 	/** The path. */
 	private List<AtomicPath> path = null;
@@ -81,6 +84,7 @@ public class Circuit extends Observable {
 		}
 		this.calculationIsFinished = true;
 		this.circuitLength = calculateLength();
+		this.circuitDuration = calculateDuration();
 	}
 
 	/**
@@ -93,6 +97,16 @@ public class Circuit extends Observable {
 		for (AtomicPath segment : this.path) {
 			result += segment.getLength();
 		}
+		return result;
+	}
+	
+	/**
+	 * Calculate duration.
+	 *
+	 * @return the double
+	 */
+	protected double calculateDuration() {
+		double result = (circuitLength*3600.0)/(15.0*1000.0);
 		return result;
 	}
 
@@ -221,6 +235,15 @@ public class Circuit extends Observable {
 	 */
 	protected void setCircuitLength(double circuitLength) {
 		this.circuitLength = circuitLength;
+	}
+	
+	/**
+	 * Gets the circuit duration.
+	 *
+	 * @return the circuit duration
+	 */
+	public double getCircuitDuration() {
+		return circuitDuration;
 	}
 
 	/**

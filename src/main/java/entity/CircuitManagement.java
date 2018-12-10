@@ -709,6 +709,27 @@ public class CircuitManagement extends Observable{
 		return new Delivery (nodeTested, -1);
 	}
 	
+	
+	/**
+	 * Checks if is repository.
+	 *
+	 * @param nodeTested the node tested
+	 * @return the delivery
+	 */
+	public boolean isRepository (Node nodeTested){
+		try {
+			if(getRepository().getPosition() == nodeTested) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (NoRepositoryException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	
 	/**
 	 * Gets the delivery by node.
 	 *
