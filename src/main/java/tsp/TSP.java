@@ -1,12 +1,14 @@
 package main.java.tsp;
 
-import java.util.*;
-import main.java.entity.*;
+import java.util.HashMap;
+
+import main.java.entity.AtomicPath;
+import main.java.entity.Delivery;
+import main.java.entity.Repository;
 import main.java.exception.TSPLimitTimeReachedException;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface TSP.
+ * The Interface for a TSP class that will be used to calculate the solution to the tsp we need to solve.
  */
 public interface TSP {
 		
@@ -22,25 +24,17 @@ public interface TSP {
 	 *
 	 * @param limitTime the limit time
 	 * @param repository the repository
-	 * @param allPaths the all paths
-	 * @param duration the duration
-	 * @param continueInterruptedCalculation TODO
-	 * @throws TSPLimitTimeReachedException the TSP limit time reached exception
+	 * @param allPaths all the paths between each delivery
+	 * @param duration duration for each delivery @unused
+	 * @param continueInterruptedCalculation true if the method is called after having interrupted the calculation at least once
+	 * @throws TSPLimitTimeReachedException when the limit time we set for the calculation is reached before the end of the calculation
 	 */
 	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException;
 	
 	/**
-	 * Gets the delivery in best solution at index.
+	 * Gets the cost of the best solution.
 	 *
-	 * @param index the index
-	 * @return the delivery in best solution at index
-	 */
-	public Delivery getDeliveryInBestSolutionAtIndex(int index);
-	
-	/**
-	 * Gets the cost best solution.
-	 *
-	 * @return the cost best solution
+	 * @return the cost of the best solution
 	 */
 	public double getCostBestSolution();
 }

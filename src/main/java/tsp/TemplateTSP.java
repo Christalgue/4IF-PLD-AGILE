@@ -6,45 +6,37 @@ import main.java.entity.*;
 import main.java.exception.TSPLimitTimeReachedException;
 
 // TODO: Auto-generated Javadoc
-///////////////////////////::
-//////////////////////////
-///////////////////////////
-//////////////////////////
-/////// ON DIRAIT QUE DES TRUCS MODIFIENT ALLPATHS EN COURS DE ROUTE DANS CONTINUE CALCULATION !!!!!!!
-/////////////////////////////////////
-////////////////////////////////////
 /**
  * The Class TemplateTSP.
  */
-////////////////////////////////////
 public abstract class TemplateTSP implements TSP {
 	
-	/** The best solution. */
+	/** The best solution. Deliveries ordered to have he most little circuit possible */
 	private Delivery[] bestSolution;
 	
-	/** The cost best solution. */
-	private double costBestSolution = 0;
+	/** The cost best solution. Initialized with the higher value possible*/
+	private double costBestSolution = Double.MAX_VALUE;
 	
-	/** The limit time reached. */
+	/** The limit time has been reached or not. */
 	private Boolean limitTimeReached;
 	
 	
-	/** The current delivery SVG. */
+	/** The current delivery saved in memory to continue the calculation if wanted. */
 	private Delivery currentDeliverySVG;
 	
-	/** The non viewed SVG. */
+	/** The list of the non viewed deliveries saved in memory to continue the calculation if wanted. */
 	private ArrayList<Delivery> nonViewedSVG = null;
 	
-	/** The viewed SVG. */
+	/** The list of the viewed deliveries saved in memory to continue the calculation if wanted. */
 	private ArrayList<Delivery> viewedSVG = null;
 	
-	/** The viewed cost SVG. */
+	/** The cost associated to the list of viewed deliveries saved in memory to continue the calculation if wanted. */
 	private double viewedCostSVG;
 	
-	/** The duration SVG. */
+	/** The duration for each delivery saved in memory to continue the calculation if wanted. @unused */
 	private int[] durationSVG = null;
 	
-	/** The execution stack. */
+	/** The execution stack to keep a trace of where we were when the calculation stopped because of the limit time exception so that we can continue it if wanted. */
 	protected ArrayList<Delivery> executionStack = null;
 	
 	/* (non-Javadoc)
@@ -60,7 +52,7 @@ public abstract class TemplateTSP implements TSP {
 	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException{
 		limitTimeReached = false;
 		if (continueInterruptedCalculation == false) {
-			costBestSolution = Integer.MAX_VALUE;
+			costBestSolution = Double.MAX_VALUE;
 			ArrayList<Delivery> nonViewed = new ArrayList<Delivery>();
 			nonViewed.addAll(allPaths.keySet());
 			nonViewed.remove(repository);
@@ -73,7 +65,6 @@ public abstract class TemplateTSP implements TSP {
 			
 		} else {
 			continueResearchSolution(limitTime, allPaths, System.currentTimeMillis());
-			//branchAndBound(currentDeliverySVG, nonViewedSVG, viewedSVG, viewedCostSVG, allPathsSVG, durationSVG, System.currentTimeMillis(), limitTime);
 		}
 		
 		// TODO need to consider the time spent delivering the order at each delivery point.
@@ -82,8 +73,8 @@ public abstract class TemplateTSP implements TSP {
 	/**
 	 * Continue research solution.
 	 *
-	 * @param limitTime the limit time
-	 * @param allPaths the all paths
+	 * @param limitTime the limit time after which the calculation have to stop, finished or not
+	 * @param allPaths all the AtomicPath between each Delivery in the deliveryList
 	 * @param startingTime the starting time
 	 * @throws TSPLimitTimeReachedException the TSP limit time reached exception
 	 */
@@ -171,16 +162,6 @@ public abstract class TemplateTSP implements TSP {
 		}
 		return viewedCost;
 	}
-	
-	/* (non-Javadoc)
-	 * @see main.java.tsp.TSP#getDeliveryInBestSolutionAtIndex(int)
-	 */
-	public Delivery getDeliveryInBestSolutionAtIndex(int index){
-		if ((bestSolution == null) || (index<0) || (index>=bestSolution.length))
-			return null;
-		return bestSolution[index];
-	}
-	
 	
 	/**
 	 * Gets the best solution.
