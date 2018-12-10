@@ -80,9 +80,7 @@ public class PopUp extends JFrame {
 	        	    new PropertyChangeListener() {
 	        	        public void propertyChange(PropertyChangeEvent e) {
 	        	            String prop = e.getPropertyName();
-	        	            System.out.println(e.getSource() == popUp);
 	        	            if (durationDialog.isVisible() && (e.getSource() == popUp)&& (prop.equals(JOptionPane.VALUE_PROPERTY))) {
-	        	            	System.out.println("Bouh");
 	        	            	Object value = popUp.getValue();
 	        	            	if (durationOptions[0].equals(value)) {
 	        	                    try{
@@ -132,13 +130,23 @@ public class PopUp extends JFrame {
 				Object[] continueOptions = {"Garder", "Continuer"};
 				userChoice = JOptionPane.showOptionDialog(window,
 											VALIDATE_CONTINUE,
-											"Meilleure tourneee actuelle",
+											"Meilleure tournee actuelle",
 											JOptionPane.YES_NO_CANCEL_OPTION,
 											JOptionPane.QUESTION_MESSAGE,
 											null,
 											continueOptions,
 											continueOptions[0]
 											);
+				window.manageContinuePopUpValue(userChoice);
+				break;
+				
+			case ERROR:
+				Object[] errorOptions = {"OK"};
+				userChoice = 0;
+				JOptionPane.showMessageDialog(window,
+											"Une erreur dans le fichier XML a été détectée",
+											"Erreur fichier XML",
+											JOptionPane.WARNING_MESSAGE);
 				window.manageContinuePopUpValue(userChoice);
 				break;
 		}

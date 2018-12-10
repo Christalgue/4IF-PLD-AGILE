@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 import main.java.entity.Bow;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadMapException;
 import main.java.exception.XMLException;
 import main.java.utils.Deserializer;
@@ -30,6 +31,8 @@ class TestDeserializer {
 	 * 5) The length of a bow is negative
 	 * 6) Duplicate bow detected
 	 * 7) Everything is good
+	 * 8) Character detected in value
+	 * 9) A node has no bow connected to it
 	 */
 	void testLoadMap() {
 		Map map = new Map();
@@ -45,6 +48,8 @@ class TestDeserializer {
 		} catch (IOException e) {
 		} catch (XMLException e) {
 			fail("1) XML Exception");
+		} catch (ForgivableXMLException e) {
+			fail("1) ForgivableXMLException");
 		}
 		
 		//2
@@ -59,6 +64,8 @@ class TestDeserializer {
 			fail("2) IO Exception");
 		} catch (XMLException e) {
 			assertTrue(e.getMessage().contains("The file is not valid"),"2) Wrong XMLException"+e.getMessage());
+		} catch (ForgivableXMLException e) {
+			fail("2) ForgivableXMLException");
 		}
 		
 		//3
@@ -73,6 +80,8 @@ class TestDeserializer {
 			fail("3) IO Exception");
 		} catch (XMLException e) {
 			assertTrue(e.getMessage().contains("The file is empty"),"3) Wrong XMLException"+e.getMessage());
+		} catch (ForgivableXMLException e) {
+			fail("3) ForgivableXMLException");
 		}
 		
 		//4
@@ -87,6 +96,8 @@ class TestDeserializer {
 			fail("4) IO Exception");
 		} catch (XMLException e) {
 			assertTrue(e.getMessage().contains("The node of a bow does not exist"),"4) Wrong XMLException"+e.getMessage());
+		} catch (ForgivableXMLException e) {
+			fail("4) ForgivableXMLException");
 		}
 		
 		//5
@@ -100,7 +111,9 @@ class TestDeserializer {
 		} catch (IOException e) {
 			fail("5) IO Exception");
 		} catch (XMLException e) {
-			assertTrue(e.getMessage().contains("The length of a bow is negative"),"5) Wrong XMLException"+e.getMessage());
+			fail("5) XMLException");
+		} catch (ForgivableXMLException e) {
+			assertTrue(e.getMessage().contains("The length of a bow is negative"),"5) Wrong ForgivableXMLException"+e.getMessage());
 		}
 		
 		//6
@@ -114,7 +127,9 @@ class TestDeserializer {
 		} catch (IOException e) {
 			fail("6) IO Exception");
 		} catch (XMLException e) {
-			assertTrue(e.getMessage().contains("Duplicate bow detected"),"6) Wrong XMLException"+e.getMessage());
+			fail("6) XMLException");
+		} catch (ForgivableXMLException e) {
+			assertTrue(e.getMessage().contains("Duplicate bow detected"),"6) Wrong ForgivableXMLException"+e.getMessage());
 		}
 		
 		//7
@@ -128,7 +143,7 @@ class TestDeserializer {
 			fail("7) IO Exception");
 		} catch (XMLException e) {
 			fail("7)"+e.getMessage());
-		}
+		}catch (ForgivableXMLException e) {}
 		assertTrue(map.getNodeMap().containsKey((long)1),"7) Nodes do not contain key 1");
 		assertTrue(map.getNodeMap().containsKey((long)2),"7) Nodes do not contain key 2");
 		assertTrue(map.getNodeMap().get((long)1).getId()==1,"7) wrong ID (1) : "+map.getNodeMap().get((long)1).getId());
@@ -143,6 +158,38 @@ class TestDeserializer {
 		assertTrue(first.getEndNode().getId()==2,"7) wrong end node (2) : "+first.getEndNode().getId());
 		assertTrue(first.getLength()==79.801414,"7) wrong length (79.801414) : "+first.getLength());
 		assertTrue(first.getStreetName().contains("Rue Edouard Aynard"),"7) wrong street name (Rue Edouard Aynard) : "+first.getStreetName());
+		
+		//8
+		try {
+			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_lettre_nombre.xml", map);
+			fail("8) No exception thrown");
+		} catch (ParserConfigurationException e) {
+			fail("8) Parser Exception");
+		} catch (SAXException e) {
+			fail("8) SAX Exception");
+		} catch (IOException e) {
+			fail("8) IO Exception");
+		} catch (XMLException e) {
+			fail("8) XMLException");
+		}catch (ForgivableXMLException e) {
+			assertTrue(e.getMessage().contains("An incorrect value has been detected in the xml file"),"8) Wrong ForgivableXMLException"+e.getMessage());
+		}
+		
+		//9
+		try {
+			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_lettre_nombre.xml", map);
+			fail("8) No exception thrown");
+		} catch (ParserConfigurationException e) {
+			fail("8) Parser Exception");
+		} catch (SAXException e) {
+			fail("8) SAX Exception");
+		} catch (IOException e) {
+			fail("8) IO Exception");
+		} catch (XMLException e) {
+			fail("8) XMLException");
+		}catch (ForgivableXMLException e) {
+			assertTrue(e.getMessage().contains("An incorrect value has been detected in the xml file"),"8) Wrong ForgivableXMLException"+e.getMessage());
+		}
 	}
 
 	@Test
@@ -158,9 +205,11 @@ class TestDeserializer {
 	 */
 	void testLoadDeliveries() {
 		List<Delivery> deliveries;
-		Map map;
+		Map map = new Map();
 		try {
-			map = new Map("resources/tests/Deserializer/xml/plan_conforme2.xml");
+			try {
+				map = new Map("resources/tests/Deserializer/xml/plan_conforme2.xml");
+			} catch (ForgivableXMLException e1) {}
 		
 			//1
 			try {

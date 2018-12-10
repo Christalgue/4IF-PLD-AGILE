@@ -6,6 +6,7 @@ import java.util.*;
 import javafx.util.Pair;
 
 import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadMapException;
 import main.java.utils.Deserializer;
 
@@ -38,17 +39,34 @@ public class Map extends Observable{
      *
      * @param filename the name of the file
      * @throws LoadMapException the load map exception
+     * @throws ForgivableXMLException 
      */
-    public Map(String filename) throws LoadMapException {
+    public Map(String filename) throws LoadMapException, ForgivableXMLException {
         // TODO implement here
     	try {
     		Deserializer.loadMap(filename, this);
+		} catch (ForgivableXMLException e) {
+			throw new ForgivableXMLException(e.getMessage());
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new LoadMapException(e.getMessage());
 		}
     	
     }
+    
+    public void load (String filename)throws LoadMapException, ForgivableXMLException {
+        // TODO implement here
+    	try {
+    		Deserializer.loadMap(filename, this);
+		} catch (ForgivableXMLException e) {
+			throw new ForgivableXMLException(e.getMessage());
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new LoadMapException(e.getMessage());
+		}
+    	
+    }
+    
 
 
     /**

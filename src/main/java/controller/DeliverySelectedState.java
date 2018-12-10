@@ -4,6 +4,7 @@ import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
 import main.java.exception.MapNotChargedException;
@@ -101,9 +102,15 @@ public class DeliverySelectedState extends DefaultState {
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			window.disableButtonCalculateCircuit();
-			controller.circuitManagement.loadMap(filename);
-			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
+			try {
+				controller.circuitManagement.loadMap(filename);
+			} catch (ForgivableXMLException e) {
+				window.setErrorMessage(e.getMessage());
+				if(controller.getShowPopUp())
+					window.getPopUpValue(PopUpType.ERROR, window);
+			}
 			window.drawMap();
+			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			commandsList.reset();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)

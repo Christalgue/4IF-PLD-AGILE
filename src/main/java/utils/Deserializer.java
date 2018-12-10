@@ -20,6 +20,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry.Entry;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -37,12 +39,14 @@ public class Deserializer {
 	 * @throws SAXException the SAX exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws XMLException the XML exception
+	 * @throws ForgivableXMLException 
 	 */
-	public static void loadMap(String path, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
+	public static void loadMap(String path, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException, ForgivableXMLException{
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    final DocumentBuilder builder = factory.newDocumentBuilder();		
 	    final Document document= builder.parse(path);
 	    final Element root = document.getDocumentElement();
+	    
 	    if (root.getNodeName().equals("reseau")) 
 	        fillMap(root, map);
 	    else
@@ -77,56 +81,79 @@ public class Deserializer {
 	 * @param root the root
 	 * @param map the map
 	 * @throws XMLException the XML exception
+	 * @throws ForgivableXMLException 
 	 */
-	private static void fillMap(Element root, Map map) throws XMLException{
+	private static void fillMap(Element root, Map map) throws XMLException, ForgivableXMLException{
 		final NodeList nodes = root.getElementsByTagName("noeud");
 		final NodeList bows = root.getElementsByTagName("troncon");
 		final int nbNodes = nodes.getLength();
 		final int nbBows = bows.getLength();
 		
+		List<ForgivableXMLException> errors = new ArrayList<ForgivableXMLException>();
+		
 		HashMap<Long, Node> tempNodeMap = new HashMap<Long, Node>();
 		HashMap<Long,Set<Bow>> tempBowMap = new HashMap<Long,Set<Bow>>();
 		
-		for (int i = 0; i<nbNodes; i++) {
-			Element element = (Element) nodes.item(i);
-			tempNodeMap.put(Long.parseLong(element.getAttribute("id")), new Node(Long.parseLong(element.getAttribute("id")),Double.parseDouble(element.getAttribute("latitude")),Double.parseDouble(element.getAttribute("longitude"))));
-		}
+		HashMap<Long, Boolean> nodeIsConnected = new HashMap<Long,Boolean>();
 		
-		if (tempNodeMap.size()==0)
-		{
-			throw new XMLException("The file is empty");
-		}
-		
-		for (int i = 0; i<nbBows; i++) {
-			Element element = (Element) bows.item(i);
-			
-			long origin = Long.parseLong(element.getAttribute("origine"));
-			long arrival = Long.parseLong(element.getAttribute("destination"));
-			double length = Double.parseDouble(element.getAttribute("longueur"));
-			
-			if(!tempNodeMap.containsKey(origin) || !tempNodeMap.containsKey(arrival)) {
-				throw new XMLException("The node of a bow does not exist : bow ("+origin+" - "+arrival+")");
+		try {
+			for (int i = 0; i<nbNodes; i++) {
+				Element element = (Element) nodes.item(i);
+				tempNodeMap.put(Long.parseLong(element.getAttribute("id")), new Node(Long.parseLong(element.getAttribute("id")),Double.parseDouble(element.getAttribute("latitude")),Double.parseDouble(element.getAttribute("longitude"))));
+				nodeIsConnected.put(Long.parseLong(element.getAttribute("id")), false);
 			}
-			if (length < 0) {
-				throw new XMLException("The length of a bow is negative : bow ("+origin+" - "+arrival+")");
-			}
-			String streetName = element.getAttribute("nomRue");
 			
-			if(!tempBowMap.containsKey(origin)){
-				tempBowMap.put(origin, new HashSet<Bow>());
-			}
-			else
+			if (tempNodeMap.size()==0)
 			{
-				for(Bow b : tempBowMap.get(origin)) {
-					if(b.getEndNode().getId()==arrival) {
-						throw new XMLException("Duplicate bow detected : bow ("+origin+" - "+arrival+")");
+				throw new XMLException("The file is empty");
+			}
+			
+			for (int i = 0; i<nbBows; i++) {
+				Element element = (Element) bows.item(i);
+				
+				long origin = Long.parseLong(element.getAttribute("origine"));
+				long arrival = Long.parseLong(element.getAttribute("destination"));
+				double length = Double.parseDouble(element.getAttribute("longueur"));
+				
+				if(!tempNodeMap.containsKey(origin) || !tempNodeMap.containsKey(arrival)) {
+					throw new XMLException("The node of a bow does not exist : bow ("+origin+" - "+arrival+")");
+				}
+				if (length < 0) {
+					errors.add(new ForgivableXMLException("The length of a bow is negative : bow ("+origin+" - "+arrival+")"));
+				}
+				String streetName = element.getAttribute("nomRue");
+				
+				if(!tempBowMap.containsKey(origin)){
+					tempBowMap.put(origin, new HashSet<Bow>());
+				}
+				else
+				{
+					for(Bow b : tempBowMap.get(origin)) {
+						if(b.getEndNode().getId()==arrival) {
+							errors.add(new ForgivableXMLException("Duplicate bow detected : bow ("+origin+" - "+arrival+")"));
+						}
 					}
 				}
+				tempBowMap.get(origin).add(new Bow(tempNodeMap.get(origin),tempNodeMap.get(arrival),streetName,length));
+				
+				nodeIsConnected.put(origin,true);
+				nodeIsConnected.put(arrival,true);
 			}
-			tempBowMap.get(origin).add(new Bow(tempNodeMap.get(origin),tempNodeMap.get(arrival),streetName,length));
+			map.setNodeMap(tempNodeMap);
+			map.setBowMap(tempBowMap);
+			
+			for(HashMap.Entry<Long, Boolean> connection : nodeIsConnected.entrySet()) {
+				if(!connection.getValue())
+					errors.add(new ForgivableXMLException("A node is not connected to any street, node : "+connection.getKey()));
+			}
 		}
-		map.setNodeMap(tempNodeMap);
-		map.setBowMap(tempBowMap);
+		catch(NumberFormatException e) {
+			errors.add(new ForgivableXMLException("An incorrect value has been detected in the xml file"));
+		}
+		
+		if(errors.size()!=0) {
+			throw errors.get(0);
+		}
 	}
 	
 	/**

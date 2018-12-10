@@ -16,6 +16,7 @@ import main.java.entity.AtomicPath;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
 import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.XMLException;
 import main.java.utils.Deserializer;
 
@@ -29,7 +30,9 @@ class TestMap {
 		HashMap<Delivery,AtomicPath> shortPath;
 		
 		try {
-			Deserializer.loadMap("resources/tests/Map/xml/plan_shortest_path.xml", map);
+			try {
+				Deserializer.loadMap("resources/tests/Map/xml/plan_shortest_path.xml", map);
+			} catch (ForgivableXMLException e) {}
 			deliveries = new ArrayList<Delivery>(Deserializer.loadDeliveries("resources/tests/Map/xml/delivery_shortest_path.xml", map));
 
 			shortPath = new HashMap<Delivery,AtomicPath>(map.findShortestPath(deliveries.get(0), deliveries));
@@ -70,7 +73,9 @@ class TestMap {
 		Map map = new Map();
 		
 		try {
-			Deserializer.loadMap("resources/tests/Map/xml/plan_conforme.xml", map);
+			try {
+				Deserializer.loadMap("resources/tests/Map/xml/plan_conforme.xml", map);
+			} catch (ForgivableXMLException e) {}
 			
 			long id = map.getIdFromCorrespondingNode(1, 1);
 			assertTrue(id==(long)1,"Error expected 1, got : "+id);
