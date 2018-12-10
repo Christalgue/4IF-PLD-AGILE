@@ -697,22 +697,25 @@ public class CircuitManagement extends Observable{
 	}
 	
 	/**
-	 * Gets the circuit by delivery.
+	 * Gets the circuit index by delivery.
 	 *
 	 * @param delivery the delivery
-	 * @return the circuit by delivery
+	 * @return the circuit index by delivery
 	 */
-	public Circuit getCircuitByDelivery( Delivery delivery) {
+
+	public int getCircuitIndexByDelivery( Delivery delivery) {
 		
+		int circuitIndex =0;
 		for(Circuit circuitTested : this.circuitsList){
 			
 			for ( Delivery deliveryTested : circuitTested.getDeliveryList()) {
 				if ( deliveryTested.getPosition() == delivery.getPosition())
-					return circuitTested;
+					return circuitIndex;
 			}
+			circuitIndex++;
 		}
 		
-		return null;
+		return -1;
 		
 	}
 	
