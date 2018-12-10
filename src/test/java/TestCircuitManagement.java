@@ -15,7 +15,6 @@ import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
 import main.java.entity.Node;
-import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
@@ -231,8 +230,6 @@ class TestCircuitManagement {
 			fail("LoadDeliveryException : "+e.getMessage());
 		} catch (MapNotChargedException e) {
 			fail("MapNotChargedException : "+e.getMessage());
-		} catch (ClusteringException e) {
-			fail("ClusteringException : "+e.getMessage());
 		} catch (DijkstraException e) {
 			fail("DijkstraException : "+e.getMessage());
 		} catch (NoRepositoryException e) {
@@ -312,8 +309,6 @@ class TestCircuitManagement {
 			fail("LoadDeliveryException"+e.getMessage());
 		} catch (MapNotChargedException e) {
 			fail("MapNotChargedException : "+e.getMessage());
-		} catch (ClusteringException e) {
-			fail("ClusteringException : "+e.getMessage());
 		} catch (DijkstraException e) {
 			fail("DijkstraException : "+e.getMessage());
 		} catch (NoRepositoryException e) {
@@ -358,8 +353,6 @@ class TestCircuitManagement {
 			fail("LoadDeliveryException"+e.getMessage());
 		} catch (MapNotChargedException e) {
 			fail("MapNotChargedException : "+e.getMessage());
-		} catch (ClusteringException e) {
-			fail("ClusteringException : "+e.getMessage());
 		} catch (DijkstraException e) {
 			fail("DijkstraException : "+e.getMessage());
 		} catch (NoRepositoryException e) {
@@ -389,8 +382,6 @@ class TestCircuitManagement {
 			fail("LoadDeliveryException"+e.getMessage());
 		} catch (MapNotChargedException e) {
 			fail("MapNotChargedException : "+e.getMessage());
-		} catch (ClusteringException e) {
-			fail("ClusteringException : "+e.getMessage());
 		} catch (DijkstraException e) {
 			fail("DijkstraException : "+e.getMessage());
 		} catch (NoRepositoryException e) {
@@ -457,8 +448,6 @@ class TestCircuitManagement {
 			fail("LoadDeliveryException"+e.getMessage());
 		} catch (MapNotChargedException e) {
 			fail("MapNotChargedException : "+e.getMessage());
-		} catch (ClusteringException e) {
-			fail("ClusteringException : "+e.getMessage());
 		} catch (DijkstraException e) {
 			fail("DijkstraException : "+e.getMessage());
 		} catch (NoRepositoryException e) {

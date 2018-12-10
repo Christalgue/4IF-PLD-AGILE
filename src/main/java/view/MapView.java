@@ -118,16 +118,16 @@ public class MapView extends JPanel {
 	
 	public void drawNode( Graphics2D g, Node node) {
 		
-		if (node.getLongitude() == graphicView.originLong || node.getLongitude()== graphicView.maxLong || node.getLatitude()== graphicView.originLat || node.getLatitude()==graphicView.minLat) {
+		/*if (node.getLongitude() == graphicView.originLong || node.getLongitude()== graphicView.maxLong || node.getLatitude()== graphicView.originLat || node.getLatitude()==graphicView.minLat) {
 			g.setColor(Color.RED);
 			Point point = graphicView.nodeToPoint( node );
 			g.fillOval((int) (point.getX()- nodeRadius/2) ,(int) (point.getY()- nodeRadius/2), nodeRadius,nodeRadius);
 			g.setColor(colorRoad);
-		}else {
+		}else {*/
 		
 			Point point = graphicView.nodeToPoint( node );
 			g.fillOval((int) (point.getX()- nodeRadius/2) ,(int) (point.getY()- nodeRadius/2), nodeRadius,nodeRadius);
-		}
+		//}
 	}
 	
 	

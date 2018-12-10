@@ -39,9 +39,11 @@ public class GraphicView extends JPanel {
 	private static Color selectedColor = Color.GREEN;
 	private static Color hoverColor = Color.BLUE;
 	private static Color deliveryColor = Color.RED;
-	private static Color repositoryColor = Color.ORANGE;
+	private static Color repositoryColor = Color.DARK_GRAY;
 
-	private Color color[] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.ORANGE, Color.PINK };
+	//private Color color[] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.ORANGE, Color.PINK };
+	
+	private HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
 	
 	protected double minLat;
 	protected double maxLong;
@@ -160,12 +162,20 @@ public class GraphicView extends JPanel {
 
 	public void paintCircuits() {
 
-		int colorIndex = 0;
+		int circuitIndex = 0;
 		if(circuitManagement.getCircuitsList()!=null) {
 			for (Circuit entry : circuitManagement.getCircuitsList()) {
-	
-				circuitView.paintCircuit(g, entry, color[colorIndex % color.length]);
-				colorIndex++;
+				Color circuitColor = colors.get(circuitIndex);
+				
+				if ( circuitColor  != null) {
+					//circuitView.paintCircuit(g, entry, color[colorIndex % color.length]);
+					circuitView.paintCircuit(g, entry, circuitColor);
+				} else {
+					circuitColor = new Color ((int)(Math.random()*256),(int)(Math.random()*256), (int)(Math.random()*256));
+					colors.put(circuitIndex, circuitColor);
+					circuitView.paintCircuit(g, entry, circuitColor);
+				}
+				circuitIndex++;
 	
 			}
 		}
@@ -181,7 +191,7 @@ public class GraphicView extends JPanel {
 		return "GraphicView [heightScale=" + heightScale + ", widthScale=" + widthScale + ", originLat=" + originLat
 				+ ", originLong=" + originLong + ", viewHeight=" + viewHeight + ", viewWidth=" + viewWidth
 				+ ", circuitManagement=" + circuitManagement + ", mapView=" + mapView + ", circuitView=" + circuitView
-				+ ", deliveryView=" + deliveryView + ", color=" + Arrays.toString(color) + "]";
+				+ ", deliveryView=" + deliveryView + ", color=" +  "]";
 	}
 
 	public void paintSelectedNode(Delivery delivery, boolean clicked) {
@@ -211,27 +221,24 @@ public class GraphicView extends JPanel {
 		}
 	}
 
-	public void paintSelectedCircuit(Circuit circuit) {
-		circuitView.paintCircuit(g, circuit, selectedColor);
-	}
 
 	public void paintSelectedCircuit(int circuitIndex) {
 		circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuitIndex), selectedColor);
 	}
 
-	public void unPaintCircuit(Circuit selectedCircuit) {
+	public void unPaintCircuit(int selectedCircuit) {
 
 		g.setColor(deliveryColor);
-		circuitView.paintCircuit(g, selectedCircuit, Color.RED);
+		circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(selectedCircuit), colors.get(selectedCircuit));
 
 	}
 
-	public void paintSelectedCircuit(Circuit circuit, boolean clicked) {
+	public void paintSelectedCircuit(int circuit, boolean clicked) {
 		
 		if (clicked) {
-			circuitView.paintCircuit(g, circuit,selectedColor);
+			circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuit),selectedColor);
 		} else {
-			circuitView.paintCircuit(g, circuit,hoverColor);
+			circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuit),hoverColor);
 		}
 		
 	}

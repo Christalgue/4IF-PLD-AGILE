@@ -2,7 +2,6 @@ package main.java.controller;
 
 import javax.swing.JOptionPane;
 
-import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.ManagementException;
@@ -12,8 +11,15 @@ import main.java.exception.TSPLimitTimeReachedException;
 import main.java.utils.PopUpType;
 import main.java.view.Window;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CalculatingState.
+ */
 public class CalculatingState extends DefaultState {
 
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#continueCalculation(main.java.controller.Controller, main.java.view.Window, boolean)
+	 */
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating) {
 		if(keepCalculating == true) {
 			try {
@@ -23,9 +29,6 @@ public class CalculatingState extends DefaultState {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (LoadDeliveryException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClusteringException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (DijkstraException e) {

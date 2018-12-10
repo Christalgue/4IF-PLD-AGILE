@@ -5,7 +5,6 @@ import javax.swing.JOptionPane;
 import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
-import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
@@ -16,10 +15,18 @@ import main.java.utils.PointUtil;
 import main.java.utils.PopUpType;
 import main.java.view.Window;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CalcState.
+ */
 public class CalcState extends DefaultState {
 	
+	/** The nb delivery man. */
 	private int nbDeliveryMan;
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#loadMap(main.java.controller.Controller, main.java.view.Window, java.lang.String, main.java.controller.CommandsList)
+	 */
 	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
@@ -37,6 +44,9 @@ public class CalcState extends DefaultState {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#loadDeliveryOffer(main.java.controller.Controller, main.java.view.Window, java.lang.String, main.java.controller.CommandsList)
+	 */
 	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 		
 		try {
@@ -54,6 +64,9 @@ public class CalcState extends DefaultState {
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#calculateCircuits(main.java.controller.Controller, main.java.view.Window, int, main.java.controller.CommandsList)
+	 */
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
 		this.nbDeliveryMan = nbDeliveryMan;
 		commandsList.reset();
@@ -62,9 +75,6 @@ public class CalcState extends DefaultState {
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
-		} catch (ClusteringException e)
-		{
-			e.printStackTrace();
 		} catch (MapNotChargedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,6 +95,9 @@ public class CalcState extends DefaultState {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#leftClick(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
+	 */
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		
@@ -109,6 +122,9 @@ public class CalcState extends DefaultState {
 		} 
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
+	 */
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
 		window.nodeSelected(deliverySelected);
 		window.circuitSelected(deliverySelected);
@@ -118,6 +134,9 @@ public class CalcState extends DefaultState {
 		controller.setCurrentState(controller.deliverySelectedState);
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
+	 */
 	public void mouseMoved(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if(node!=null) {
@@ -128,11 +147,17 @@ public class CalcState extends DefaultState {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#undo(main.java.controller.Controller, main.java.controller.CommandsList)
+	 */
 	@Override
 	public void undo(Controller controller, CommandsList commandsList) {
 		commandsList.undo();
 	}
 
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#redo(main.java.controller.Controller, main.java.controller.CommandsList)
+	 */
 	@Override
 	public void redo(Controller controller, CommandsList commandsList) {
 		commandsList.redo();
