@@ -119,6 +119,15 @@ public class DeliveryLoadedState extends DefaultState {
 			}
 		}
 	}
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
+	 */
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+		window.nodeSelected(deliverySelected);
+		window.enableButtonDeleteDelivery();
+		controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());
+		controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
+	}
 	
 	/* (non-Javadoc)
 	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)

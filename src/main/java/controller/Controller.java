@@ -299,6 +299,8 @@ public class Controller {
 	 */
 	public void treeDeliverySelected(Delivery deliverySelected) {
 		
+		currentState.treeDeliverySelected(this, window, deliverySelected, commandsList);
+		
 	}
 	
 	/**

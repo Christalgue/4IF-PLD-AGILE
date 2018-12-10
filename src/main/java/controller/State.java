@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.exception.ManagementException;
@@ -143,4 +144,6 @@ public interface State {
 	 * @param keepCalculating the keep calculating
 	 */
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating);
+	
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList);
 }

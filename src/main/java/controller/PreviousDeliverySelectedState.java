@@ -62,6 +62,21 @@ public class PreviousDeliverySelectedState extends DefaultState {
 	}
 	
 	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
+	 */
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+		window.nodeSelected(deliverySelected);
+		window.circuitSelected(deliverySelected);
+		controller.deliveryAddedState.setNode(node);
+		controller.deliveryAddedState.setDuration(duration);
+		controller.deliveryAddedState.setPreviousNode(deliverySelected.getPosition());
+		window.setMessage("");
+		controller.setCurrentState(controller.deliveryAddedState);
+		if(controller.getShowPopUp())
+			controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
+	}
+	
+	/* (non-Javadoc)
 	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
 	 */
 	public void mouseMoved(Controller controller, Window window, Point point) {

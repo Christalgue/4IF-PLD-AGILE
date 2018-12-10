@@ -58,6 +58,15 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	}
 	
 	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
+	 */
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+		window.nodeSelected(deliverySelected);
+		controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());
+		controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
+	}
+	
+	/* (non-Javadoc)
 	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
 	 */
 	public void mouseMoved(Controller controller, Window window, Point point) {
