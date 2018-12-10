@@ -137,12 +137,13 @@ public class CircuitManagement extends Observable{
     }
 
     /**
-     * K-means clustering algorithm.
+     * Clustering algorithm, performing K-means clustering algorithm and if the
+     * clusters are unbalanced in terms of cardinality, balance those clusters.
      *
-     * @return the list
-     * @throws ClusteringException the clustering exception
+     * @return a list containing all clusters
+     * @throws ClusteringException when no repository is found
      */
-    public List<ArrayList<Delivery>> cluster() throws ClusteringException {
+    public List<ArrayList<Delivery>> cluster() throws NoRepositoryException {
     	
         // process the Kmeansclustering method multiple times and keep the best one
     	
@@ -150,8 +151,8 @@ public class CircuitManagement extends Observable{
     	try {
 			deliveriesToDistribute.remove(getRepository());
 		} catch (NoRepositoryException e) {
-			System.out.println("PAS DE REPOSITORY!!!");
 			e.printStackTrace();
+			throw new NoRepositoryException("CircuitManagement.java : no repository found in cluster()");
 		}
     	
     	Pair<List<ArrayList<Delivery>>,List<Pair<Double,Double>>> distribution = KmeansClustering(nbDeliveryMan, deliveriesToDistribute);
@@ -160,54 +161,19 @@ public class CircuitManagement extends Observable{
     		iteration++;
     		distribution = KmeansClustering(nbDeliveryMan, deliveriesToDistribute);
     		
-    		/*System.out.println("--------------- AVANT ------------------");
-    		System.out.println("Iteration : "+iteration);
-    		System.out.println("Validity : "+checkClusterValidity(distribution.getKey()));
-    		for (ArrayList<Delivery> cluster : distribution.getKey()) {
-    			System.out.println("Cluster de taille "+cluster.size()+" : ");
-    			for (Delivery del : cluster) {
-    				System.out.println("Livraison : "+del.getPosition().getId());
-    			}
-    			System.out.println("");
-    		}
-    		System.out.println("----------------------------------------");
-    		System.out.println("");*/
-    		
     		// Balance the distribution
     		distribution = balanceDistribution(distribution);
     	}
-    	if (iteration==1000) {
-    		System.out.println("PROBLEME DE DIVERGENCE DES CLUSTERS!!! (LA SOLUTION TROUVEE N'EST PAS OPTIMALE)");
-    	} /*else {
-    		System.out.println("Nombre d'iteration : "+iteration);
-    	}*/
-
-    	
-		System.out.println("-------------------------------------------");
-		System.out.println("Iteration : "+iteration);
-		System.out.println("Validity : "+checkClusterValidity(distribution.getKey()));
-		for (ArrayList<Delivery> cluster : distribution.getKey()) {
-			System.out.println(cluster.size()+" : ");
-			for (Delivery del : cluster) {
-				System.out.println("Livraison : "+del.getPosition().getId()+" ("+del.getPosition().getLatitude()+"/"+del.getPosition().getLongitude()+")");
-			}
-			System.out.println("");
-		}
-		System.out.println("-------------------------------------------");
-		System.out.println("");
-    	
-    	
+  	    	
 		// Add repository to each circuit
 		for (ArrayList<Delivery> cluster : distribution.getKey()) {
 			try {
 				cluster.add(getRepository());
 			} catch (NoRepositoryException e) {
-				// TODO Auto-generated catch block
-				System.out.println("PAS DE REPOSITORY!!!");
 				e.printStackTrace();
+				throw new NoRepositoryException("CircuitManagement.java : no repository found in cluster()");
 			}
 		} 
-		
         return distribution.getKey();
     }
     
@@ -225,28 +191,12 @@ public class CircuitManagement extends Observable{
     		addRandomBarycenter(barycenters,numberOfClusters, deliveriesToCluster);
     	}
     	
-    	/*
-    	System.out.println("Affichage des barycentres : ");
-		for (Pair<Double,Double> barycenter : barycenters) {
-			System.out.println("Barycentre : "+barycenter.getKey()+" (lat) / "+barycenter.getValue()+" (long)");
-		}
-		System.out.println("");
-    	*/
-
     	List<ArrayList<Delivery>> newDistribution = KmeansClusteringStep(barycenters, deliveriesToCluster);
     	List<ArrayList<Delivery>> oldDistribution = null; //// HOW TO INITIALIZE????
     	    	
     	while (evaluateCluster(newDistribution, oldDistribution)) {
     		
     		barycenters = calculateBarycenters(newDistribution);
-    		
-    		/*
-    		System.out.println("Affichage des barycentres : ");
-    		for (Pair<Double,Double> barycenter : barycenters) {
-    			System.out.println("Barycentre : "+barycenter.getKey()+" (lat) / "+barycenter.getValue()+" (long)");
-    		}
-    		System.out.println("");
-    		*/
     		
     		oldDistribution = newDistribution;
     		newDistribution = KmeansClusteringStep(barycenters, deliveriesToCluster);
@@ -324,7 +274,6 @@ public class CircuitManagement extends Observable{
     	Random r = new Random();
         Integer randomIndex = r.nextInt(deliveries.size());
         Delivery randomDelivery = deliveries.get(randomIndex);
-        //System.out.println("Random Delivery prise (barycenter) : "+randomDelivery.getPosition().getId());
         Pair<Double,Double> barycenter = new Pair<Double,Double>(randomDelivery.getPosition().getLatitude(),randomDelivery.getPosition().getLongitude());
     	if (!barycenters.contains(barycenter)) {
     		barycenters.add(barycenter);
@@ -368,17 +317,6 @@ public class CircuitManagement extends Observable{
         	ArrayList<Delivery> cluster = clusterAndRestOfDeliveries.getKey();
         	List<Delivery> restOfDeliveries = clusterAndRestOfDeliveries.getValue();
         	
-        	/*
-        	System.out.println("Affichage cluster APRES EQUILIBRAGE : ");
-        	for (Delivery d : cluster) {
-        		System.out.println("--- Livraison : "+d.getPosition().getId());
-        	}
-        	
-        	System.out.println("Affichage du reste des livraisons APRES EQUILIBRAGE : ");
-        	for (Delivery d : restOfDeliveries) {
-        		System.out.println("(Reste) Livraison : "+d.getPosition().getId());
-        	}*/
-        	
         	balancedDistribution.getKey().add(cluster);
         	balancedDistribution.getValue().add(new Pair<Double,Double>(0.0,0.0)); // A changer
         	
@@ -420,42 +358,12 @@ public class CircuitManagement extends Observable{
     		}
     	}
     	
-    	//Integer bottomAverageNumberOfDeliveries = (deliveryList.size()-1)/nbDeliveryMan;
-    	//Integer topAverageNumberOfDeliveries = bottomAverageNumberOfDeliveries;
-    	
     	Integer bottomAverageNumberOfDeliveries = (clusterToBalance.size()+restOfDeliveries.size())/distributionToBalance.size();
     	Integer topAverageNumberOfDeliveries = bottomAverageNumberOfDeliveries;
     	
     	if ((clusterToBalance.size()+restOfDeliveries.size())%distributionToBalance.size()!=0) {
     		topAverageNumberOfDeliveries += 1;
-    	}
-    	
-    	/*
-    	System.out.println("------------------------------------------");
-    	System.out.println("BOTTOM : "+bottomAverageNumberOfDeliveries);
-    	System.out.println("TOP : "+topAverageNumberOfDeliveries);
-    	System.out.println("Taille du cluste a equilibrer : "+clusterToBalance.size());
-    	System.out.println("Nombre du reste des deliveries : "+restOfDeliveries.size());
-    	System.out.println("le nouveau truc : "+(clusterToBalance.size()+restOfDeliveries.size()));
-    	System.out.println("le nouveau nombre de clusters : "+distributionToBalance.size());
-    	System.out.println("------------------------------------------");*/
-    	
-    	/*
-    	System.out.println("Affichage du cluster AVANT EQUILIBRAGE : ");
-    	for (Delivery d : clusterToBalance) {
-    		System.out.println("Livraison : "+d.getPosition().getId());
-    	}
-    	
-    	System.out.println("Affichage du reste des livraisons AVANT EQUILIBRAGE : ");
-    	for (Delivery d : restOfDeliveries) {
-    		System.out.println("(Reste) Livraison : "+d.getPosition().getId());
-    	}*/
-    	
-    	/*System.out.println("Taille du cluster : "+clusterToBalance.size());
-    	System.out.println("Borne sup : "+topAverageNumberOfDeliveries);
-    	System.out.println("Borne inf : "+bottomAverageNumberOfDeliveries);
-    	System.out.println("Nb de del man : "+nbDeliveryMan);
-    	System.out.println("Nb de livr total : "+deliveryList.size());*/  	
+    	} 	
     	
     	if (clusterToBalance.size()>topAverageNumberOfDeliveries) {
     		// Remove closest deliveries to center of all deliveries
@@ -495,11 +403,7 @@ public class CircuitManagement extends Observable{
     	globalLongitude = globalLongitude/numberOfDeliveries;
     	Pair<Double,Double> globalBarycenter = new Pair<Double,Double>(globalLatitude,globalLongitude);
     	
-    	/*
-    	System.out.println("Coordonnees du centre de gravite : ");
-    	System.out.println("lat : "+globalLatitude);
-    	System.out.println("long : "+globalLongitude);
-    	*/
+
     	Double greatestBarycentersDistance = (double)0;
     	Pair<Double,Double> mostDistantBarycenter = null;
     	for (Pair<Double,Double> currentBarycenter : barycenters) {
@@ -512,11 +416,7 @@ public class CircuitManagement extends Observable{
     			mostDistantBarycenter = currentBarycenter;
     		}
     	}
-    	/*
-    	System.out.println("Coordonnees du barycentre : ");
-    	System.out.println("lat : "+mostDistantBarycenter.getKey());
-    	System.out.println("long : "+mostDistantBarycenter.getValue());
-    	*/
+
     	Pair<Pair<Double,Double>,Pair<Double,Double>> globalAndMostDistantBarycenters = new Pair<Pair<Double,Double>,Pair<Double,Double>>(mostDistantBarycenter,globalBarycenter);
     	return globalAndMostDistantBarycenters;
     }
@@ -542,7 +442,6 @@ public class CircuitManagement extends Observable{
     		}
     	}
     	
-    	//System.out.println("Ajout de la livraison : "+deliveryToAdd.getPosition().getId());
     	// add the closest delivery to the cluster
     	cluster.add(deliveryToAdd);
     	restOfDeliveries.remove(deliveryToAdd);
@@ -566,7 +465,6 @@ public class CircuitManagement extends Observable{
     		}
     	}
     	
-    	//System.out.println("Retirer la livraison : "+deliveryToRemove.getPosition().getId());
     	// add the closest delivery to the cluster
     	cluster.remove(deliveryToRemove);
     	restOfDeliveries.add(deliveryToRemove);
@@ -577,9 +475,8 @@ public class CircuitManagement extends Observable{
      * @return
      */
     protected boolean checkClusterValidity (List<ArrayList<Delivery>> clustersToCheck) {
-    	Integer bottomAverageNumberOfDeliveries = (deliveryList.size()-1)/nbDeliveryMan; // Passer plutot la liste sans l'entrepot
+    	Integer bottomAverageNumberOfDeliveries = (deliveryList.size()-1)/nbDeliveryMan;
     	Integer topAverageNumberOfDeliveries = bottomAverageNumberOfDeliveries+1;
-    	//System.out.println("Bornes valides : "+bottomAverageNumberOfDeliveries+"/"+topAverageNumberOfDeliveries);
     	boolean isValid = true;
     	for (ArrayList<Delivery> cluster : clustersToCheck) {
     		if (cluster.size() != bottomAverageNumberOfDeliveries && cluster.size() != topAverageNumberOfDeliveries) {
@@ -603,7 +500,7 @@ public class CircuitManagement extends Observable{
      * @throws NoRepositoryException the no repository exception
      * @throws TSPLimitTimeReachedException the TSP limit time reached exception
      */
-    public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, LoadDeliveryException, ClusteringException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException {
+    public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, LoadDeliveryException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException {
     	
     	if(continueInterruptedCalculation == false) {
     		this.circuitsList = null;
@@ -618,7 +515,7 @@ public class CircuitManagement extends Observable{
         	} else {
         		try {
     				groupedDeliveries = cluster();
-    			} catch (ClusteringException e) {
+    			} catch (NoRepositoryException e) {
     				throw e;
     			}
         	}
@@ -651,20 +548,16 @@ public class CircuitManagement extends Observable{
         			}
         			Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths);
         			this.circuitsList.add(circuit);
-        			System.out.println("circuit cre¿½e¿½");
         		}
         		for(Circuit circuit : this.circuitsList) {
         			try {
         				circuit.createCircuit();
-        				//System.out.println(circuit.getPath().toString());
     				} catch (TSPLimitTimeReachedException e) {
-    					//System.out.println(e.getMessage());
     					throw e;
     				} 
         		}
         	}
     	} else {
-    		System.out.println("passage par CM_calculateCircuits");
     		for(Circuit circuitTested : this.circuitsList)
     		{
     			if(circuitTested.calculationIsFinished == false) {
@@ -960,7 +853,6 @@ public class CircuitManagement extends Observable{
 			}
 		}
 		else {
-			System.out.println("bonjour");
 			deliveryList.remove(getDeliveryByNode(nodeDelivery));
 		}
 	}
@@ -975,9 +867,7 @@ public class CircuitManagement extends Observable{
 	public void moveDelivery(Node node, Node previousNode) throws ManagementException {
 		
 		Delivery delivery = getDeliveryByNode(node);
-		System.out.println(delivery);
 		removeDelivery(node,false);
-		System.out.println(delivery);
 		addDelivery(node, delivery.getDuration(), previousNode,false);
 		
 	}
