@@ -153,7 +153,8 @@ public class Window extends JFrame{
 		messageField.setLocation(0, buttonPanelHeight);
 		messageField.setOpaque(true);
 		messageField.setForeground(Color.WHITE);
-		messageField.setBackground(Color.GREEN);
+		messageField.setBackground(Color.DARK_GRAY);
+		messageField.setHorizontalTextPosition(JLabel.CENTER);
 		messageField.setText("Veuillez selectionner un plan a charger");
 	
 	}
@@ -340,7 +341,7 @@ public class Window extends JFrame{
 	}
 	
 	public void setMessage( String string) {
-		messageField.setBackground(Color.GREEN);
+		messageField.setBackground(Color.DARK_GRAY);
 		messageField.setText(string);
 	}
 	
