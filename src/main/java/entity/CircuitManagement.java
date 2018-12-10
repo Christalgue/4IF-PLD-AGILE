@@ -719,6 +719,22 @@ public class CircuitManagement extends Observable{
 		
 	}
 	
+	public int getCircuitIndexByNode ( Delivery delivery) {
+		
+		int circuitIndex =0;
+		for(Circuit circuitTested : this.circuitsList){		
+			for ( AtomicPath path : circuitTested.getPath()) {
+				for ( Bow bow : path.getPath()) {
+					if (bow.getStartNode() != null && bow.getStartNode()== delivery.getPosition())
+						return circuitIndex;
+				}
+			}
+			circuitIndex++;
+		}
+		
+		return -1;
+	}
+	
 	/**
 	 * Gets the circuit by index.
 	 *

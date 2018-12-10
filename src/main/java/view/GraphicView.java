@@ -34,6 +34,7 @@ public class GraphicView extends JPanel {
 	private DeliveryView deliveryView;
 
 	private int width;
+	private int deliveryRadius;
 
 	private static Color nodeColor = Color.WHITE;
 	private static Color selectedColor = Color.GREEN;
@@ -60,12 +61,13 @@ public class GraphicView extends JPanel {
 		this.viewHeight = viewHeight-50;
 		this.viewWidth = viewWidth-20;
 		this.width = width;
-
+		this.deliveryRadius = 3*width;
+		
 		this.circuitManagement = circuitManagement;
 
 		mapView = new MapView(nodeColor, width, this);
 		circuitView = new CircuitView(this, width);
-		deliveryView = new DeliveryView(deliveryColor, repositoryColor, width, this);
+		deliveryView = new DeliveryView(deliveryColor, repositoryColor, deliveryRadius, this);
 
 	}
 
@@ -176,7 +178,7 @@ public class GraphicView extends JPanel {
 					//circuitView.paintCircuit(g, entry, color[colorIndex % color.length]);
 					circuitView.paintCircuit(g, entry, circuitColor);
 				} else {
-					circuitColor = new Color ((int)(Math.random()*256),(int)(Math.random()*256), (int)(Math.random()*256));
+					circuitColor = new Color ((int)(Math.random()*200),(int)(Math.random()*200), (int)(Math.random()*200));
 					colors.put(circuitIndex, circuitColor);
 					circuitView.paintCircuit(g, entry, circuitColor);
 				}
@@ -220,7 +222,7 @@ public class GraphicView extends JPanel {
 		if (delivery.getDuration() == -1) {
 			mapView.drawNode(g, delivery.getPosition());
 		} else {
-			deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery));
+			deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery), deliveryRadius );
 		}
 	}
 
@@ -231,7 +233,7 @@ public class GraphicView extends JPanel {
 			mapView.drawNode(g, delivery.getPosition());
 		} else {
 			g.setColor(deliveryColor);
-			deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery));
+			deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery), deliveryRadius);
 
 		}
 	}
