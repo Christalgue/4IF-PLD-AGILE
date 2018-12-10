@@ -1,11 +1,11 @@
 package main.java.entity;
 
 
-import java.util.*;
+import java.util.Observable;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Bow.
+ * The Class Bow represents the path between two nodes.
+ * @see Node
  */
 public class Bow extends Observable{
 
@@ -15,10 +15,14 @@ public class Bow extends Observable{
 	public Bow() {
     }
 
-    /** The start node. */
+    /** 
+     * The start node.
+     * */
     private Node startNode;
 
-    /** The end node. */
+    /** 
+     * The end node.
+     * */
     private Node endNode;
 
     /** The street name. */
@@ -43,18 +47,18 @@ public class Bow extends Observable{
     }
     
     /**
-     * Gets the start node.
+     * Gets the starting node.
      *
-     * @return the start node
+     * @return the starting node
      */
     public Node getStartNode() {
     	return this.startNode;
     }
     
     /**
-     * Gets the end node.
+     * Gets the ending node.
      *
-     * @return the end node
+     * @return the ending node
      */
     public Node getEndNode(){
     	return this.endNode;
@@ -79,18 +83,18 @@ public class Bow extends Observable{
     }
     
     /**
-     * Sets the start node.
+     * Sets the starting node.
      *
-     * @param sNode the new start node
+     * @param sNode the new starting node
      */
     public void setStartNode(Node sNode){
     	this.startNode = sNode;
     }
     
     /**
-     * Sets the end node.
+     * Sets the ending node.
      *
-     * @param eNode the new end node
+     * @param eNode the new ending node
      */
     public void setEndNode(Node eNode){
     	this.endNode = eNode;
