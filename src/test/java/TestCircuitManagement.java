@@ -81,15 +81,19 @@ class TestCircuitManagement {
 		
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan.xml");
-			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
+			//circuitManager.loadMap("resources/tests/Global/xml/plan.xml");
+			//circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
+			circuitManager.loadMap("resources/tests/Global/xml/plan_balance.xml");
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_balance.xml");
 			
-			circuitManager.setNbDeliveryMan(2);
+			
+			circuitManager.setNbDeliveryMan(3);
 	    	
 	    	List<ArrayList<Delivery>> distribution = circuitManager.cluster();
 	    	int nbDeliveries1 = distribution.get(0).size();
 	    	int nbDeliveries2 = distribution.get(1).size();
 	    	
+	    	// Display for Debug
 	    	for (ArrayList<Delivery> deliveries : distribution) {
 	    		System.out.println("");
 	    		System.out.println("Livreur : ");
