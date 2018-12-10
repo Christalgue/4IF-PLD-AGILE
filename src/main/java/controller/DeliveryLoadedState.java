@@ -104,7 +104,7 @@ public class DeliveryLoadedState extends DefaultState {
 			window.nodeSelected(isDelivery);
 			
 			//Rajoute pour ajout/supp depuis la liste de dl loaded
-			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+			if (controller.circuitManagement.checkNodeInDeliveryList(node) && (!controller.circuitManagement.isRepository(node)) ) {
 				window.enableButtonDeleteDelivery();
 				controller.deliverySelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
