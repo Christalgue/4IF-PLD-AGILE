@@ -34,8 +34,8 @@ public class SelectedPreviousMovedState extends DefaultState {
 	public void leftClick(Controller controller, Window window, Point point) {
 	
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);	
-		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		if (previousNode != null) {
+			window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(previousNode);
 			window.nodeSelected(isDelivery);
 			window.circuitSelected(isDelivery);

@@ -105,11 +105,12 @@ public class CalcState extends DefaultState {
 	@Override
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
-		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
+		
 		if (node != null){
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
 			window.circuitSelected(isDelivery);
+			window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 			
 			if (controller.circuitManagement.checkNodeInDeliveryList(node) && (!controller.circuitManagement.isRepository(node))) {
 				window.enableButtonDeleteDelivery();
