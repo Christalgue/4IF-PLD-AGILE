@@ -1,13 +1,16 @@
 package main.java.entity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
 
 import main.java.exception.TSPLimitTimeReachedException;
-import main.java.tsp.*;
+import main.java.tsp.TSP1;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class Circuit.
+ * The Class Circuit represents the trip that a delivery-man have to accomplish.
  */
 public class Circuit extends Observable {
 
@@ -18,7 +21,7 @@ public class Circuit extends Observable {
 	public Circuit() {
 	}
 
-	/** The circuit length. */
+	/** The circuit's length. */
 	private double circuitLength;
 
 	/** The path. */
@@ -28,16 +31,21 @@ public class Circuit extends Observable {
 	private List<Delivery> deliveryList;
 	
 	
-	/** The repository SVG. */
+	/** The repository. */
 	private Repository repositorySVG = null;
 	
-	/** The all paths SVG. */
+	/** 
+	 * All the AtomicPath between each Delivery in the deliveryList.
+	 * The first entry is the starting Delivery, the second entry is the ending Delivery,
+	 * the value associated is the AtomicPath between those two deliveries.
+	 *  */
 	private HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathsSVG = null;
+
 	
-	/** The initial all paths SVG. */
-	private HashMap<Delivery, HashMap<Delivery, AtomicPath>> initialAllPathsSVG = null;
-	
-	/** The tsp. */
+	/** 
+	 * The instance of tsp used to calculate the best circuit. 
+	 * @see TemplateTSP
+	 * */
 	protected TSP1 tsp;
 
 	/** The calculation is finished. */
@@ -51,7 +59,7 @@ public class Circuit extends Observable {
 	 *
 	 * @param deliveries the deliveries
 	 * @param repository the repository
-	 * @param allPaths the all paths
+	 * @param allPaths all the paths between each delivery
 	 */
 	public Circuit(List<Delivery> deliveries, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
 		this.tsp = new TSP1();
@@ -61,9 +69,11 @@ public class Circuit extends Observable {
 	}
 	
 	/**
-	 * Creates the circuit.
+	 * Creates the circuit by searching the best one possible, using its TSP instance
+	 * 
+	 * @see calculateTrackTSP
 	 *
-	 * @throws TSPLimitTimeReachedException the TSP limit time reached exception
+	 * @throws TSPLimitTimeReachedException when the limitTime is reached before the calculation is finished
 	 */
 	public void createCircuit(/*Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths*/) 
 			throws TSPLimitTimeReachedException {
@@ -71,9 +81,6 @@ public class Circuit extends Observable {
 		try {
 			calculateTrackTSP(this.repositorySVG, this.allPathsSVG, false);
 		} catch (TSPLimitTimeReachedException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			//System.out.println(e.getMessage());
 			throw e;
 		}
 		this.calculationIsFinished = true;
@@ -94,20 +101,23 @@ public class Circuit extends Observable {
 	}
 
 	/**
-	 * Calculate track TSP.
+	 * Calculate the best circuit possible.
+	 * Uses the TSP instance to search the best solution and no matter if the limit time is reached this method 
+	 * reorganize the deliveryList for it to be in the right order. And using that order it creates the path.
 	 *
 	 * @param repository the repository
 	 * @param allPaths the all paths
-	 * @param continueInterruptedCalculation the continue interrupted calculation
-	 * @throws TSPLimitTimeReachedException the TSP limit time reached exception
+	 * @param continueInterruptedCalculation if the method is called after having interrupted the calculation at least once
+	 * @throws TSPLimitTimeReachedException when the limitTime is reached before the calculation is finished
 	 */
-	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException {
+	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths,
+			boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException {
 		//this.tsp = new TSP1();
 		TSPLimitTimeReachedException timeException = null;
 		try {
 			//System.out.println("debut try");
 			if(!continueInterruptedCalculation) {
-				initialAllPathsSVG = allPaths;
+				allPathsSVG = allPaths;
 			}
 			System.out.println("calculateTrackTSP " + continueInterruptedCalculation);
 			tsp.searchSolution(1000, repository, allPaths, null, continueInterruptedCalculation);
@@ -135,7 +145,6 @@ public class Circuit extends Observable {
 			for (int indexBestSolution = 1; indexBestSolution < bestSolution.length; indexBestSolution++) {
 				deliveriesOrdered.add(bestSolution[indexBestSolution]);
 				HashMap<Delivery, AtomicPath> pathsFromLastDelivery = allPaths.get(bestSolution[indexBestSolution - 1]);
-				System.out.println("v1 : " + initialAllPathsSVG.get(bestSolution[indexBestSolution - 1]).keySet().toString());
 				System.out.println("v2 : " + pathsFromLastDelivery.keySet().toString());
 				System.out.println("index : " + indexBestSolution + " / size : " + bestSolution.length);
 				for(int j=0;j<bestSolution.length; j++) {
@@ -173,9 +182,9 @@ public class Circuit extends Observable {
 	}*/
 	
 	/**
-	 * Continue calculation.
+	 * Continue the calculation from where it stopped.
 	 *
-	 * @throws TSPLimitTimeReachedException the TSP limit time reached exception
+	 * @throws TSPLimitTimeReachedException when the limitTime is reached before the calculation is finished
 	 */
 	public void continueCalculation() throws TSPLimitTimeReachedException {
 		//load the save and continue the calculation.
@@ -194,10 +203,10 @@ public class Circuit extends Observable {
 	}
 
 	/**
-	 * Adds the delivery.
+	 * Adds a delivery to the deliveryList.
 	 *
 	 * @param deliveryToAdd the delivery to add
-	 * @param position the position
+	 * @param position its position in the list
 	 */
 	protected void addDelivery(Delivery deliveryToAdd, int position) {
 		this.deliveryList.add(position, deliveryToAdd);
@@ -214,7 +223,7 @@ public class Circuit extends Observable {
 	}
 	
 	/**
-	 * Removes the atomic path.
+	 * Removes the atomicPath from path at the chosen position in the list.
 	 *
 	 * @param position the position
 	 */
@@ -223,18 +232,18 @@ public class Circuit extends Observable {
 	}
 
 	/**
-	 * Gets the circuit length.
+	 * Gets the circuit's length.
 	 *
-	 * @return the circuit length
+	 * @return the circuit's length
 	 */
 	public double getCircuitLength() {
 		return circuitLength;
 	}
 
 	/**
-	 * Sets the circuit length.
+	 * Sets the circuit's length.
 	 *
-	 * @param circuitLength the new circuit length
+	 * @param circuitLength the new circuit's length
 	 */
 	protected void setCircuitLength(double circuitLength) {
 		this.circuitLength = circuitLength;
@@ -277,7 +286,7 @@ public class Circuit extends Observable {
 	}
 	
 	/**
-	 * Check node in circuit.
+	 * Check if a node belong to circuit.
 	 *
 	 * @param nodeTested the node tested
 	 * @return the int
@@ -295,36 +304,36 @@ public class Circuit extends Observable {
 	}
 
 	/**
-	 * Gets the repository SVG.
+	 * Gets the saved repository.
 	 *
-	 * @return the repository SVG
+	 * @return the saved repository
 	 */
 	protected Repository getRepositorySVG() {
 		return repositorySVG;
 	}
 
 	/**
-	 * Sets the repository SVG.
+	 * Sets the saved repository.
 	 *
-	 * @param repositorySVG the new repository SVG
+	 * @param repositorySVG the new saved repository
 	 */
 	protected void setRepositorySVG(Repository repositorySVG) {
 		this.repositorySVG = repositorySVG;
 	}
 
 	/**
-	 * Gets the all paths SVG.
+	 * Gets all the paths saved.
 	 *
-	 * @return the all paths SVG
+	 * @return the paths saved
 	 */
 	protected HashMap<Delivery, HashMap<Delivery, AtomicPath>> getAllPathsSVG() {
 		return allPathsSVG;
 	}
 
 	/**
-	 * Sets the all paths SVG.
+	 * Sets all the paths saved.
 	 *
-	 * @param allPathsSVG the all paths SVG
+	 * @param allPathsSVG the paths saved
 	 */
 	protected void setAllPathsSVG(HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPathsSVG) {
 		this.allPathsSVG = allPathsSVG;

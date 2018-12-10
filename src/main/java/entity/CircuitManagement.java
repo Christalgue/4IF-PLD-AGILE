@@ -651,7 +651,7 @@ public class CircuitManagement extends Observable{
         			}
         			Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths);
         			this.circuitsList.add(circuit);
-        			System.out.println("circuit cre¿½e¿½");
+        			System.out.println("circuit cree");
         		}
         		for(Circuit circuit : this.circuitsList) {
         			try {
