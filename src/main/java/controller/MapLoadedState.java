@@ -29,12 +29,14 @@ public class MapLoadedState extends DefaultState{
 	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 		
 		try {
+			
 			window.enableButtonCalculateCircuit();
 			controller.circuitManagement.loadDeliveryList(filename);
 			window.setMessage("");
 			//window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.drawDeliveries();
+
 		} catch (LoadDeliveryException l)
 		{
 			l.printStackTrace();

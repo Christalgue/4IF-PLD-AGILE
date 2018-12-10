@@ -110,6 +110,15 @@ public class CalcState extends DefaultState {
 		} 
 	}
 	
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+		window.nodeSelected(deliverySelected);
+		window.circuitSelected(deliverySelected);
+		window.enableButtonDeleteDelivery();
+		window.enableButtonMoveDelivery();
+		controller.deliverySelectedState.setNode(deliverySelected.getPosition());
+		controller.setCurrentState(controller.deliverySelectedState);
+	}
+	
 	public void mouseMoved(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if(node!=null) {

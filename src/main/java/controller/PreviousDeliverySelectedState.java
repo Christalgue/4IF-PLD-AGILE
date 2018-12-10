@@ -41,6 +41,18 @@ public class PreviousDeliverySelectedState extends DefaultState {
 		}
 	}
 	
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+		window.nodeSelected(deliverySelected);
+		window.circuitSelected(deliverySelected);
+		controller.deliveryAddedState.setNode(node);
+		controller.deliveryAddedState.setDuration(duration);
+		controller.deliveryAddedState.setPreviousNode(deliverySelected.getPosition());
+		window.setMessage("");
+		controller.setCurrentState(controller.deliveryAddedState);
+		if(controller.getShowPopUp())
+			controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
+	}
+	
 	public void mouseMoved(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if(node!=null) {

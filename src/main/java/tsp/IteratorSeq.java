@@ -8,16 +8,23 @@ import java.util.Iterator;
 import main.java.entity.AtomicPath;
 import main.java.entity.Delivery;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class IteratorSeq.
+ */
 public class IteratorSeq implements Iterator<Delivery> {
 
+	/** The candidates. */
 	private Delivery[] candidates;
+	
+	/** The nb candidates. */
 	private int nbCandidates;
 
 	/**
-	 * create an iterator to iterate on every non viewed delivery
-	 * @param nonViewed
-	 * @param currentDelivery
-	 * TODO refactor to guaranty to see the non viewed deliveries in the good order 
+	 * create an iterator to iterate on every non viewed delivery.
+	 *
+	 * @param nonViewed the non viewed
+	 * @param currentDelivery TODO refactor to guaranty to see the non viewed deliveries in the good order 
 	 * @param allPaths TODO
 	 * @param duration TODO
 	 */
@@ -62,17 +69,26 @@ public class IteratorSeq implements Iterator<Delivery> {
 		//System.out.println("fin iterateur");
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.util.Iterator#hasNext()
+	 */
 	@Override
 	public boolean hasNext() {
 		//System.out.println("reste : " + nbCandidates);
 		return nbCandidates > 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.Iterator#next()
+	 */
 	@Override
 	public Delivery next() {
 		return candidates[--nbCandidates];
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.Iterator#remove()
+	 */
 	@Override
 	public void remove() {}
 

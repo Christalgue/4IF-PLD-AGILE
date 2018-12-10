@@ -8,10 +8,22 @@ import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.entity.CircuitManagement;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PointUtil.
+ */
 public class PointUtil {
 	
+	/** The range. */
 	public static double range;
 	
+	/**
+	 * Point to node.
+	 *
+	 * @param point the point
+	 * @param circuitManagement the circuit management
+	 * @return the node
+	 */
 	public static Node pointToNode( Point point, CircuitManagement circuitManagement) {
 		
 		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();

@@ -9,32 +9,30 @@ import main.java.exception.DijkstraException;
 import main.java.exception.LoadMapException;
 import main.java.utils.Deserializer;
 
+// TODO: Auto-generated Javadoc
 /**
- * 
+ * The Class Map.
  */
 public class Map extends Observable{
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     public Map() {
     }
 
-    /**
-     * 
-     */
+    /** The node map. */
     protected HashMap<Long, Node> nodeMap;
 
-    /**
-     * 
-     */
+    /** The bow map. */
     protected HashMap<Long,Set<Bow>> bowMap;
 
 
     /**
-     * appel au serializer etc
-     * @param filename
-     * @throws LoadMapException 
+     * appel au serializer etc.
+     *
+     * @param filename the filename
+     * @throws LoadMapException the load map exception
      */
     public Map(String filename) throws LoadMapException {
         // TODO implement here
@@ -48,29 +46,50 @@ public class Map extends Observable{
     }
 
 
+    /**
+     * Gets the node map.
+     *
+     * @return the node map
+     */
     public HashMap<Long, Node> getNodeMap() {
 		return nodeMap;
 	}
 
+	/**
+	 * Sets the node map.
+	 *
+	 * @param nodeMap the node map
+	 */
 	public void setNodeMap(HashMap<Long, Node> nodeMap) {
 		this.nodeMap = new HashMap<Long, Node>(nodeMap);
 	}
 
+	/**
+	 * Gets the bow map.
+	 *
+	 * @return the bow map
+	 */
 	public HashMap<Long, Set<Bow>> getBowMap() {
 		return bowMap;
 	}
 
+	/**
+	 * Sets the bow map.
+	 *
+	 * @param bowMap the bow map
+	 */
 	public void setBowMap(HashMap<Long, Set<Bow>> bowMap) {
 		this.bowMap = new HashMap<Long, Set<Bow>>(bowMap);
 	}
 
 	/**
-     * 
-     * Dijkstra & co ;)
-     * @param Node startNode; Node endNode 
-     * @return
-	 * @throws DijkstraException 
-     */
+	 * Dijkstra & co ;).
+	 *
+	 * @param startDelivery the start delivery
+	 * @param arrivalDeliveries the arrival deliveries
+	 * @return the hash map
+	 * @throws DijkstraException the dijkstra exception
+	 */
 	
 	// use nodes instead of deliveries ? -> if we have the type it could be a good idea to generalize the algorithm
 	// from any departureNode any List of arrivalNodes
@@ -163,6 +182,13 @@ public class Map extends Observable{
         return AtomicPaths;
     }
     
+    /**
+     * Release bow.
+     *
+     * @param currentBow the current bow
+     * @param nodeDistances the node distances
+     * @param nodePrecedences the node precedences
+     */
     protected static void releaseBow(Bow currentBow, HashMap<Node, Double> nodeDistances, HashMap<Node, Node> nodePrecedences) {
     	Double newDistance = nodeDistances.get(currentBow.getStartNode()) + currentBow.getLength();
     	if (nodeDistances.containsKey(currentBow.getEndNode())) {
@@ -179,6 +205,13 @@ public class Map extends Observable{
     	
     }
     
+    /**
+     * Gets the lowest distance node.
+     *
+     * @param nodeSet the node set
+     * @param nodeDistances the node distances
+     * @return the lowest distance node
+     */
     protected static Pair<Long, Node> getLowestDistanceNode(Set<Node> nodeSet, HashMap<Node, Double> nodeDistances) {
     	Pair<Long, Node> minimumDistanceNodeEntry = null;
     	Double minimumDistance = Double.MAX_VALUE;
@@ -196,6 +229,13 @@ public class Map extends Observable{
     	return minimumDistanceNodeEntry; 
     }
     
+    /**
+     * Gets the id from node.
+     *
+     * @param longitude the longitude
+     * @param latitude the latitude
+     * @return the id from node
+     */
     public long getIdFromNode (double longitude, double latitude) {
 
 		for( HashMap.Entry<Long, Node> entry : nodeMap.entrySet()) {
@@ -209,6 +249,9 @@ public class Map extends Observable{
     }
     
     
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		String s = "";
