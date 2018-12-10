@@ -1,30 +1,33 @@
 package main.java.entity;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
+import java.util.Random;
 
 import javafx.util.Pair;
-import java.lang.Math;
-import main.java.exception.*;
+import main.java.exception.DijkstraException;
+import main.java.exception.LoadDeliveryException;
+import main.java.exception.LoadMapException;
+import main.java.exception.ManagementException;
+import main.java.exception.MapNotChargedException;
+import main.java.exception.NoRepositoryException;
+import main.java.exception.TSPLimitTimeReachedException;
 import main.java.utils.Deserializer;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CircuitManagement.
+ * The Class CircuitManagement is used as an entry point into the model for the controller. It manages all the model (load the map, load the delivery list create the circuits)
  */
 public class CircuitManagement extends Observable{
-
-    /**
-     * Default constructor.
-     */
-    public CircuitManagement() {
-    }
 
     /** The current map. */
     private Map currentMap;
 
-    /** The nb delivery man. */
-    private int nbDeliveryMan;
+    /** The number of delivery-men. The default value is 3*/
+    private int nbDeliveryMan = 3;
 
     /** The circuits list. */
     private List<Circuit> circuitsList;
@@ -40,7 +43,7 @@ public class CircuitManagement extends Observable{
      * Load delivery list.
      *
      * @param filename the path to the file containing all deliveries
-     * @throws LoadDeliveryException the load delivery exception
+     * @throws LoadDeliveryException when the deserializer couldn't properly load the delivery list 
      */
     public void loadDeliveryList(String filename) throws LoadDeliveryException {
     	try {
@@ -92,7 +95,7 @@ public class CircuitManagement extends Observable{
 	 * Gets the repository.
 	 *
 	 * @return the repository
-	 * @throws NoRepositoryException the no repository exception
+	 * @throws NoRepositoryException when no repository is found in the delivery list
 	 */
 	protected Repository getRepository() throws NoRepositoryException{
 		for(Delivery delivery : this.deliveryList){
@@ -105,18 +108,18 @@ public class CircuitManagement extends Observable{
 	}
 
 	/**
-	 * Gets the number of deliverymen.
+	 * Gets the number of delivery-men.
 	 *
-	 * @return the number of deliverymen.
+	 * @return the number of delivery-men.
 	 */
 	public int getNbDeliveryMan() {
 		return nbDeliveryMan;
 	}
 
 	/**
-	 * Sets the number deliverymen.
+	 * Sets the number delivery-men.
 	 *
-	 * @param nbDeliveryMan the new number deliverymen
+	 * @param nbDeliveryMan the new number delivery-men
 	 */
 	public void setNbDeliveryMan(int nbDeliveryMan) {
 		this.nbDeliveryMan = nbDeliveryMan;
@@ -141,7 +144,7 @@ public class CircuitManagement extends Observable{
      * clusters are unbalanced in terms of cardinality, balance those clusters.
      *
      * @return a list containing all clusters
-     * @throws noRepositoryException when no repository is found
+     * @throws noRepositoryException when no repository is found in the delivery list
      */
     public List<ArrayList<Delivery>> cluster() throws NoRepositoryException {
     	
@@ -322,7 +325,7 @@ public class CircuitManagement extends Observable{
         	List<Delivery> restOfDeliveries = clusterAndRestOfDeliveries.getValue();
         	
         	balancedDistribution.getKey().add(cluster);
-        	balancedDistribution.getValue().add(new Pair<Double,Double>(0.0,0.0)); // A changer
+        	balancedDistribution.getValue().add(new Pair<Double,Double>(0.0,0.0)); // TODO A changer
         	
         	// Make another Kmeansclustering on the rest of the deliveries
         	distribution = KmeansClustering(distributionToBalance.getKey().size()-balancedDistribution.getKey().size(), restOfDeliveries);
@@ -387,6 +390,7 @@ public class CircuitManagement extends Observable{
     	return clusterAndRestOfDeliveries;
     }
     
+    // TODO more explanations with comments in the method about how it works ?
     /**
      * Calculates the distances between all barycenter and the center of all deliveries in order to return the most distant cluster.
      * 
@@ -497,14 +501,13 @@ public class CircuitManagement extends Observable{
      * call the cluster method and create the circuits one by one after having 
      *      calculated the atomic path between each delivery.
      *
-     * @param nbDeliveryman the nb deliveryman
-     * @param continueInterruptedCalculation TODO
-     * @throws MapNotChargedException the map not charged exception
-     * @throws LoadDeliveryException the load delivery exception
-     * @throws ClusteringException the clustering exception
-     * @throws DijkstraException the dijkstra exception
-     * @throws NoRepositoryException the no repository exception
-     * @throws TSPLimitTimeReachedException the TSP limit time reached exception
+     * @param nbDeliveryman the number delivery-men
+     * @param continueInterruptedCalculation true if the method is called after having interrupted the calculation at least once
+     * @throws MapNotChargedException when the map is not properly charged
+     * @throws LoadDeliveryException when the delivery list is not properly charged
+     * @throws DijkstraException when a problem happened during the dijkstra algorithm
+     * @throws NoRepositoryException when no repository is found in the delivery list
+     * @throws TSPLimitTimeReachedException when the limit time we set for the calculation is reached before the end of the calculation
      */
     public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, LoadDeliveryException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException {
     	
@@ -525,36 +528,37 @@ public class CircuitManagement extends Observable{
     				throw e;
     			}
         	}
+        	//check if there is more than 0 clusters
         	if(groupedDeliveries.size()>0){
         		this.circuitsList = new ArrayList<Circuit>();
         		Repository repository = null;
-        		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathsTemp = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
+        		//create the HashMap containing all the paths between the repository and each delivery. This hashmap will be used to initialize the hashmap of each circuit
+        		HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPathsWithJustRepository = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>();
         		try {
     				repository = getRepository();
     			} catch (NoRepositoryException e1) {
-    				// TODO Auto-generated catch block
-    				//e1.printStackTrace();
     				throw e1;
     			}
         		if(repository != null){
-        			allPathsTemp.put(repository, this.currentMap.findShortestPath(repository, this.deliveryList));
+        			allPathsWithJustRepository.put(repository, this.currentMap.findShortestPath(repository, this.deliveryList));
         		}
+        		//for each cluster it creates a hashmap containing each delivery associated to an hashmap containing all the deliveries that could be accessed from
+        		//the first delivery, and the AtomicPath to go there.
         		for(List<Delivery> arrivalDeliveries : groupedDeliveries){
-        			HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>(allPathsTemp);
+        			HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths = new HashMap<Delivery,HashMap<Delivery,AtomicPath>>(allPathsWithJustRepository);
         			for(Delivery departureDelivery : arrivalDeliveries){
         				try {
         					if (departureDelivery!=repository) {
         						allPaths.put(departureDelivery, this.currentMap.findShortestPath(departureDelivery, arrivalDeliveries));
         					}
     					} catch (DijkstraException e) {
-    						// TODO Auto-generated catch block
-    						//e.printStackTrace();
     						throw e;
     					}
         			}
         			Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths);
         			this.circuitsList.add(circuit);
         		}
+        		//calculate each circuit after having created the instances to avoid the nullpointer exceptions in the view.
         		for(Circuit circuit : this.circuitsList) {
         			try {
         				circuit.createCircuit();
@@ -564,6 +568,7 @@ public class CircuitManagement extends Observable{
         		}
         	}
     	} else {
+    		//if we are continuing the calculation we check for each circuit if its calculation is finished and if not we continue it.
     		for(Circuit circuitTested : this.circuitsList)
     		{
     			if(circuitTested.calculationIsFinished == false) {
@@ -573,16 +578,9 @@ public class CircuitManagement extends Observable{
     	}
     	
     }
-    
-    /**
-     * Clean execution stacks.
-     */
-    public void cleanExecutionStacks() {
-    	
-    }
 
 	/**
-	 * Check node in delivery list.
+	 * Check if a node is contained in the delivery list.
 	 *
 	 * @param nodeTested the node tested
 	 * @return true, if successful
@@ -596,30 +594,32 @@ public class CircuitManagement extends Observable{
 	}
 	
 	/**
-	 * Gets the circuit index by delivery.
+	 * Gets the index of the circuit that contains a delivery using the delivery to identify it.
 	 *
 	 * @param delivery the delivery
-	 * @return the circuit index by delivery
+	 * @return the index of the circuit containing the delivery. -1 if no circuit contains it.
 	 */
 
 	public int getCircuitIndexByDelivery( Delivery delivery) {
 		
 		int circuitIndex =0;
 		for(Circuit circuitTested : this.circuitsList){
-			
 			for ( Delivery deliveryTested : circuitTested.getDeliveryList()) {
 				if ( deliveryTested.getPosition() == delivery.getPosition())
 					return circuitIndex;
 			}
 			circuitIndex++;
 		}
-		
 		return -1;
-		
 	}
 	
+	/**
+	 * Gets the index of the circuit that contains a node using the node to identify it
+	 *
+	 * @param delivery the delivery
+	 * @return the index of the circuit containing the nodes. -1 if no circuit contains it.
+	 */
 	public int getCircuitIndexByNode ( Delivery delivery) {
-		
 		int circuitIndex =0;
 		for(Circuit circuitTested : this.circuitsList){		
 			for ( AtomicPath path : circuitTested.getPath()) {
@@ -630,15 +630,14 @@ public class CircuitManagement extends Observable{
 			}
 			circuitIndex++;
 		}
-		
 		return -1;
 	}
 	
 	/**
-	 * Gets the circuit by index.
+	 * Gets the circuit using its index in the circuits lists.
 	 *
 	 * @param index the index
-	 * @return the circuit by index
+	 * @return the circuit if found, null if not
 	 */
 	public Circuit getCircuitByIndex( int index) {
 		
@@ -656,10 +655,10 @@ public class CircuitManagement extends Observable{
 
 	
 	/**
-	 * Gets the delivery index.
+	 * Gets the delivery's index in the delivery list.
 	 *
 	 * @param delivery the delivery
-	 * @return the delivery index
+	 * @return the delivery's index or -1 if it's not contained in the delivery list
 	 */
 	public int getDeliveryIndex (Delivery delivery) {
 		
@@ -676,10 +675,10 @@ public class CircuitManagement extends Observable{
 	}
 	
 	/**
-	 * Gets the delivery by index.
+	 * Gets the delivery using its index in the delivery lists.
 	 *
 	 * @param index the index
-	 * @return the delivery by index
+	 * @return the delivery or null if there is no delivery at this index
 	 */
 	public Delivery getDeliveryByIndex (int index) {
 		
@@ -695,11 +694,12 @@ public class CircuitManagement extends Observable{
 		return null;
 	}
 	
+	// TODO merging with getDeliveryByNode ?
 	/**
-	 * Checks if is delivery.
+	 * Checks if a node is also a delivery.
 	 *
 	 * @param nodeTested the node tested
-	 * @return the delivery
+	 * @return the delivery at this node if there is one, TODO What the fuck is that return if the node is not a delivery ?
 	 */
 	public Delivery isDelivery(Node nodeTested){
 		for(Delivery deliveryTested : this.deliveryList){
@@ -711,10 +711,10 @@ public class CircuitManagement extends Observable{
 	
 	
 	/**
-	 * Checks if is repository.
+	 * Checks if a node is also a the repository.
 	 *
 	 * @param nodeTested the node tested
-	 * @return the delivery
+	 * @return true if its the repository, false if not
 	 */
 	public boolean isRepository (Node nodeTested){
 		try {
@@ -729,7 +729,7 @@ public class CircuitManagement extends Observable{
 		}
 	}
 	
-	
+	// TODO merging with isDelivery ?
 	/**
 	 * Gets the delivery by node.
 	 *
@@ -746,10 +746,11 @@ public class CircuitManagement extends Observable{
 	}
 	
 	/**
-	 * Adds the delivery.
+	 * Adds the delivery after the delivery present at the selected node in the circuit that contains it. It does it by calling the generic add method specifying
+	 * that we want to modify the delivery list
 	 *
-	 * @param nodeDelivery the node delivery
-	 * @param duration the duration
+	 * @param nodeDelivery the node where the new delivery will be
+	 * @param duration the duration of the delivery
 	 * @param previousNode the previous node
 	 */
 	public void addDelivery (Node nodeDelivery, int duration, Node previousNode) {
@@ -757,12 +758,12 @@ public class CircuitManagement extends Observable{
 	}
 	
 	/**
-	 * Adds the delivery.
+	 * Generic method to add a delivery at the node selected after the previous node selected, precising if we want to change the delivery list or not by doing so.
 	 *
 	 * @param nodeDelivery the node delivery
 	 * @param duration the duration
 	 * @param previousNode the previous node
-	 * @param changeDeliveryList the change delivery list
+	 * @param changeDeliveryList if we modify the delivery list by adding the delivery TODO check if correct because sounds weird
 	 */
 	private void addDelivery (Node nodeDelivery, int duration, Node previousNode, boolean changeDeliveryList) {
 		Delivery delivery = new Delivery (nodeDelivery, duration);
@@ -771,14 +772,14 @@ public class CircuitManagement extends Observable{
 		if(circuitsList!=null && circuitsList.size()!=0) {
 			for (Circuit circuit : this.circuitsList) {
 				if ((position=circuit.checkNodeInCircuit(previousNode))!=-1) {
-					// on rajoute le delivery e¿½ la liste et on supprime l'atomic path entre le delivery precedent et suivant
+					// we add the delivery to the list and we delete the atomicPath between the previous delivery and the next one
 					circuit.addDelivery(delivery, (position+1));
 					circuit.removeAtomicPath(position);
 					
-					// on recupere le delivery precedent et suivant
+					// we get the previous and the next delivery
 					Delivery previousDelivery = circuit.getDeliveryList().get(position);
 					
-					//on setup des listes pour pouvoir utiliser le findShortestPath
+					// we build the lists that we will send to the Dijstra algorithm to find the shortest paths we want
 					List<Delivery> newDeliveryList = new ArrayList<Delivery>();
 					newDeliveryList.add(previousDelivery);
 					newDeliveryList.add(delivery);
@@ -787,7 +788,7 @@ public class CircuitManagement extends Observable{
 						HashMap<Delivery,AtomicPath> deliveryPrevious = this.currentMap.findShortestPath(previousDelivery, newDeliveryList);
 						circuit.addAtomicPath(deliveryPrevious.get(delivery), (position));
 					} catch (DijkstraException e) {
-						// TODO Auto-generated catch block
+						// TODO does we really catch this Exception here ? Or do we let it be thrown higher in the execution stack ?
 						e.printStackTrace();
 					}
 					
@@ -804,7 +805,7 @@ public class CircuitManagement extends Observable{
 							HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(delivery, nextDeliveryList);
 							circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+1));
 						} catch (DijkstraException e) {
-							// TODO Auto-generated catch block
+							// TODO Same as previously
 							e.printStackTrace();
 						}
 					}
@@ -819,7 +820,7 @@ public class CircuitManagement extends Observable{
 							HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(delivery, nextDeliveryList);
 							circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+1));
 						} catch (DijkstraException e) {
-							// TODO Auto-generated catch block
+							// TODO Same as previously
 							e.printStackTrace();
 						}
 					}
@@ -835,7 +836,7 @@ public class CircuitManagement extends Observable{
 	}
 	
 	/**
-	 * Removes the delivery.
+	 * Removes the delivery at the node selected from the delivery list. It does it by calling the generic remove method specifying that we want to modify the delivery list
 	 *
 	 * @param nodeDelivery the node delivery
 	 * @throws ManagementException the management exception
@@ -845,11 +846,11 @@ public class CircuitManagement extends Observable{
 	}
 	
 	/**
-	 * Removes the delivery.
+	 * Generic method to remove the delivery at the node selected, precising if we want to change the delivery list or not by doing so.
 	 *
-	 * @param nodeDelivery the node delivery
-	 * @param changeDeliveryList the change delivery list
-	 * @throws ManagementException the management exception
+	 * @param nodeDelivery the node selected where the delivery we want to remove is
+	 * @param changeDeliveryList if we modify the delivery list by removing the delivery TODO check if correct because sounds weird
+	 * @throws ManagementException  TODO explain when this exception is raised
 	 */
 	private void removeDelivery (Node nodeDelivery, boolean changeDeliveryList) throws ManagementException {		
 		int position;
@@ -862,7 +863,7 @@ public class CircuitManagement extends Observable{
 						circuit.removeAtomicPath(position);
 						circuit.removeAtomicPath(position-1);
 						
-						// on recupere le delivery precedent et suivant
+						// we get the previous and the next delivery
 						Delivery previousDelivery = circuit.getDeliveryList().get(position-1);
 						Delivery nextDelivery;
 						if(position != circuit.getDeliveryList().size()){ //Not last delivery
@@ -872,7 +873,7 @@ public class CircuitManagement extends Observable{
 							nextDelivery = circuit.getDeliveryList().get(0);
 						}
 						
-						//on setup des listes pour pouvoir utiliser le findShortestPath
+						// we build the lists that we will send to the Dijstra algorithm to find the shortest paths we want
 						List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
 						nextDeliveryList.add(previousDelivery);
 						nextDeliveryList.add(nextDelivery);
@@ -882,7 +883,7 @@ public class CircuitManagement extends Observable{
 							HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(previousDelivery, nextDeliveryList);
 							circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position-1));
 						} catch (DijkstraException e) {
-							// TODO Auto-generated catch block
+							// TODO does we really catch this Exception here ? Or do we let it be thrown higher in the execution stack ?
 							e.printStackTrace();
 						}
 						
@@ -916,10 +917,10 @@ public class CircuitManagement extends Observable{
 	}
 	
 	/**
-	 * Gets the previous node.
+	 * Gets the previous node in the circuit for the delivery placed at the node selected.
 	 *
-	 * @param node the node
-	 * @return the previous node
+	 * @param node the node selected
+	 * @return the previous node or null if there is no previous node
 	 */
 	public Node getPreviousNode(Node node) {
 		int position;

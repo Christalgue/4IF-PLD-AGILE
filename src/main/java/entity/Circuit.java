@@ -117,7 +117,7 @@ public class Circuit extends Observable {
 	 *
 	 * @param repository the repository
 	 * @param allPaths all the paths between each delivery
-	 * @param continueInterruptedCalculation if the method is called after having interrupted the calculation at least once
+	 * @param continueInterruptedCalculation true if the method is called after having interrupted the calculation at least once
 	 * @throws TSPLimitTimeReachedException when the limitTime is reached before the calculation is finished
 	 */
 	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths,
