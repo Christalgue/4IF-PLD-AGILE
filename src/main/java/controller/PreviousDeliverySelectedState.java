@@ -42,6 +42,7 @@ public class PreviousDeliverySelectedState extends DefaultState {
 	 */
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		if (previousNode != null) {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
@@ -67,10 +68,10 @@ public class PreviousDeliverySelectedState extends DefaultState {
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
 		window.nodeSelected(deliverySelected);
 		window.circuitSelected(deliverySelected);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		controller.deliveryAddedState.setNode(node);
 		controller.deliveryAddedState.setDuration(duration);
 		controller.deliveryAddedState.setPreviousNode(deliverySelected.getPosition());
-		window.setMessage("");
 		controller.setCurrentState(controller.deliveryAddedState);
 		if(controller.getShowPopUp())
 			controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());

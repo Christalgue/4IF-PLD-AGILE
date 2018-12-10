@@ -39,6 +39,7 @@ public class DeliverySelectedState extends DefaultState {
 	 */
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		if (node != null)
 		{
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
@@ -65,6 +66,7 @@ public class DeliverySelectedState extends DefaultState {
 	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
 	 */
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		window.nodeSelected(deliverySelected);
 		window.circuitSelected(deliverySelected);
 		controller.deliverySelectedState.setNode(deliverySelected.getPosition());
@@ -100,6 +102,7 @@ public class DeliverySelectedState extends DefaultState {
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			e.printStackTrace();
 		}
 	}
@@ -110,6 +113,7 @@ public class DeliverySelectedState extends DefaultState {
 	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 	
 		try {
+			window.setMessage("");
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.loadDeliveryList(filename);
@@ -119,6 +123,7 @@ public class DeliverySelectedState extends DefaultState {
 			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			e.printStackTrace();
 		}
 	
@@ -130,6 +135,7 @@ public class DeliverySelectedState extends DefaultState {
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
 		commandsList.reset();
 		try {
+			window.setMessage("");
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);

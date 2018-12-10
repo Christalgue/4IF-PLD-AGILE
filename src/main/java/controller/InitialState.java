@@ -15,6 +15,7 @@ public class InitialState extends DefaultState {
 	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
+			window.setMessage("");
 			window.enableButtonLoadDeliveriesList();
 			controller.circuitManagement.loadMap(filename);
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
@@ -23,6 +24,7 @@ public class InitialState extends DefaultState {
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			l.printStackTrace();
 		}
 	}

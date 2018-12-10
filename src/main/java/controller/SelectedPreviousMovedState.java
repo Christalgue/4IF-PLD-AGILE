@@ -32,6 +32,7 @@ public class SelectedPreviousMovedState extends DefaultState {
 	public void leftClick(Controller controller, Window window, Point point) {
 	
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);	
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		if (previousNode != null) {
 			//window.nodeSelected(previousNode);
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(previousNode);
@@ -55,6 +56,7 @@ public class SelectedPreviousMovedState extends DefaultState {
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
 		window.nodeSelected(deliverySelected);
 		window.circuitSelected(deliverySelected);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		controller.deliveryMovedState.setNode(node);
 		controller.deliveryMovedState.setPreviousNode(deliverySelected.getPosition());
 		controller.setCurrentState(controller.deliveryMovedState);
