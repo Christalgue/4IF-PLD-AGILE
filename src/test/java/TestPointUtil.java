@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadMapException;
 import main.java.utils.PointUtil;
 
@@ -16,7 +17,9 @@ class TestPointUtil {
 	void testPointToNode() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/PointUtil/xml/plan.xml");
+			try {
+				circuitManager.loadMap("resources/tests/PointUtil/xml/plan.xml");
+			} catch (ForgivableXMLException e) {}
 			
 			PointUtil.range = 3;
 			

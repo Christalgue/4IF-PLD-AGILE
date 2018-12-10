@@ -3,6 +3,8 @@ package main.java.view;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import main.java.controller.Controller;
 
 public class KeyListener extends KeyAdapter {
@@ -17,13 +19,36 @@ public class KeyListener extends KeyAdapter {
 	public void keyPressed(KeyEvent e) {
 		// Called by the key listener each time a key is pressed
 		// Interesting keys are SUPPR, CRTL+Z, and numbers ( for delivery men number ) 
-		if (e.getKeyCode()== KeyEvent.VK_Z && ((e.getModifiers() & KeyEvent.CTRL_MASK)!=0 )) {
+		int keyCode = e.getKeyCode();
+	    
+		switch( keyCode ) { 
+	        case KeyEvent.VK_UP:
+	        	controller.getWindow().verticalShift(-50);
+	            break;
+	        case KeyEvent.VK_DOWN:
+	        	controller.getWindow().verticalShift(50);
+	            break;
+	        case KeyEvent.VK_LEFT:
+	        	controller.getWindow().horizontalShift(-50);
+	            break;
+	        case KeyEvent.VK_RIGHT :
+	        	controller.getWindow().horizontalShift(50);
+	            break;
+	        case KeyEvent.VK_Z:
+	        	controller.getWindow().zoom();
+	        	break;
+	        case KeyEvent.VK_D:
+	        	controller.getWindow().unZoom();
+	        	break;
+	        	
+	     }
+		
+		if (keyCode== KeyEvent.VK_Z && ((e.getModifiers() & KeyEvent.CTRL_MASK)!=0 )) {
 			controller.undo();
 			
-		} else if (e.getKeyCode()== KeyEvent.VK_Y && ((e.getModifiers() & KeyEvent.CTRL_MASK)!=0 )) {
+		} else if (keyCode == KeyEvent.VK_Y && ((e.getModifiers() & KeyEvent.CTRL_MASK)!=0 )) {
 			controller.redo();
 		} 
-		//controller.keyPressed(e.getKeyCode());
 	}
 
 }

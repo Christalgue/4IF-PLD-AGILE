@@ -47,6 +47,13 @@ public class Window extends JFrame{
 	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
 	protected static final String UNDO = "Annuler";
 	protected static final String REDO = "Retablir";
+
+	protected static final String UP = "U";
+	protected static final String DOWN = "D";
+	protected static final String RIGHT = "R";
+	protected static final String LEFT = "L";
+	protected static final String ZOOM = "+";
+	protected static final String UNZOOM = "-";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
@@ -61,8 +68,14 @@ public class Window extends JFrame{
 	protected static JButton moveDeliveryButton;
 	protected static JButton undoButton;	
 	protected static JButton redoButton;
+	protected static JButton upButton;
+	protected static JButton downButton;
+	protected static JButton rightButton;
+	protected static JButton leftButton;
+	protected static JButton zoomButton;
+	protected static JButton unZoomButton;
 	
-	protected static final int windowWidth = 1400;
+	protected static final int windowWidth = 1600;
 	protected static final int windowHeight = 720;
 	protected static final int buttonPanelHeight =50;
 	protected static final int graphicWidth = 1030;
@@ -214,6 +227,7 @@ public class Window extends JFrame{
 		moveDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight+50));
 		moveDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
 		textualView.add(moveDeliveryButton);
+		
 			
 	}
 	
@@ -294,12 +308,42 @@ public class Window extends JFrame{
 		redoButton = new JButton(REDO);
 		buttonPanel.add(redoButton);
 		redoButton.addActionListener(buttonsListener);	
-		redoButton.setEnabled(false);
+		redoButton.setEnabled(true);
 		
 		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
 		calculateCircuitButton.addActionListener(buttonsListener);
-		calculateCircuitButton.setEnabled(false);
+		calculateCircuitButton.setEnabled(true);
 		buttonPanel.add(calculateCircuitButton);
+
+		upButton = new JButton(UP);
+		upButton.addActionListener(buttonsListener);
+		upButton.setEnabled(true);
+		buttonPanel.add(upButton);
+		
+		downButton = new JButton(DOWN);
+		downButton.addActionListener(buttonsListener);
+		downButton.setEnabled(true);
+		buttonPanel.add(downButton);
+		
+		rightButton = new JButton(RIGHT);
+		rightButton.addActionListener(buttonsListener);
+		rightButton.setEnabled(true);
+		buttonPanel.add(rightButton);
+		
+		leftButton = new JButton(LEFT);
+		leftButton.addActionListener(buttonsListener);
+		leftButton.setEnabled(true);
+		buttonPanel.add(leftButton);
+		
+		zoomButton = new JButton(ZOOM);
+		zoomButton.addActionListener(buttonsListener);
+		zoomButton.setEnabled(true);
+		buttonPanel.add(zoomButton);
+		
+		unZoomButton = new JButton(UNZOOM);
+		unZoomButton.addActionListener(buttonsListener);
+		unZoomButton.setEnabled(true);
+		buttonPanel.add(unZoomButton);
 	}
 	
 	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
@@ -350,9 +394,13 @@ public class Window extends JFrame{
 		messageField.setText(string);
 	}
 	//////////////////////////////DRAW COMPOSANTS/////////////////////////////
+	public void calculateScale() {
+		graphicView.calculateScale(controller.getCircuitManagement());
+	}
+	
 	public void drawMap() {
-		graphicView.removeAll();
-		graphicView.update(graphicView.getGraphics());
+		//graphicView.removeAll();
+		//graphicView.update(graphicView.getGraphics());
 		graphicView.paintMap();
 	}
 	
@@ -595,6 +643,22 @@ public class Window extends JFrame{
 		} else if (userChoice == 1) {
 			controller.continueCalculation(true);
 		}
+	 }
+	 
+	 public void zoom() {
+		graphicView.zoom();
+	 }
+	 
+	 public void unZoom() {
+		graphicView.unZoom();
+	 }
+	 
+	 public void horizontalShift( int right) {
+		 graphicView.horizontalShift(right);
+	 }
+	 
+	 public void verticalShift(int down) {
+		 graphicView.verticalShift(down);
 	 }
 	 
 }

@@ -16,6 +16,7 @@ import main.java.entity.Delivery;
 import main.java.entity.Map;
 import main.java.entity.Node;
 import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
 import main.java.exception.ManagementException;
@@ -29,7 +30,9 @@ class TestCircuitManagement {
 	void testLoadMap() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan_simple.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_simple.xml");
+			} catch (ForgivableXMLException e) {}
 			
 			Map map = circuitManager.getCurrentMap();
 
@@ -100,7 +103,9 @@ class TestCircuitManagement {
 	void testLoadDeliveries() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan_simple.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_simple.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_simple.xml");
 			List<Delivery> deliveries = circuitManager.getDeliveryList();
 			
@@ -124,7 +129,9 @@ class TestCircuitManagement {
 		
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
 			//circuitManager.loadMap("resources/tests/Global/xml/plan_balance.xml");
 			//circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_balance.xml");
@@ -187,7 +194,9 @@ class TestCircuitManagement {
 	void checkNodeInDeliveryList() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
 			
 			Node inList = circuitManager.getCurrentMap().getNodeMap().get((long)5);
@@ -209,7 +218,9 @@ class TestCircuitManagement {
 		
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan_simple.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_simple.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_simple.xml");
 			circuitManager.calculateCircuits(1, false);
 			
@@ -245,7 +256,9 @@ class TestCircuitManagement {
 		try {
 			//Trying to put a delivery at the beginning or in the middle
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
 			circuitManager.calculateCircuits(1, false);
 			
@@ -277,7 +290,9 @@ class TestCircuitManagement {
 			
 			//Trying to put a delivery at the end
 			circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
 			circuitManager.calculateCircuits(1, false);
 			
@@ -323,7 +338,9 @@ class TestCircuitManagement {
 		try {
 			//Trying to remove a delivery
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan_remove.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_remove.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_remove.xml");
 			circuitManager.calculateCircuits(1, false);
 
@@ -367,7 +384,9 @@ class TestCircuitManagement {
 
 			//Trying to remove the repository
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
 			circuitManager.calculateCircuits(1, false);
 			
@@ -398,7 +417,9 @@ class TestCircuitManagement {
 		try {
 			//Trying to remove a delivery
 			CircuitManagement circuitManager = new CircuitManagement();
-			circuitManager.loadMap("resources/tests/Global/xml/plan_move.xml");
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_move.xml");
+			} catch (ForgivableXMLException e) {}
 			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_move.xml");
 			circuitManager.calculateCircuits(1, false);
 			

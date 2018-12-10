@@ -84,19 +84,22 @@ public class DeliveryView extends JPanel {
 		boolean b = true;
 		int deliveryIndex = 0;
 		
-		for( Delivery entry : deliveryList ) {
-		    
-			Node node = entry.getPosition();		
-			drawDelivery( g, node,deliveryIndex, deliveryRadius );
-			
-			if (b) {
+		if ( deliveryList != null) {
+		
+			for( Delivery entry : deliveryList ) {
+			    
+				Node node = entry.getPosition();		
+				drawDelivery( g, node,deliveryIndex, deliveryRadius );
 				
-				drawDelivery( g, node,deliveryIndex, repositoryRadius );
-				g.setColor(deliveryColor);
-				b = false;
+				if (b) {
+					
+					drawDelivery( g, node,deliveryIndex, repositoryRadius );
+					g.setColor(deliveryColor);
+					b = false;
+				}
+				 deliveryIndex++;
+				
 			}
-			 deliveryIndex++;
-			
 		}
 		
 	}

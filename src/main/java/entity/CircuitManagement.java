@@ -9,6 +9,7 @@ import java.util.Random;
 
 import javafx.util.Pair;
 import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
 import main.java.exception.ManagementException;
@@ -130,10 +131,14 @@ public class CircuitManagement extends Observable{
 	 *
 	 * @param filename the filename
 	 * @throws LoadMapException the load map exception
+	 * @throws ForgivableXMLException 
 	 */
-    public void loadMap(String filename) throws LoadMapException {
+    public void loadMap(String filename) throws LoadMapException, ForgivableXMLException {
+    	currentMap = new Map();
         try {
-			this.currentMap = new Map(filename);
+			currentMap.load(filename);
+		} catch (ForgivableXMLException e) {
+			throw e; 
 		} catch (LoadMapException e) {
 			throw e; 
 		}
@@ -775,7 +780,6 @@ public class CircuitManagement extends Observable{
 			for (Circuit circuit : this.circuitsList) {
 				if ((position=circuit.checkNodeInCircuit(previousNode))!=-1) {
 					// we add the delivery to the list and we delete the atomicPath between the previous delivery and the next one
-
 					circuit.addDelivery(delivery, (position+1));
 					circuit.removeAtomicPath(position);
 					

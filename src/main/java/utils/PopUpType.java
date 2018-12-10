@@ -19,5 +19,8 @@ public enum PopUpType {
 	MOVE,
 	
 	/** The duration. */
-	DURATION
+	DURATION,
+	
+	/** error. */
+	ERROR
 }
