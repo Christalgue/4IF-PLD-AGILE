@@ -2,6 +2,8 @@ package main.java.controller;
 
 import java.util.LinkedList;
 
+import main.java.view.Window;
+
 
 /**
  * The Class CommandsList.
@@ -16,13 +18,19 @@ public class CommandsList {
 	/** The index. */
 	private int index;
 	
+	
+	/** The window. */
+	private Window window;
 	/**
 	 * Instantiates a new CommandsList.
+	 * @param window the window
 	 */
-	public CommandsList() {
+	public CommandsList(Window window) {
+		this.window = window;
 		commands = new LinkedList<Command>();
 		index = -1;
 	}
+	
 	
 	/**
 	 * Adds a command.
@@ -37,6 +45,7 @@ public class CommandsList {
 		index++;
 		commands.add(command);
 		command.doCde();
+		window.enableButtonUndo();
 	}
 	
 	/**
@@ -47,7 +56,11 @@ public class CommandsList {
 		{
 			commands.get(index).undoCde();
 			index--;
-		}
+		} 
+		if (index <0) {
+			window.disableButtonUndo();
+		} 
+		window.enableButtonRedo();
 	}
 	
 	/**
@@ -59,6 +72,10 @@ public class CommandsList {
 			index++;
 			commands.get(index).doCde();
 		}
+		if (index >= (commands.size()-1)) {
+			window.disableButtonRedo();
+		}
+		window.enableButtonUndo();
 	}
 	
 	/**
@@ -67,6 +84,8 @@ public class CommandsList {
 	public void reset() {
 		index = -1;
 		commands.clear();
+		window.disableButtonRedo();
+		window.disableButtonUndo();
 	}
 	
 }

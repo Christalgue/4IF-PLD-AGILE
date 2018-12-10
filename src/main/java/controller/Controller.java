@@ -92,7 +92,7 @@ public class Controller {
 		currentState = initState;
 		this.window = new Window(this);
 		showPopUp = true;
-		commandsList = new CommandsList();
+		commandsList = new CommandsList(this.window);
 	}
 	
 	/**

@@ -179,5 +179,22 @@ public class NodeSelectedState extends DefaultState {
 	
 	}
 	
+	/**
+	 * @see main.java.controller.DefaultState#undo(main.java.controller.Controller, main.java.controller.CommandsList)
+	 */
+	@Override
+	public void undo(Controller controller, CommandsList commandsList) {
+		commandsList.undo();
+	
+	}
+
+	/**
+	 * @see main.java.controller.DefaultState#redo(main.java.controller.Controller, main.java.controller.CommandsList)
+	 */
+	@Override
+	public void redo(Controller controller, CommandsList commandsList) {
+		commandsList.redo();
+	}
+	
 
 }

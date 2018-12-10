@@ -287,10 +287,13 @@ public class Window extends JFrame{
 		undoButton = new JButton(UNDO);
 		buttonPanel.add(undoButton);
 		undoButton.addActionListener(buttonsListener);
+		undoButton.setEnabled(false);
+		
 
 		redoButton = new JButton(REDO);
 		buttonPanel.add(redoButton);
-		redoButton.addActionListener(buttonsListener);		
+		redoButton.addActionListener(buttonsListener);	
+		redoButton.setEnabled(false);
 		
 		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
 		calculateCircuitButton.addActionListener(buttonsListener);
