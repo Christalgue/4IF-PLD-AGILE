@@ -72,16 +72,16 @@ class TestMap {
 		try {
 			Deserializer.loadMap("resources/tests/Map/xml/plan_conforme.xml", map);
 			
-			long id = map.getIdFromNode(1, 1);
+			long id = map.getIdFromCorrespondingNode(1, 1);
 			assertTrue(id==(long)1,"Error expected 1, got : "+id);
 			
-			id = map.getIdFromNode(2, 2);
+			id = map.getIdFromCorrespondingNode(2, 2);
 			assertTrue(id==(long)2,"Error expected 2, got : "+id);
 			
-			id = map.getIdFromNode(3, 3);
+			id = map.getIdFromCorrespondingNode(3, 3);
 			assertTrue(id==(long)3,"Error expected 3, got : "+id);
 			
-			id = map.getIdFromNode(4, 4);
+			id = map.getIdFromCorrespondingNode(4, 4);
 			assertTrue(id==(long)4,"Error expected 4, got : "+id);
 			
 		} catch (ParserConfigurationException e) {

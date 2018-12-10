@@ -48,7 +48,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 			} else {
 				window.disableButtonDeleteDelivery();
 				window.enableButtonAddDelivery();
-				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
+				long id = controller.circuitManagement.getCurrentMap().getIdFromCorrespondingNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
 				controller.nodeSelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.nodeSelectedBeforeCalcState);
