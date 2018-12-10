@@ -10,6 +10,7 @@ import main.java.entity.AtomicPath;
 import main.java.entity.Bow;
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
+import main.java.entity.Node;
 
 public class Serializer {
 	
@@ -18,6 +19,7 @@ public class Serializer {
 		Circuit circuit;
 		try {
 			for(int i = 0; i<circuits.size(); i++) {
+				//Tournées différentes
 				circuit = circuits.get(i);
 				File file = new File(path+"/Tournée_"+(i+1)+".txt");
 				file.createNewFile();
@@ -30,6 +32,7 @@ public class Serializer {
 				List<AtomicPath> atomicPaths = circuit.getPath();
 				
 				for(int indexAtomicPath = 0; indexAtomicPath<atomicPaths.size(); indexAtomicPath++) {
+					//Livraisons différentes
 					String start = "Chemin de la Livraison n°"+deliveryNumber;
 					String end = " à la Livraison n°"+(deliveryNumber+1)+",";
 					String destination;
@@ -60,6 +63,7 @@ public class Serializer {
 					distance = 0;
 					
 					for(int indexBow = 1; indexBow<bows.size(); indexBow++) {
+						//Rues différentes
 						distance += bows.get(indexBow-1).getLength();
 						if(!bows.get(indexBow-1).getStreetName().contains(bows.get(indexBow).getStreetName())) {
 							writer.write("    ->");
@@ -94,10 +98,19 @@ public class Serializer {
 						start = "Prendre //";
 					
 					if(indexAtomicPath!=atomicPaths.size()-1) {
-						if(atomicPaths.get(indexAtomicPath+1).getPath().get(0).getStreetName().length()!=0)
-							end = " jusqu'à "+atomicPaths.get(indexAtomicPath+1).getPath().get(0).getStreetName();
-						else
-							end = " jusqu'à //";
+						//Dernier chemin d'une livraison
+						Node node = bows.get(bows.size()-1).getEndNode();
+						
+						List<Bow> endIntersection = circuitManager.getCurrentMap().getBowsIntersection(node);
+
+						end = " jusqu'à //";
+						for(Bow intersection : endIntersection) {
+							if(!bows.get(bows.size()-1).getStreetName().contains(intersection.getStreetName()) && intersection.getStreetName().length()!=0) {
+								end = " jusqu'à "+intersection.getStreetName();
+								break;
+							}
+						}
+						
 						destination = "Vous êtes arrivé à destination, votre livraison doit durer environ : ";
 						min = (int)(circuitManager.getDeliveryByNode(bows.get(bows.size()-1).getEndNode()).getDuration()/60);
 						if(min==0)
@@ -106,6 +119,7 @@ public class Serializer {
 							destination+= min+"min";
 					}
 					else {
+						//Dernier chemin de la tournée
 						end = " jusqu'à l'entrepôt";
 						destination = "Vous avez terminé votre tournée";
 					}
