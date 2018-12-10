@@ -75,6 +75,9 @@ public class Window extends JFrame{
 	protected Delivery selectedNode;
 	protected Delivery hoverNode;
 	
+	protected Circuit selectedCircuit;
+	protected Circuit hoverCircuit;
+	
 	/**
 	 * Default constructor
 	 */
@@ -362,17 +365,51 @@ public class Window extends JFrame{
 	
 	public void circuitSelected(Delivery selectedDelivery) {
 
+		if(selectedCircuit!=null){
+			graphicView.unPaintCircuit( selectedCircuit);
+		}
+		
 		if ( selectedDelivery.getDuration() != -1 ) {
 			for (Circuit circuit : controller.getCircuitManagement().getCircuitsList()) {
 					
 				for ( Delivery delivery :circuit.getDeliveryList()) {
 					if ( selectedDelivery.getPosition()== delivery.getPosition()) {
-						graphicView.paintSelectedCircuit(circuit); 
+						graphicView.paintSelectedCircuit(circuit, true); 
+						hoverCircuit = null;
+						selectedCircuit = circuit;
 					}
 				}
 			}
 		}
 	}
+	
+	public void circuitHover(Delivery delivery) {
+		//Mouse exit a node
+		if(delivery == null && hoverCircuit!=null) {
+			graphicView.unPaintCircuit( hoverCircuit);
+			hoverCircuit = null;
+		}
+		//Cannot hover a selected node
+		else if (delivery != null && delivery.getDuration() != -1 ) {
+				
+			Circuit toDrawCircuit = controller.getCircuitManagement().getCircuitByDelivery(delivery);
+			if( selectedCircuit == null || toDrawCircuit.getID() != selectedCircuit.getID()) {
+				
+				//Mouse enter a node
+				if( hoverCircuit == null) {
+					graphicView.paintSelectedCircuit( toDrawCircuit, false);
+				}
+				//Mouse pass from one node to another
+				else if(delivery!=null && delivery.getPosition().getId()!=hoverNode.getPosition().getId()) {
+					graphicView.unPaintNode( hoverNode);
+					graphicView.paintSelectedCircuit( toDrawCircuit, false);
+				}
+				hoverCircuit = toDrawCircuit;
+				
+			}
+		}
+	}
+	
 	
 	public void textualCircuitSelected(int circuitIndex) {
 		graphicView.paintSelectedCircuit(circuitIndex);
@@ -401,6 +438,10 @@ public class Window extends JFrame{
 	
 	public void emptySelectedNode() {
 		selectedNode = null;
+	}
+	
+	public void emptySelectedCircuit() {
+		selectedCircuit = null;
 	}
 	
 	public void fillDeliveryTree() {
