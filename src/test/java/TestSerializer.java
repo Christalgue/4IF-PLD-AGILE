@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
-import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
@@ -37,9 +36,6 @@ class TestSerializer {
 		} catch (LoadDeliveryException e) {
 			fail("LoadDeliveryException, report to TestDeserializer : "+e.getMessage());
 		} catch (MapNotChargedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClusteringException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (DijkstraException e) {
