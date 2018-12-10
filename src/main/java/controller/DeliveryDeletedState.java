@@ -32,6 +32,7 @@ public class DeliveryDeletedState extends DefaultState{
 		commandsList.addCommand(new RemoveDeliveryCommand(window,node,controller.circuitManagement));
 		window.disableButtonDeleteDelivery();
 		window.disableButtonMoveDelivery();
+		window.emptySelectedNode();
 		controller.setCurrentState(controller.calcState);
 	}
 	
