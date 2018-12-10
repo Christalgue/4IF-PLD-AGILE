@@ -118,6 +118,7 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 				if(controller.getShowPopUp())
 					window.getPopUpValue(PopUpType.ERROR, window);
 			}
+			window.calculateScale();
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			window.drawMap();
 			controller.setCurrentState(controller.mapLoadedState);

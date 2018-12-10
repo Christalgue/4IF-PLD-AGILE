@@ -27,7 +27,7 @@ class TestAtomicPath {
 		try {
 			Map map = new Map();
 			try {
-				map = new Map("resources/tests/AtomicPath/xml/plan.xml");
+				map.load("resources/tests/AtomicPath/xml/plan.xml");
 			} catch (ForgivableXMLException e) {}
 			List<Delivery> deliveries = Deserializer.loadDeliveries("resources/tests/AtomicPath/xml/delivery.xml", map);
 			

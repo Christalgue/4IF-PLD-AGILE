@@ -41,6 +41,7 @@ public class CalcState extends DefaultState {
 				if(controller.getShowPopUp())
 					window.getPopUpValue(PopUpType.ERROR, window);
 			}
+			window.calculateScale();
 			window.drawMap();
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			commandsList.reset();

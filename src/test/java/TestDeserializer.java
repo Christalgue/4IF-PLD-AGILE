@@ -208,7 +208,7 @@ class TestDeserializer {
 		Map map = new Map();
 		try {
 			try {
-				map = new Map("resources/tests/Deserializer/xml/plan_conforme2.xml");
+				map.load("resources/tests/Deserializer/xml/plan_conforme2.xml");
 			} catch (ForgivableXMLException e1) {}
 		
 			//1
