@@ -11,7 +11,7 @@ public class Controller {
 	
 	public CircuitManagement circuitManagement;
 	private Window window;
-	public State currentState; // TURN BACK TO PRIVATE
+	private State currentState; // TURN BACK TO PRIVATE
 	private CommandsList commandsList;
 	
 	// Instances associated to each possible state of the controller
@@ -197,5 +197,9 @@ public class Controller {
 	
 	public void setShowPopUp(boolean popUp) {
 		showPopUp = popUp;
+	}
+	
+	public String toString() {
+		return currentState.toString();
 	}
 }
