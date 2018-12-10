@@ -618,6 +618,22 @@ public class CircuitManagement extends Observable{
 		
 	}
 	
+	public int getCircuitIndexByNode ( Delivery delivery) {
+		
+		int circuitIndex =0;
+		for(Circuit circuitTested : this.circuitsList){		
+			for ( AtomicPath path : circuitTested.getPath()) {
+				for ( Bow bow : path.getPath()) {
+					if (bow.getStartNode() != null && bow.getStartNode()== delivery.getPosition())
+						return circuitIndex;
+				}
+			}
+			circuitIndex++;
+		}
+		
+		return -1;
+	}
+	
 	/**
 	 * Gets the circuit by index.
 	 *
@@ -692,6 +708,27 @@ public class CircuitManagement extends Observable{
 		}
 		return new Delivery (nodeTested, -1);
 	}
+	
+	
+	/**
+	 * Checks if is repository.
+	 *
+	 * @param nodeTested the node tested
+	 * @return the delivery
+	 */
+	public boolean isRepository (Node nodeTested){
+		try {
+			if(getRepository().getPosition() == nodeTested) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (NoRepositoryException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	
 	/**
 	 * Gets the delivery by node.

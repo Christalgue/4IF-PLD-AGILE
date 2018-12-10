@@ -144,7 +144,7 @@ public class TextualView extends JPanel{
 					}else {
 					
 						treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
-								(deliveryIndex) +": Duree "+delivery.getDuration()+" s"),
+								circuitManagement.getDeliveryIndex(delivery) +": Duree "+delivery.getDuration()+" s"),
 									circuit, deliveryIndex++);		
 					}
 				}

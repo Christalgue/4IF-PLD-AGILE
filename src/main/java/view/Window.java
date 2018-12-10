@@ -381,47 +381,46 @@ public class Window extends JFrame{
 			graphicView.unPaintCircuit( selectedCircuit);
 		}
 		
-		if ( selectedDelivery.getDuration() != -1 ) {
+		int circuitIndex;
+		
+		if ( selectedDelivery != null ) {
 			
-			int circuitIndex =0;
-			
-			for (Circuit circuit : controller.getCircuitManagement().getCircuitsList()) {
-					
-				for ( Delivery delivery :circuit.getDeliveryList()) {
-					if ( selectedDelivery.getPosition() == delivery.getPosition()) {
-						graphicView.paintSelectedCircuit(circuitIndex, true); 
-						hoverCircuit = -1 ;
-						selectedCircuit = circuitIndex;
-					}
-				}
-				circuitIndex++;
+			circuitIndex = controller.getCircuitManagement().getCircuitIndexByNode( selectedDelivery);
+			if (circuitIndex != -1) {
+				graphicView.paintSelectedCircuit(circuitIndex, true); 
+				hoverCircuit = -1 ;
+				selectedCircuit = circuitIndex;
 			}
 		}
 	}
 	
 	public void circuitHover(Delivery delivery) {
 		//Mouse exit a node
-		if(delivery == null && hoverCircuit!= -1) {
+		if(delivery == null && hoverCircuit != -1) {
 			graphicView.unPaintCircuit( hoverCircuit);
 			hoverCircuit = -1;
 		}
-		//Cannot hover a selected node
-		else if (delivery != null && delivery.getDuration() != -1 ) {
+		//Cannot hover a selected circuit
+		else if (delivery != null ) {
 				
-			int toDrawCircuit = controller.getCircuitManagement().getCircuitIndexByDelivery(delivery);
-			if( toDrawCircuit != selectedCircuit) {
+			int toDrawCircuit = controller.getCircuitManagement().getCircuitIndexByNode(delivery);
+			
+			if( toDrawCircuit != -1 && toDrawCircuit != selectedCircuit) {
 				
 				//Mouse enter a node
-				if( hoverCircuit != -1) {
+				if( hoverCircuit == -1) {
 					graphicView.paintSelectedCircuit( toDrawCircuit, false);
 				}
 				//Mouse pass from one node to another
-				else if(delivery!=null && delivery.getPosition().getId()!=hoverNode.getPosition().getId()) {
-					graphicView.unPaintNode( hoverNode);
+				else if(delivery!=null && toDrawCircuit!= hoverCircuit) {
+					graphicView.unPaintCircuit( hoverCircuit);
 					graphicView.paintSelectedCircuit( toDrawCircuit, false);
 				}
 				hoverCircuit = toDrawCircuit;
 				
+			} else {
+				graphicView.unPaintCircuit( hoverCircuit);
+				hoverCircuit =-1;
 			}
 		}
 	}
@@ -450,6 +449,10 @@ public class Window extends JFrame{
 			}
 			hoverNode = delivery;
 		}
+		
+		if (controller.getCircuitManagement().getCircuitsList()!= null)
+			circuitHover(delivery);
+		
 	}
 	
 	public void emptySelectedNode() {
