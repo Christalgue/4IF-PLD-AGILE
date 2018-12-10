@@ -101,6 +101,7 @@ public class DeliveryView extends JPanel {
 		
 	}
 
+
 	public void drawDelivery( Graphics2D g, Node node, int deliveryIndex, int radius) {
 
 		Point point = graphicView.nodeToPoint( node );

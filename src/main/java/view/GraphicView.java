@@ -119,11 +119,6 @@ public class GraphicView extends JPanel {
 		this.minLat = minLat;
 		this.maxLong = maxLong;
 
-		/*System.out.println("originLat " + originLat);
-		System.out.println("originLong " + originLong);
-		System.out.println("minLat " + minLat);
-		System.out.println("maxLong " + maxLong);*/
-
 		PointUtil.range = 5.0 * Math.min(heightScale, widthScale);
 	}
 
@@ -188,16 +183,6 @@ public class GraphicView extends JPanel {
 		}
 		paintDeliveries();
 	}
-
-	/*
-	 * protected Graphics2D getGraphic() { return g; }
-	 */
-
-	/*
-	 * protected void setGraphics() { System.out.println("setGraphics : " +
-	 * this.getGraphics()); g = (Graphics2D) this.getGraphics();
-	 * System.out.println(g); }
-	 */
 
 	protected void setGraphics() {
 		g = (Graphics2D) this.getGraphics();

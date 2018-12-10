@@ -7,18 +7,32 @@ import main.java.utils.PointUtil;
 import main.java.utils.PopUpType;
 import main.java.view.Window;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SelectedPreviousMovedState.
+ */
 public class SelectedPreviousMovedState extends DefaultState {
 	
+	/** The node. */
 	Node node;
 	
+	/**
+	 * Sets the node.
+	 *
+	 * @param node the new node
+	 */
 	protected void setNode (Node node) {
 		this.node =  node;
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#leftClick(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
+	 */
 	public void leftClick(Controller controller, Window window, Point point) {
 	
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);	
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		if (previousNode != null) {
 			//window.nodeSelected(previousNode);
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(previousNode);
@@ -35,9 +49,14 @@ public class SelectedPreviousMovedState extends DefaultState {
 			}
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
+	 */
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
 		window.nodeSelected(deliverySelected);
 		window.circuitSelected(deliverySelected);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		controller.deliveryMovedState.setNode(node);
 		controller.deliveryMovedState.setPreviousNode(deliverySelected.getPosition());
 		controller.setCurrentState(controller.deliveryMovedState);
@@ -45,6 +64,9 @@ public class SelectedPreviousMovedState extends DefaultState {
 			controller.getWindow().getPopUpValue(PopUpType.MOVE, controller.getWindow());
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
+	 */
 	public void mouseMoved(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if(node!=null) {
@@ -55,6 +77,9 @@ public class SelectedPreviousMovedState extends DefaultState {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#cancel(main.java.controller.Controller, main.java.view.Window)
+	 */
 	public void cancel (Controller controller, Window window) {
 		controller.setCurrentState(controller.calcState);
 	}

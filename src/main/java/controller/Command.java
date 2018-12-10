@@ -1,15 +1,19 @@
 package main.java.controller;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface Command.
+ */
 public interface Command {
 	
 	
 	/**
-	 * Execut at this command
+	 * Execute at this command.
 	 */
 	void doCde();
 	
 	/**
-	 * Execut the opposite method at this
+	 * Execute the opposite method at this.
 	 */
 	void undoCde();
 

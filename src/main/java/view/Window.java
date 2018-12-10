@@ -62,7 +62,7 @@ public class Window extends JFrame{
 	protected static JButton undoButton;	
 	protected static JButton redoButton;
 	
-	protected static final int windowWidth = 1280;
+	protected static final int windowWidth = 1400;
 	protected static final int windowHeight = 720;
 	protected static final int buttonPanelHeight =50;
 	protected static final int graphicWidth = 1030;
@@ -540,7 +540,6 @@ public class Window extends JFrame{
 			try {
 				controller.validateAdd();
 			} catch (ManagementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -553,7 +552,6 @@ public class Window extends JFrame{
 			try {
 				controller.validateDelete();
 			} catch (ManagementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -561,13 +559,11 @@ public class Window extends JFrame{
 		}
 	}
 	
-	/* Need to change the signature of validateDuration with a string */
-	 public void manageDurationPopUpValue(String inputValue) {
-		if (inputValue != "" && inputValue != null) {
+	 public void manageDurationPopUpValue(int inputValue) {
+		 if (inputValue >= 0) {
 			try {
-				controller.validateDuration(Integer.parseInt(inputValue));
+				controller.validateDuration(inputValue);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -580,7 +576,6 @@ public class Window extends JFrame{
 			try {
 				controller.validateMove();
 			} catch (ManagementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
