@@ -45,15 +45,20 @@ public class DeliverySelectedState extends DefaultState {
 			window.nodeSelected(isDelivery);
 			window.circuitSelected(isDelivery);
 			
-			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+			if (controller.circuitManagement.checkNodeInDeliveryList(node) && (!controller.circuitManagement.isRepository(node))) {
+				window.enableButtonDeleteDelivery();
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
-			} else {
+			} else if (!controller.circuitManagement.isRepository(node)){
 				window.disableButtonMoveDelivery();
 				window.disableButtonDeleteDelivery();
 				window.enableButtonAddDelivery();
 				controller.nodeSelectedState.setNode(node);
 				controller.setCurrentState(controller.nodeSelectedState);
+			} else {
+				window.disableButtonAddDelivery();
+				window.disableButtonDeleteDelivery();
+				window.disableButtonMoveDelivery();
 			}
 		}
 		

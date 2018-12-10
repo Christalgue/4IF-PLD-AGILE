@@ -106,11 +106,15 @@ public class DeliveryLoadedState extends DefaultState {
 				window.enableButtonDeleteDelivery();
 				controller.deliverySelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
-			} else {
+			} else if ((!controller.circuitManagement.isRepository(node))) {
 				window.enableButtonAddDelivery();
 				controller.nodeSelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.nodeSelectedBeforeCalcState);
 				
+			} else {
+				window.disableButtonAddDelivery();
+				window.disableButtonDeleteDelivery();
+				window.disableButtonMoveDelivery();
 			}
 		}
 	}

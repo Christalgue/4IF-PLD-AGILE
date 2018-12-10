@@ -111,16 +111,20 @@ public class CalcState extends DefaultState {
 			window.nodeSelected(isDelivery);
 			window.circuitSelected(isDelivery);
 			
-			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+			if (controller.circuitManagement.checkNodeInDeliveryList(node) && (!controller.circuitManagement.isRepository(node))) {
 				window.enableButtonDeleteDelivery();
 				window.enableButtonMoveDelivery();
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
-			} else {
+			} else if (!controller.circuitManagement.isRepository(node)) {
 				window.enableButtonAddDelivery();
 				controller.nodeSelectedState.setNode(node);
 				controller.setCurrentState(controller.nodeSelectedState);
 				
+			} else {
+				window.disableButtonAddDelivery();
+				window.disableButtonDeleteDelivery();
+				window.disableButtonMoveDelivery();
 			}
 		} 
 	}

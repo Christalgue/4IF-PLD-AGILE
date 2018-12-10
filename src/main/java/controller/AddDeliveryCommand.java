@@ -60,7 +60,6 @@ public class AddDeliveryCommand implements Command {
 		try {
 			previousNode = circuitManagement.getPreviousNode(node);
 			circuitManagement.removeDelivery(node);
-			window.drawDeliveries();
 			window.drawCircuits();
 		} catch (ManagementException e) {
 			e.printStackTrace();

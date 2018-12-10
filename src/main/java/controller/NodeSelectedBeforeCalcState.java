@@ -54,17 +54,22 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
 			
-			if (controller.circuitManagement.checkNodeInDeliveryList(node)) {
+			if (controller.circuitManagement.checkNodeInDeliveryList(node) && (!controller.circuitManagement.isRepository(node)) ) {
 				window.enableButtonDeleteDelivery();
 				window.disableButtonAddDelivery();
 				controller.deliverySelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
-			} else {
+			} else if (!controller.circuitManagement.isRepository(node)){
 				window.disableButtonDeleteDelivery();
 				window.enableButtonAddDelivery();
 				controller.nodeSelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.nodeSelectedBeforeCalcState);
+			} else {
+				window.disableButtonAddDelivery();
+				window.disableButtonDeleteDelivery();
+				window.disableButtonMoveDelivery();
 			}
+			
 		}
 		
 	}
