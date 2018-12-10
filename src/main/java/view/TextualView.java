@@ -83,8 +83,8 @@ public class TextualView extends JPanel{
 		}*/
 
 	public void fillDeliveryTree() {
-		
 
+		System.out.println("Coucou");
 		treeRoot.removeAllChildren();
 		treeModel.reload();
 		

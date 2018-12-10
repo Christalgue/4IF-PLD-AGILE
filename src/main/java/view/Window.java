@@ -361,7 +361,9 @@ public class Window extends JFrame{
 	public void drawCircuits() {
 		drawDeliveries();
 		graphicView.paintCircuits();
-		textualView.fillCircuitTree();
+		if ( controller.getCircuitManagement().getCircuitsList()!= null) {
+			textualView.fillCircuitTree();
+		}
 	}
 	
 	public void nodeSelected(Delivery delivery) {
