@@ -8,24 +8,24 @@ import main.java.view.Window;
 public class DeliveryDeletedState extends DefaultState{
 	
 	
-
+	
 	Node node;
-	protected void setNode (Node node) {
-		this.node =  node;
+	
+	protected void setNode(Node node) {
+		this.node = node;
+	}
+	
+	public void validate (Controller controller, Window window, CommandsList commandsList) throws ManagementException{
+		commandsList.addCommand(new RemoveDeliveryCommand(window,node,controller.circuitManagement));
+		window.disableButtonDeleteDelivery();
+		window.disableButtonMoveDelivery();
+		controller.setCurrentState(controller.calcState);
 	}
 	
 	public void cancel (Controller controller, Window window) {
-		controller.setCurrentState(controller.deliverySelectedState);
-	}
-	
-	public void validate (Controller controller, Window window) {
-		try {
-			controller.circuitManagement.removeDelivery(node);
-			controller.setCurrentState(controller.calcState);
-		} catch (ManagementException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		window.disableButtonDeleteDelivery();
+		window.disableButtonMoveDelivery();
+		controller.setCurrentState(controller.calcState);
 	}
 
 	

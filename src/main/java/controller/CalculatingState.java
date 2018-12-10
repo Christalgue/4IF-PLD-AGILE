@@ -1,11 +1,15 @@
 package main.java.controller;
 
+import javax.swing.JOptionPane;
+
 import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
+import main.java.exception.ManagementException;
 import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
 import main.java.exception.TSPLimitTimeReachedException;
+import main.java.utils.PopUpType;
 import main.java.view.Window;
 
 public class CalculatingState extends DefaultState {
@@ -13,8 +17,6 @@ public class CalculatingState extends DefaultState {
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating) {
 		if(keepCalculating == true) {
 			try {
-				System.out.println(keepCalculating);
-				System.out.println("///////////////////////////////////////////////////////////////////////////////////////////////////////");
 				controller.circuitManagement.calculateCircuits(controller.circuitManagement.getNbDeliveryMan(), keepCalculating);
 				controller.setCurrentState(controller.calcState);
 			} catch (MapNotChargedException e) {
@@ -34,22 +36,13 @@ public class CalculatingState extends DefaultState {
 				e.printStackTrace();
 			} catch (TSPLimitTimeReachedException e) {
 				System.out.println(e.getMessage());
-				controller.setCurrentState(controller.calculatingState);
+				window.drawCircuits();
+				//controller.setCurrentState(controller.calculatingState);
+				//System.err.println("*********************************************************************");
+				controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 			}
+		} else {
+			controller.setCurrentState(controller.calcState);
 		}
-	}
-	
-	// just to have a gateway while the implementation is not finished
-	// to delete afterwards
-	public void loadDeliveryOffer(Controller controller, Window window, String filename){
-		
-		try {
-			controller.circuitManagement.loadDeliveryList(filename);
-			window.drawDeliveries();
-		} catch (LoadDeliveryException e)
-		{
-			e.printStackTrace();
-		}
-		
 	}
 }

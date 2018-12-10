@@ -22,7 +22,7 @@ public class Delivery extends Observable{
     	this.duration = duration;
     }
 
-    /**
+	/**
      * 
      */
     protected Node position;

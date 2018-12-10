@@ -6,8 +6,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 
 import main.java.controller.Controller;
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.utils.PointUtil;
 
 public class MouseListener extends MouseAdapter {
 
@@ -29,33 +31,23 @@ public class MouseListener extends MouseAdapter {
 		// Called by MouseAdapter each time the mouse is clicked
 		// If it's a left click, the controller is worn
 		if ( evt.getButton() == MouseEvent.BUTTON1) { 
-			Point p = graphicView.pointToLatLong(new Point (evt.getX(), evt.getY()));
-			Node n = graphicView.pointToNode(p);
-			window.nodeSelected(n);
-			System.out.println(n);
-			/*if (p != null) {
-				
-				if(this.controller.circuitManagement.checkNodeInDeliveryList(n))
-				{
-					this.controller.leftClick(n, true);
-				} else {
-					this.controller.leftClick(n, false);
-				}
-			}*/
-				//controleur.clic(p);*/
+			Point p = new Point (evt.getX(), evt.getY());
+			p = graphicView.pointToLatLong(p);
+			controller.leftClick(p);
+
 		}
 	}
 
 	public void mouseReleased(MouseEvent evt) {
-		window.addDeliveryButton.setVisible(true);
 	}
 	
-/*	private Point coordinates(MouseEvent evt){
-		MouseEvent e = SwingUtilities.convertMouseEvent(fenetre, evt, vueGraphique);
-		int x = Math.round((float)e.getX()/(float)vueGraphique.getEchelle());
-		int y = Math.round((float)e.getY()/(float)vueGraphique.getEchelle());
-		return PointFactory.creePoint(x, y);
+	
+	@Override
+	public void mouseMoved(MouseEvent evt) {
+		
+		Point p = new Point ( evt.getX(), evt.getY());
+		p = graphicView.pointToLatLong(p);
+		controller.mouseMoved(p);
 	}
-*/
 
 }

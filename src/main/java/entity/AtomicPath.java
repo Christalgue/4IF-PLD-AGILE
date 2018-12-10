@@ -46,7 +46,13 @@ public class AtomicPath extends Observable{
 		return length;
 	}
 
-
+	public Node getStartNode() {
+		return path.get(0).getStartNode();
+	}
+	
+	public Node getEndNode() {
+		return path.get(path.size()-1).getEndNode();
+	}
 
 	protected void setLength(double length) {
 		this.length = length;
@@ -69,6 +75,8 @@ public class AtomicPath extends Observable{
 		for (Bow currentBow : this.path) {
 			s+=(currentBow.getStartNode().getId()+" => "+currentBow.getEndNode().getId()+" ("+currentBow.getLength()+")\n");
 		}
+		/*s+= path.get(0).getStartNode().toString();
+		s+= " --> " + path.get(path.size()-1).getEndNode().toString();*/
 		return s;
 	}    
 

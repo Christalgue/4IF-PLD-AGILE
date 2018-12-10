@@ -41,8 +41,8 @@ public class CircuitView extends JPanel {
     public CircuitView( GraphicView graphicView, int width) {
     	this.graphicView= graphicView;
     	this.roadWidth = width;
-    	this.arrowLength = 3*width;
-    	this.arrowWidth = 3*width;
+    	this.arrowLength = 2*width;
+    	this.arrowWidth = 2*width;
     }
     
     /**
@@ -58,28 +58,44 @@ public class CircuitView extends JPanel {
 		int atomicPathIndex = 0;
 		Point start;
 		Point end;
+		boolean arrow = false;
 		
 		super.paintComponent(g);
 		g.setColor(color);
 		
-		for( AtomicPath entry : circuit.getPath()) {
-		    
-			for ( Bow bow: entry.getPath()) {
-				
-				drawBow(g, bow);
-				atomicPathIndex++;
-				
-				if ( atomicPathIndex == entry.getPath().size() ) {	
+		if(circuit != null && circuit.getPath() != null) {
+			for( AtomicPath entry : circuit.getPath()) {
+			    
+				for ( Bow bow: entry.getPath()) {
 					
-					start = graphicView.nodeToPoint( bow.getStartNode());
-				 	end = graphicView.nodeToPoint ( bow.getEndNode());
-					drawArrow(g, start, end);
-					atomicPathIndex =0;
+					drawBow(g, bow);
+					
+					
+					if (arrow) {
+						start = graphicView.nodeToPoint( bow.getStartNode());
+						end = graphicView.nodeToPoint ( bow.getEndNode());
+						drawArrow(g, start, end);
+					}
+					
+					arrow = !arrow;
+					
+					/*atomicPathIndex++;
+					
+					if ( atomicPathIndex == entry.getPath().size() ) {	
+						
+						start = graphicView.nodeToPoint( bow.getStartNode());
+					 	end = graphicView.nodeToPoint ( bow.getEndNode());
+						drawArrow(g, start, end);
+						atomicPathIndex =0;
+					}*/
+					
+					
 				}
-				
 			}
-		
 		}
+		
+		
+		
 	}	
 	
 	public void drawBow( Graphics2D g, Bow bow) {
@@ -129,8 +145,11 @@ public class CircuitView extends JPanel {
 		xPoints[2]= (int) point2X;
 		yPoints[2]= (int) point2Y;
 		
-		g.fillPolygon( xPoints, yPoints, 3);
+		//g.fillPolygon( xPoints, yPoints, 3);
 		
+		g.setStroke(new BasicStroke(roadWidth));
+        g.draw(new Line2D.Double(xPoints[0], yPoints[0], xPoints[1], yPoints[1]));
+        g.draw(new Line2D.Double(xPoints[0], yPoints[0], xPoints[2], yPoints[2]));
 		
 		
 	}
