@@ -108,7 +108,7 @@ public class DeliveryLoadedState extends DefaultState {
 				controller.deliverySelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
 			} else {
-				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
+				long id = controller.circuitManagement.getCurrentMap().getIdFromCorrespondingNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
 				window.enableButtonAddDelivery();
 				controller.nodeSelectedBeforeCalcState.setNode(node);

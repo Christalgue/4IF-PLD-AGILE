@@ -112,7 +112,7 @@ public class CalcState extends DefaultState {
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
 			} else {
-				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
+				long id = controller.circuitManagement.getCurrentMap().getIdFromCorrespondingNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
 				window.enableButtonAddDelivery();
 				controller.nodeSelectedState.setNode(node);
