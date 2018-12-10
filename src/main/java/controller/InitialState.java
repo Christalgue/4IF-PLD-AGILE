@@ -16,7 +16,6 @@ public class InitialState extends DefaultState {
 		
 		try {
 			window.enableButtonLoadDeliveriesList();
-			System.out.println(filename);
 			controller.circuitManagement.loadMap(filename);
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			window.drawMap();

@@ -77,7 +77,6 @@ public class Circuit extends Observable {
 	 */
 	public void createCircuit(/*Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths*/) 
 			throws TSPLimitTimeReachedException {
-		System.out.println("calcul circuit");
 		try {
 			calculateTrackTSP(this.repositorySVG, this.allPathsSVG, false);
 		} catch (TSPLimitTimeReachedException e) {
@@ -115,17 +114,13 @@ public class Circuit extends Observable {
 		//this.tsp = new TSP1();
 		TSPLimitTimeReachedException timeException = null;
 		try {
-			//System.out.println("debut try");
 			if(!continueInterruptedCalculation) {
 				allPathsSVG = allPaths;
 			}
-			System.out.println("calculateTrackTSP " + continueInterruptedCalculation);
 			tsp.searchSolution(1000, repository, allPaths, null, continueInterruptedCalculation);
-			//System.out.println("fin try");
 		} catch (TSPLimitTimeReachedException e) {
 			// TODO Auto-generated catch block
 			///e.printStackTrace();
-			//System.out.println(e.getMessage());
 			
 			this.calculationIsFinished = false;
 			//saveCurrentStateForCalculation(repository, allPaths);
@@ -135,7 +130,6 @@ public class Circuit extends Observable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			System.out.println("fin recherche solution");
 			Delivery bestSolution[];
 			bestSolution = this.tsp.getBestSolution();
 			List<Delivery> deliveriesOrdered = new ArrayList<Delivery>();
@@ -145,30 +139,15 @@ public class Circuit extends Observable {
 			for (int indexBestSolution = 1; indexBestSolution < bestSolution.length; indexBestSolution++) {
 				deliveriesOrdered.add(bestSolution[indexBestSolution]);
 				HashMap<Delivery, AtomicPath> pathsFromLastDelivery = allPaths.get(bestSolution[indexBestSolution - 1]);
-				System.out.println("v2 : " + pathsFromLastDelivery.keySet().toString());
-				System.out.println("index : " + indexBestSolution + " / size : " + bestSolution.length);
-				for(int j=0;j<bestSolution.length; j++) {
-					if(bestSolution[j] != null) {
-						System.out.println(j + " : " + bestSolution[j]);
-					} else {
-						System.out.println(j + " : null");
-					}
-				}
-				System.out.println("A :" + bestSolution[indexBestSolution].toString());
-				///System.out.println("B : "+ pathsFromLastDelivery.get(bestSolution[indexBestSolution]).toString());
 				finalPath.add(pathsFromLastDelivery.get(bestSolution[indexBestSolution]));
 			}
 			// add the last AtomicPath to the finalPath
 			HashMap<Delivery, AtomicPath> pathsFromLastDeliveryOfTheList = allPaths.get(bestSolution[bestSolution.length-1]);
-			System.out.println(bestSolution[0]);
-			//System.out.println(finalPath.toString());
-			System.out.println(pathsFromLastDeliveryOfTheList.get(bestSolution[0]));
 			finalPath.add(pathsFromLastDeliveryOfTheList.get(bestSolution[0]));
 			this.deliveryList = deliveriesOrdered;
 			this.path = finalPath;
 		}
 		if (timeException!= null) {
-			System.out.println("temps limite atteint");
 			throw timeException;
 			
 		}
@@ -188,8 +167,6 @@ public class Circuit extends Observable {
 	 */
 	public void continueCalculation() throws TSPLimitTimeReachedException {
 		//load the save and continue the calculation.
-		System.out.println("ContinueCalc_repositorySVG " /*+ repositorySVG*/);
-		System.out.println("ContinueCalc_allPathsSVG " /*+ allPathsSVG*/);
 		calculateTrackTSP(repositorySVG, allPathsSVG, true);
 	}
 

@@ -3,7 +3,6 @@ package main.java.controller;
 import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
-import main.java.exception.ClusteringException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
@@ -142,9 +141,6 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
-		} catch (ClusteringException e)
-		{
-			e.printStackTrace();
 		} catch (MapNotChargedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -158,10 +154,8 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
-			System.out.println(e.getMessage());
 			window.drawCircuits();
 			controller.setCurrentState(controller.calculatingState);
-			//System.err.println("*********************************************************************");
 			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		}
 	

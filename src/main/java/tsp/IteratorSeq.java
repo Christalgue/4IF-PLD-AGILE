@@ -30,20 +30,15 @@ public class IteratorSeq implements Iterator<Delivery> {
 	 */
 	public IteratorSeq(Collection<Delivery> nonViewed, Delivery currentDelivery, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration){
 		this.candidates = new Delivery[nonViewed.size()];
-		//System.out.println(nonViewed.toString());
 		nbCandidates = 0;
-		//System.out.println("creation de l'iterateur");
 		ArrayList<Delivery> stillToAdd = new ArrayList<Delivery>(nonViewed);
 		for(int nbDeliveriesAddedToIteratorFromNonViewed = 0; nbDeliveriesAddedToIteratorFromNonViewed < nonViewed.size(); nbDeliveriesAddedToIteratorFromNonViewed++) {
 			double maxDistance = Double.MIN_VALUE;
 			Delivery toAdd = null;
 			Delivery dontAdd = null;
-			//System.out.println(allPaths.get(currentDelivery).keySet().toString());
 			for(Delivery d : stillToAdd) {
-				//System.out.println("test it 1 " + d.toString());
 				if(allPaths.get(currentDelivery).containsKey(d)) {
 					double distance = allPaths.get(currentDelivery).get(d).getLength();
-					//System.out.println("test it 2");
 					if(distance > maxDistance) {
 						toAdd = d;
 						maxDistance = distance;
@@ -53,7 +48,6 @@ public class IteratorSeq implements Iterator<Delivery> {
 					break;
 				}
 			}
-			//System.out.println("test it 2");
 			if (toAdd != null) {
 				candidates[nbCandidates++] = toAdd;
 				stillToAdd.remove(toAdd);
@@ -66,7 +60,6 @@ public class IteratorSeq implements Iterator<Delivery> {
 		/*for (Delivery s : nonViewed){
 			candidates[nbCandidates++] = s;
 		}*/
-		//System.out.println("fin iterateur");
 	}
 	
 	/* (non-Javadoc)
@@ -74,7 +67,6 @@ public class IteratorSeq implements Iterator<Delivery> {
 	 */
 	@Override
 	public boolean hasNext() {
-		//System.out.println("reste : " + nbCandidates);
 		return nbCandidates > 0;
 	}
 
