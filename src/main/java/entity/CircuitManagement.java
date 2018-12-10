@@ -406,6 +406,8 @@ public class CircuitManagement extends Observable{
     	// get most distant cluster from the center of all deliveries
     	ArrayList<Delivery> clusterToBalance = distributionToBalance.get(barycenters.indexOf(mostDistantBarycenter));
 
+
+
     	
     	// Build rest of deliveries for next iteration
     	List<Delivery> restOfDeliveries = new ArrayList<Delivery>();
@@ -453,8 +455,7 @@ public class CircuitManagement extends Observable{
     	System.out.println("Borne sup : "+topAverageNumberOfDeliveries);
     	System.out.println("Borne inf : "+bottomAverageNumberOfDeliveries);
     	System.out.println("Nb de del man : "+nbDeliveryMan);
-    	System.out.println("Nb de livr total : "+deliveryList.size());*/
-    	
+    	System.out.println("Nb de livr total : "+deliveryList.size());*/  	
     	
     	if (clusterToBalance.size()>topAverageNumberOfDeliveries) {
     		// Remove closest deliveries to center of all deliveries
@@ -475,11 +476,8 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Return the most distant barycenter.
-     *
-     * @param distribution the distribution
-     * @param barycenters the barycenters
-     * @return the pair
+     * Return the most distant barycenter
+     * @return
      */
     protected Pair<Pair<Double,Double>,Pair<Double,Double>> calculateGlobalAndMostDistantBarycenter(List<ArrayList<Delivery>> distribution, List<Pair<Double,Double>> barycenters) {
     	
@@ -502,7 +500,6 @@ public class CircuitManagement extends Observable{
     	System.out.println("lat : "+globalLatitude);
     	System.out.println("long : "+globalLongitude);
     	*/
-    	
     	Double greatestBarycentersDistance = (double)0;
     	Pair<Double,Double> mostDistantBarycenter = null;
     	for (Pair<Double,Double> currentBarycenter : barycenters) {
@@ -552,11 +549,8 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Remove a delivery from the cluster (the delivery that is the closest to the specified barycenter).
-     *
-     * @param cluster the cluster
-     * @param barycenter the barycenter
-     * @param restOfDeliveries the rest of deliveries
+     * Remove a delivery from the cluster (the delivery that is the closest to the specified barycenter)
+     * @return
      */
     protected void removeDeliveryFromCluster(List<Delivery> cluster, Pair<Double,Double> barycenter, List<Delivery> restOfDeliveries) {
     	// get closest delivery to the barycenter
@@ -579,10 +573,8 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Check cluster validity.
-     *
-     * @param clustersToCheck the clusters to check
-     * @return true, if successful
+     * Check if distribution has same-size clusters
+     * @return
      */
     protected boolean checkClusterValidity (List<ArrayList<Delivery>> clustersToCheck) {
     	Integer bottomAverageNumberOfDeliveries = (deliveryList.size()-1)/nbDeliveryMan; // Passer plutot la liste sans l'entrepot
