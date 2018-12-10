@@ -80,9 +80,7 @@ public class PopUp extends JFrame {
 	        	    new PropertyChangeListener() {
 	        	        public void propertyChange(PropertyChangeEvent e) {
 	        	            String prop = e.getPropertyName();
-	        	            System.out.println(e.getSource() == popUp);
 	        	            if (durationDialog.isVisible() && (e.getSource() == popUp)&& (prop.equals(JOptionPane.VALUE_PROPERTY))) {
-	        	            	System.out.println("Bouh");
 	        	            	Object value = popUp.getValue();
 	        	            	if (durationOptions[0].equals(value)) {
 	        	                    try{
