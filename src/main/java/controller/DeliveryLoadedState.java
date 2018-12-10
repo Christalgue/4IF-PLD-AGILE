@@ -22,6 +22,7 @@ public class DeliveryLoadedState extends DefaultState {
 		try {
 			controller.circuitManagement.loadDeliveryList(filename);
 			commandsList.reset();
+			window.setMessage("");
 		//	window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
@@ -43,6 +44,7 @@ public class DeliveryLoadedState extends DefaultState {
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			e.printStackTrace();
 		}
 	}
@@ -83,6 +85,8 @@ public class DeliveryLoadedState extends DefaultState {
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
+
 		if(node!=null) {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
@@ -104,6 +108,7 @@ public class DeliveryLoadedState extends DefaultState {
 	}
 	
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+		window.setMessage("");
 		window.nodeSelected(deliverySelected);
 		window.enableButtonDeleteDelivery();
 		controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());

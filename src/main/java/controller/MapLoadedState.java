@@ -22,6 +22,7 @@ public class MapLoadedState extends DefaultState{
 			window.drawMap();
 		} catch (LoadMapException l)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			l.printStackTrace();
 		}
 	}
@@ -39,6 +40,7 @@ public class MapLoadedState extends DefaultState{
 
 		} catch (LoadDeliveryException l)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			l.printStackTrace();
 		}
 	}

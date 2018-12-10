@@ -24,6 +24,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		if (node != null)
 		{
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);

@@ -2,7 +2,7 @@ package main.java.entity;
 
 
 import java.util.*;
-import java.util.HashMap;
+
 import javafx.util.Pair;
 
 import main.java.exception.DijkstraException;
@@ -247,6 +247,47 @@ public class Map extends Observable{
 		}
 		return 0;
     }
+    
+	public String displayIntersectionNode (Node node) {
+		long id = node.getId();
+		String temp = "";
+		String finalString = "";
+		int i=0;
+		for( HashMap.Entry<Long,Set<Bow>> bowSet : bowMap.entrySet() ) {
+			
+			Iterator<Bow> iterator = bowSet.getValue().iterator();
+		    while(iterator.hasNext()) {
+		        Bow setElement = iterator.next();
+		        if (setElement.getStartNode().getId() == id || setElement.getEndNode().getId()==id) {
+		        	if (!(setElement.getStreetName() == "")) {
+			        	if(i == 0) {
+				        
+				            temp = temp + setElement.getStreetName();	
+				            i++;
+				        }
+				        else if (i == 1 && (!temp.contains(setElement.getStreetName()))) {
+					       	temp = temp +" et " + setElement.getStreetName();
+					       	i++;
+			     	    }
+		        	}
+		        }
+		        
+		        if (i == 2) {
+		        	break;
+		        }
+		    }
+		}
+		
+		if (i == 0) {
+			finalString = "-";
+		}
+		else if (i == 2) {
+			finalString = "Intersection entre " + temp;
+		} else if (i==1) {
+			finalString = "Impasse à " + temp;
+		} 
+		return finalString;
+	}
     
     
 	/* (non-Javadoc)
