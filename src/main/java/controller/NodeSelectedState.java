@@ -124,10 +124,8 @@ public class NodeSelectedState extends DefaultState {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
-			System.out.println(e.getMessage());
 			window.drawCircuits();
 			controller.setCurrentState(controller.calculatingState);
-			//System.err.println("*********************************************************************");
 			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		}
 	

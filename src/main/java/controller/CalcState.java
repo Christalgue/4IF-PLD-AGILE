@@ -78,7 +78,6 @@ public class CalcState extends DefaultState {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
-			System.out.println(e.getMessage());
 			window.drawCircuits();
 			controller.setCurrentState(controller.calculatingState);
 			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());

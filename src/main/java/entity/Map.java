@@ -120,16 +120,8 @@ public class Map extends Observable{
     		}
     	}
     	
-    	for (HashMap.Entry<Node,Double> e : nodeDistances.entrySet()) {
-    		//System.out.println("Distance du node "+e.getKey().getId()+" : "+e.getValue());
-    	}
-    	for (HashMap.Entry<Node,Node> e : nodePrecedences.entrySet()) {
-    		//System.out.println("Precedent du node "+e.getKey().getId()+" : "+e.getValue().getId());
-    	}
-    	
     	for (Delivery currentDelivery : arrivalDeliveries) {
     		if (!currentDelivery.equals(startDelivery)) {
-    			//System.out.println("Delivery : "+currentDelivery.getPosition());
         		List<Bow> bowList = new ArrayList<Bow>();
         		Node currentNode = currentDelivery.getPosition();
         		while (nodePrecedences.containsKey(currentNode)) {
@@ -145,21 +137,11 @@ public class Map extends Observable{
         			bowList.add(0, bowToAddToAtomicPath);
         			currentNode = precedentNode;
         		}
-        		/*System.out.println("Taille de atomic path : "+bowList.size());
-        		System.out.println("Atomic path : "+AtomicPathsIndex);
-        		for (Bow b : bowList) {
-        			System.out.println(b.getStartNode().getId()+" => "+b.getEndNode().getId());
-        		}
-        		System.out.println("");*/
         		
         		AtomicPath optimalPath = new AtomicPath(bowList);
         		AtomicPaths.put(currentDelivery, optimalPath);
     		}
     	}  
-    	/*if(arrivalDeliveries.size() != AtomicPaths.keySet().size()-1 ) {
-    		throw new DijkstraException("All pathes not calculated for delivery : " + startDelivery.toString()
-    					+ "\n arrival deliveries : " + arrivalDeliveries.toString() + " \n AtomicPaths keySet : " + AtomicPaths.keySet().toString() + "\n \n \n");
-    	}*/
         return AtomicPaths;
     }
     

@@ -17,7 +17,6 @@ public class MapLoadedState extends DefaultState{
 			window.enableButtonLoadDeliveriesList();
 			window.disableButtonCalculateCircuit();
 			controller.circuitManagement.loadMap(filename);
-			System.out.println(filename);
 			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			window.drawMap();
 		} catch (LoadMapException l)
