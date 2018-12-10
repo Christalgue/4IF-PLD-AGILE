@@ -5,13 +5,32 @@ import main.java.entity.Node;
 import main.java.exception.ManagementException;
 import main.java.view.Window;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MoveDeliveryCommand.
+ */
 public class MoveDeliveryCommand implements Command {
 	
+	/** The window. */
 	private Window window;
+	
+	/** The circuit management. */
 	private CircuitManagement circuitManagement;
+	
+	/** The node 1. */
 	private Node node1;
+	
+	/** The node 2. */
 	private Node node2;
 	
+	/**
+	 * Instantiates a new move delivery command.
+	 *
+	 * @param window the window
+	 * @param node1 the node 1
+	 * @param node2 the node 2
+	 * @param circuitManagement the circuit management
+	 */
 	public MoveDeliveryCommand(Window window, Node node1, Node node2, CircuitManagement circuitManagement) {
 		this.node1 = node1;
 		this.node2 = node2;
@@ -19,6 +38,9 @@ public class MoveDeliveryCommand implements Command {
 		this.circuitManagement = circuitManagement;
 	}
 
+	/* (non-Javadoc)
+	 * @see main.java.controller.Command#doCde()
+	 */
 	@Override
 	public void doCde() {
 		try {
@@ -30,6 +52,9 @@ public class MoveDeliveryCommand implements Command {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see main.java.controller.Command#undoCde()
+	 */
 	@Override
 	public void undoCde() {
 		try {

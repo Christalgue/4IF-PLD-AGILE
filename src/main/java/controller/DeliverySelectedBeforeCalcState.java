@@ -14,14 +14,27 @@ import main.java.utils.PointUtil;
 import main.java.utils.PopUpType;
 import main.java.view.Window;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DeliverySelectedBeforeCalcState.
+ */
 public class DeliverySelectedBeforeCalcState extends DefaultState {
 	
+	/** The node. */
 	Node node;
 	
+	/**
+	 * Sets the node.
+	 *
+	 * @param node the new node
+	 */
 	protected void setNode (Node node) {
 		this.node =  node;
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#leftClick(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
+	 */
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (node != null)
@@ -44,6 +57,9 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
+	 */
 	public void mouseMoved(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if(node!=null) {
@@ -54,6 +70,9 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#loadMap(main.java.controller.Controller, main.java.view.Window, java.lang.String, main.java.controller.CommandsList)
+	 */
 	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
@@ -71,6 +90,9 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#loadDeliveryOffer(main.java.controller.Controller, main.java.view.Window, java.lang.String, main.java.controller.CommandsList)
+	 */
 	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 	
 		try {
@@ -88,6 +110,9 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	
 	}
 
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#calculateCircuits(main.java.controller.Controller, main.java.view.Window, int, main.java.controller.CommandsList)
+	 */
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
 		commandsList.reset();
 		try {
@@ -120,6 +145,9 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#deleteDelivery(main.java.controller.Controller, main.java.view.Window)
+	 */
 	public void deleteDelivery (Controller controller, Window window) {
 		
 		controller.deliveryDeletedBeforeCalcState.setNode(node);
@@ -128,11 +156,17 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 			controller.getWindow().getPopUpValue(PopUpType.DELETE, controller.getWindow());
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#undo(main.java.controller.Controller, main.java.controller.CommandsList)
+	 */
 	@Override
 	public void undo(Controller controller, CommandsList commandsList) {
 		commandsList.undo();
 	}
 
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#redo(main.java.controller.Controller, main.java.controller.CommandsList)
+	 */
 	@Override
 	public void redo(Controller controller, CommandsList commandsList) {
 		commandsList.redo();

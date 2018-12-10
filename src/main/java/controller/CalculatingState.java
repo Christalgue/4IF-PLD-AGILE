@@ -12,8 +12,15 @@ import main.java.exception.TSPLimitTimeReachedException;
 import main.java.utils.PopUpType;
 import main.java.view.Window;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CalculatingState.
+ */
 public class CalculatingState extends DefaultState {
 
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#continueCalculation(main.java.controller.Controller, main.java.view.Window, boolean)
+	 */
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating) {
 		if(keepCalculating == true) {
 			try {

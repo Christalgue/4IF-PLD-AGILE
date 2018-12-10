@@ -7,19 +7,39 @@ import main.java.utils.PointUtil;
 import main.java.utils.PopUpType;
 import main.java.view.Window;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PreviousDeliverySelectedState.
+ */
 public class PreviousDeliverySelectedState extends DefaultState {
 	
+	/** The node. */
 	Node node;
+	
+	/** The duration. */
 	int duration; 
 	
+	/**
+	 * Sets the node.
+	 *
+	 * @param node the new node
+	 */
 	protected void setNode (Node node) {
 		this.node =  node;
 	}
 	
+	/**
+	 * Sets the duration.
+	 *
+	 * @param duration the new duration
+	 */
 	protected void setDuration (int duration) {
 		this.duration  = duration;
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#leftClick(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
+	 */
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);
 		if (previousNode != null) {
@@ -41,6 +61,9 @@ public class PreviousDeliverySelectedState extends DefaultState {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
+	 */
 	public void mouseMoved(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if(node!=null) {
@@ -51,6 +74,9 @@ public class PreviousDeliverySelectedState extends DefaultState {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see main.java.controller.DefaultState#cancel(main.java.controller.Controller, main.java.view.Window)
+	 */
 	public void cancel (Controller controller, Window window) {
 		controller.setCurrentState(controller.calcState);
 	}
