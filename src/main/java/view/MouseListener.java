@@ -17,6 +17,7 @@ public class MouseListener extends MouseAdapter {
 	private GraphicView graphicView;
 	//private TextualView textualView;
 	private Window window;
+	private Point lastClickedPoint;
 
 	public MouseListener(Controller controller, GraphicView graphicView, Window window){
 	//public MouseListener(Controller controller, GraphicView graphicView, TextualView textualView, Window window){
@@ -38,7 +39,21 @@ public class MouseListener extends MouseAdapter {
 		}
 	}
 
+	public void mousePressed (MouseEvent evt) {
+		
+		if ( evt.getButton() == MouseEvent.BUTTON1) { 
+			Point p = new Point (evt.getX(), evt.getY());
+			lastClickedPoint = p;
+		}
+	}
+	
 	public void mouseReleased(MouseEvent evt) {
+		
+		if (lastClickedPoint != null) {
+			Point releasedPoint = new Point (evt.getX(), evt.getY());
+			graphicView.shift((int)(-lastClickedPoint.getX()+ releasedPoint.getX()),(int)(-lastClickedPoint.getY()+ releasedPoint.getY()));
+		}
+		
 	}
 	
 	

@@ -48,6 +48,9 @@ public class GraphicView extends JPanel {
 	
 	protected double minLat;
 	protected double maxLong;
+	
+	private int horizontalOffset =0;
+	private int verticalOffset =0;
 
 	/**
 	 * Create the graphic view where the map will be drawn in Window windows
@@ -128,14 +131,14 @@ public class GraphicView extends JPanel {
 
 	public Point nodeToPoint(Node node) {
 
-		Point p = new Point(((node.getLongitude() - originLong) / widthScale)+10,
-				((originLat - node.getLatitude()) / heightScale)+10);
+		Point p = new Point(((node.getLongitude() - originLong) / widthScale)+10 - horizontalOffset,
+				((originLat - node.getLatitude()) / heightScale)+10 -verticalOffset);
 		return p;
 
 	}
 
 	public Point pointToLatLong(Point point) {
-		Point p = new Point((point.getX()-10) * widthScale + originLong, -(point.getY()-10) * heightScale + originLat);
+		Point p = new Point((point.getX()-10+horizontalOffset) * widthScale + originLong, -(point.getY()-10+verticalOffset) * heightScale + originLat);
 		return p;
 
 	}
@@ -153,8 +156,10 @@ public class GraphicView extends JPanel {
 
 	}
 
+	
 	public void paintMap() {
-		calculateScale(circuitManagement);
+		this.removeAll();
+		this.update(g);
 		mapView.paintMap(g, circuitManagement.getCurrentMap());
 	}
 
@@ -245,4 +250,35 @@ public class GraphicView extends JPanel {
 		
 	}
 
+	public void zoom() {
+		heightScale = heightScale/2;
+		widthScale = widthScale/2;
+		paintComponent();
+
+	}
+	
+	public void unZoom (){
+		heightScale = heightScale*2;
+		widthScale = widthScale*2;
+		paintComponent();
+		
+	}
+
+	public void horizontalShift(int right) {
+		horizontalOffset +=right;
+		paintComponent();
+	}
+
+	public void verticalShift(int down) {
+		verticalOffset +=down;
+		paintComponent();
+	}
+	
+	public void shift(int right, int down) {
+		horizontalOffset +=right;
+		verticalOffset +=down;
+		paintComponent();
+	}
+
+	
 }
