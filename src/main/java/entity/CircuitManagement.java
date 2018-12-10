@@ -623,9 +623,11 @@ public class CircuitManagement extends Observable{
 		int circuitIndex =0;
 		for(Circuit circuitTested : this.circuitsList){		
 			for ( AtomicPath path : circuitTested.getPath()) {
-				for ( Bow bow : path.getPath()) {
-					if (bow.getStartNode() != null && bow.getStartNode()== delivery.getPosition())
-						return circuitIndex;
+				if(path != null) {
+					for ( Bow bow : path.getPath()) {
+						if (bow.getStartNode() != null && bow.getStartNode()== delivery.getPosition())
+							return circuitIndex;
+					}
 				}
 			}
 			circuitIndex++;
@@ -771,7 +773,7 @@ public class CircuitManagement extends Observable{
 		if(circuitsList!=null && circuitsList.size()!=0) {
 			for (Circuit circuit : this.circuitsList) {
 				if ((position=circuit.checkNodeInCircuit(previousNode))!=-1) {
-					// on rajoute le delivery e¿½ la liste et on supprime l'atomic path entre le delivery precedent et suivant
+					// on rajoute le delivery eï¿½ï¿½ la liste et on supprime l'atomic path entre le delivery precedent et suivant
 					circuit.addDelivery(delivery, (position+1));
 					circuit.removeAtomicPath(position);
 					
