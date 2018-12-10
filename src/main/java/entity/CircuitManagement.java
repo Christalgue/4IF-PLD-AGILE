@@ -39,7 +39,7 @@ public class CircuitManagement extends Observable{
     /**
      * Load delivery list.
      *
-     * @param filename the filename
+     * @param filename the path to the file containing all deliveries
      * @throws LoadDeliveryException the load delivery exception
      */
     public void loadDeliveryList(String filename) throws LoadDeliveryException {
@@ -105,25 +105,25 @@ public class CircuitManagement extends Observable{
 	}
 
 	/**
-	 * Gets the nb delivery man.
+	 * Gets the number of deliverymen.
 	 *
-	 * @return the nb delivery man
+	 * @return the number of deliverymen.
 	 */
 	public int getNbDeliveryMan() {
 		return nbDeliveryMan;
 	}
 
 	/**
-	 * Sets the nb delivery man.
+	 * Sets the number deliverymen.
 	 *
-	 * @param nbDeliveryMan the new nb delivery man
+	 * @param nbDeliveryMan the new number deliverymen
 	 */
 	public void setNbDeliveryMan(int nbDeliveryMan) {
 		this.nbDeliveryMan = nbDeliveryMan;
 	}
 
 	/**
-	 * Load map.
+	 * Load map. (load all nodes and bows)
 	 *
 	 * @param filename the filename
 	 * @throws LoadMapException the load map exception
@@ -141,7 +141,7 @@ public class CircuitManagement extends Observable{
      * clusters are unbalanced in terms of cardinality, balance those clusters.
      *
      * @return a list containing all clusters
-     * @throws ClusteringException when no repository is found
+     * @throws noRepositoryException when no repository is found
      */
     public List<ArrayList<Delivery>> cluster() throws NoRepositoryException {
     	
@@ -178,17 +178,17 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * K-means clustering algorithm.
+     * K-means clustering algorithm. 
      *
-     * @param numberOfClusters the number of clusters
-     * @param deliveriesToCluster the deliveries to cluster
-     * @return the pair
+     * @param numberOfClusters the expected number of clusters
+     * @param deliveriesToCluster all deliveries to partition in clusters
+     * @return a pair containing the clusters and their respective barycenters.
      */
     public Pair<List<ArrayList<Delivery>>,List<Pair<Double,Double>>> KmeansClustering(int numberOfClusters, List<Delivery> deliveriesToCluster) {
     	
     	List<Pair<Double,Double>> barycenters = new ArrayList<Pair<Double,Double>>(numberOfClusters);
     	for (int barycenterIndex = 0 ; barycenterIndex < numberOfClusters ; barycenterIndex++) {
-    		addRandomBarycenter(barycenters,numberOfClusters, deliveriesToCluster);
+    		addRandomBarycenter(barycenters, deliveriesToCluster);
     	}
     	
     	List<ArrayList<Delivery>> newDistribution = KmeansClusteringStep(barycenters, deliveriesToCluster);
@@ -208,11 +208,12 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Kmeans clustering step.
+     * Associates all deliveries to their closest barycenter and updates all barycenters.
+     * Each set of association to a barycenter results in a new cluster.
      *
-     * @param barycenters the barycenters
-     * @param deliveriesToCluster the deliveries to cluster
-     * @return the list
+     * @param barycenters the barycenters of the distribution
+     * @param deliveriesToCluster all deliveries to partition in clusters
+     * @return the list containing all clusters
      */
     public List<ArrayList<Delivery>> KmeansClusteringStep(List<Pair<Double,Double>> barycenters, List<Delivery> deliveriesToCluster) {
     	
@@ -239,10 +240,10 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Calculate barycenters.
+     * Calculate new barycenters based on a distribution of deliveries in clusters.
      *
-     * @param currentDistribution the current distribution
-     * @return the list
+     * @param currentDistribution the current clustered distribution
+     * @return a list containing all barycenters
      */
     protected List<Pair<Double,Double>> calculateBarycenters(List<ArrayList<Delivery>> currentDistribution){
     	List<Pair<Double,Double>> barycenters = new ArrayList<Pair<Double,Double>>(currentDistribution.size());
@@ -264,13 +265,12 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Adds the random barycenter.
+     * Adds a random barycenter.
      *
-     * @param barycenters the barycenters
-     * @param numberOfClusters the number of clusters
-     * @param deliveries the deliveries
+     * @param barycenters the list containing all barycenters
+     * @param deliveries the list containing all deliveries
      */
-    public void addRandomBarycenter(List<Pair<Double,Double>> barycenters, int numberOfClusters, List<Delivery> deliveries) {
+    public void addRandomBarycenter(List<Pair<Double,Double>> barycenters, List<Delivery> deliveries) {
     	Random r = new Random();
         Integer randomIndex = r.nextInt(deliveries.size());
         Delivery randomDelivery = deliveries.get(randomIndex);
@@ -278,19 +278,20 @@ public class CircuitManagement extends Observable{
     	if (!barycenters.contains(barycenter)) {
     		barycenters.add(barycenter);
     	} else {
-    		addRandomBarycenter(barycenters, numberOfClusters, deliveries);
+    		addRandomBarycenter(barycenters, deliveries);
     	}
     }
     
     /**
-     * Evaluate cluster.
+     * Evaluate a clustered distribution validity.
+     * Checks if old and new distribution are different (return false if so).
      *
-     * @param newDistribution the new distribution
-     * @param oldDistribution the old distribution
-     * @return true, if successful
+     * @param newDistribution the new clustered distribution
+     * @param oldDistribution the old clustered distribution
+     * @return true, if both distribution are equal
      */
     protected boolean evaluateCluster(List<ArrayList<Delivery>> newDistribution, List<ArrayList<Delivery>> oldDistribution) {
-    	if (newDistribution.equals(oldDistribution)) { // A CHANGER
+    	if (newDistribution.equals(oldDistribution)) {
     		return false;
     	} else {
     		return true;
@@ -298,10 +299,13 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Balance all clusters.
+     * Balance the clustered distribution.
+     * Takes the most distant cluster and adds/remove deliveries until its cardinality is valid.
+     * Then performs Kmeans algorithm on the rest of the deliveries.
+     * Repeats those two steps until the distribution is full.
      *
-     * @param distributionToBalance the distribution to balance
-     * @return the pair
+     * @param distributionToBalance the distribution to balance, which contains all the clusters and their respective barycenters
+     * @return the balanced clusters and their barycenters
      */
     protected Pair<List<ArrayList<Delivery>>,List<Pair<Double,Double>>> balanceDistribution(Pair<List<ArrayList<Delivery>>,List<Pair<Double,Double>>> distributionToBalance) {
     	List<ArrayList<Delivery>> balancedClusters = new ArrayList<ArrayList<Delivery>>();
@@ -328,11 +332,11 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Return most balanced cluster.
+     * Return the most distant cluster from the center of all deliveries.
      *
-     * @param distributionToBalance the distribution to balance
-     * @param barycenters the barycenters
-     * @return the pair
+     * @param distributionToBalance the current distribution of clusters
+     * @param barycenters the barycenters of the current distribution
+     * @return a pair containing the most distant cluster and the rest of the deliveries
      */
     protected Pair<ArrayList<Delivery>,List<Delivery>> balanceMostDistantCluster(List<ArrayList<Delivery>> distributionToBalance, List<Pair<Double,Double>> barycenters) {
     	    	
@@ -384,8 +388,9 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Return the most distant barycenter
-     * @return
+     * Calculates the distances between all barycenter and the center of all deliveries in order to return the most distant cluster.
+     * 
+     * @return the most distant barycenter and the center of all deliveries
      */
     protected Pair<Pair<Double,Double>,Pair<Double,Double>> calculateGlobalAndMostDistantBarycenter(List<ArrayList<Delivery>> distribution, List<Pair<Double,Double>> barycenters) {
     	
@@ -422,19 +427,20 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Check if distribution has same-size clusters.
+     * Adds a delivery to the cluster.
+     * The delivery is selected according to its closeness to the cluster (actually to the barycenter)
      *
-     * @param cluster the cluster
-     * @param barycenter the barycenter
+     * @param cluster the current cluster to balance
+     * @param barycenters the all barycenters of the current distribution
      * @param restOfDeliveries the rest of deliveries
      */
-    protected void addDeliveryToCluster(List<Delivery> cluster, Pair<Double,Double> barycenter, List<Delivery> restOfDeliveries) {
+    protected void addDeliveryToCluster(List<Delivery> cluster, Pair<Double,Double> barycenters, List<Delivery> restOfDeliveries) {
     	// get closest delivery to the barycenter
     	Double closestTotalDistance = Double.MAX_VALUE;
     	Delivery deliveryToAdd = null;
     	for (Delivery currentDelivery : restOfDeliveries) {
-    		Double currentLatitudeDifference = barycenter.getKey()-currentDelivery.getPosition().getLatitude();
-    		Double currentLongitudeDifference = barycenter.getValue()-currentDelivery.getPosition().getLongitude();
+    		Double currentLatitudeDifference = barycenters.getKey()-currentDelivery.getPosition().getLatitude();
+    		Double currentLongitudeDifference = barycenters.getValue()-currentDelivery.getPosition().getLongitude();
     		Double currentTotalDistance = Math.sqrt(currentLatitudeDifference*currentLatitudeDifference+currentLongitudeDifference*currentLongitudeDifference);
     		if (currentTotalDistance<closestTotalDistance) {
     			deliveryToAdd = currentDelivery;
@@ -448,8 +454,8 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Remove a delivery from the cluster (the delivery that is the closest to the specified barycenter)
-     * @return
+     * Remove a delivery from the cluster.
+     * The delivery must be the closest to the center of all the deliveries.
      */
     protected void removeDeliveryFromCluster(List<Delivery> cluster, Pair<Double,Double> barycenter, List<Delivery> restOfDeliveries) {
     	// get closest delivery to the barycenter
@@ -471,8 +477,8 @@ public class CircuitManagement extends Observable{
     }
     
     /**
-     * Check if distribution has same-size clusters
-     * @return
+     * Check if distribution has same-size clusters.
+     * @return the validity of all cluster's cardinality.
      */
     protected boolean checkClusterValidity (List<ArrayList<Delivery>> clustersToCheck) {
     	Integer bottomAverageNumberOfDeliveries = (deliveryList.size()-1)/nbDeliveryMan;
@@ -893,5 +899,6 @@ public class CircuitManagement extends Observable{
 		}
 		return null;
 	}
+	
 
 }

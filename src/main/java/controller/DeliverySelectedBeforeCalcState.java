@@ -36,6 +36,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	 */
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		if (node != null)
 		{
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
@@ -47,7 +48,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 			} else {
 				window.disableButtonDeleteDelivery();
 				window.enableButtonAddDelivery();
-				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
+				long id = controller.circuitManagement.getCurrentMap().getIdFromCorrespondingNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
 				controller.nodeSelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.nodeSelectedBeforeCalcState);
@@ -61,6 +62,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	 */
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
 		window.nodeSelected(deliverySelected);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());
 		controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
 	}
@@ -94,6 +96,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			e.printStackTrace();
 		}
 	}
@@ -109,10 +112,12 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 			controller.circuitManagement.loadDeliveryList(filename);
 			commandsList.reset();
 			controller.setCurrentState(controller.deliveryLoadedState);
+			window.setMessage("");
 			//window.setMessage("Veuillez rentrer le nombre de livreurs et appuyer sur \"Calculer les tournees\"");
 			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			e.printStackTrace();
 		}
 	
@@ -127,6 +132,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
+			window.setMessage("");
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
 		} catch (MapNotChargedException e) {
@@ -153,7 +159,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	 * @see main.java.controller.DefaultState#deleteDelivery(main.java.controller.Controller, main.java.view.Window)
 	 */
 	public void deleteDelivery (Controller controller, Window window) {
-		
+		window.setMessage("");
 		controller.deliveryDeletedBeforeCalcState.setNode(node);
 		controller.setCurrentState(controller.deliveryDeletedBeforeCalcState);
 		if(controller.getShowPopUp())

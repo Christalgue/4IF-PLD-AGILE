@@ -48,6 +48,7 @@ public class NodeSelectedState extends DefaultState {
 	 */
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		if (node != null)
 		{
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
@@ -64,7 +65,7 @@ public class NodeSelectedState extends DefaultState {
 				window.disableButtonMoveDelivery();
 				window.disableButtonDeleteDelivery();
 				window.enableButtonAddDelivery();
-				long id = controller.circuitManagement.getCurrentMap().getIdFromNode(point.getX(), point.getY());
+				long id = controller.circuitManagement.getCurrentMap().getIdFromCorrespondingNode(point.getX(), point.getY());
 				Node newNode = new Node (id, point.getX(), point.getY());
 				controller.nodeSelectedState.setNode(node);
 				controller.setCurrentState(controller.nodeSelectedState);
@@ -79,6 +80,7 @@ public class NodeSelectedState extends DefaultState {
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
 		window.nodeSelected(deliverySelected);
 		window.circuitSelected(deliverySelected);
+		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		window.enableButtonDeleteDelivery();
 		window.enableButtonMoveDelivery();
 		controller.deliverySelectedState.setNode(deliverySelected.getPosition());
@@ -112,6 +114,7 @@ public class NodeSelectedState extends DefaultState {
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
 		{
+			window.setErrorMessage("Fichier XML invalide");
 			e.printStackTrace();
 		}
 	}
@@ -122,6 +125,7 @@ public class NodeSelectedState extends DefaultState {
 	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 	
 		try {
+			window.setMessage("");
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.loadDeliveryList(filename);
@@ -131,6 +135,7 @@ public class NodeSelectedState extends DefaultState {
 			window.drawDeliveries();
 		} catch (LoadDeliveryException e)
 		{
+			window.setErrorMessage("");
 			e.printStackTrace();
 		}
 	
@@ -142,6 +147,7 @@ public class NodeSelectedState extends DefaultState {
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
 		commandsList.reset();
 		try {
+			window.setMessage("");
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
