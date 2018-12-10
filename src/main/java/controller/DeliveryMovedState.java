@@ -50,6 +50,7 @@ public class DeliveryMovedState extends DefaultState {
 	@Override
 	public void validate (Controller controller, Window window, CommandsList commandsList) throws ManagementException {
 		window.setMessage("");
+		window.emptySelectedNode();
 		commandsList.addCommand(new MoveDeliveryCommand(window,node,previousNode,controller.circuitManagement));
 		controller.setCurrentState(controller.calcState);
 	}

@@ -27,11 +27,10 @@ public class DeliveryDeletedBeforeCalcState extends DefaultState {
 	 */
 	@Override
 	public void validate (Controller controller, Window window, CommandsList commandsList) throws ManagementException{
+		window.emptySelectedNode();
 		commandsList.addCommand(new RemoveDeliveryCommand(window, node, controller.circuitManagement));
 		window.disableButtonDeleteDelivery();
-		window.emptySelectedNode();
 		controller.setCurrentState(controller.deliveryLoadedState);
-		window.drawDeliveries();
 	}
 	
 	/**

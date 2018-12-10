@@ -30,10 +30,10 @@ public class DeliveryDeletedState extends DefaultState{
 	 */
 	@Override
 	public void validate (Controller controller, Window window, CommandsList commandsList) throws ManagementException{
+		window.emptySelectedNode();
 		commandsList.addCommand(new RemoveDeliveryCommand(window,node,controller.circuitManagement));
 		window.disableButtonDeleteDelivery();
 		window.disableButtonMoveDelivery();
-		window.emptySelectedNode();
 		controller.setCurrentState(controller.calcState);
 	}
 	
