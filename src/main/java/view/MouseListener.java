@@ -49,9 +49,18 @@ public class MouseListener extends MouseAdapter {
 	
 	public void mouseReleased(MouseEvent evt) {
 		
-		if (lastClickedPoint != null) {
-			Point releasedPoint = new Point (evt.getX(), evt.getY());
-			graphicView.shift((int)(-lastClickedPoint.getX()+ releasedPoint.getX()),(int)(-lastClickedPoint.getY()+ releasedPoint.getY()));
+		int x = evt.getX();
+		int y = evt.getY();
+		
+		if (lastClickedPoint != null ) {
+			
+			int lastX = (int)lastClickedPoint.getX();
+			int lastY = (int)lastClickedPoint.getY();
+			
+			if (y < lastY-10 ||  y > lastY+10 || x > lastX +10 || x < lastX -10) {
+		
+			graphicView.shift((int)(lastClickedPoint.getX()- x),(int)(lastClickedPoint.getY()- y));
+			}
 		}
 		
 	}

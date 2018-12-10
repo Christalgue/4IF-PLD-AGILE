@@ -123,6 +123,9 @@ public class GraphicView extends JPanel {
 		this.maxLong = maxLong;
 
 		PointUtil.range = 5.0 * Math.min(heightScale, widthScale);
+		
+		horizontalOffset = 0;
+		verticalOffset =0;
 	}
 
 	public Node pointToNode(Point point) {
