@@ -45,6 +45,8 @@ public class Window extends JFrame{
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
 	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
+	protected static final String UNDO = "Annuler";
+	protected static final String REDO = "Retablir";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
@@ -57,8 +59,10 @@ public class Window extends JFrame{
 	protected static JButton addDeliveryButton;
 	protected static JButton deleteDeliveryButton;
 	protected static JButton moveDeliveryButton;
+	protected static JButton undoButton;	
+	protected static JButton redoButton;
 	
-	protected static final int windowWidth = 1280;
+	protected static final int windowWidth = 1400;
 	protected static final int windowHeight = 720;
 	protected static final int buttonPanelHeight =50;
 	protected static final int graphicWidth = 1030;
@@ -75,8 +79,8 @@ public class Window extends JFrame{
 	protected Delivery selectedNode;
 	protected Delivery hoverNode;
 	
-	protected Circuit selectedCircuit;
-	protected Circuit hoverCircuit;
+	protected int selectedCircuit = -1;
+	protected int hoverCircuit = -1;
 	
 	/**
 	 * Default constructor
@@ -216,31 +220,36 @@ public class Window extends JFrame{
 		 
 		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
 		    public void valueChanged(TreeSelectionEvent e) {
-		        DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
 		        
-		        String deliveryInfo = (String) deliveryPoint.getUserObject();
-		        
-		        if (!deliveryInfo.startsWith("Entrepot")) {
-		        	
-		        	if (!deliveryInfo.startsWith("Tournee")) {
-		        		String secondPart = deliveryInfo.substring(10);
-		        		String[] split = secondPart.split(":");
-		        		String deliveryNumber = split[0];
-		        		int deliveryIndex = Integer.parseInt(deliveryNumber);
-		        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
-		        		nodeSelected(delivery);
-		        		controller.treeDeliverySelected(delivery);
-		        	} else {
-		        		String secondPart = deliveryInfo.substring(8);
-		        		String[] split = secondPart.split(":");
-		        		String circuitNumber = split[0];
-		        		int circuitIndex = Integer.parseInt(circuitNumber);	
-		        		textualCircuitSelected(circuitIndex);
-		        	}
-		        }
+		    	if ( treeRoot.getChildCount() != 0) {
+			    	
+			    	DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
+			        
+			        String deliveryInfo = (String) deliveryPoint.getUserObject();
+			        
+			        if (!deliveryInfo.startsWith("Entrepot")) {
+			        	
+			        	if (!deliveryInfo.startsWith("Tournee")) {
+			        		String secondPart = deliveryInfo.substring(10);
+			        		String[] split = secondPart.split(":");
+			        		String deliveryNumber = split[0];
+			        		int deliveryIndex = Integer.parseInt(deliveryNumber);
+			        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
+			        		nodeSelected(delivery);
+			        		controller.treeDeliverySelected(delivery);
+			        	} else {
+			        		String secondPart = deliveryInfo.substring(8);
+			        		String[] split = secondPart.split(":");
+			        		String circuitNumber = split[0];
+			        		int circuitIndex = Integer.parseInt(circuitNumber);	
+			        		textualCircuitSelected(circuitIndex);
+			        	}
+			        }
+		    	}
 		    }     
 });
 		}
+	 
 	
 	public static void fillButtonPanel(JPanel buttonPanel) {
 		
@@ -275,9 +284,13 @@ public class Window extends JFrame{
 		numberOfDeliveryMen.setEditable(true);
 		buttonPanel.add(numberOfDeliveryMen);
 	
-		/*JButton undoButton = new JButton("Retour");
+		undoButton = new JButton(UNDO);
 		buttonPanel.add(undoButton);
-		undoButton.addActionListener(buttonsListener);*/
+		undoButton.addActionListener(buttonsListener);
+
+		redoButton = new JButton(REDO);
+		buttonPanel.add(redoButton);
+		redoButton.addActionListener(buttonsListener);		
 		
 		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
 		calculateCircuitButton.addActionListener(buttonsListener);
@@ -362,41 +375,44 @@ public class Window extends JFrame{
 	}
 	
 	
-	
 	public void circuitSelected(Delivery selectedDelivery) {
 
-		if(selectedCircuit!=null){
+		if(selectedCircuit!= -1){
 			graphicView.unPaintCircuit( selectedCircuit);
 		}
 		
 		if ( selectedDelivery.getDuration() != -1 ) {
+			
+			int circuitIndex =0;
+			
 			for (Circuit circuit : controller.getCircuitManagement().getCircuitsList()) {
 					
 				for ( Delivery delivery :circuit.getDeliveryList()) {
-					if ( selectedDelivery.getPosition()== delivery.getPosition()) {
-						graphicView.paintSelectedCircuit(circuit, true); 
-						hoverCircuit = null;
-						selectedCircuit = circuit;
+					if ( selectedDelivery.getPosition() == delivery.getPosition()) {
+						graphicView.paintSelectedCircuit(circuitIndex, true); 
+						hoverCircuit = -1 ;
+						selectedCircuit = circuitIndex;
 					}
 				}
+				circuitIndex++;
 			}
 		}
 	}
 	
 	public void circuitHover(Delivery delivery) {
 		//Mouse exit a node
-		if(delivery == null && hoverCircuit!=null) {
+		if(delivery == null && hoverCircuit!= -1) {
 			graphicView.unPaintCircuit( hoverCircuit);
-			hoverCircuit = null;
+			hoverCircuit = -1;
 		}
 		//Cannot hover a selected node
 		else if (delivery != null && delivery.getDuration() != -1 ) {
 				
-			Circuit toDrawCircuit = controller.getCircuitManagement().getCircuitByDelivery(delivery);
-			if( selectedCircuit == null || toDrawCircuit.getID() != selectedCircuit.getID()) {
+			int toDrawCircuit = controller.getCircuitManagement().getCircuitIndexByDelivery(delivery);
+			if( toDrawCircuit != selectedCircuit) {
 				
 				//Mouse enter a node
-				if( hoverCircuit == null) {
+				if( hoverCircuit != -1) {
 					graphicView.paintSelectedCircuit( toDrawCircuit, false);
 				}
 				//Mouse pass from one node to another
@@ -441,7 +457,7 @@ public class Window extends JFrame{
 	}
 	
 	public void emptySelectedCircuit() {
-		selectedCircuit = null;
+		selectedCircuit = -1;
 	}
 	
 	public void fillDeliveryTree() {
@@ -456,6 +472,14 @@ public class Window extends JFrame{
 	public void enableButtonCalculateCircuit() {
 		calculateCircuitButton.setEnabled(true);
 	}	
+	
+	public void enableButtonUndo() {
+		undoButton.setEnabled(true);
+	}
+	
+	public void enableButtonRedo() {
+		redoButton.setEnabled(true);
+	}
 	
 	public void enableButtonAddDelivery() {
 		addDeliveryButton.setVisible(true);
@@ -494,6 +518,14 @@ public class Window extends JFrame{
 		moveDeliveryButton.setEnabled(false);
 	}
 	
+	public void disableButtonUndo() {
+		undoButton.setEnabled(false);
+	}
+	
+	public void disableButtonRedo() {
+		redoButton.setEnabled(false);
+	}
+	
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
 	public int getPopUpValue(PopUpType message, Window window) {
 		
@@ -505,7 +537,6 @@ public class Window extends JFrame{
 			try {
 				controller.validateAdd();
 			} catch (ManagementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -518,7 +549,6 @@ public class Window extends JFrame{
 			try {
 				controller.validateDelete();
 			} catch (ManagementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -526,13 +556,11 @@ public class Window extends JFrame{
 		}
 	}
 	
-	/* Need to change the signature of validateDuration with a string */
-	 public void manageDurationPopUpValue(String inputValue) {
-		if (inputValue != "" && inputValue != null) {
+	 public void manageDurationPopUpValue(int inputValue) {
+		 if (inputValue >= 0) {
 			try {
-				controller.validateDuration(Integer.parseInt(inputValue));
+				controller.validateDuration(inputValue);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
@@ -545,7 +573,6 @@ public class Window extends JFrame{
 			try {
 				controller.validateMove();
 			} catch (ManagementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {

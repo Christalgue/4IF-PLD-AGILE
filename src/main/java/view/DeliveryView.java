@@ -54,7 +54,7 @@ public class DeliveryView extends JPanel {
 	public DeliveryView (Color deliveryColor, Color repositoryColor, int deliveryRadius, GraphicView graphicView) {
 		this.deliveryColor = deliveryColor;
 		this.repositoryColor = repositoryColor;
-		this.deliveryRadius = deliveryRadius*3;
+		this.deliveryRadius = deliveryRadius*6;
 		this.graphicView = graphicView;
 	}
 	
@@ -89,6 +89,7 @@ public class DeliveryView extends JPanel {
 			if (b) {
 				g.setColor(deliveryColor);
 				b = false;
+				deliveryRadius = deliveryRadius /2;
 			}
 			 deliveryIndex++;
 			
@@ -97,15 +98,10 @@ public class DeliveryView extends JPanel {
 	}
 
 	public void drawDelivery( Graphics2D g, Node node, int deliveryIndex) {
-		
-		if (node.getLongitude() < graphicView.originLong || node.getLongitude() > graphicView.maxLong) 
-			System.out.println("X:"+node.getLongitude());
-		if( node.getLatitude()> graphicView.originLat || node.getLatitude()<graphicView.minLat)
-			System.out.println(" Y:"+node.getLatitude()+"");
-			
+					
 		Point point = graphicView.nodeToPoint( node );
 		g.fillOval((int) (point.getX()- deliveryRadius/2) ,(int) (point.getY()- deliveryRadius/2), deliveryRadius,deliveryRadius);
-		g.drawString(""+deliveryIndex+"", (int) point.getX()-3, (int) point.getY()-5);
+		g.drawString(""+deliveryIndex+"", (int) point.getX()-3, (int) point.getY()-6);
 		
 	}
 	

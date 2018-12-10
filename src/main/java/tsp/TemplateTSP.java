@@ -60,7 +60,6 @@ public abstract class TemplateTSP implements TSP {
 	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException{
 		limitTimeReached = false;
 		if (continueInterruptedCalculation == false) {
-			System.out.println("premier clacul du tsp");
 			costBestSolution = Integer.MAX_VALUE;
 			ArrayList<Delivery> nonViewed = new ArrayList<Delivery>();
 			nonViewed.addAll(allPaths.keySet());
@@ -69,20 +68,10 @@ public abstract class TemplateTSP implements TSP {
 			viewed.add(repository); // the first "node" visited in the repository 
 			this.executionStack = new ArrayList<Delivery>();
 			this.executionStack.add(repository);
-			/*try {*/
-				branchAndBound(repository, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
-			/*} catch (TSPLimitTimeReachedException e) {
-				System.out.println(e.getMessage());
-			}*/
+			branchAndBound(repository, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
+
 			
 		} else {
-			//System.out.println("passage par searchSolution");
-			System.out.println("passage dans le tsp suite a un continue");
-			//System.out.println("indexCurrentDeliverySVG " + indexCurrentDeliverySVG);
-			//System.out.println("nonViewedSVG " + nonViewedSVG);
-			//System.out.println("viewedSVG " + viewedSVG);
-			//System.out.println("viewedCostSVG " + viewedCostSVG);
-			System.out.println("allPathsSVG " + allPaths);
 			continueResearchSolution(limitTime, allPaths, System.currentTimeMillis());
 			//branchAndBound(currentDeliverySVG, nonViewedSVG, viewedSVG, viewedCostSVG, allPathsSVG, durationSVG, System.currentTimeMillis(), limitTime);
 		}
@@ -104,7 +93,6 @@ public abstract class TemplateTSP implements TSP {
 		ArrayList<Delivery> nonViewed = new ArrayList<Delivery>(nonViewedSVG);
 		double viewedCost = viewedCostSVG;
 		branchAndBound(currentDeliverySVG, nonViewed, viewed, viewedCost, allPaths, durationSVG, startingTime, limitTime);
-		System.out.println("putain ca plante");
 		Delivery lastDeliveryTreated = currentDeliverySVG;
 		viewed.remove(currentDeliverySVG);
 		this.executionStack.remove(currentDeliverySVG);
@@ -115,9 +103,7 @@ public abstract class TemplateTSP implements TSP {
 		boolean nextDeliveryFound;
 		boolean continueUnstack = this.executionStack.size()>0;
 		int compteurTest = 0;
-		while(continueUnstack) {
-			System.out.println("test");
-			
+		while(continueUnstack) {			
 			//continue the branch and bound that was ongoing for the last delivery of the execution stack
 				//create the iterator and fix it to the good value
 			currentDelivery = this.executionStack.get(this.executionStack.size()-1);
@@ -125,14 +111,12 @@ public abstract class TemplateTSP implements TSP {
 			
 			nextDeliveryFound = false;
 			while(it.hasNext() && nextDeliveryFound == false) {
-				System.out.println("il est passé par ici");
 				nextDelivery = it.next();
 				nextDeliveryFound = (nextDelivery == lastDeliveryTreated);
 				
 			}
 			//if still deliveries to branch and bound then go and execute it for every one left to explore.
 			if(nextDeliveryFound) {
-				System.out.println("il repassera par la");
 				viewed.add(nextDelivery);
 	        	this.executionStack.add(nextDelivery);
 	        	nonViewed.remove(nextDelivery);
@@ -161,7 +145,6 @@ public abstract class TemplateTSP implements TSP {
 			viewed.remove(currentDelivery);
 			this.executionStack.remove(currentDelivery);
 			if(this.executionStack.size()>0) {
-				System.out.println("ca couille sa race");
 				viewedCost -= allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDelivery).getLength();
 				nonViewed.add(currentDelivery);
 			} else {
@@ -179,7 +162,6 @@ public abstract class TemplateTSP implements TSP {
 	 */
 	protected double calculateViewedCost(ArrayList<Delivery> viewed, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths) {
 		double viewedCost = 0;
-		System.out.println("calculateVC");
 		if(viewed.size()>1) {
 			for(int indexViewed = 0; indexViewed<viewed.size()-1; indexViewed++) {
 				viewedCost += allPaths.get(viewed.get(indexViewed)).get(viewed.get(indexViewed+1)).getLength();
@@ -237,13 +219,11 @@ public abstract class TemplateTSP implements TSP {
 	 */
 	private void saveCurrentStateOfCalculation(Delivery currentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost,
 			int[] duration, int limitTime) {
-		System.out.println("passage par saveCurrentStateOfCalculation");
 		this.currentDeliverySVG = currentDelivery;
 		this.nonViewedSVG = nonViewed;
 		this.viewedSVG = viewed;
 		this.viewedCostSVG = viewedCost;
 		this.durationSVG = duration;
-		System.out.println("fin sauvegarde etat");
 	}
 	
 	/**
@@ -289,19 +269,12 @@ public abstract class TemplateTSP implements TSP {
 	 * @throws TSPLimitTimeReachedException the TSP limit time reached exception
 	 */	
 	 private void branchAndBound(Delivery currentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration, long startingTime, int limitTime) throws TSPLimitTimeReachedException{
-		 System.out.println("passage par B&B");
-		 //System.out.println("execution stack : " + this.executionStack.toString());
-		 //System.out.println("viewedCost " + viewedCost);
 		 if (System.currentTimeMillis() - startingTime > limitTime){
-			 System.out.println("coucou");
-			 System.out.println("temps Limite atteint");
 			 limitTimeReached = true;
 			 saveCurrentStateOfCalculation(currentDelivery, nonViewed, viewed, viewedCost, duration, limitTime);
 			 throw new TSPLimitTimeReachedException("Branch and Bound of the circuit : " /*+ allPaths.keySet().toString()*/);
 		 }
 	    if (nonViewed.size() == 0){ // all the deliveries have been visited 
-	    	System.out.println("////////////**********************//////////////////////***********************");
-	    	System.out.println("tous les chemins visites");
 	    	AtomicPath returnToRepository = allPaths.get(currentDelivery).get(viewed.get(0)); //may be split for more readability
 	    	if (returnToRepository != null) {
 	    		viewedCost += returnToRepository.getLength();
@@ -311,32 +284,22 @@ public abstract class TemplateTSP implements TSP {
 		    		}
 		    		viewed.toArray(bestSolution);
 		    		costBestSolution = viewedCost;
-		    		System.out.println("solution enregistree");
 		    	}
 	    	}
 	    } else if (viewedCost + bound(currentDelivery, nonViewed, allPaths, duration) < costBestSolution){
-	    	//System.out.println("exploration du noeud : "+ currentDelivery);
-	    	//System.out.println(nonViewed.toString());
-	    	System.out.println("salut");
 	        Iterator<Delivery> it = iterator(currentDelivery, nonViewed, allPaths, duration);
 	        while (it.hasNext()){
-	        	//System.out.println("op 1");
 	        	Delivery nextDelivery = it.next();
-	        	//System.out.println("op 2");
 	        	viewed.add(nextDelivery);
 	        	this.executionStack.add(nextDelivery);
 	        	
-	        	//System.out.println("op 3");
 	        	nonViewed.remove(nextDelivery);
 	        	
 	        	branchAndBound(nextDelivery, nonViewed, viewed, viewedCost + allPaths.get(currentDelivery).get(nextDelivery).getLength()/*allPathes[indexCurrentDelivery][prochainSommet]*/ /*+ duration[prochainSommet]*/,
 	        			allPaths, duration, startingTime, limitTime);
-	        	//System.out.println("op5");
 	        	viewed.remove(nextDelivery);
 	        	this.executionStack.remove(nextDelivery);
-	        	//System.out.println("op 6");
 	        	nonViewed.add(nextDelivery);
-	        	//System.out.println("op 7");
 	        }
 	    }
 	}

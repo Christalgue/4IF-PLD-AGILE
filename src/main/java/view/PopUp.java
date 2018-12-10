@@ -1,11 +1,16 @@
 package main.java.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import main.java.utils.PopUpType;
 
-public class PopUp extends JFrame{
+public class PopUp extends JFrame {
 
 	protected static final String VALIDATE_ADD = "Voulez-vous vraiment ajouter ce point de livraison ?";
 	protected static final String VALIDATE_ADD_DURATION = "Veuillez entrer la duree de la livraison.";
@@ -51,9 +56,62 @@ public class PopUp extends JFrame{
 				break;
 				
 			case DURATION: 
-				Object[] validateOptionsMove = {"Valider", "Anuler"};
-				String inputValue = JOptionPane.showInputDialog("Duree de la livraison");
-				window.manageDurationPopUpValue(inputValue);
+				JTextField durationTextField = new JTextField(10);
+		        String durationMessage = "Duree de la livraison en secondes";
+		        
+		        Object[] popUpContent = {durationMessage, durationTextField};
+		        Object[] durationOptions = {"Valider", "Annuler"};
+
+		        popUp = new JOptionPane(popUpContent,
+						                JOptionPane.QUESTION_MESSAGE,
+						                JOptionPane.YES_NO_OPTION,
+						                null,
+						                durationOptions
+						                );
+		        
+		        JDialog durationDialog = new JDialog(window, "Duree de la livraison", true);
+		        
+		        durationDialog.setSize(400, 150);
+		        durationDialog.setLocationRelativeTo(null);
+		        durationDialog.setContentPane(popUp);
+		        durationDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		        
+		        popUp.addPropertyChangeListener(
+	        	    new PropertyChangeListener() {
+	        	        public void propertyChange(PropertyChangeEvent e) {
+	        	            String prop = e.getPropertyName();
+	        	            System.out.println(e.getSource() == popUp);
+	        	            if (durationDialog.isVisible() && (e.getSource() == popUp)&& (prop.equals(JOptionPane.VALUE_PROPERTY))) {
+	        	            	System.out.println("Bouh");
+	        	            	Object value = popUp.getValue();
+	        	            	if (durationOptions[0].equals(value)) {
+	        	                    try{
+	        	                    	String duration = durationTextField.getText();
+	        	                        int durationValue = Integer.parseInt(duration);
+	        	                        if (durationValue < 0) {
+	        	                        	errorPopUp(window);
+	        	                        	popUp.setValue(42);
+	        	            
+	        	                        } else {
+	        	                        	window.manageDurationPopUpValue(durationValue);
+	        	                        	durationDialog.dispose();
+	        	                        }
+	        	                    } catch(Exception parseException) {
+	        	                    	errorPopUp(window);
+	        	                    	popUp.setValue(42);
+	        	                    	popUp.requestFocusInWindow();
+	        	                    }
+        	                    } else if (durationOptions[1].equals(value)) {
+	        	                	popUp.setValue(42);
+	        	                	durationDialog.dispose();
+	        	            		window.manageDurationPopUpValue(-1);
+	        	            	}
+	        	            }
+	        	        }
+	        	    });
+		        
+		        durationDialog.pack();
+		        durationDialog.setVisible(true);
 				break;
 				
 			case MOVE: 
@@ -85,5 +143,12 @@ public class PopUp extends JFrame{
 				break;
 		}
 		return userChoice;
+	}
+	
+	public static void errorPopUp(Window window) {
+		JOptionPane.showMessageDialog(window,
+                "Veuillez entrer un nombre superieur ou egal a 0.",
+                "Entree invalide.",
+                JOptionPane.ERROR_MESSAGE);
 	}
 }

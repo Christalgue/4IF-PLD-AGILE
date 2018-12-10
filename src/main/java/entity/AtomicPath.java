@@ -1,11 +1,12 @@
 package main.java.entity;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class AtomicPath.
+ * The Class AtomicPath represents the path between two deliveries.
  */
 public class AtomicPath extends Observable{
 
@@ -15,7 +16,9 @@ public class AtomicPath extends Observable{
     public AtomicPath() {
     }
 
-    /** The path. */
+    /** The path. 
+     * @see Bow
+     * */
     private List<Bow> path;
 
 
@@ -32,7 +35,7 @@ public class AtomicPath extends Observable{
 	 */
 	public AtomicPath(List<Bow> path) {
 		super();
-		this.path = new ArrayList<>(path);
+		this.path = new ArrayList<Bow>(path);
 		this.length = calculateLength();
 		this.duration = calculateDuration();
 	}
@@ -53,7 +56,7 @@ public class AtomicPath extends Observable{
 	 * @param path the new path
 	 */
 	protected void setPath(List<Bow> path) {
-		this.path = new ArrayList(path);
+		this.path = new ArrayList<Bow>(path);
 	}
 
 
@@ -68,18 +71,18 @@ public class AtomicPath extends Observable{
 	}
 
 	/**
-	 * Gets the start node.
+	 * Gets the starting node.
 	 *
-	 * @return the start node
+	 * @return the starting node
 	 */
 	public Node getStartNode() {
 		return path.get(0).getStartNode();
 	}
 	
 	/**
-	 * Gets the end node.
+	 * Gets the ending node.
 	 *
-	 * @return the end node
+	 * @return the ending node
 	 */
 	public Node getEndNode() {
 		return path.get(path.size()-1).getEndNode();
