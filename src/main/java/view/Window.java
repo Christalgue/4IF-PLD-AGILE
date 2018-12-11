@@ -404,6 +404,11 @@ public class Window extends JFrame{
 		messageField.setBackground(Color.RED);
 		messageField.setText(string);
 	}
+	
+	public void setWarningMessage(String string) {
+		messageField.setBackground(Color.ORANGE);
+		messageField.setText(string);
+	}
 	//////////////////////////////DRAW COMPOSANTS/////////////////////////////
 	public void calculateScale() {
 		graphicView.calculateScale(controller.getCircuitManagement());
