@@ -1,8 +1,7 @@
 package main.java.exception;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class LoadDeliveryException.
+ * The Class LoadDeliveryException is instantiated when a problem occurred while loading the deliveries and the deliveries haven't been loaded.
  */
 public class LoadDeliveryException extends Exception{
 	

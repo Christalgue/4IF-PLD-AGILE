@@ -1,5 +1,6 @@
 package main.java.exception;
 
+// TODO Javadoc need to be more precise 
 /**
  * The Class ForgivableXMLException.
  */

@@ -1,8 +1,7 @@
 package main.java.exception;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class MapNotChargedException.
+ * The Class MapNotChargedException when a method needs the map to be loaded it is not.
  */
 public class MapNotChargedException extends Exception{
 	

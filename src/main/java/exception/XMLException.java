@@ -1,8 +1,7 @@
 package main.java.exception;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class XMLException.
+ * The Class XMLException is instantiated when a problem occurs while loading the data of an xml file (map or delivery list).
  */
 public class XMLException extends Exception{
 	

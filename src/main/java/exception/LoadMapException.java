@@ -1,8 +1,7 @@
 package main.java.exception;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class LoadMapException.
+ * The Class LoadMapException is instantiated when a problem occurred while loading the map and the map haven't been loaded.
  */
 public class LoadMapException extends Exception{
 	
