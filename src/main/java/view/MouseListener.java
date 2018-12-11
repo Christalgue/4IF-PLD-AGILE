@@ -2,6 +2,7 @@ package main.java.view;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 
 import javax.swing.SwingUtilities;
 
@@ -73,5 +74,20 @@ public class MouseListener extends MouseAdapter {
 		p = graphicView.pointToLatLong(p);
 		controller.mouseMoved(p);
 	}
+	
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        
+        int notches = e.getWheelRotation();
+        if (notches < 0) {
+            System.out.println("ZOOOOM");
+        } else {
+            System.out.println("DEZOOOM");
+        }
+        if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
+            System.out.println("MROUUUUUW");
+        } else { //scroll type == MouseWheelEvent.WHEEL_BLOCK_SCROLL
+            System.out.println("MYSTERYYY");
+        }
+     }
 
 }

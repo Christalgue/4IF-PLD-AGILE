@@ -2,6 +2,7 @@ package main.java.view;
 
 import java.awt.Color;
 import java.awt.TextField;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -95,6 +96,14 @@ public class Window extends JFrame{
 	protected int selectedCircuit = -1;
 	protected int hoverCircuit = -1;
 	
+
+	protected HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
+	
+	protected static Color selectedColor = Color.GREEN;
+	protected static Color hoverColor = Color.BLUE;
+	protected static Color deliveryColor = Color.RED;
+	protected static Color repositoryColor = Color.DARK_GRAY;
+	
 	/**
 	 * Default constructor
 	 */
@@ -124,7 +133,7 @@ public class Window extends JFrame{
 		
 		//////////////////////////////CREATE THE GRAPHIC VIEW//////////////////////////////
 		
-		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth);
+		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth,this);
 		setGraphicView(this.graphicView);
 		mouseListener = new MouseListener(controller, this.graphicView, this);
 		
@@ -132,7 +141,7 @@ public class Window extends JFrame{
 		
 		this.treeRoot = createTree();
 		this.textualViewTree = new JTree (this.treeRoot);
-		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this.textualViewTree);
+		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this);
 		setTextualView(this.textualView);
 		addTreeListener();
 		
@@ -238,6 +247,8 @@ public class Window extends JFrame{
 		        
 		    	if ( treeRoot.getChildCount() != 0) {
 			    	
+		    		System.out.println("detected");
+		    		
 			    	DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
 			        
 			        String deliveryInfo = (String) deliveryPoint.getUserObject();
@@ -439,7 +450,11 @@ public class Window extends JFrame{
 		
 		if ( selectedDelivery != null ) {
 			
-			circuitIndex = controller.getCircuitManagement().getCircuitIndexByNode( selectedDelivery);
+			if (selectedDelivery.getDuration()!= -1)
+				circuitIndex = controller.getCircuitManagement().getCircuitIndexByDelivery( selectedDelivery);
+			else
+				circuitIndex = controller.getCircuitManagement().getCircuitIndexByNode( selectedDelivery);
+
 			if (circuitIndex != -1) {
 				graphicView.paintSelectedCircuit(circuitIndex, true); 
 				hoverCircuit = -1 ;
@@ -481,7 +496,9 @@ public class Window extends JFrame{
 	
 	
 	public void textualCircuitSelected(int circuitIndex) {
+		graphicView.unPaintCircuit(selectedCircuit);
 		graphicView.paintSelectedCircuit(circuitIndex);
+		selectedCircuit = circuitIndex;
 	}	
 	
 	public void nodeHover(Delivery delivery) {
@@ -659,6 +676,10 @@ public class Window extends JFrame{
 	 
 	 public void verticalShift(int down) {
 		 graphicView.verticalShift(down);
+	 }
+	 
+	 public void emptyColors () {
+		 colors = new HashMap < Integer,Color>();
 	 }
 	 
 }

@@ -37,27 +37,23 @@ public class GraphicView extends JPanel {
 	private int deliveryRadius;
 
 	private static Color nodeColor = Color.WHITE;
-	private static Color selectedColor = Color.GREEN;
-	private static Color hoverColor = Color.BLUE;
-	private static Color deliveryColor = Color.RED;
-	private static Color repositoryColor = Color.DARK_GRAY;
 
 	//private Color color[] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.ORANGE, Color.PINK };
-	
-	private HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
 	
 	protected double minLat;
 	protected double maxLong;
 	
 	private int horizontalOffset =0;
 	private int verticalOffset =0;
+	private Window window;
 
 	/**
 	 * Create the graphic view where the map will be drawn in Window windows
 	 * 
 	 * @param circuitManagement the CircuitManagement
 	 */
-	public GraphicView(CircuitManagement circuitManagement, int viewHeight, int viewWidth, int width) {
+	public GraphicView(CircuitManagement circuitManagement, int viewHeight, int viewWidth, int width, 
+			Window window ) {
 
 		super();
 
@@ -67,10 +63,11 @@ public class GraphicView extends JPanel {
 		this.deliveryRadius = 3*width;
 		
 		this.circuitManagement = circuitManagement;
+		this.window = window;
 
 		mapView = new MapView(nodeColor, width, this);
 		circuitView = new CircuitView(this, width);
-		deliveryView = new DeliveryView(deliveryColor, repositoryColor, deliveryRadius, this);
+		deliveryView = new DeliveryView(window.deliveryColor, window.repositoryColor, deliveryRadius, this);
 
 	}
 
@@ -175,14 +172,14 @@ public class GraphicView extends JPanel {
 		int circuitIndex = 0;
 		if(circuitManagement.getCircuitsList()!=null) {
 			for (Circuit entry : circuitManagement.getCircuitsList()) {
-				Color circuitColor = colors.get(circuitIndex);
+				Color circuitColor = window.colors.get(circuitIndex);
 				
 				if ( circuitColor  != null) {
 					//circuitView.paintCircuit(g, entry, color[colorIndex % color.length]);
 					circuitView.paintCircuit(g, entry, circuitColor);
 				} else {
 					circuitColor = new Color ((int)(Math.random()*200),(int)(Math.random()*200), (int)(Math.random()*200));
-					colors.put(circuitIndex, circuitColor);
+					window.colors.put(circuitIndex, circuitColor);
 					circuitView.paintCircuit(g, entry, circuitColor);
 				}
 				circuitIndex++;
@@ -207,9 +204,9 @@ public class GraphicView extends JPanel {
 	public void paintSelectedNode(Delivery delivery, boolean clicked) {
 
 		if (clicked) {
-			g.setColor(selectedColor);
+			g.setColor(window.selectedColor);
 		} else {
-			g.setColor(hoverColor);
+			g.setColor(window.hoverColor);
 		}
 		
 		if (delivery.getDuration() == -1) {
@@ -225,7 +222,7 @@ public class GraphicView extends JPanel {
 			g.setColor(nodeColor);
 			mapView.drawNode(g, delivery.getPosition());
 		} else {
-			g.setColor(deliveryColor);
+			g.setColor(window.deliveryColor);
 			deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery), deliveryRadius);
 
 		}
@@ -233,22 +230,22 @@ public class GraphicView extends JPanel {
 
 
 	public void paintSelectedCircuit(int circuitIndex) {
-		circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuitIndex), selectedColor);
+		circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuitIndex), window.selectedColor);
 	}
 
 	public void unPaintCircuit(int selectedCircuit) {
 
-		g.setColor(deliveryColor);
-		circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(selectedCircuit), colors.get(selectedCircuit));
+		g.setColor(window.deliveryColor);
+		circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(selectedCircuit), window.colors.get(selectedCircuit));
 
 	}
 
 	public void paintSelectedCircuit(int circuit, boolean clicked) {
 		
 		if (clicked) {
-			circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuit),selectedColor);
+			circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuit),window.selectedColor);
 		} else {
-			circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuit),hoverColor);
+			circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuit),window.hoverColor);
 		}
 		
 	}

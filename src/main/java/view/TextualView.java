@@ -1,5 +1,8 @@
 package main.java.view;
 
+import java.awt.Color;
+import java.util.HashMap;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,12 +27,14 @@ public class TextualView extends JPanel{
 	private DefaultMutableTreeNode treeRoot;
 	
 	private JScrollPane scrollPane;
+	private Window window;
 	
 	public TextualView () {
 		
 	}
 	
-	public TextualView(CircuitManagement circuitManagement, int viewHeight, int viewWidth, JTree deliveryTree) {
+	public TextualView(CircuitManagement circuitManagement, int viewHeight, int viewWidth, 
+			Window window ) {
 		
 		super();
 		
@@ -37,14 +42,16 @@ public class TextualView extends JPanel{
 		this.viewHeight = viewHeight;
 		this.viewWidth = viewWidth;
 		
-		this.deliveryTree = deliveryTree;
+		this.deliveryTree = window.textualViewTree;
 		this.treeRoot = (DefaultMutableTreeNode) deliveryTree.getModel().getRoot();
 		
 		//this.addTreeListener();
+		this.window = window;
 		
 		this.deliveryTree.expandRow(0);
 		this.deliveryTree.setRootVisible(false);
 		this.deliveryTree.setShowsRootHandles(true);
+		this.deliveryTree.setCellRenderer(new MyTreeCellRenderer(window, circuitManagement));
 		
 		this.treeModel = (DefaultTreeModel) this.deliveryTree.getModel();
 		
