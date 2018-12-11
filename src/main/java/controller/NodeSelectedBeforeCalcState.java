@@ -3,6 +3,7 @@ package main.java.controller;
 import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.exception.DeliveriesNotLoadedException;
 import main.java.exception.DijkstraException;
 import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadDeliveryException;
@@ -168,9 +169,6 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 		} catch (MapNotChargedException e) {
 			window.setErrorMessage("Carte non chargee");
 			e.printStackTrace();
-		} catch (LoadDeliveryException e) {
-			window.setErrorMessage("Fichier XML invalide");
-			e.printStackTrace();
 		} catch (DijkstraException e) {
 			window.setErrorMessage("Erreur lors du calcul des tournees");
 			e.printStackTrace();
@@ -181,6 +179,9 @@ public class NodeSelectedBeforeCalcState extends DefaultState {
 			window.drawCircuits();
 			controller.setCurrentState(controller.calculatingState);
 			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+		} catch (DeliveriesNotLoadedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	
 	}

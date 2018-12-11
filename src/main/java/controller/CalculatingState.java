@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import main.java.exception.DeliveriesNotLoadedException;
 import main.java.exception.DijkstraException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.MapNotChargedException;
@@ -27,9 +28,6 @@ public class CalculatingState extends DefaultState {
 			} catch (MapNotChargedException e) {
 				window.setErrorMessage("Carte non chargee");
 				e.printStackTrace();
-			} catch (LoadDeliveryException e) {
-				window.setErrorMessage("Fichier XML invalide");
-				e.printStackTrace();
 			} catch (DijkstraException e) {
 				window.setErrorMessage("Erreur lors du calcul des tournees");
 				e.printStackTrace();
@@ -39,6 +37,9 @@ public class CalculatingState extends DefaultState {
 			} catch (TSPLimitTimeReachedException e) {
 				window.drawCircuits();
 				controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+			} catch (DeliveriesNotLoadedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		} else {
 			controller.setCurrentState(controller.calcState);
