@@ -597,8 +597,8 @@ public class Window extends JFrame{
 			    	}
 		    	}
 		    }     
-});
-		}
+		 });
+	}
 	 
 	public void nodeSelected(Delivery delivery) {
 		if(selectedNode!=null){
@@ -746,10 +746,18 @@ public class Window extends JFrame{
 	}			
 		
 	public void emptySelectedNode() {
+		if(selectedNode!=null){
+			graphicView.unPaintNode( selectedNode);
+		}
+		
 		selectedNode = null;
 	}
 	
 	public void emptySelectedCircuit() {
+		if(selectedCircuit!= -1){
+			graphicView.unPaintCircuit( selectedCircuit);
+		}
+		
 		selectedCircuit = -1;
 	}
 }

@@ -85,6 +85,9 @@ public class SelectedPreviousMovedState extends DefaultState {
 	 * @see main.java.controller.DefaultState#cancel(main.java.controller.Controller, main.java.view.Window)
 	 */
 	public void cancel (Controller controller, Window window) {
+		window.setMessage("");
+		window.emptySelectedNode();
+		window.emptySelectedCircuit();
 		controller.setCurrentState(controller.calcState);
 	}
 	
