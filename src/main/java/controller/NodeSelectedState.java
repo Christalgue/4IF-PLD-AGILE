@@ -84,13 +84,16 @@ public class NodeSelectedState extends DefaultState {
 	 */
 	@Override
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
-		window.nodeSelected(deliverySelected);
-		window.circuitSelected(deliverySelected);
-		window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
-		window.enableButtonDeleteDelivery();
-		window.enableButtonMoveDelivery();
-		controller.deliverySelectedState.setNode(deliverySelected.getPosition());
-		controller.setCurrentState(controller.deliverySelectedState);
+		if (!controller.getCircuitManagement().isRepository(deliverySelected.getPosition())) {
+			window.nodeSelected(deliverySelected);
+			window.circuitSelected(deliverySelected);
+			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
+			window.enableButtonDeleteDelivery();
+			window.enableButtonMoveDelivery();
+			controller.deliverySelectedState.setNode(deliverySelected.getPosition());
+			controller.setCurrentState(controller.deliverySelectedState);
+		}
+		
 	}
 	
 	/**
@@ -183,7 +186,7 @@ public class NodeSelectedState extends DefaultState {
 			controller.setCurrentState(controller.calculatingState);
 			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		} catch (DeliveriesNotLoadedException e) {
-			// TODO Auto-generated catch block
+			window.setErrorMessage("Fichier XML invalide");
 			e.printStackTrace();
 		}
 	

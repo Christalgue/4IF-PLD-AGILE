@@ -80,6 +80,7 @@ public class CalcState extends DefaultState {
 	@Override
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
 		this.nbDeliveryMan = nbDeliveryMan;
+		window.emptyColors();
 		commandsList.reset();
 		try {
 			window.setMessage("");
@@ -143,12 +144,15 @@ public class CalcState extends DefaultState {
 	@Override
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
 		window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
-		window.nodeSelected(deliverySelected);
-		window.circuitSelected(deliverySelected);
-		window.enableButtonDeleteDelivery();
-		window.enableButtonMoveDelivery();
-		controller.deliverySelectedState.setNode(deliverySelected.getPosition());
-		controller.setCurrentState(controller.deliverySelectedState);
+		if (!controller.getCircuitManagement().isRepository(deliverySelected.getPosition()))
+		{
+			window.nodeSelected(deliverySelected);
+			window.circuitSelected(deliverySelected);
+			window.enableButtonDeleteDelivery();
+			window.enableButtonMoveDelivery();
+			controller.deliverySelectedState.setNode(deliverySelected.getPosition());
+			controller.setCurrentState(controller.deliverySelectedState);
+		}
 	}
 	
 	/**)

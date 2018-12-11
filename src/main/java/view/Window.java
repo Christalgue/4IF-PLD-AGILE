@@ -74,7 +74,7 @@ public class Window extends JFrame{
 	protected static JButton leftButton;
 	protected static JButton zoomButton;
 	protected static JButton unZoomButton;
-	protected static JButton cancelButton;
+	protected static JButton cancelAddButton;
 	protected static JButton resetScaleButton;
 	
 	protected static final int windowWidth = 1600;
@@ -300,18 +300,18 @@ public class Window extends JFrame{
 		
 		zoomButton = new JButton(ZOOM);
 		zoomButton.addActionListener(buttonsListener);
-		zoomButton.setEnabled(true);
+		zoomButton.setEnabled(false);
 		buttonPanel.add(zoomButton);
 		
 		unZoomButton = new JButton(UNZOOM);
 		unZoomButton.addActionListener(buttonsListener);
-		unZoomButton.setEnabled(true);
+		unZoomButton.setEnabled(false);
 		buttonPanel.add(unZoomButton);
 		
-		cancelButton = new JButton(CANCEL);
-		cancelButton.addActionListener(buttonsListener);
-		cancelButton.setEnabled(true);
-		buttonPanel.add(cancelButton);
+		cancelAddButton = new JButton(CANCEL);
+		cancelAddButton.addActionListener(buttonsListener);
+		cancelAddButton.setEnabled(true);
+		buttonPanel.add(cancelAddButton);
 	}
 	
 	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
@@ -438,7 +438,22 @@ public class Window extends JFrame{
 		moveDeliveryButton.setVisible(true);;
 		moveDeliveryButton.setEnabled(true);
 	}
+	
+	public void enableZoomButton() {
+		zoomButton.setEnabled(true);
+	}
 
+	public void enableDeZoomButton() {
+		unZoomButton.setEnabled(true);
+	}
+
+	public void enableCancelButton() {
+		cancelAddButton.setEnabled(true);
+	}
+	
+	public void enableResetScaleButton() {
+		resetScaleButton.setEnabled(true);
+	}
 	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
 	public void disableButtonLoadDeliveriesList() {
@@ -469,13 +484,21 @@ public class Window extends JFrame{
 		redoButton.setEnabled(false);
 	}
 	
-	public void enableResetScaleButton() {
-		 resetScaleButton.setEnabled(true);
-	 }
-	 
-	 public void disableResetScaleButton() {
-		 resetScaleButton.setEnabled(false);
-	 }
+	public void disableZoomButton() {
+		zoomButton.setEnabled(false);
+	}
+		
+	public void disableDeZoomButton() {
+		unZoomButton.setEnabled(false);
+	}
+
+	public void disableCancelButton() {
+		cancelAddButton.setEnabled(false);
+	}
+	
+	public void disableResetScaleButton() {
+		resetScaleButton.setEnabled(false);
+	}
 	
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
 	public int getPopUpValue(PopUpType message, Window window) {
@@ -597,8 +620,8 @@ public class Window extends JFrame{
 			    	}
 		    	}
 		    }     
-});
-		}
+		 });
+	}
 	 
 	public void nodeSelected(Delivery delivery) {
 		if(selectedNode!=null){
@@ -746,10 +769,18 @@ public class Window extends JFrame{
 	}			
 		
 	public void emptySelectedNode() {
+		if(selectedNode!=null){
+			graphicView.unPaintNode( selectedNode);
+		}
+		
 		selectedNode = null;
 	}
 	
 	public void emptySelectedCircuit() {
+		if(selectedCircuit!= -1){
+			graphicView.unPaintCircuit( selectedCircuit);
+		}
+		
 		selectedCircuit = -1;
 	}
 }
