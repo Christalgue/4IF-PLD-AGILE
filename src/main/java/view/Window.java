@@ -16,10 +16,8 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 
 import main.java.controller.Controller;
-import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Repository;
@@ -51,17 +49,15 @@ public class Window extends JFrame{
 	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
 	protected static final String UNDO = "Annuler";
 	protected static final String REDO = "Retablir";
-
-	protected static final String UP = "U";
-	protected static final String DOWN = "D";
-	protected static final String RIGHT = "R";
-	protected static final String LEFT = "L";
+	protected static final String CANCEL = "Cancel";
+	protected static final String RESET_SCALE = "Retablir l'echelle";
+	
 	protected static final String ZOOM = "+";
 	protected static final String UNZOOM = "-";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
-	protected static TextField numberOfDeliveryMen;
+	protected static TextField numberOfDeliveryMenField;
 	
 	protected static PopUp popUp;
 	
@@ -78,6 +74,8 @@ public class Window extends JFrame{
 	protected static JButton leftButton;
 	protected static JButton zoomButton;
 	protected static JButton unZoomButton;
+	protected static JButton cancelButton;
+	protected static JButton resetScaleButton;
 	
 	protected static final int windowWidth = 1600;
 	protected static final int windowHeight = 720;
@@ -103,7 +101,7 @@ public class Window extends JFrame{
 	protected HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
 	public MyTreeCellRenderer cellRenderer; 
 	
-	protected static Color selectedColor = Color.GREEN;
+	protected static Color selectedColor = new Color(0,150,0);
 	protected static Color hoverColor = Color.BLUE;
 	protected static Color deliveryColor = Color.RED;
 	protected static Color repositoryColor = Color.DARK_GRAY;
@@ -251,6 +249,11 @@ public class Window extends JFrame{
 		buttonPanel.setSize(windowWidth, buttonPanelHeight);
 		buttonPanel.setBackground(Color.WHITE);
 		
+		resetScaleButton = new JButton(RESET_SCALE);
+		resetScaleButton.addActionListener(buttonsListener);
+		resetScaleButton.setEnabled(false);
+		buttonPanel.add(resetScaleButton);
+		
 		setNameOfMap = new TextField();
 		setNameOfMap.setText("resources/xml/moyenPlan.xml");
 		buttonPanel.add(setNameOfMap);
@@ -274,10 +277,10 @@ public class Window extends JFrame{
 		labelNumberOfDeliveryMen.setEditable(false);
 		buttonPanel.add(labelNumberOfDeliveryMen);
 		
-		numberOfDeliveryMen = new TextField();
-		numberOfDeliveryMen.setText("1");
-		numberOfDeliveryMen.setEditable(true);
-		buttonPanel.add(numberOfDeliveryMen);
+		numberOfDeliveryMenField = new TextField();
+		numberOfDeliveryMenField.setText("1");
+		numberOfDeliveryMenField.setEditable(true);
+		buttonPanel.add(numberOfDeliveryMenField);
 	
 		undoButton = new JButton(UNDO);
 		buttonPanel.add(undoButton);
@@ -288,32 +291,12 @@ public class Window extends JFrame{
 		redoButton = new JButton(REDO);
 		buttonPanel.add(redoButton);
 		redoButton.addActionListener(buttonsListener);	
-		redoButton.setEnabled(true);
+		redoButton.setEnabled(false);
 		
 		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
 		calculateCircuitButton.addActionListener(buttonsListener);
-		calculateCircuitButton.setEnabled(true);
+		calculateCircuitButton.setEnabled(false);
 		buttonPanel.add(calculateCircuitButton);
-
-		upButton = new JButton(UP);
-		upButton.addActionListener(buttonsListener);
-		upButton.setEnabled(true);
-		buttonPanel.add(upButton);
-		
-		downButton = new JButton(DOWN);
-		downButton.addActionListener(buttonsListener);
-		downButton.setEnabled(true);
-		buttonPanel.add(downButton);
-		
-		rightButton = new JButton(RIGHT);
-		rightButton.addActionListener(buttonsListener);
-		rightButton.setEnabled(true);
-		buttonPanel.add(rightButton);
-		
-		leftButton = new JButton(LEFT);
-		leftButton.addActionListener(buttonsListener);
-		leftButton.setEnabled(true);
-		buttonPanel.add(leftButton);
 		
 		zoomButton = new JButton(ZOOM);
 		zoomButton.addActionListener(buttonsListener);
@@ -324,6 +307,11 @@ public class Window extends JFrame{
 		unZoomButton.addActionListener(buttonsListener);
 		unZoomButton.setEnabled(true);
 		buttonPanel.add(unZoomButton);
+		
+		cancelButton = new JButton(CANCEL);
+		cancelButton.addActionListener(buttonsListener);
+		cancelButton.setEnabled(true);
+		buttonPanel.add(cancelButton);
 	}
 	
 	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
@@ -339,10 +327,22 @@ public class Window extends JFrame{
 		return filePath;
 	}
 
-	//// Alternatives aux gestionnaires de fichiers
-	public static void getDeliveryMenNumber() {
+	public boolean getDeliveryMenNumber() {
 		
-		buttonsListener.setDeliveryMenNumber(Integer.parseInt(numberOfDeliveryMen.getText()));
+		boolean correctValue = false;
+		try{
+        	String numberOfDeliveryMen = numberOfDeliveryMenField.getText();
+            int numberOfDeliveryMenValue = Integer.parseInt(numberOfDeliveryMen);
+            if (numberOfDeliveryMenValue <= 0) {
+            	PopUp.errorPopUp(this, false);
+            } else {
+            	buttonsListener.setDeliveryMenNumber(numberOfDeliveryMenValue);
+            	correctValue = true;
+            }
+        } catch(Exception parseException) {
+        	PopUp.errorPopUp(this, false);
+        }
+		return correctValue;
 		
 	}
 	
@@ -468,6 +468,14 @@ public class Window extends JFrame{
 	public void disableButtonRedo() {
 		redoButton.setEnabled(false);
 	}
+	
+	public void enableResetScaleButton() {
+		 resetScaleButton.setEnabled(true);
+	 }
+	 
+	 public void disableResetScaleButton() {
+		 resetScaleButton.setEnabled(false);
+	 }
 	
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
 	public int getPopUpValue(PopUpType message, Window window) {

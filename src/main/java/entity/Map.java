@@ -10,7 +10,6 @@ import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadMapException;
 import main.java.utils.Deserializer;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Map represent all streets and addresses.
  */

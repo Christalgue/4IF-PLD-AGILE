@@ -22,12 +22,10 @@ public class InitialState extends DefaultState {
 			window.enableButtonLoadDeliveriesList();
 			try {
 				controller.circuitManagement.loadMap(filename);
+				window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			} catch (ForgivableXMLException e) {
-				window.setErrorMessage(e.getMessage());
-				if(controller.getShowPopUp())
-					window.getPopUpValue(PopUpType.ERROR, window);
+				window.setWarningMessage(e.getMessage());
 			}
-			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			window.calculateScale();
 			window.drawMap();
 			Window.setMouseListener(window);

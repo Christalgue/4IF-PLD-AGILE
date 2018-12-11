@@ -56,8 +56,8 @@ public class ButtonsListener implements ActionListener {
 			//controller.loadDeliveryOffer(controller.getWindow().getFile());
 			break;
 		case Window.CALCULATE_CIRCUITS: 
-			Window.getDeliveryMenNumber();
-			controller.calculateCircuits(deliveryMenNumber); 
+			if (controller.getWindow().getDeliveryMenNumber())
+				controller.calculateCircuits(deliveryMenNumber); 
 			break;
 		case Window.ADD_DELIVERY: 
 			controller.addDelivery(); 
@@ -76,22 +76,6 @@ public class ButtonsListener implements ActionListener {
 		case Window.REDO:
 			controller.redo();
 			break;
-		
-		case Window.UP:
-			controller.getWindow().verticalShift(-50);
-			break;
-		
-		case Window.DOWN:
-			controller.getWindow().verticalShift(50);
-			break;
-			
-		case Window.RIGHT:
-			controller.getWindow().horizontalShift(50);
-			break;
-		
-		case Window.LEFT:
-			controller.getWindow().horizontalShift(-50);
-			break;
 			
 		case Window.ZOOM:
 			controller.getWindow().zoom();
@@ -99,6 +83,15 @@ public class ButtonsListener implements ActionListener {
 		
 		case Window.UNZOOM:
 			controller.getWindow().unZoom();
+			break;
+			
+		case Window.CANCEL:
+			controller.cancelAdd();
+			break;
+			
+		case Window.RESET_SCALE:
+			controller.getWindow().calculateScale();
+			controller.getWindow().drawCircuits();
 			break;
 			
 		/*case Window.VALIDATE_ADD: controller.validateAdd(); break;
