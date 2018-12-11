@@ -1,8 +1,5 @@
 package main.java.view;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,7 +19,7 @@ public class FileChooser extends JFrame {
 		JPanel fileChooserPanel = new JPanel();
 		fileChooserPanel.add(chooser);
 		this.getContentPane().add(fileChooserPanel);
-		this.setSize(520, 370);
+		this.pack();
 		this.setLocationRelativeTo(null);
 		
 	}

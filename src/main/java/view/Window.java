@@ -51,6 +51,7 @@ public class Window extends JFrame{
 	protected static final String REDO = "Retablir";
 	protected static final String CANCEL = "Cancel";
 	protected static final String RESET_SCALE = "Retablir l'echelle";
+	protected static final String GENERATE_ROADMAP = "Generer la feuille de route";
 	
 	protected static final String ZOOM = "+";
 	protected static final String UNZOOM = "-";
@@ -76,6 +77,7 @@ public class Window extends JFrame{
 	protected static JButton unZoomButton;
 	protected static JButton cancelAddButton;
 	protected static JButton resetScaleButton;
+	protected static JButton generateRoadmapButton;
 	
 	protected static final int windowWidth = 1600;
 	protected static final int windowHeight = 720;
@@ -312,12 +314,18 @@ public class Window extends JFrame{
 		cancelAddButton.addActionListener(buttonsListener);
 		cancelAddButton.setEnabled(true);
 		buttonPanel.add(cancelAddButton);
+		
+		generateRoadmapButton = new JButton(GENERATE_ROADMAP);
+		generateRoadmapButton.addActionListener(buttonsListener);
+		generateRoadmapButton.setEnabled(true);
+		buttonPanel.add(generateRoadmapButton);
 	}
 	
 	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
 	protected String getFile () {
 			
 		chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new java.io.File("."));
 		int returnValue = chooser.showOpenDialog(controller.getWindow());
 		String filePath = "";
 		
@@ -326,6 +334,27 @@ public class Window extends JFrame{
 		}
 		return filePath;
 	}
+	
+	protected String getFolder() {
+		chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new java.io.File("."));
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int returnValue = chooser.showOpenDialog(controller.getWindow());
+		String folderPath = "";
+		
+		if(returnValue == JFileChooser.APPROVE_OPTION){
+			folderPath = chooser.getCurrentDirectory().getAbsolutePath();
+		}
+		return folderPath;
+	}
+	
+	/*private JFileChooser displayFileChooser() {
+		chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new java.io.File("."));
+		int returnValue = chooser.showOpenDialog(controller.getWindow());
+		String folderPath = "";
+		return chooser;
+	}*/
 
 	public boolean getDeliveryMenNumber() {
 		

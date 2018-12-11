@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import main.java.controller.Controller;
+import main.java.utils.Serializer;
 
 /*
  * 
@@ -97,6 +98,11 @@ public class ButtonsListener implements ActionListener {
 			controller.getWindow().drawCircuits();
 			break;
 			
+		case Window.GENERATE_ROADMAP:
+			//folder explorer pour stocker les fichiers qui vont être créé, path en string
+			System.out.println(controller.getWindow().getFolder());
+			//Serializer.serializer("string", controller.getCircuitManagement());
+			break;
 		/*case Window.VALIDATE_ADD: controller.validateAdd(); break;
 		case Window.CANCEL_ADD: controller.cancelAdd(); break;
 		*/case Window.MOVE_DELIVERY: controller.moveDelivery();break;/*
