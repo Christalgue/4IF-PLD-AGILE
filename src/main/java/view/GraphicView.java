@@ -19,6 +19,9 @@ public class GraphicView extends JPanel {
 
 	private double heightScale;
 	private double widthScale;
+	
+	private double defaultWidthScale;
+	private double defaultHeightScale;
 
 	protected double originLat;
 	protected double originLong;
@@ -113,6 +116,9 @@ public class GraphicView extends JPanel {
 
 		heightScale = (double) ((maxLat - minLat) / (double) viewHeight);
 		widthScale = (double) ((maxLong - minLong) / (double) viewWidth);
+		
+		this.defaultHeightScale = heightScale;
+		this.defaultWidthScale = widthScale;
 
 		originLat = maxLat;
 		originLong = minLong;
@@ -279,6 +285,11 @@ public class GraphicView extends JPanel {
 		verticalOffset +=down;
 		paintComponent();
 	}
-
 	
+	public void resetDefaultValues() {
+		heightScale = defaultHeightScale;
+		widthScale = defaultWidthScale;
+		horizontalOffset = 0;
+		verticalOffset = 0;
+	}
 }

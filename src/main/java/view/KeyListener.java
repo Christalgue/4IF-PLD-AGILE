@@ -24,21 +24,27 @@ public class KeyListener extends KeyAdapter {
 		switch( keyCode ) { 
 	        case KeyEvent.VK_UP:
 	        	controller.getWindow().verticalShift(-50);
+	        	controller.getWindow().enableResetScaleButton();
 	            break;
 	        case KeyEvent.VK_DOWN:
 	        	controller.getWindow().verticalShift(50);
+	        	controller.getWindow().enableResetScaleButton();
 	            break;
 	        case KeyEvent.VK_LEFT:
 	        	controller.getWindow().horizontalShift(-50);
+	        	controller.getWindow().enableResetScaleButton();
 	            break;
 	        case KeyEvent.VK_RIGHT :
 	        	controller.getWindow().horizontalShift(50);
+	        	controller.getWindow().enableResetScaleButton();
 	            break;
 	        case KeyEvent.VK_Z:
 	        	controller.getWindow().zoom();
+	        	controller.getWindow().enableResetScaleButton();
 	        	break;
 	        case KeyEvent.VK_D:
 	        	controller.getWindow().unZoom();
+	        	controller.getWindow().enableResetScaleButton();
 	        	break;
 	        	
 	     }

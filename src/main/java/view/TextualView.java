@@ -97,26 +97,28 @@ public class TextualView extends JPanel{
 		setBorder(BorderFactory.createTitledBorder("Livraisons"));
 		
 		int deliveryListIndex = 0;
-			
-		for( Delivery entry : circuitManagement.getDeliveryList() ) {
-
-			if (deliveryListIndex == 0) {
-				
-				treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
-					+ "Duree "+entry.getDuration()+" s"),
-						treeRoot, deliveryListIndex++);
-			
-			}else {
-			
-				treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
-						deliveryListIndex +": Duree "+entry.getDuration()+" s"),
-							treeRoot, deliveryListIndex++);				
 		
+		if (circuitManagement.getDeliveryList() != null) {
+			for( Delivery entry : circuitManagement.getDeliveryList() ) {
+	
+				if (deliveryListIndex == 0) {
+					
+					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
+						+ "Duree "+entry.getDuration()+" s"),
+							treeRoot, deliveryListIndex++);
+				
+				}else {
+				
+					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
+							deliveryListIndex +": Duree "+entry.getDuration()+" s"),
+								treeRoot, deliveryListIndex++);				
+			
+				}
 			}
-			
 		}
+		
 		treeModel.nodeStructureChanged( treeRoot );
-			
+		
 	}
 	
 	public void fillCircuitTree() {

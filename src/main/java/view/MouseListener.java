@@ -62,7 +62,9 @@ public class MouseListener extends MouseAdapter {
 		
 			graphicView.shift((int)(lastClickedPoint.getX()- x),(int)(lastClickedPoint.getY()- y));
 			}
+			controller.getWindow().enableResetScaleButton();
 		}
+		
 		
 	}
 	

@@ -715,4 +715,8 @@ public class Window extends JFrame{
 		 }
 		 ((DefaultTreeModel) textualViewTree.getModel()).reload();
 	 }
+	 
+	 public void resetScale() {
+		 graphicView.resetDefaultValues();
+	 }
 }
