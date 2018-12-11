@@ -24,7 +24,7 @@ public class MapLoadedState extends DefaultState{
 			window.enableButtonLoadDeliveriesList();
 			window.disableButtonCalculateCircuit();
 			try {
-				controller.circuitManagement.loadMap(filename);
+				controller.getCircuitManagement().loadMap(filename);
 				window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			} catch (ForgivableXMLException e) {
 				window.setWarningMessage(e.getMessage());
@@ -47,7 +47,7 @@ public class MapLoadedState extends DefaultState{
 		try {
 			
 			window.enableButtonCalculateCircuit();
-			controller.circuitManagement.loadDeliveryList(filename);
+			controller.getCircuitManagement().loadDeliveryList(filename);
 			window.setMessage("");
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.drawDeliveries();

@@ -30,7 +30,7 @@ public class DurationChoiceBeforeCalcState extends DefaultState {
 	@Override
 	public void validateDuration (Controller controller, Window window, int duration, CommandsList commandsList) {
 		window.disableButtonAddDelivery();
-		commandsList.addCommand(new AddDeliveryCommand(window,node,duration,null,controller.circuitManagement));
+		commandsList.addCommand(new AddDeliveryCommand(window,node,duration,null,controller.getCircuitManagement()));
 		controller.setCurrentState(controller.deliveryLoadedState);
 	}
 	

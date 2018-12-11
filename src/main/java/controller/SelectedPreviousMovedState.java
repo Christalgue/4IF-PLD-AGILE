@@ -33,13 +33,13 @@ public class SelectedPreviousMovedState extends DefaultState {
 	@Override
 	public void leftClick(Controller controller, Window window, Point point) {
 	
-		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);	
+		Node previousNode = PointUtil.pointToNode(point, controller.getCircuitManagement());	
 		if (previousNode != null && previousNode != node) {
-			window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
+			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(node));
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(previousNode);
 			window.nodeSelected(isDelivery);
 			window.circuitSelected(isDelivery);
-			if (controller.circuitManagement.checkNodeInDeliveryList(previousNode)) {
+			if (controller.getCircuitManagement().checkNodeInDeliveryList(previousNode)) {
 				controller.deliveryMovedState.setNode(node);
 				controller.deliveryMovedState.setPreviousNode(previousNode);
 				controller.setCurrentState(controller.deliveryMovedState);
@@ -58,7 +58,7 @@ public class SelectedPreviousMovedState extends DefaultState {
 		{
 			window.nodeSelected(deliverySelected);
 			window.circuitSelected(deliverySelected);
-			window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
+			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 			controller.deliveryMovedState.setNode(node);
 			controller.deliveryMovedState.setPreviousNode(deliverySelected.getPosition());
 			controller.setCurrentState(controller.deliveryMovedState);
@@ -72,7 +72,7 @@ public class SelectedPreviousMovedState extends DefaultState {
 	 */
 	@Override
 	public void mouseMoved(Controller controller, Window window, Point point) {
-		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		Node node = PointUtil.pointToNode(point, controller.getCircuitManagement());
 		if(node!=null) {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeHover(isDelivery);

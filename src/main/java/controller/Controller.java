@@ -15,7 +15,7 @@ import main.java.view.Window;
 public class Controller {
 	
 	/** The circuit management. */
-	public CircuitManagement circuitManagement;
+	private CircuitManagement circuitManagement;
 	
 	/** The window. */
 	private Window window;
