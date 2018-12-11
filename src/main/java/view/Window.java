@@ -50,11 +50,8 @@ public class Window extends JFrame{
 	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
 	protected static final String UNDO = "Annuler";
 	protected static final String REDO = "Retablir";
-
-	protected static final String UP = "U";
-	protected static final String DOWN = "D";
-	protected static final String RIGHT = "R";
-	protected static final String LEFT = "L";
+	protected static final String CANCEL = "Cancel";
+	
 	protected static final String ZOOM = "+";
 	protected static final String UNZOOM = "-";
 	
@@ -77,6 +74,7 @@ public class Window extends JFrame{
 	protected static JButton leftButton;
 	protected static JButton zoomButton;
 	protected static JButton unZoomButton;
+	protected static JButton cancelButton;
 	
 	protected static final int windowWidth = 1600;
 	protected static final int windowHeight = 720;
@@ -331,26 +329,6 @@ public class Window extends JFrame{
 		calculateCircuitButton.addActionListener(buttonsListener);
 		calculateCircuitButton.setEnabled(true);
 		buttonPanel.add(calculateCircuitButton);
-
-		upButton = new JButton(UP);
-		upButton.addActionListener(buttonsListener);
-		upButton.setEnabled(true);
-		buttonPanel.add(upButton);
-		
-		downButton = new JButton(DOWN);
-		downButton.addActionListener(buttonsListener);
-		downButton.setEnabled(true);
-		buttonPanel.add(downButton);
-		
-		rightButton = new JButton(RIGHT);
-		rightButton.addActionListener(buttonsListener);
-		rightButton.setEnabled(true);
-		buttonPanel.add(rightButton);
-		
-		leftButton = new JButton(LEFT);
-		leftButton.addActionListener(buttonsListener);
-		leftButton.setEnabled(true);
-		buttonPanel.add(leftButton);
 		
 		zoomButton = new JButton(ZOOM);
 		zoomButton.addActionListener(buttonsListener);
@@ -361,6 +339,11 @@ public class Window extends JFrame{
 		unZoomButton.addActionListener(buttonsListener);
 		unZoomButton.setEnabled(true);
 		buttonPanel.add(unZoomButton);
+		
+		cancelButton = new JButton(CANCEL);
+		cancelButton.addActionListener(buttonsListener);
+		cancelButton.setEnabled(true);
+		buttonPanel.add(cancelButton);
 	}
 	
 	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
