@@ -15,6 +15,8 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
 
 import main.java.controller.Controller;
 import main.java.entity.Circuit;
@@ -98,6 +100,7 @@ public class Window extends JFrame{
 	
 
 	protected HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
+	public MyTreeCellRenderer cellRenderer; 
 	
 	protected static Color selectedColor = Color.GREEN;
 	protected static Color hoverColor = Color.BLUE;
@@ -141,6 +144,7 @@ public class Window extends JFrame{
 		
 		this.treeRoot = createTree();
 		this.textualViewTree = new JTree (this.treeRoot);
+		this.cellRenderer = new MyTreeCellRenderer(this, circuitManagement);
 		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this);
 		setTextualView(this.textualView);
 		addTreeListener();
@@ -246,31 +250,33 @@ public class Window extends JFrame{
 		    public void valueChanged(TreeSelectionEvent e) {
 		        
 		    	if ( treeRoot.getChildCount() != 0) {
-			    	
-		    		System.out.println("detected");
 		    		
 			    	DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
 			        
-			        String deliveryInfo = (String) deliveryPoint.getUserObject();
-			        
-			        if (!deliveryInfo.startsWith("Entrepot")) {
-			        	
-			        	if (!deliveryInfo.startsWith("Tournee")) {
-			        		String secondPart = deliveryInfo.substring(10);
-			        		String[] split = secondPart.split(":");
-			        		String deliveryNumber = split[0];
-			        		int deliveryIndex = Integer.parseInt(deliveryNumber);
-			        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
-			        		nodeSelected(delivery);
-			        		controller.treeDeliverySelected(delivery);
-			        	} else {
-			        		String secondPart = deliveryInfo.substring(8);
-			        		String[] split = secondPart.split(":");
-			        		String circuitNumber = split[0];
-			        		int circuitIndex = Integer.parseInt(circuitNumber);	
-			        		textualCircuitSelected(circuitIndex);
-			        	}
-			        }
+			    	if ( deliveryPoint != null ) {
+				        String deliveryInfo = (String) deliveryPoint.getUserObject();
+				        
+				        if (!deliveryInfo.startsWith("Entrepot")) {
+				        	
+				        	if (!deliveryInfo.startsWith("Tournee")) {
+				        		String secondPart = deliveryInfo.substring(10);
+				        		String[] split = secondPart.split(":");
+				        		String deliveryNumber = split[0];
+				        		int deliveryIndex = Integer.parseInt(deliveryNumber);
+				        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
+				        		nodeSelected(delivery);
+				        		controller.treeDeliverySelected(delivery);
+				        	} else {
+				        		String secondPart = deliveryInfo.substring(8);
+				        		String[] split = secondPart.split(":");
+				        		String circuitNumber = split[0];
+				        		int circuitIndex = Integer.parseInt(circuitNumber);	
+				        		textualCircuitSelected(circuitIndex-1);
+				        	}
+				        }
+				        
+				        cellRenderer.setSelectedNode(deliveryPoint);
+			    	}
 		    	}
 		    }     
 });
@@ -437,6 +443,8 @@ public class Window extends JFrame{
 		graphicView.paintSelectedNode( delivery, true);
 		hoverNode = null;
 		selectedNode = delivery;
+		
+		setSelectedTreeNode( delivery);
 	}
 	
 	
@@ -682,4 +690,16 @@ public class Window extends JFrame{
 		 colors = new HashMap < Integer,Color>();
 	 }
 	 
+	 public void setSelectedTreeNode ( Delivery delivery){
+		 
+		 if ( delivery != null && delivery.getDuration() != -1) {
+			 
+			 int index = controller.getCircuitManagement().getDeliveryIndex(delivery);
+			 String string = "Livraison "+ index +": Duree "+delivery.getDuration()+" s";
+			 cellRenderer.setSelectedUserObject(string);
+		 }else {
+			 cellRenderer.setSelectedUserObject("");
+		 }
+		 ((DefaultTreeModel) textualViewTree.getModel()).reload();
+	 }
 }

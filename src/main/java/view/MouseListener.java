@@ -75,7 +75,7 @@ public class MouseListener extends MouseAdapter {
 		controller.mouseMoved(p);
 	}
 	
-    public void mouseWheelMoved(MouseWheelEvent e) {
+/*    public void mouseWheelMoved(MouseWheelEvent e) {
         
         int notches = e.getWheelRotation();
         if (notches < 0) {
@@ -88,6 +88,6 @@ public class MouseListener extends MouseAdapter {
         } else { //scroll type == MouseWheelEvent.WHEEL_BLOCK_SCROLL
             System.out.println("MYSTERYYY");
         }
-     }
+     }*/
 
 }

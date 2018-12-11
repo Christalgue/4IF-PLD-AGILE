@@ -51,7 +51,7 @@ public class TextualView extends JPanel{
 		this.deliveryTree.expandRow(0);
 		this.deliveryTree.setRootVisible(false);
 		this.deliveryTree.setShowsRootHandles(true);
-		this.deliveryTree.setCellRenderer(new MyTreeCellRenderer(window, circuitManagement));
+		this.deliveryTree.setCellRenderer(window.cellRenderer);
 		
 		this.treeModel = (DefaultTreeModel) this.deliveryTree.getModel();
 		
