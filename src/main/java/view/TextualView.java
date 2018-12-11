@@ -1,14 +1,9 @@
 package main.java.view;
 
-import java.awt.Color;
-import java.util.HashMap;
-
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -16,23 +11,51 @@ import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TextualView.
+ */
 public class TextualView extends JPanel{
 
+	/** The circuit management. */
 	private CircuitManagement circuitManagement;
+	
+	/** The view height. */
 	private int viewHeight;
+	
+	/** The view width. */
 	private int viewWidth;	
 	
+	/** The delivery tree. */
 	private JTree deliveryTree;
+	
+	/** The tree model. */
 	private DefaultTreeModel treeModel;
+	
+	/** The tree root. */
 	private DefaultMutableTreeNode treeRoot;
 	
+	/** The scroll pane. */
 	private JScrollPane scrollPane;
+	
+	/** The window. */
 	private Window window;
 	
+	/**
+	 * Instantiates a new textual view.
+	 */
 	public TextualView () {
 		
 	}
 	
+	/**
+	 * Instantiates a new textual view.
+	 *
+	 * @param circuitManagement the circuit management
+	 * @param viewHeight the view height
+	 * @param viewWidth the view width
+	 * @param window the window
+	 */
 	public TextualView(CircuitManagement circuitManagement, int viewHeight, int viewWidth, 
 			Window window ) {
 		
@@ -89,7 +112,10 @@ public class TextualView extends JPanel{
 });
 		}*/
 
-	public void fillDeliveryTree() {
+	/**
+ * Fill delivery tree.
+ */
+public void fillDeliveryTree() {
 
 		treeRoot.removeAllChildren();
 		treeModel.reload();
@@ -109,7 +135,7 @@ public class TextualView extends JPanel{
 				} else {
 				
 					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
-							deliveryListIndex +": Duree "+entry.getDuration()+" s"),
+							deliveryListIndex +": Duree "+(int)(entry.getDuration()/60)+"min"+(int)(entry.getDuration()%60)+"s"),
 								treeRoot, deliveryListIndex++);				
 				}
 			}
@@ -119,6 +145,9 @@ public class TextualView extends JPanel{
 		
 	}
 	
+	/**
+	 * Fill circuit tree.
+	 */
 	public void fillCircuitTree() {
 		
 		treeRoot.removeAllChildren();
@@ -133,9 +162,11 @@ public class TextualView extends JPanel{
 		if(circuitManagement.getCircuitsList()!=null)
 		{
 			for( Circuit entry : circuitManagement.getCircuitsList() ) {
-			
+				double duration = entry.getCircuitDuration();
+				int durationHour = (int) duration / (int) 3600;
+				int durationMinutes = ((int)duration % 3600) / (int) 60;
 				circuit = new DefaultMutableTreeNode("Tournee "+ 
-						(circuitIndex+1) +": Duree "+entry.getCircuitLength()+" s");
+						(circuitIndex+1) + ": Duree "+ durationHour + "h" + durationMinutes + "min" + (int)(duration%60) +"s");
 				treeModel.insertNodeInto(circuit, treeRoot, circuitIndex++);
 				
 				
@@ -149,7 +180,7 @@ public class TextualView extends JPanel{
 					}else {
 					
 						treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
-								circuitManagement.getDeliveryIndex(delivery) +": Duree "+delivery.getDuration()+" s"),
+								circuitManagement.getDeliveryIndex(delivery) +": Duree "+(int)(delivery.getDuration()/60)+"min"+(int)(delivery.getDuration()%60)+"s"),
 									circuit, deliveryIndex++);		
 					}
 				}
