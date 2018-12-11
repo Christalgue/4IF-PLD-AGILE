@@ -36,7 +36,7 @@ public class RemoveDeliveryCommand implements Command {
 	public RemoveDeliveryCommand(Window window, Node node, CircuitManagement circuitManagement) {
 		this.node = node;
 		this.circuitManagement = circuitManagement;
-		this.duration = circuitManagement.getDeliveryByNode(node).getDuration();
+		this.duration = circuitManagement.isDelivery(node).getDuration();
 		this.previousNode = circuitManagement.getPreviousNode(node);
 		this.window = window;
 	}

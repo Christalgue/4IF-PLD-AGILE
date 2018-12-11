@@ -1,5 +1,6 @@
 package main.java.controller;
 
+import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.exception.ManagementException;
 import main.java.view.Window;
@@ -51,7 +52,7 @@ public class DeliveryMovedState extends DefaultState {
 	public void validate (Controller controller, Window window, CommandsList commandsList) throws ManagementException {
 		window.setMessage("");
 		window.emptySelectedNode();
-		commandsList.addCommand(new MoveDeliveryCommand(window,node,previousNode,controller.circuitManagement));
+		commandsList.addCommand(new MoveDeliveryCommand(window,node,previousNode,controller.getCircuitManagement()));
 		controller.setCurrentState(controller.calcState);
 	}
 

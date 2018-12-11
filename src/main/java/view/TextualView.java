@@ -107,12 +107,11 @@ public class TextualView extends JPanel{
 						+ "Duree "+entry.getDuration()+" s"),
 							treeRoot, deliveryListIndex++);
 				
-				}else {
+				} else {
 				
 					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Livraison "+ 
 							deliveryListIndex +": Duree "+entry.getDuration()+" s"),
 								treeRoot, deliveryListIndex++);				
-			
 				}
 			}
 		}
