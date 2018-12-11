@@ -103,8 +103,7 @@ public class TextualView extends JPanel{
 	
 				if (deliveryListIndex == 0) {
 					
-					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: "
-						+ "Duree "+entry.getDuration()+" s"),
+					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: Duree 0s"),
 							treeRoot, deliveryListIndex++);
 				
 				} else {
