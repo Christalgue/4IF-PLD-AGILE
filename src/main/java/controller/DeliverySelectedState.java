@@ -105,14 +105,12 @@ public class DeliverySelectedState extends DefaultState {
 			window.disableButtonCalculateCircuit();
 			try {
 				controller.circuitManagement.loadMap(filename);
+				window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			} catch (ForgivableXMLException e) {
-				window.setErrorMessage(e.getMessage());
-				if(controller.getShowPopUp())
-					window.getPopUpValue(PopUpType.ERROR, window);
+				window.setWarningMessage(e.getMessage());
 			}
 			window.calculateScale();
 			window.drawMap();
-			window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			commandsList.reset();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
