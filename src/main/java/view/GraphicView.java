@@ -13,6 +13,7 @@ import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Node;
 import main.java.entity.Point;
+import main.java.entity.Repository;
 import main.java.utils.PointUtil;
 
 public class GraphicView extends JPanel {
@@ -35,6 +36,7 @@ public class GraphicView extends JPanel {
 
 	private int width;
 	private int deliveryRadius;
+	private int repositoryRadius;
 
 	private static Color nodeColor = Color.WHITE;
 
@@ -61,13 +63,14 @@ public class GraphicView extends JPanel {
 		this.viewWidth = viewWidth-20;
 		this.width = width;
 		this.deliveryRadius = 3*width;
+		this.repositoryRadius = 6*width;
 		
 		this.circuitManagement = circuitManagement;
 		this.window = window;
 
 		mapView = new MapView(nodeColor, width, this);
 		circuitView = new CircuitView(this, width);
-		deliveryView = new DeliveryView(window.deliveryColor, window.repositoryColor, deliveryRadius, this);
+		deliveryView = new DeliveryView(window.deliveryColor, window.repositoryColor, deliveryRadius, repositoryRadius, this);
 
 	}
 
@@ -212,7 +215,12 @@ public class GraphicView extends JPanel {
 		if (delivery.getDuration() == -1) {
 			mapView.drawNode(g, delivery.getPosition());
 		} else {
-			deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery), deliveryRadius );
+			
+			if ( delivery instanceof Repository ) {
+				deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery), repositoryRadius );				
+			} else {	
+				deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery), deliveryRadius );
+			}
 		}
 	}
 
@@ -222,9 +230,14 @@ public class GraphicView extends JPanel {
 			g.setColor(nodeColor);
 			mapView.drawNode(g, delivery.getPosition());
 		} else {
-			g.setColor(window.deliveryColor);
-			deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery), deliveryRadius);
-
+			
+			if ( delivery instanceof Repository ) {
+				g.setColor(window.repositoryColor);;
+				deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery), repositoryRadius );				
+			} else {
+				g.setColor(window.deliveryColor);
+				deliveryView.drawDelivery(g, delivery.getPosition(), circuitManagement.getDeliveryIndex(delivery), deliveryRadius);
+			}
 		}
 	}
 

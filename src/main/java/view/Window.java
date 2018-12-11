@@ -22,6 +22,7 @@ import main.java.controller.Controller;
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
+import main.java.entity.Repository;
 import main.java.exception.ManagementException;
 import main.java.utils.PopUpType;
 
@@ -244,44 +245,6 @@ public class Window extends JFrame{
 			
 	}
 	
-	 public void addTreeListener () {
-		 
-		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
-		    public void valueChanged(TreeSelectionEvent e) {
-		        
-		    	if ( treeRoot.getChildCount() != 0) {
-		    		
-			    	DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
-			        
-			    	if ( deliveryPoint != null ) {
-				        String deliveryInfo = (String) deliveryPoint.getUserObject();
-				        
-				        if (!deliveryInfo.startsWith("Entrepot")) {
-				        	
-				        	if (!deliveryInfo.startsWith("Tournee")) {
-				        		String secondPart = deliveryInfo.substring(10);
-				        		String[] split = secondPart.split(":");
-				        		String deliveryNumber = split[0];
-				        		int deliveryIndex = Integer.parseInt(deliveryNumber);
-				        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
-				        		nodeSelected(delivery);
-				        		controller.treeDeliverySelected(delivery);
-				        	} else {
-				        		String secondPart = deliveryInfo.substring(8);
-				        		String[] split = secondPart.split(":");
-				        		String circuitNumber = split[0];
-				        		int circuitIndex = Integer.parseInt(circuitNumber);	
-				        		textualCircuitSelected(circuitIndex-1);
-				        	}
-				        }
-				        
-				        cellRenderer.setSelectedNode(deliveryPoint);
-			    	}
-		    	}
-		    }     
-});
-		}
-	 
 	
 	public static void fillButtonPanel(JPanel buttonPanel) {
 		
@@ -440,113 +403,6 @@ public class Window extends JFrame{
 		}
 	}
 	
-	public void nodeSelected(Delivery delivery) {
-		if(selectedNode!=null){
-			graphicView.unPaintNode( selectedNode);
-		}
-		
-		graphicView.paintSelectedNode( delivery, true);
-		hoverNode = null;
-		selectedNode = delivery;
-		
-		setSelectedTreeNode( delivery);
-	}
-	
-	
-	public void circuitSelected(Delivery selectedDelivery) {
-
-		if(selectedCircuit!= -1){
-			graphicView.unPaintCircuit( selectedCircuit);
-		}
-		
-		int circuitIndex;
-		
-		if ( selectedDelivery != null ) {
-			
-			if (selectedDelivery.getDuration()!= -1)
-				circuitIndex = controller.getCircuitManagement().getCircuitIndexByDelivery( selectedDelivery);
-			else
-				circuitIndex = controller.getCircuitManagement().getCircuitIndexByNode( selectedDelivery);
-
-			if (circuitIndex != -1) {
-				graphicView.paintSelectedCircuit(circuitIndex, true); 
-				hoverCircuit = -1 ;
-				selectedCircuit = circuitIndex;
-			}
-		}
-	}
-	
-	public void circuitHover(Delivery delivery) {
-		//Mouse exit a node
-		if(delivery == null && hoverCircuit != -1) {
-			graphicView.unPaintCircuit( hoverCircuit);
-			hoverCircuit = -1;
-		}
-		//Cannot hover a selected circuit
-		else if (delivery != null ) {
-				
-			int toDrawCircuit = controller.getCircuitManagement().getCircuitIndexByNode(delivery);
-			
-			if( toDrawCircuit != -1 && toDrawCircuit != selectedCircuit) {
-				
-				//Mouse enter a node
-				if( hoverCircuit == -1) {
-					graphicView.paintSelectedCircuit( toDrawCircuit, false);
-				}
-				//Mouse pass from one node to another
-				else if(delivery!=null && toDrawCircuit!= hoverCircuit) {
-					graphicView.unPaintCircuit( hoverCircuit);
-					graphicView.paintSelectedCircuit( toDrawCircuit, false);
-				}
-				hoverCircuit = toDrawCircuit;
-				
-			} else {
-				graphicView.unPaintCircuit( hoverCircuit);
-				hoverCircuit =-1;
-			}
-		}
-	}
-	
-	
-	public void textualCircuitSelected(int circuitIndex) {
-		graphicView.unPaintCircuit(selectedCircuit);
-		graphicView.paintSelectedCircuit(circuitIndex);
-		selectedCircuit = circuitIndex;
-	}	
-	
-	public void nodeHover(Delivery delivery) {
-		//Mouse exit a node
-		if(delivery == null && hoverNode!=null) {
-			graphicView.unPaintNode( hoverNode);
-			hoverNode = delivery;
-		}
-		//Cannot hover a selected node
-		else if (selectedNode == null || (delivery != null && delivery.getPosition().getId()!=selectedNode.getPosition().getId())){
-			//Mouse enter a node
-			if(delivery!=null && hoverNode == null) {
-				graphicView.paintSelectedNode( delivery, false);
-			}
-			//Mouse pass from one node to another
-			else if(delivery!=null && delivery.getPosition().getId()!=hoverNode.getPosition().getId()) {
-				graphicView.unPaintNode( hoverNode);
-				graphicView.paintSelectedNode( delivery, false);
-			}
-			hoverNode = delivery;
-		}
-		
-		if (controller.getCircuitManagement().getCircuitsList()!= null)
-			circuitHover(delivery);
-		
-	}
-	
-	public void emptySelectedNode() {
-		selectedNode = null;
-	}
-	
-	public void emptySelectedCircuit() {
-		selectedCircuit = -1;
-	}
-	
 	public void fillDeliveryTree() {
 		textualView.fillDeliveryTree();
 	}
@@ -695,16 +551,190 @@ public class Window extends JFrame{
 		 colors = new HashMap < Integer,Color>();
 	 }
 	 
-	 public void setSelectedTreeNode ( Delivery delivery){
+	 public void addTreeListener () {
 		 
+		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
+		    public void valueChanged(TreeSelectionEvent e) {
+		        
+		    	if ( treeRoot.getChildCount() != 0) {
+		    		
+			    	DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
+			        
+			    	if ( deliveryPoint != null ) {
+				        String deliveryInfo = (String) deliveryPoint.getUserObject();
+				        
+				        if (!deliveryInfo.startsWith("Entrepot")) {
+				        	
+				        	if (!deliveryInfo.startsWith("Tournee")) {
+				        		String secondPart = deliveryInfo.substring(10);
+				        		String[] split = secondPart.split(":");
+				        		String deliveryNumber = split[0];
+				        		int deliveryIndex = Integer.parseInt(deliveryNumber);
+				        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
+				        		nodeSelected(delivery);
+				        		controller.treeDeliverySelected(delivery);
+				        	} else {
+				        		String secondPart = deliveryInfo.substring(8);
+				        		String[] split = secondPart.split(":");
+				        		String circuitNumber = split[0];
+				        		int circuitIndex = Integer.parseInt(circuitNumber);	
+				        		textualCircuitSelected(circuitIndex-1);
+				        	}
+				        } else {
+				        	Delivery delivery = controller.getCircuitManagement().getDeliveryList().get(0);
+			        		nodeSelected(delivery);
+				        	controller.treeDeliverySelected(delivery);
+				        }
+				        
+			    	}
+		    	}
+		    }     
+});
+		}
+	 
+	public void nodeSelected(Delivery delivery) {
+		if(selectedNode!=null){
+			graphicView.unPaintNode( selectedNode);
+		}
+			
+		graphicView.paintSelectedNode( delivery, true);
+		hoverNode = null;
+		selectedNode = delivery;
+			
+		setSelectedTreeNode( delivery,true);
+	}
+		
+	public void nodeHover(Delivery delivery) {
+		//Mouse exit a node
+		if(delivery == null && hoverNode!=null) {
+			graphicView.unPaintNode( hoverNode);
+			hoverNode = delivery;
+		}
+		//Cannot hover a selected node
+		else if ( delivery != null && (selectedNode == null || delivery.getPosition().getId()!=selectedNode.getPosition().getId())){
+			//Mouse enter a node
+			if(delivery!=null && hoverNode == null) {
+				graphicView.paintSelectedNode( delivery, false);
+			}
+			//Mouse pass from one node to another
+			else if(delivery!=null && delivery.getPosition().getId()!=hoverNode.getPosition().getId()) {
+				graphicView.unPaintNode( hoverNode);
+				graphicView.paintSelectedNode( delivery, false);
+			}
+			hoverNode = delivery;
+		
+			if ( controller.getCircuitManagement().getCircuitsList()!= null) {
+				circuitHover(delivery);
+			}		
+			
+		}
+		
+		setSelectedTreeNode (delivery, false);
+			
+	}
+		
+	public void circuitSelected(Delivery selectedDelivery) {
+
+		if (selectedDelivery != null && controller.getCircuitManagement().getCircuitsList()!= null) {
+			
+			int circuitIndex;
+								
+			if (selectedDelivery.getDuration()!= -1)
+				circuitIndex = controller.getCircuitManagement().getCircuitIndexByDelivery( selectedDelivery);
+			else
+				circuitIndex = controller.getCircuitManagement().getCircuitIndexByNode( selectedDelivery);
+
+			if(selectedCircuit!= -1 && selectedCircuit != circuitIndex){
+				graphicView.unPaintCircuit( selectedCircuit);
+			}
+			
+			if (circuitIndex != -1) {
+				graphicView.paintSelectedCircuit(circuitIndex, true); 
+				hoverCircuit = -1 ;
+				selectedCircuit = circuitIndex;
+			}
+			
+			setSelectedTreeNode(circuitIndex, true);
+		}
+		
+	}
+
+	public void circuitHover(Delivery delivery) {
+					
+		int toDrawCircuit = controller.getCircuitManagement().getCircuitIndexByNode(delivery);
+				
+		if( toDrawCircuit != -1 ) {
+			
+			if( toDrawCircuit != selectedCircuit) {
+					
+				//Mouse enter a node
+				if( hoverCircuit == -1) {
+					graphicView.paintSelectedCircuit( toDrawCircuit, false);
+				}
+				//Mouse pass from one node to another
+				else if( toDrawCircuit != hoverCircuit) {
+					graphicView.unPaintCircuit( hoverCircuit);
+					graphicView.paintSelectedCircuit( toDrawCircuit, false);
+				}
+				hoverCircuit = toDrawCircuit;
+					
+			} else if ( toDrawCircuit == selectedCircuit) {
+			
+			graphicView.paintSelectedCircuit( toDrawCircuit, true);
+			hoverCircuit = -1;
+			
+			}
+		} else {
+			graphicView.unPaintCircuit( hoverCircuit);
+			hoverCircuit =-1;
+		}
+		
+		setSelectedTreeNode (toDrawCircuit, false);
+	}		
+		
+	public void textualCircuitSelected(int circuitIndex) {
+		graphicView.unPaintCircuit(selectedCircuit);
+		graphicView.paintSelectedCircuit(circuitIndex);
+		selectedCircuit = circuitIndex;
+		setSelectedTreeNode (circuitIndex, true);
+	}	
+	
+	 public void setSelectedTreeNode ( Delivery delivery, boolean selected ){
+			 
 		 if ( delivery != null && delivery.getDuration() != -1) {
 			 
-			 int index = controller.getCircuitManagement().getDeliveryIndex(delivery);
-			 String string = "Livraison "+ index +": Duree "+delivery.getDuration()+" s";
-			 cellRenderer.setSelectedUserObject(string);
+			 if ( delivery instanceof Repository ) {
+				 cellRenderer.setSelectedDelivery("Entrepot: Duree 0s", selected);
+			 } else {
+				 int index = controller.getCircuitManagement().getDeliveryIndex(delivery);
+				 String string = "Livraison "+ index +": Duree "+delivery.getDuration()+" s";
+				 cellRenderer.setSelectedDelivery(string, selected);
+			 }
 		 }else {
-			 cellRenderer.setSelectedUserObject("");
+			 cellRenderer.setSelectedDelivery("", selected);
 		 }
+		 
 		 ((DefaultTreeModel) textualViewTree.getModel()).reload();
 	 }
+		
+	private void setSelectedTreeNode(int circuitIndex, boolean selected) {
+			
+		if ( circuitIndex != -1 ) {
+			 cellRenderer.setSelectedCircuit("Tournee "+(circuitIndex+1) +": Duree "+controller.getCircuitManagement().getCircuitByIndex(circuitIndex).getCircuitLength()+" s", selected);
+		 } else {
+			 cellRenderer.setSelectedCircuit("", selected);
+
+		 }
+		 
+		 ((DefaultTreeModel) textualViewTree.getModel()).reload();
+	}			
+		
+	public void emptySelectedNode() {
+		selectedNode = null;
+	}
+	
+	public void emptySelectedCircuit() {
+		selectedCircuit = -1;
+	}
+	 
 }
