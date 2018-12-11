@@ -79,10 +79,12 @@ public class ButtonsListener implements ActionListener {
 			
 		case Window.ZOOM:
 			controller.getWindow().zoom();
+			controller.getWindow().enableResetScaleButton();
 			break;
 		
 		case Window.UNZOOM:
 			controller.getWindow().unZoom();
+			controller.getWindow().enableResetScaleButton();
 			break;
 			
 		case Window.CANCEL:
@@ -90,7 +92,8 @@ public class ButtonsListener implements ActionListener {
 			break;
 			
 		case Window.RESET_SCALE:
-			controller.getWindow().calculateScale();
+			controller.getWindow().resetScale();
+			controller.getWindow().disableResetScaleButton();
 			controller.getWindow().drawCircuits();
 			break;
 			

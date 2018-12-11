@@ -53,11 +53,11 @@ public class DeliveryView extends JPanel {
 	 * @param colorDelivery 		The color of the delivery
 	 * @param deliveryRadius			The width of the road
 	 */
-	public DeliveryView (Color deliveryColor, Color repositoryColor, int deliveryRadius, GraphicView graphicView) {
+	public DeliveryView (Color deliveryColor, Color repositoryColor, int deliveryRadius, int repositoryRadius, GraphicView graphicView) {
 		this.deliveryColor = deliveryColor;
 		this.repositoryColor = repositoryColor;
 		this.deliveryRadius = deliveryRadius;
-		this.repositoryRadius = deliveryRadius*2;
+		this.repositoryRadius = repositoryRadius;
 		this.graphicView = graphicView;
 	}
 	

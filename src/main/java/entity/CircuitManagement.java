@@ -165,12 +165,8 @@ public class CircuitManagement extends Observable{
 		}
     	
     	Pair<List<ArrayList<Delivery>>,List<Pair<Double,Double>>> distribution = KmeansClustering(nbDeliveryMan, deliveriesToDistribute);
-    	int iteration = 1;
-    	while (iteration<2 && !checkClusterValidity(distribution.getKey())) {
-    		iteration++;
-    		distribution = KmeansClustering(nbDeliveryMan, deliveriesToDistribute);
-    		
-    		// Balance the distribution
+    	// Balance the distribution
+    	if (!checkClusterValidity(distribution.getKey())) {
     		distribution = balanceDistribution(distribution);
     	}
   	    	

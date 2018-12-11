@@ -16,8 +16,10 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 	
 	private CircuitManagement circuitManagement;
 	private Window window;
-	private DefaultMutableTreeNode selectedNode;
-	private String selectedUserObject ="";
+	private String selectedDelivery ="";
+	private String selectedCircuit ="";
+	private String hoverDelivery ="";
+	private String hoverCircuit="";
 	
 	public MyTreeCellRenderer (Window window, CircuitManagement circuitManagement) {
 		this.window = window;
@@ -32,11 +34,14 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
         // Assuming you have a tree of Strings
         String node = (String) ((DefaultMutableTreeNode) value).getUserObject();
 
-        if ( (DefaultMutableTreeNode) value == selectedNode) {
-        	//setForeground ( window.selectedColor);
-        } else if (selectedUserObject.equals(node)) {
-        	setForeground ( window.selectedColor);
-        } else {
+        setBackgroundSelectionColor(Color.WHITE);
+        setTextSelectionColor(window.selectedColor);
+        
+       if (selectedDelivery.equals(node) || selectedCircuit.equals(node)) {
+    	   setForeground ( window.selectedColor);
+       } else if (hoverDelivery.equals(node) || hoverCircuit.equals(node)){
+    	   setForeground ( window.hoverColor);
+       } else {
         
 	        if ( window.colors.get(0) != null) {
 	        
@@ -80,13 +85,23 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 
         return this;
     }
-    
-    public void setSelectedNode( DefaultMutableTreeNode node) {
-    	this.selectedNode = node;
-  
-    }
 
-    public void setSelectedUserObject ( String string) {    	
-    	this.selectedUserObject = string;
+    public void setSelectedDelivery ( String string, boolean selected) {    	
+    	if (selected) {
+    		this.selectedDelivery = string;
+    	} else {
+    		this.hoverDelivery = string; 
+    	}
     }
+    
+    public void setSelectedCircuit ( String string, boolean selected) {    	
+    	if (selected) {
+    		this.selectedCircuit = string;
+    	} else {
+    		this.hoverCircuit = string; 
+    	}
+    }
+    
+    
+    
 }

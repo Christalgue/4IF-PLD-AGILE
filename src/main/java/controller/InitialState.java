@@ -21,7 +21,7 @@ public class InitialState extends DefaultState {
 			window.setMessage("");
 			window.enableButtonLoadDeliveriesList();
 			try {
-				controller.circuitManagement.loadMap(filename);
+				controller.getCircuitManagement().loadMap(filename);
 				window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			} catch (ForgivableXMLException e) {
 				window.setWarningMessage(e.getMessage());

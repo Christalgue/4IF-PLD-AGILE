@@ -28,7 +28,7 @@ public class DeliveryLoadedState extends DefaultState {
 	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 		
 		try {
-			controller.circuitManagement.loadDeliveryList(filename);
+			controller.getCircuitManagement().loadDeliveryList(filename);
 			commandsList.reset();
 			window.setMessage("");
 			window.drawDeliveries();
@@ -49,7 +49,7 @@ public class DeliveryLoadedState extends DefaultState {
 		try {
 			window.disableButtonCalculateCircuit();
 			try {
-				controller.circuitManagement.loadMap(filename);
+				controller.getCircuitManagement().loadMap(filename);
 				window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			} catch (ForgivableXMLException e) {
 				window.setWarningMessage(e.getMessage());
@@ -75,7 +75,7 @@ public class DeliveryLoadedState extends DefaultState {
 		commandsList.reset();
 		try {
 			window.setMessage("");
-			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
+			controller.getCircuitManagement().calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
 		} catch (MapNotChargedException e) {
@@ -102,18 +102,18 @@ public class DeliveryLoadedState extends DefaultState {
 	 */
 	@Override
 	public void leftClick(Controller controller, Window window, Point point) {
-		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		Node node = PointUtil.pointToNode(point, controller.getCircuitManagement());
 
 
 		if(node!=null) {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
-			window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
-			if (controller.circuitManagement.checkNodeInDeliveryList(node) && (!controller.circuitManagement.isRepository(node)) ) {
+			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(node));
+			if (controller.getCircuitManagement().checkNodeInDeliveryList(node) && (!controller.getCircuitManagement().isRepository(node)) ) {
 				window.enableButtonDeleteDelivery();
 				controller.deliverySelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
-			} else if ((!controller.circuitManagement.isRepository(node))) {
+			} else if ((!controller.getCircuitManagement().isRepository(node))) {
 				window.enableButtonAddDelivery();
 				controller.nodeSelectedBeforeCalcState.setNode(node);
 				controller.setCurrentState(controller.nodeSelectedBeforeCalcState);
@@ -130,7 +130,7 @@ public class DeliveryLoadedState extends DefaultState {
 	 */
 	@Override
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
-		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
+		window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		window.nodeSelected(deliverySelected);
 		window.enableButtonDeleteDelivery();
 		controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());
@@ -142,7 +142,7 @@ public class DeliveryLoadedState extends DefaultState {
 	 */
 	@Override
 	public void mouseMoved(Controller controller, Window window, Point point) {
-		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		Node node = PointUtil.pointToNode(point, controller.getCircuitManagement());
 		if(node!=null) {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeHover(isDelivery);

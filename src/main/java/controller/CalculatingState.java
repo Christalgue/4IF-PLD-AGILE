@@ -23,7 +23,7 @@ public class CalculatingState extends DefaultState {
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating) {
 		if(keepCalculating == true) {
 			try {
-				controller.circuitManagement.calculateCircuits(controller.circuitManagement.getNbDeliveryMan(), keepCalculating);
+				controller.getCircuitManagement().calculateCircuits(controller.getCircuitManagement().getNbDeliveryMan(), keepCalculating);
 				controller.setCurrentState(controller.calcState);
 			} catch (MapNotChargedException e) {
 				window.setErrorMessage("Carte non chargee");

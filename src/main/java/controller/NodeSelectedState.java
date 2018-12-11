@@ -49,22 +49,22 @@ public class NodeSelectedState extends DefaultState {
 	 */
 	@Override
 	public void leftClick(Controller controller, Window window, Point point) {
-		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		Node node = PointUtil.pointToNode(point, controller.getCircuitManagement());
 		if (node != null)
 		{
 
-			window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
+			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(node));
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
 			window.circuitSelected(isDelivery);
 			
-			if (controller.circuitManagement.checkNodeInDeliveryList(node) && (!controller.circuitManagement.isRepository(node))) {
+			if (controller.getCircuitManagement().checkNodeInDeliveryList(node) && (!controller.getCircuitManagement().isRepository(node))) {
 				window.enableButtonMoveDelivery();
 				window.enableButtonDeleteDelivery();
 				window.disableButtonAddDelivery();
 				controller.deliverySelectedState.setNode(node);
 				controller.setCurrentState(controller.deliverySelectedState);
-			} else if (!controller.circuitManagement.isRepository(node)) {
+			} else if (!controller.getCircuitManagement().isRepository(node)) {
 				window.disableButtonMoveDelivery();
 				window.disableButtonDeleteDelivery();
 				window.enableButtonAddDelivery();
@@ -86,7 +86,7 @@ public class NodeSelectedState extends DefaultState {
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
 		window.nodeSelected(deliverySelected);
 		window.circuitSelected(deliverySelected);
-		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
+		window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		window.enableButtonDeleteDelivery();
 		window.enableButtonMoveDelivery();
 		controller.deliverySelectedState.setNode(deliverySelected.getPosition());
@@ -98,7 +98,7 @@ public class NodeSelectedState extends DefaultState {
 	 */
 	@Override
 	public void mouseMoved(Controller controller, Window window, Point point) {
-		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
+		Node node = PointUtil.pointToNode(point, controller.getCircuitManagement());
 		if(node!=null) {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeHover(isDelivery);
@@ -118,7 +118,7 @@ public class NodeSelectedState extends DefaultState {
 			window.disableButtonDeleteDelivery();
 			window.disableButtonCalculateCircuit();
 			try {
-				controller.circuitManagement.loadMap(filename);
+				controller.getCircuitManagement().loadMap(filename);
 				window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			} catch (ForgivableXMLException e) {
 				window.setWarningMessage(e.getMessage());
@@ -144,7 +144,7 @@ public class NodeSelectedState extends DefaultState {
 			window.setMessage("");
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
-			controller.circuitManagement.loadDeliveryList(filename);
+			controller.getCircuitManagement().loadDeliveryList(filename);
 			commandsList.reset();
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.drawDeliveries();
@@ -166,7 +166,7 @@ public class NodeSelectedState extends DefaultState {
 			window.setMessage("");
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
-			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
+			controller.getCircuitManagement().calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
 		} catch (MapNotChargedException e) {
