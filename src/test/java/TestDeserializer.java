@@ -113,7 +113,7 @@ class TestDeserializer {
 		} catch (XMLException e) {
 			fail("5) XMLException");
 		} catch (ForgivableXMLException e) {
-			assertTrue(e.getMessage().contains("The length of a bow is negative"),"5) Wrong ForgivableXMLException"+e.getMessage());
+			assertTrue(e.getMessage().contains("Un arc a une longueur negative"),"5) Wrong ForgivableXMLException"+e.getMessage());
 		}
 		
 		//6
@@ -129,7 +129,7 @@ class TestDeserializer {
 		} catch (XMLException e) {
 			fail("6) XMLException");
 		} catch (ForgivableXMLException e) {
-			assertTrue(e.getMessage().contains("Duplicate bow detected"),"6) Wrong ForgivableXMLException"+e.getMessage());
+			assertTrue(e.getMessage().contains("Un doublon d'arcs a ete detectee"),"6) Wrong ForgivableXMLException"+e.getMessage());
 		}
 		
 		//7
@@ -172,23 +172,23 @@ class TestDeserializer {
 		} catch (XMLException e) {
 			fail("8) XMLException");
 		}catch (ForgivableXMLException e) {
-			assertTrue(e.getMessage().contains("An incorrect value has been detected in the xml file"),"8) Wrong ForgivableXMLException"+e.getMessage());
+			assertTrue(e.getMessage().contains("Une valeur incorrecte a ete trouvee dans le fichier xml"),"8) Wrong ForgivableXMLException"+e.getMessage());
 		}
 		
 		//9
 		try {
-			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_lettre_nombre.xml", map);
-			fail("8) No exception thrown");
+			Deserializer.loadMap("resources/tests/Deserializer/xml/plan_sans_connexion.xml", map);
+			fail("9) No exception thrown");
 		} catch (ParserConfigurationException e) {
-			fail("8) Parser Exception");
+			fail("9) Parser Exception");
 		} catch (SAXException e) {
-			fail("8) SAX Exception");
+			fail("9) SAX Exception");
 		} catch (IOException e) {
-			fail("8) IO Exception");
+			fail("9) IO Exception");
 		} catch (XMLException e) {
-			fail("8) XMLException");
+			fail("9) XMLException");
 		}catch (ForgivableXMLException e) {
-			assertTrue(e.getMessage().contains("An incorrect value has been detected in the xml file"),"8) Wrong ForgivableXMLException"+e.getMessage());
+			assertTrue(e.getMessage().contains("Un point n'est connecte a aucune rue"),"9) Wrong ForgivableXMLException"+e.getMessage());
 		}
 	}
 

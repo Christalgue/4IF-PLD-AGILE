@@ -119,7 +119,7 @@ public class Deserializer {
 					throw new XMLException("The node of a bow does not exist : bow ("+origin+" - "+arrival+")");
 				}
 				if (length < 0) {
-					errors.add(new ForgivableXMLException("The length of a bow is negative : bow ("+origin+" - "+arrival+")"));
+					errors.add(new ForgivableXMLException("Un arc a une longueur negative : arc ("+origin+" - "+arrival+")"));
 				}
 				String streetName = element.getAttribute("nomRue");
 				
@@ -130,7 +130,7 @@ public class Deserializer {
 				{
 					for(Bow b : tempBowMap.get(origin)) {
 						if(b.getEndNode().getId()==arrival) {
-							errors.add(new ForgivableXMLException("Duplicate bow detected : bow ("+origin+" - "+arrival+")"));
+							errors.add(new ForgivableXMLException("Un doublon d'arcs a ete detectee : arc ("+origin+" - "+arrival+")"));
 						}
 					}
 				}
@@ -144,11 +144,11 @@ public class Deserializer {
 			
 			for(HashMap.Entry<Long, Boolean> connection : nodeIsConnected.entrySet()) {
 				if(!connection.getValue())
-					errors.add(new ForgivableXMLException("A node is not connected to any street, node : "+connection.getKey()));
+					errors.add(new ForgivableXMLException("Un point n'est connecte a aucune rue, point : "+connection.getKey()));
 			}
 		}
 		catch(NumberFormatException e) {
-			errors.add(new ForgivableXMLException("An incorrect value has been detected in the xml file"));
+			errors.add(new ForgivableXMLException("Une valeur incorrecte a ete trouvee dans le fichier xml"));
 		}
 		
 		if(errors.size()!=0) {

@@ -402,7 +402,7 @@ public class Window extends JFrame{
 			textualView.fillCircuitTree();
 		}
 	}
-	
+
 	public void fillDeliveryTree() {
 		textualView.fillDeliveryTree();
 	}
@@ -726,6 +726,10 @@ public class Window extends JFrame{
 		 ((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
 
 	 }
+	 
+	 public void resetScale() {
+		 graphicView.resetDefaultValues();
+	 }
 		
 	private void setSelectedTreeNode(int circuitIndex, boolean selected) {
 			
@@ -748,5 +752,4 @@ public class Window extends JFrame{
 	public void emptySelectedCircuit() {
 		selectedCircuit = -1;
 	}
-	 
 }
