@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
+import main.java.exception.DeliveriesNotLoadedException;
 import main.java.exception.DijkstraException;
 import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadDeliveryException;
@@ -114,6 +115,8 @@ class TestSerializer {
 			fail("TSPLimitTimeReachedException : "+e.getMessage());
 		} catch (IOException e) {
 			fail("IOException : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e) {
+			e.printStackTrace();
 		}
 	}
 

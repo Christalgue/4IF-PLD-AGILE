@@ -8,6 +8,7 @@ import java.util.Observable;
 import java.util.Random;
 
 import javafx.util.Pair;
+import main.java.exception.DeliveriesNotLoadedException;
 import main.java.exception.DijkstraException;
 import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadDeliveryException;
@@ -131,7 +132,7 @@ public class CircuitManagement extends Observable{
 	 *
 	 * @param filename the filename
 	 * @throws LoadMapException the load map exception
-	 * @throws ForgivableXMLException 
+	 * @throws ForgivableXMLException when a problem occurred while loading the map but without avoiding it to be created
 	 */
     public void loadMap(String filename) throws LoadMapException, ForgivableXMLException {
     	currentMap = new Map();
@@ -149,7 +150,7 @@ public class CircuitManagement extends Observable{
      * clusters are unbalanced in terms of cardinality, balance those clusters.
      *
      * @return a list containing all clusters
-     * @throws noRepositoryException when no repository is found in the delivery list
+     * @throws NoRepositoryException when no repository is found in the delivery list
      */
     public List<ArrayList<Delivery>> cluster() throws NoRepositoryException {
     	
@@ -509,12 +510,12 @@ public class CircuitManagement extends Observable{
      * @param nbDeliveryman the number delivery-men
      * @param continueInterruptedCalculation true if the method is called after having interrupted the calculation at least once
      * @throws MapNotChargedException when the map is not properly charged
-     * @throws LoadDeliveryException when the delivery list is not properly charged
+     * @throws DeliveriesNotLoadedException when the delivery list is not properly charged
      * @throws DijkstraException when a problem happened during the dijkstra algorithm
      * @throws NoRepositoryException when no repository is found in the delivery list
-     * @throws TSPLimitTimeReachedException when the limit time we set for the calculation is reached before the end of the calculation
+     * @throws TSPLimitTimeReachedException when the limit time we set for the calculation is reached before the end of the calculation 
      */
-    public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, LoadDeliveryException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException {
+    public void calculateCircuits(int nbDeliveryman, boolean continueInterruptedCalculation) throws MapNotChargedException, DijkstraException, NoRepositoryException, TSPLimitTimeReachedException, DeliveriesNotLoadedException {
     	
     	if(continueInterruptedCalculation == false) {
     		this.circuitsList = null;
@@ -525,7 +526,7 @@ public class CircuitManagement extends Observable{
         	if(this.currentMap.getNodeMap().isEmpty()){
         		throw new MapNotChargedException("Impossible to calculate the circuits if there is not any Map in the system");
         	} else if (this.deliveryList.isEmpty()){
-        		throw new LoadDeliveryException("Impossible to calculate the circuits if there is not any Delivery in the system");
+        		throw new DeliveriesNotLoadedException("Impossible to calculate the circuits if there is not any Delivery in the system");
         	} else {
         		try {
     				groupedDeliveries = cluster();

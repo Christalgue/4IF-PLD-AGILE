@@ -15,6 +15,7 @@ import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
 import main.java.entity.Node;
+import main.java.exception.DeliveriesNotLoadedException;
 import main.java.exception.DijkstraException;
 import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadDeliveryException;
@@ -247,6 +248,8 @@ class TestCircuitManagement {
 			fail("NoRepositoryException : "+e.getMessage());
 		} catch (TSPLimitTimeReachedException e) {
 			fail("TSPLimitTimeReachedException : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e) {
+			e.printStackTrace();
 		}
 		
 	}
@@ -330,6 +333,8 @@ class TestCircuitManagement {
 			fail("NoRepositoryException : "+e.getMessage());
 		} catch (TSPLimitTimeReachedException e) {
 			fail("TSPLimitTimeReachedException : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e1) {
+			e1.printStackTrace();
 		}
 	}
 	
@@ -378,6 +383,8 @@ class TestCircuitManagement {
 			fail("TSPLimitTimeReachedException : "+e.getMessage());
 		} catch (ManagementException e) {
 			fail("ManagementException : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e) {
+			e.printStackTrace();
 		}
 		
 		try {
@@ -409,6 +416,8 @@ class TestCircuitManagement {
 			fail("TSPLimitTimeReachedException : "+e.getMessage());
 		} catch (ManagementException e) {
 			assertTrue(e.getMessage().contains("You cannot remove a repository"),"The ManagementException is not the one expected, got : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -477,6 +486,8 @@ class TestCircuitManagement {
 			fail("TSPLimitTimeReachedException : "+e.getMessage());
 		} catch (ManagementException e) {
 			fail("ManagementException : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e) {
+			e.printStackTrace();
 		}
 	}
 
