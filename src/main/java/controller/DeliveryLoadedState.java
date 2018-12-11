@@ -71,8 +71,9 @@ public class DeliveryLoadedState extends DefaultState {
 	 */
 	@Override
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
-
+		
 		commandsList.reset();
+		window.emptyColors();
 		try {
 			window.setMessage("");
 			controller.getCircuitManagement().calculateCircuits(nbDeliveryMan, false);
@@ -92,7 +93,6 @@ public class DeliveryLoadedState extends DefaultState {
 			controller.setCurrentState(controller.calculatingState);
 			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		} catch (DeliveriesNotLoadedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -130,11 +130,14 @@ public class DeliveryLoadedState extends DefaultState {
 	 */
 	@Override
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
-		window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
-		window.nodeSelected(deliverySelected);
-		window.enableButtonDeleteDelivery();
-		controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());
-		controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
+		if (!controller.getCircuitManagement().isRepository(deliverySelected.getPosition())) {
+			
+			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
+			window.nodeSelected(deliverySelected);
+			window.enableButtonDeleteDelivery();
+			controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());
+			controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
+		}
 	}
 	
 	/**

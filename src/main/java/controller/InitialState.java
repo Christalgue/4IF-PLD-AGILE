@@ -18,6 +18,8 @@ public class InitialState extends DefaultState {
 	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
+			window.enableDeZoomButton();
+			window.enableZoomButton();
 			window.setMessage("");
 			window.enableButtonLoadDeliveriesList();
 			try {

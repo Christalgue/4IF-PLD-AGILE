@@ -300,12 +300,12 @@ public class Window extends JFrame{
 		
 		zoomButton = new JButton(ZOOM);
 		zoomButton.addActionListener(buttonsListener);
-		zoomButton.setEnabled(true);
+		zoomButton.setEnabled(false);
 		buttonPanel.add(zoomButton);
 		
 		unZoomButton = new JButton(UNZOOM);
 		unZoomButton.addActionListener(buttonsListener);
-		unZoomButton.setEnabled(true);
+		unZoomButton.setEnabled(false);
 		buttonPanel.add(unZoomButton);
 		
 		cancelAddButton = new JButton(CANCEL);

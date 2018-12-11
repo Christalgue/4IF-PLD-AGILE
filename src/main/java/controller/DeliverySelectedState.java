@@ -72,11 +72,14 @@ public class DeliverySelectedState extends DefaultState {
 	 */
 	@Override
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
-		window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(node));
-		window.nodeSelected(deliverySelected);
-		window.circuitSelected(deliverySelected);
-		controller.deliverySelectedState.setNode(deliverySelected.getPosition());
-		controller.setCurrentState(controller.deliverySelectedState);
+		if (!controller.getCircuitManagement().isRepository(deliverySelected.getPosition()))
+		{
+			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(node));
+			window.nodeSelected(deliverySelected);
+			window.circuitSelected(deliverySelected);
+			controller.deliverySelectedState.setNode(deliverySelected.getPosition());
+			controller.setCurrentState(controller.deliverySelectedState);
+		}
 	}
 	
 	/**
