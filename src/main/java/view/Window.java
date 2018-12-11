@@ -722,7 +722,9 @@ public class Window extends JFrame{
 			 cellRenderer.setSelectedDelivery("", selected);
 		 }
 		 
-		 ((DefaultTreeModel) textualViewTree.getModel()).reload();
+		 //((DefaultTreeModel) textualViewTree.getModel()).reload();
+		 ((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
+
 	 }
 		
 	private void setSelectedTreeNode(int circuitIndex, boolean selected) {
@@ -734,7 +736,9 @@ public class Window extends JFrame{
 
 		 }
 		 
-		 ((DefaultTreeModel) textualViewTree.getModel()).reload();
+		 //((DefaultTreeModel) textualViewTree.getModel()).reload();
+		 ((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
+
 	}			
 		
 	public void emptySelectedNode() {

@@ -42,7 +42,6 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
        } else if (hoverDelivery.equals(node) || hoverCircuit.equals(node)){
     	   setForeground ( window.hoverColor);
        } else {
-        
 	        if ( window.colors.get(0) != null) {
 	        
 	        	if (!node.startsWith("Tournee")) {
