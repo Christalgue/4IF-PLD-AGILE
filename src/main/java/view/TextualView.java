@@ -135,7 +135,7 @@ public class TextualView extends JPanel{
 			for( Circuit entry : circuitManagement.getCircuitsList() ) {
 			
 				circuit = new DefaultMutableTreeNode("Tournee "+ 
-						(circuitIndex+1) +": Duree "+entry.getCircuitLength()+" s");
+						(circuitIndex+1) +": Duree "+(int)entry.getCircuitDuration()+" s");
 				treeModel.insertNodeInto(circuit, treeRoot, circuitIndex++);
 				
 				
