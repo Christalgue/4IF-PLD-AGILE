@@ -21,27 +21,29 @@ public class KeyListener extends KeyAdapter {
 		// Interesting keys are SUPPR, CRTL+Z, and numbers ( for delivery men number ) 
 		int keyCode = e.getKeyCode();
 	    
-		switch( keyCode ) { 
-	        case KeyEvent.VK_UP:
-	        	controller.getWindow().verticalShift(-50);
-	            break;
-	        case KeyEvent.VK_DOWN:
-	        	controller.getWindow().verticalShift(50);
-	            break;
-	        case KeyEvent.VK_LEFT:
-	        	controller.getWindow().horizontalShift(-50);
-	            break;
-	        case KeyEvent.VK_RIGHT :
-	        	controller.getWindow().horizontalShift(50);
-	            break;
-	        case KeyEvent.VK_Z:
-	        	controller.getWindow().zoom();
-	        	break;
-	        case KeyEvent.VK_D:
-	        	controller.getWindow().unZoom();
-	        	break;
-	        	
-	     }
+		if((e.getModifiers() & KeyEvent.CTRL_MASK)==0 ){
+			switch( keyCode ) { 
+		        case KeyEvent.VK_UP:
+		        	controller.getWindow().verticalShift(-50);
+		            break;
+		        case KeyEvent.VK_DOWN:
+		        	controller.getWindow().verticalShift(50);
+		            break;
+		        case KeyEvent.VK_LEFT:
+		        	controller.getWindow().horizontalShift(-50);
+		            break;
+		        case KeyEvent.VK_RIGHT :
+		        	controller.getWindow().horizontalShift(50);
+		            break;
+		        case KeyEvent.VK_Z:
+		        	controller.getWindow().zoom();
+		        	break;
+		        case KeyEvent.VK_D:
+		        	controller.getWindow().unZoom();
+		        	break;
+		        	
+		     }
+		}
 		
 		if (keyCode== KeyEvent.VK_Z && ((e.getModifiers() & KeyEvent.CTRL_MASK)!=0 )) {
 			controller.undo();

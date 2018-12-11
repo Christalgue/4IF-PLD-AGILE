@@ -213,8 +213,6 @@ public class Controller {
 		
 	}
 	
-	
-	
 	/**
 	 * Validate the move of the delivery.
 	 *

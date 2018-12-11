@@ -737,22 +737,6 @@ public class CircuitManagement extends Observable{
 		}
 	}
 	
-	// TODO merging with isDelivery ?
-	/**
-	 * Gets the delivery by node.
-	 *
-	 * @param nodeTested the node tested
-	 * @return the delivery by node
-	 */
-	public Delivery getDeliveryByNode (Node nodeTested) {
-		for (Delivery deliveryTested : this.deliveryList) {
-			if (deliveryTested.getPosition() == nodeTested) {
-				return deliveryTested;
-			}
-		}
-		return null;
-	}
-	
 	/**
 	 * Adds the delivery after the delivery present at the selected node in the circuit that contains it. It does it by calling the generic add method specifying
 	 * that we want to modify the delivery list
@@ -850,7 +834,9 @@ public class CircuitManagement extends Observable{
 	 * @throws ManagementException the management exception
 	 */
 	public void removeDelivery (Node nodeDelivery) throws ManagementException {	
+		System.out.println("Avant remove: "+deliveryList.size());
 		removeDelivery (nodeDelivery, true);
+		System.out.println("Après remove: "+deliveryList.size());
 	}
 	
 	/**
@@ -866,7 +852,6 @@ public class CircuitManagement extends Observable{
 			for (Circuit circuit : this.circuitsList) {
 				if ((position=circuit.checkNodeInCircuit(nodeDelivery))!=-1) {
 					if (position != 0) {
-						Delivery delivery = circuit.getDeliveryList().get(position);
 						circuit.removeDelivery(position);
 						circuit.removeAtomicPath(position);
 						circuit.removeAtomicPath(position-1);
@@ -895,17 +880,18 @@ public class CircuitManagement extends Observable{
 							e.printStackTrace();
 						}
 						
-						if(changeDeliveryList)
-							deliveryList.remove(delivery);
-						
 					} else {
 						throw new ManagementException("You cannot remove a repository");
 					}
 				}
 			}
+			if(changeDeliveryList) {
+				System.out.println("bonjour");
+				deliveryList.remove(isDelivery(nodeDelivery));
+			}
 		}
 		else {
-			deliveryList.remove(getDeliveryByNode(nodeDelivery));
+			deliveryList.remove(isDelivery(nodeDelivery));
 		}
 	}
 	
@@ -917,11 +903,11 @@ public class CircuitManagement extends Observable{
 	 * @throws ManagementException the management exception
 	 */
 	public void moveDelivery(Node node, Node previousNode) throws ManagementException {
-		
-		Delivery delivery = getDeliveryByNode(node);
+		System.out.println("Avant : "+deliveryList.size());
+		Delivery delivery = isDelivery(node);
 		removeDelivery(node,false);
 		addDelivery(node, delivery.getDuration(), previousNode,false);
-		
+		System.out.println("Après : "+deliveryList.size());
 	}
 	
 	/**
