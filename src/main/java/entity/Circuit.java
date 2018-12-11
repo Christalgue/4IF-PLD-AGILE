@@ -107,6 +107,9 @@ public class Circuit extends Observable {
 	 */
 	protected double calculateDuration() {
 		double result = (circuitLength*3600.0)/(15.0*1000.0);
+		for(Delivery d : deliveryList) {
+			result += d.getDuration();
+		}
 		return result;
 	}
 
