@@ -69,10 +69,13 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	 */
 	@Override
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
-		window.nodeSelected(deliverySelected);
-		window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
-		controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());
-		controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
+		if (!controller.getCircuitManagement().isRepository(deliverySelected.getPosition()))
+		{
+			window.nodeSelected(deliverySelected);
+			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
+			controller.deliverySelectedBeforeCalcState.setNode(deliverySelected.getPosition());
+			controller.setCurrentState(controller.deliverySelectedBeforeCalcState);
+		}
 	}
 	
 	/**
@@ -143,6 +146,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	 */
 	@Override
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
+		window.emptyColors();
 		commandsList.reset();
 		try {
 			window.disableButtonMoveDelivery();
@@ -165,7 +169,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 			controller.setCurrentState(controller.calculatingState);
 			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		} catch (DeliveriesNotLoadedException e) {
-			// TODO Auto-generated catch block
+			window.setErrorMessage("Fichier XML invalide");
 			e.printStackTrace();
 		}
 	
