@@ -16,10 +16,8 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 
 import main.java.controller.Controller;
-import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.exception.ManagementException;
@@ -51,6 +49,7 @@ public class Window extends JFrame{
 	protected static final String UNDO = "Annuler";
 	protected static final String REDO = "Retablir";
 	protected static final String CANCEL = "Cancel";
+	protected static final String RESET_SCALE = "Retablir l'echelle";
 	
 	protected static final String ZOOM = "+";
 	protected static final String UNZOOM = "-";
@@ -75,6 +74,7 @@ public class Window extends JFrame{
 	protected static JButton zoomButton;
 	protected static JButton unZoomButton;
 	protected static JButton cancelButton;
+	protected static JButton resetScaleButton;
 	
 	protected static final int windowWidth = 1600;
 	protected static final int windowHeight = 720;
@@ -286,6 +286,11 @@ public class Window extends JFrame{
 		buttonPanel.setSize(windowWidth, buttonPanelHeight);
 		buttonPanel.setBackground(Color.WHITE);
 		
+		resetScaleButton = new JButton(RESET_SCALE);
+		resetScaleButton.addActionListener(buttonsListener);
+		resetScaleButton.setEnabled(false);
+		buttonPanel.add(resetScaleButton);
+		
 		setNameOfMap = new TextField();
 		setNameOfMap.setText("resources/xml/moyenPlan.xml");
 		buttonPanel.add(setNameOfMap);
@@ -323,11 +328,11 @@ public class Window extends JFrame{
 		redoButton = new JButton(REDO);
 		buttonPanel.add(redoButton);
 		redoButton.addActionListener(buttonsListener);	
-		redoButton.setEnabled(true);
+		redoButton.setEnabled(false);
 		
 		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
 		calculateCircuitButton.addActionListener(buttonsListener);
-		calculateCircuitButton.setEnabled(true);
+		calculateCircuitButton.setEnabled(false);
 		buttonPanel.add(calculateCircuitButton);
 		
 		zoomButton = new JButton(ZOOM);
@@ -607,6 +612,14 @@ public class Window extends JFrame{
 	public void disableButtonRedo() {
 		redoButton.setEnabled(false);
 	}
+	
+	public void enableResetScaleButton() {
+		 resetScaleButton.setEnabled(true);
+	 }
+	 
+	 public void disableResetScaleButton() {
+		 resetScaleButton.setEnabled(false);
+	 }
 	
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
 	public int getPopUpValue(PopUpType message, Window window) {

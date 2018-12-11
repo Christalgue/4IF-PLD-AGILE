@@ -89,6 +89,11 @@ public class ButtonsListener implements ActionListener {
 			controller.cancelAdd();
 			break;
 			
+		case Window.RESET_SCALE:
+			controller.getWindow().calculateScale();
+			controller.getWindow().drawCircuits();
+			break;
+			
 		/*case Window.VALIDATE_ADD: controller.validateAdd(); break;
 		case Window.CANCEL_ADD: controller.cancelAdd(); break;
 		*/case Window.MOVE_DELIVERY: controller.moveDelivery();break;/*
