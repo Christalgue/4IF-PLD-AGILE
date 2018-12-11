@@ -102,6 +102,8 @@ public class NodeSelectedState extends DefaultState {
 		if(node!=null) {
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeHover(isDelivery);
+		}else {
+			window.nodeHover(null);
 		}
 	}
 	

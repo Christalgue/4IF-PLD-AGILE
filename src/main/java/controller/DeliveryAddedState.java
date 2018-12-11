@@ -54,6 +54,8 @@ public class DeliveryAddedState extends DefaultState{
 	@Override
 	public void validate(Controller controller, Window window, CommandsList commandsList){
 		commandsList.addCommand(new AddDeliveryCommand(window, node, duration, previousNode, controller.circuitManagement));
+		window.emptySelectedNode();
+		window.emptySelectedCircuit();
 		controller.setCurrentState(controller.calcState);
 	}
 	

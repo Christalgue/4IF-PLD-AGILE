@@ -528,6 +528,7 @@ public class Window extends JFrame{
 			}
 			//Mouse pass from one node to another
 			else if(delivery!=null && delivery.getPosition().getId()!=hoverNode.getPosition().getId()) {
+				System.out.println(delivery.toString());
 				graphicView.unPaintNode( hoverNode);
 				graphicView.paintSelectedNode( delivery, false);
 			}

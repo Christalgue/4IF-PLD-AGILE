@@ -834,9 +834,7 @@ public class CircuitManagement extends Observable{
 	 * @throws ManagementException the management exception
 	 */
 	public void removeDelivery (Node nodeDelivery) throws ManagementException {	
-		System.out.println("Avant remove: "+deliveryList.size());
 		removeDelivery (nodeDelivery, true);
-		System.out.println("Après remove: "+deliveryList.size());
 	}
 	
 	/**
@@ -886,7 +884,6 @@ public class CircuitManagement extends Observable{
 				}
 			}
 			if(changeDeliveryList) {
-				System.out.println("bonjour");
 				deliveryList.remove(isDelivery(nodeDelivery));
 			}
 		}
@@ -903,11 +900,9 @@ public class CircuitManagement extends Observable{
 	 * @throws ManagementException the management exception
 	 */
 	public void moveDelivery(Node node, Node previousNode) throws ManagementException {
-		System.out.println("Avant : "+deliveryList.size());
 		Delivery delivery = isDelivery(node);
 		removeDelivery(node,false);
 		addDelivery(node, delivery.getDuration(), previousNode,false);
-		System.out.println("Après : "+deliveryList.size());
 	}
 	
 	/**
