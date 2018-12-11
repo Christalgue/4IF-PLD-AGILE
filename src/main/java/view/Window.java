@@ -60,7 +60,7 @@ public class Window extends JFrame{
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
-	protected static TextField numberOfDeliveryMen;
+	protected static TextField numberOfDeliveryMenField;
 	
 	protected static PopUp popUp;
 	
@@ -102,7 +102,7 @@ public class Window extends JFrame{
 	protected HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
 	public MyTreeCellRenderer cellRenderer; 
 	
-	protected static Color selectedColor = Color.GREEN;
+	protected static Color selectedColor = new Color(0,150,0);
 	protected static Color hoverColor = Color.BLUE;
 	protected static Color deliveryColor = Color.RED;
 	protected static Color repositoryColor = Color.DARK_GRAY;
@@ -311,10 +311,10 @@ public class Window extends JFrame{
 		labelNumberOfDeliveryMen.setEditable(false);
 		buttonPanel.add(labelNumberOfDeliveryMen);
 		
-		numberOfDeliveryMen = new TextField();
-		numberOfDeliveryMen.setText("1");
-		numberOfDeliveryMen.setEditable(true);
-		buttonPanel.add(numberOfDeliveryMen);
+		numberOfDeliveryMenField = new TextField();
+		numberOfDeliveryMenField.setText("1");
+		numberOfDeliveryMenField.setEditable(true);
+		buttonPanel.add(numberOfDeliveryMenField);
 	
 		undoButton = new JButton(UNDO);
 		buttonPanel.add(undoButton);
@@ -376,10 +376,22 @@ public class Window extends JFrame{
 		return filePath;
 	}
 
-	//// Alternatives aux gestionnaires de fichiers
-	public static void getDeliveryMenNumber() {
+	public boolean getDeliveryMenNumber() {
 		
-		buttonsListener.setDeliveryMenNumber(Integer.parseInt(numberOfDeliveryMen.getText()));
+		boolean correctValue = false;
+		try{
+        	String numberOfDeliveryMen = numberOfDeliveryMenField.getText();
+            int numberOfDeliveryMenValue = Integer.parseInt(numberOfDeliveryMen);
+            if (numberOfDeliveryMenValue <= 0) {
+            	PopUp.errorPopUp(this, false);
+            } else {
+            	buttonsListener.setDeliveryMenNumber(numberOfDeliveryMenValue);
+            	correctValue = true;
+            }
+        } catch(Exception parseException) {
+        	PopUp.errorPopUp(this, false);
+        }
+		return correctValue;
 		
 	}
 	

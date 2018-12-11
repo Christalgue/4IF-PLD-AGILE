@@ -56,8 +56,8 @@ public class ButtonsListener implements ActionListener {
 			//controller.loadDeliveryOffer(controller.getWindow().getFile());
 			break;
 		case Window.CALCULATE_CIRCUITS: 
-			Window.getDeliveryMenNumber();
-			controller.calculateCircuits(deliveryMenNumber); 
+			if (controller.getWindow().getDeliveryMenNumber())
+				controller.calculateCircuits(deliveryMenNumber); 
 			break;
 		case Window.ADD_DELIVERY: 
 			controller.addDelivery(); 
