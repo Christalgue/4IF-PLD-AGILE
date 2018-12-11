@@ -36,9 +36,9 @@ public class Serializer {
 					String start = "Chemin de la Livraison n°"+deliveryNumber;
 					String end = " à la Livraison n°"+(deliveryNumber+1)+",";
 					String destination;
-					if(circuitManager.getDeliveryByNode(atomicPaths.get(indexAtomicPath).getStartNode()).getClass().getSimpleName().contains("Repository")) 
+					if(circuitManager.isDelivery(atomicPaths.get(indexAtomicPath).getStartNode()).getClass().getSimpleName().contains("Repository")) 
 						start =  "Chemin de l'entrepôt";
-					if(circuitManager.getDeliveryByNode(atomicPaths.get(indexAtomicPath).getEndNode()).getClass().getSimpleName().contains("Repository")) 
+					if(circuitManager.isDelivery(atomicPaths.get(indexAtomicPath).getEndNode()).getClass().getSimpleName().contains("Repository")) 
 						end =  " à l'entrepôt,";
 					
 					double distance = atomicPaths.get(indexAtomicPath).getLength();
@@ -112,7 +112,7 @@ public class Serializer {
 						}
 						
 						destination = "Vous êtes arrivé à destination, votre livraison doit durer environ : ";
-						min = (int)(circuitManager.getDeliveryByNode(bows.get(bows.size()-1).getEndNode()).getDuration()/60);
+						min = (int)(circuitManager.isDelivery(bows.get(bows.size()-1).getEndNode()).getDuration()/60);
 						if(min==0)
 							destination+= "moins de 1min";
 						else

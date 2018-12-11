@@ -21,8 +21,11 @@ public class MoveDeliveryCommand implements Command {
 	/** The node to move. */
 	private Node node1;
 	
-	/** The previous node. */
+	/** The previous node selected by the user. */
 	private Node node2;
+	
+	/** The initial previous node. */
+	private Node initialPreviousNode;
 	
 	/**
 	 * Instantiates a new MoveDeliveryCommand.
@@ -35,6 +38,8 @@ public class MoveDeliveryCommand implements Command {
 	public MoveDeliveryCommand(Window window, Node node1, Node node2, CircuitManagement circuitManagement) {
 		this.node1 = node1;
 		this.node2 = node2;
+		this.initialPreviousNode = circuitManagement.getPreviousNode(node1);
+		
 		this.window = window;
 		this.circuitManagement = circuitManagement;
 	}
@@ -58,7 +63,7 @@ public class MoveDeliveryCommand implements Command {
 	@Override
 	public void undoCde() {
 		try {
-			circuitManagement.moveDelivery(node2, node1);
+			circuitManagement.moveDelivery(node1, initialPreviousNode);
 			window.drawCircuits();
 		} catch (ManagementException e) {
 			e.printStackTrace();
