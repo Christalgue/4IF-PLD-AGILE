@@ -1,23 +1,13 @@
 package main.java.entity;
 
 
-import java.util.*;
+import java.util.Observable;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Node.
  */
 public class Node extends Observable{
 
-    
-	/**
-	 * Default constructor.
-	 */
-	public Node() {
-    }
-
-    //add a non-default constructor
-    
     /** The id. */
     private Long id;
 

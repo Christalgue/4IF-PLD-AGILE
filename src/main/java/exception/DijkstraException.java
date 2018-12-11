@@ -1,8 +1,7 @@
 package main.java.exception;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class DijkstraException.
+ * The Class DijkstraException is instantiated when a problem occurs in the algorithm to find the shortest path.
  */
 public class DijkstraException extends Exception {
 
@@ -13,7 +12,6 @@ public class DijkstraException extends Exception {
 	 */
 	public DijkstraException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.*;
 import javafx.util.Pair;
 
 import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadMapException;
 import main.java.utils.Deserializer;
 
@@ -33,21 +34,25 @@ public class Map extends Observable{
 
 
     /**
-     * Constructor of Map with a xml file containing all streets and addresses
+     * Fill the Map with a xml file containing all streets and addresses
      *
      * @param filename the name of the file
      * @throws LoadMapException the load map exception
+     * @throws ForgivableXMLException 
      */
-    public Map(String filename) throws LoadMapException {
+    public void load (String filename)throws LoadMapException, ForgivableXMLException {
         // TODO implement here
     	try {
     		Deserializer.loadMap(filename, this);
+		} catch (ForgivableXMLException e) {
+			throw new ForgivableXMLException(e.getMessage());
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new LoadMapException(e.getMessage());
 		}
     	
     }
+    
 
 
     /**
@@ -232,36 +237,38 @@ public class Map extends Observable{
 		return 0;
     }
     
+    /**
+     * Return two different street names which both connect to a same node.
+     * If a node has less than two streets connected to it, return there names.
+     *
+     * @param the node of the intersection
+     * @return the string containing the street names
+     */
 	public String displayIntersectionNode (Node node) {
-		long id = node.getId();
+		long id = -1;
+		if(node!=null)
+			id = node.getId();
 		String temp = "";
 		String finalString = "";
 		int i=0;
-		for( HashMap.Entry<Long,Set<Bow>> bowSet : bowMap.entrySet() ) {
-			
-			Iterator<Bow> iterator = bowSet.getValue().iterator();
-		    while(iterator.hasNext()) {
-		        Bow setElement = iterator.next();
-		        if (setElement.getStartNode().getId() == id || setElement.getEndNode().getId()==id) {
-		        	if (!(setElement.getStreetName() == "")) {
-			        	if(i == 0) {
-				        
-				            temp = temp + setElement.getStreetName();	
-				            i++;
-				        }
-				        else if (i == 1 && (!temp.contains(setElement.getStreetName()))) {
-					       	temp = temp +" et " + setElement.getStreetName();
-					       	i++;
-			     	    }
-		        	}
-		        }
-		        
-		        if (i == 2) {
-		        	break;
-		        }
-		    }
-		}
 		
+		List<Bow> bows = getBowsIntersection(node);
+		for( Bow bow : bows ) {
+        	if (!(bow.getStreetName() == "")) {
+	        	if(i == 0) {
+			        
+		            temp = temp + bow.getStreetName();	
+		            i++;
+	        	}
+		        else if (i == 1 && (!temp.contains(bow.getStreetName()))) {
+			       	temp = temp +" et " + bow.getStreetName();
+			       	i++;
+	     	    }
+        	}
+        	if (i == 2) {
+	        	break;
+	        }
+        }
 		if (i == 0) {
 			finalString = "-";
 		}
@@ -271,6 +278,31 @@ public class Map extends Observable{
 			finalString = "Impasse : " + temp;
 		} 
 		return finalString;
+	}
+	
+	/**
+     * Return a list of every bows containing the given node.
+     *
+     * @param the node of the intersection
+     * @return the list of bows containing the node
+     */
+	public List<Bow> getBowsIntersection (Node node){
+		List<Bow> connections = new ArrayList<Bow>();
+		long id = -1;
+		if(node!=null)
+			id = node.getId();
+		
+		for( HashMap.Entry<Long,Set<Bow>> bowSet : bowMap.entrySet() ) {
+			
+			Iterator<Bow> iterator = bowSet.getValue().iterator();
+		    while(iterator.hasNext()) {
+		        Bow setElement = iterator.next();
+		        if (setElement.getStartNode().getId() == id || setElement.getEndNode().getId()==id) {
+		        	connections.add(setElement);
+		        }
+		    }
+		}
+		return connections;
 	}
     
     

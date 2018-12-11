@@ -1,8 +1,7 @@
 package main.java.exception;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class TSPLimitTimeReachedException.
+ * The Class TSPLimitTimeReachedException is instantiated when the limit time set for the tsp calculation is reached before the end of this calculation.
  */
 public class TSPLimitTimeReachedException extends Exception {
 
@@ -14,7 +13,6 @@ public class TSPLimitTimeReachedException extends Exception {
 	 */
 	public TSPLimitTimeReachedException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 

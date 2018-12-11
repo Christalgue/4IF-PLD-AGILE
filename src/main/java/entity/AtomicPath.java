@@ -24,6 +24,9 @@ public class AtomicPath extends Observable{
 
 	/** The length. */
     private double length;
+    
+    /** The duration. */
+    private double duration;
 
 	/**
 	 * Instantiates a new atomic path.
@@ -34,6 +37,7 @@ public class AtomicPath extends Observable{
 		super();
 		this.path = new ArrayList<Bow>(path);
 		this.length = calculateLength();
+		this.duration = calculateDuration();
 	}
 	
 	/**
@@ -83,6 +87,15 @@ public class AtomicPath extends Observable{
 	public Node getEndNode() {
 		return path.get(path.size()-1).getEndNode();
 	}
+	
+	/**
+	 * Gets the atomic path duration.
+	 *
+	 * @return the atomic path duration
+	 */
+	public double getDuration() {
+		return duration;
+	}
 
 	/**
 	 * Sets the length.
@@ -106,6 +119,16 @@ public class AtomicPath extends Observable{
 			length += bow.getLength();
 		}
 		return length;
+	}
+	
+	/**
+	 * Calculate duration.
+	 *
+	 * @return the double
+	 */
+	protected double calculateDuration() {
+		double result = (length*3600.0)/(15.0*1000.0);
+		return result;
 	}
 
 

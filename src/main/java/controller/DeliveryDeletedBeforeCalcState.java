@@ -4,13 +4,13 @@ import main.java.entity.Node;
 import main.java.exception.ManagementException;
 import main.java.view.Window;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class DeliveryDeletedBeforeCalcState.
+ * The State when the user has to choose if he wants to validate the removal of a delivery before the circuits calculation.
  */
 public class DeliveryDeletedBeforeCalcState extends DefaultState {
 	
-	/** The node. */
+	/** The node to delete. */
 	Node node;
 	
 	/**
@@ -22,18 +22,18 @@ public class DeliveryDeletedBeforeCalcState extends DefaultState {
 		this.node =  node;
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.DefaultState#validate(main.java.controller.Controller, main.java.view.Window, main.java.controller.CommandsList)
 	 */
 	@Override
 	public void validate (Controller controller, Window window, CommandsList commandsList) throws ManagementException{
+		window.emptySelectedNode();
 		commandsList.addCommand(new RemoveDeliveryCommand(window, node, controller.circuitManagement));
 		window.disableButtonDeleteDelivery();
 		controller.setCurrentState(controller.deliveryLoadedState);
-		window.drawDeliveries();
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.DefaultState#cancel(main.java.controller.Controller, main.java.view.Window)
 	 */
 	@Override

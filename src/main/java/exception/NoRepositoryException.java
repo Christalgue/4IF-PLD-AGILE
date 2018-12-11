@@ -1,8 +1,7 @@
 package main.java.exception;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class NoRepositoryException.
+ * The Class NoRepositoryException is instantiated when a method need the repository to function but there is no repository in the delivery list of the circuitManagement.
  */
 public class NoRepositoryException extends Exception {
 
@@ -14,6 +13,5 @@ public class NoRepositoryException extends Exception {
 	 */
 	public NoRepositoryException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 }

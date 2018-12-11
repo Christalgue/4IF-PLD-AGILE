@@ -8,25 +8,24 @@ import java.util.Iterator;
 import main.java.entity.AtomicPath;
 import main.java.entity.Delivery;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class IteratorSeq.
+ * The Class IteratorSeq that is an iterator on the non viewed deliveries iterating from the nearest to the most distant delivery from the current delivery.
  */
 public class IteratorSeq implements Iterator<Delivery> {
 
 	/** The candidates. */
 	private Delivery[] candidates;
 	
-	/** The nb candidates. */
+	/** The number of candidates. */
 	private int nbCandidates;
 
 	/**
-	 * create an iterator to iterate on every non viewed delivery.
+	 * create an iterator to iterate on every non viewed delivery sorted by proximity from the current delivery.
 	 *
-	 * @param nonViewed the non viewed
-	 * @param currentDelivery TODO refactor to guaranty to see the non viewed deliveries in the good order 
-	 * @param allPaths TODO
-	 * @param duration TODO
+	 * @param nonViewed the non viewed deliveries
+	 * @param currentDelivery the current delivery
+	 * @param allPaths all the AtomicPath between each Delivery in the deliveryList
+	 * @param duration duration for each delivery @unused
 	 */
 	public IteratorSeq(Collection<Delivery> nonViewed, Delivery currentDelivery, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration){
 		this.candidates = new Delivery[nonViewed.size()];
@@ -36,6 +35,7 @@ public class IteratorSeq implements Iterator<Delivery> {
 			double maxDistance = Double.MIN_VALUE;
 			Delivery toAdd = null;
 			Delivery dontAdd = null;
+			//add every delivery in the candidates array sorted by proximity from the current delivery, the most distant is the first one to be added 
 			for(Delivery d : stillToAdd) {
 				if(allPaths.get(currentDelivery).containsKey(d)) {
 					double distance = allPaths.get(currentDelivery).get(d).getLength();
@@ -43,7 +43,7 @@ public class IteratorSeq implements Iterator<Delivery> {
 						toAdd = d;
 						maxDistance = distance;
 					} 
-				} else {
+				} else {						//if we can't go from the current delivery to the delivery d then don't add it to the list that will be iterated
 					dontAdd = d;
 					break;
 				}
@@ -56,10 +56,6 @@ public class IteratorSeq implements Iterator<Delivery> {
 				stillToAdd.remove(dontAdd);
 			}
 		}
-		
-		/*for (Delivery s : nonViewed){
-			candidates[nbCandidates++] = s;
-		}*/
 	}
 	
 	/* (non-Javadoc)

@@ -80,16 +80,14 @@ public class PopUp extends JFrame {
 	        	    new PropertyChangeListener() {
 	        	        public void propertyChange(PropertyChangeEvent e) {
 	        	            String prop = e.getPropertyName();
-	        	            System.out.println(e.getSource() == popUp);
 	        	            if (durationDialog.isVisible() && (e.getSource() == popUp)&& (prop.equals(JOptionPane.VALUE_PROPERTY))) {
-	        	            	System.out.println("Bouh");
 	        	            	Object value = popUp.getValue();
 	        	            	if (durationOptions[0].equals(value)) {
 	        	                    try{
 	        	                    	String duration = durationTextField.getText();
 	        	                        int durationValue = Integer.parseInt(duration);
 	        	                        if (durationValue < 0) {
-	        	                        	errorPopUp(window);
+	        	                        	errorPopUp(window, true);
 	        	                        	popUp.setValue(42);
 	        	            
 	        	                        } else {
@@ -97,7 +95,7 @@ public class PopUp extends JFrame {
 	        	                        	durationDialog.dispose();
 	        	                        }
 	        	                    } catch(Exception parseException) {
-	        	                    	errorPopUp(window);
+	        	                    	errorPopUp(window, true);
 	        	                    	popUp.setValue(42);
 	        	                    	popUp.requestFocusInWindow();
 	        	                    }
@@ -132,7 +130,7 @@ public class PopUp extends JFrame {
 				Object[] continueOptions = {"Garder", "Continuer"};
 				userChoice = JOptionPane.showOptionDialog(window,
 											VALIDATE_CONTINUE,
-											"Meilleure tourneee actuelle",
+											"Meilleure tournee actuelle",
 											JOptionPane.YES_NO_CANCEL_OPTION,
 											JOptionPane.QUESTION_MESSAGE,
 											null,
@@ -141,13 +139,28 @@ public class PopUp extends JFrame {
 											);
 				window.manageContinuePopUpValue(userChoice);
 				break;
+				
+			case ERROR:
+				Object[] errorOptions = {"OK"};
+				userChoice = 0;
+				JOptionPane.showMessageDialog(window,
+											"Une erreur dans le fichier XML a été détectée",
+											"Erreur fichier XML",
+											JOptionPane.WARNING_MESSAGE);
+				window.manageContinuePopUpValue(userChoice);
+				break;
 		}
 		return userChoice;
 	}
 	
-	public static void errorPopUp(Window window) {
+	public static void errorPopUp(Window window, boolean zero) {
+		String errorPopUpText;
+		if (zero)
+			errorPopUpText = "Veuillez entrer un nombre entier superieur ou egal a 0.";
+		else
+			errorPopUpText = "Veuillez entrer un nombre entier superieur a 0.";
 		JOptionPane.showMessageDialog(window,
-                "Veuillez entrer un nombre superieur ou egal a 0.",
+				errorPopUpText,
                 "Entree invalide.",
                 JOptionPane.ERROR_MESSAGE);
 	}

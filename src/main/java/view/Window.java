@@ -2,6 +2,7 @@ package main.java.view;
 
 import java.awt.Color;
 import java.awt.TextField;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,6 +15,8 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
 
 import main.java.controller.Controller;
 import main.java.entity.Circuit;
@@ -47,10 +50,14 @@ public class Window extends JFrame{
 	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
 	protected static final String UNDO = "Annuler";
 	protected static final String REDO = "Retablir";
+	protected static final String CANCEL = "Cancel";
+	
+	protected static final String ZOOM = "+";
+	protected static final String UNZOOM = "-";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
-	protected static TextField numberOfDeliveryMen;
+	protected static TextField numberOfDeliveryMenField;
 	
 	protected static PopUp popUp;
 	
@@ -61,8 +68,15 @@ public class Window extends JFrame{
 	protected static JButton moveDeliveryButton;
 	protected static JButton undoButton;	
 	protected static JButton redoButton;
+	protected static JButton upButton;
+	protected static JButton downButton;
+	protected static JButton rightButton;
+	protected static JButton leftButton;
+	protected static JButton zoomButton;
+	protected static JButton unZoomButton;
+	protected static JButton cancelButton;
 	
-	protected static final int windowWidth = 1400;
+	protected static final int windowWidth = 1600;
 	protected static final int windowHeight = 720;
 	protected static final int buttonPanelHeight =50;
 	protected static final int graphicWidth = 1030;
@@ -81,6 +95,15 @@ public class Window extends JFrame{
 	
 	protected int selectedCircuit = -1;
 	protected int hoverCircuit = -1;
+	
+
+	protected HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
+	public MyTreeCellRenderer cellRenderer; 
+	
+	protected static Color selectedColor = new Color(0,150,0);
+	protected static Color hoverColor = Color.BLUE;
+	protected static Color deliveryColor = Color.RED;
+	protected static Color repositoryColor = Color.DARK_GRAY;
 	
 	/**
 	 * Default constructor
@@ -111,7 +134,7 @@ public class Window extends JFrame{
 		
 		//////////////////////////////CREATE THE GRAPHIC VIEW//////////////////////////////
 		
-		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth);
+		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth,this);
 		setGraphicView(this.graphicView);
 		mouseListener = new MouseListener(controller, this.graphicView, this);
 		
@@ -119,7 +142,8 @@ public class Window extends JFrame{
 		
 		this.treeRoot = createTree();
 		this.textualViewTree = new JTree (this.treeRoot);
-		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this.textualViewTree);
+		this.cellRenderer = new MyTreeCellRenderer(this, circuitManagement);
+		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this);
 		setTextualView(this.textualView);
 		addTreeListener();
 		
@@ -153,7 +177,8 @@ public class Window extends JFrame{
 		messageField.setLocation(0, buttonPanelHeight);
 		messageField.setOpaque(true);
 		messageField.setForeground(Color.WHITE);
-		messageField.setBackground(Color.GREEN);
+		messageField.setBackground(Color.DARK_GRAY);
+		messageField.setHorizontalTextPosition(JLabel.CENTER);
 		messageField.setText("Veuillez selectionner un plan a charger");
 	
 	}
@@ -213,6 +238,7 @@ public class Window extends JFrame{
 		moveDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight+50));
 		moveDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
 		textualView.add(moveDeliveryButton);
+		
 			
 	}
 	
@@ -222,29 +248,33 @@ public class Window extends JFrame{
 		    public void valueChanged(TreeSelectionEvent e) {
 		        
 		    	if ( treeRoot.getChildCount() != 0) {
-			    	
+		    		
 			    	DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
 			        
-			        String deliveryInfo = (String) deliveryPoint.getUserObject();
-			        
-			        if (!deliveryInfo.startsWith("Entrepot")) {
-			        	
-			        	if (!deliveryInfo.startsWith("Tournee")) {
-			        		String secondPart = deliveryInfo.substring(10);
-			        		String[] split = secondPart.split(":");
-			        		String deliveryNumber = split[0];
-			        		int deliveryIndex = Integer.parseInt(deliveryNumber);
-			        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
-			        		nodeSelected(delivery);
-			        		controller.treeDeliverySelected(delivery);
-			        	} else {
-			        		String secondPart = deliveryInfo.substring(8);
-			        		String[] split = secondPart.split(":");
-			        		String circuitNumber = split[0];
-			        		int circuitIndex = Integer.parseInt(circuitNumber);	
-			        		textualCircuitSelected(circuitIndex);
-			        	}
-			        }
+			    	if ( deliveryPoint != null ) {
+				        String deliveryInfo = (String) deliveryPoint.getUserObject();
+				        
+				        if (!deliveryInfo.startsWith("Entrepot")) {
+				        	
+				        	if (!deliveryInfo.startsWith("Tournee")) {
+				        		String secondPart = deliveryInfo.substring(10);
+				        		String[] split = secondPart.split(":");
+				        		String deliveryNumber = split[0];
+				        		int deliveryIndex = Integer.parseInt(deliveryNumber);
+				        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
+				        		nodeSelected(delivery);
+				        		controller.treeDeliverySelected(delivery);
+				        	} else {
+				        		String secondPart = deliveryInfo.substring(8);
+				        		String[] split = secondPart.split(":");
+				        		String circuitNumber = split[0];
+				        		int circuitIndex = Integer.parseInt(circuitNumber);	
+				        		textualCircuitSelected(circuitIndex-1);
+				        	}
+				        }
+				        
+				        cellRenderer.setSelectedNode(deliveryPoint);
+			    	}
 		    	}
 		    }     
 });
@@ -279,23 +309,41 @@ public class Window extends JFrame{
 		labelNumberOfDeliveryMen.setEditable(false);
 		buttonPanel.add(labelNumberOfDeliveryMen);
 		
-		numberOfDeliveryMen = new TextField();
-		numberOfDeliveryMen.setText("1");
-		numberOfDeliveryMen.setEditable(true);
-		buttonPanel.add(numberOfDeliveryMen);
+		numberOfDeliveryMenField = new TextField();
+		numberOfDeliveryMenField.setText("1");
+		numberOfDeliveryMenField.setEditable(true);
+		buttonPanel.add(numberOfDeliveryMenField);
 	
 		undoButton = new JButton(UNDO);
 		buttonPanel.add(undoButton);
 		undoButton.addActionListener(buttonsListener);
+		undoButton.setEnabled(false);
+		
 
 		redoButton = new JButton(REDO);
 		buttonPanel.add(redoButton);
-		redoButton.addActionListener(buttonsListener);		
+		redoButton.addActionListener(buttonsListener);	
+		redoButton.setEnabled(true);
 		
 		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
 		calculateCircuitButton.addActionListener(buttonsListener);
-		calculateCircuitButton.setEnabled(false);
+		calculateCircuitButton.setEnabled(true);
 		buttonPanel.add(calculateCircuitButton);
+		
+		zoomButton = new JButton(ZOOM);
+		zoomButton.addActionListener(buttonsListener);
+		zoomButton.setEnabled(true);
+		buttonPanel.add(zoomButton);
+		
+		unZoomButton = new JButton(UNZOOM);
+		unZoomButton.addActionListener(buttonsListener);
+		unZoomButton.setEnabled(true);
+		buttonPanel.add(unZoomButton);
+		
+		cancelButton = new JButton(CANCEL);
+		cancelButton.addActionListener(buttonsListener);
+		cancelButton.setEnabled(true);
+		buttonPanel.add(cancelButton);
 	}
 	
 	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
@@ -311,10 +359,22 @@ public class Window extends JFrame{
 		return filePath;
 	}
 
-	//// Alternatives aux gestionnaires de fichiers
-	public static void getDeliveryMenNumber() {
+	public boolean getDeliveryMenNumber() {
 		
-		buttonsListener.setDeliveryMenNumber(Integer.parseInt(numberOfDeliveryMen.getText()));
+		boolean correctValue = false;
+		try{
+        	String numberOfDeliveryMen = numberOfDeliveryMenField.getText();
+            int numberOfDeliveryMenValue = Integer.parseInt(numberOfDeliveryMen);
+            if (numberOfDeliveryMenValue <= 0) {
+            	PopUp.errorPopUp(this, false);
+            } else {
+            	buttonsListener.setDeliveryMenNumber(numberOfDeliveryMenValue);
+            	correctValue = true;
+            }
+        } catch(Exception parseException) {
+        	PopUp.errorPopUp(this, false);
+        }
+		return correctValue;
 		
 	}
 	
@@ -337,7 +397,7 @@ public class Window extends JFrame{
 	}
 	
 	public void setMessage( String string) {
-		messageField.setBackground(Color.GREEN);
+		messageField.setBackground(Color.DARK_GRAY);
 		messageField.setText(string);
 	}
 	
@@ -345,10 +405,19 @@ public class Window extends JFrame{
 		messageField.setBackground(Color.RED);
 		messageField.setText(string);
 	}
+	
+	public void setWarningMessage(String string) {
+		messageField.setBackground(Color.ORANGE);
+		messageField.setText(string);
+	}
 	//////////////////////////////DRAW COMPOSANTS/////////////////////////////
+	public void calculateScale() {
+		graphicView.calculateScale(controller.getCircuitManagement());
+	}
+	
 	public void drawMap() {
-		graphicView.removeAll();
-		graphicView.update(graphicView.getGraphics());
+		//graphicView.removeAll();
+		//graphicView.update(graphicView.getGraphics());
 		graphicView.paintMap();
 	}
 	
@@ -361,7 +430,9 @@ public class Window extends JFrame{
 	public void drawCircuits() {
 		drawDeliveries();
 		graphicView.paintCircuits();
-		textualView.fillCircuitTree();
+		if ( controller.getCircuitManagement().getCircuitsList()!= null) {
+			textualView.fillCircuitTree();
+		}
 	}
 	
 	public void nodeSelected(Delivery delivery) {
@@ -372,6 +443,8 @@ public class Window extends JFrame{
 		graphicView.paintSelectedNode( delivery, true);
 		hoverNode = null;
 		selectedNode = delivery;
+		
+		setSelectedTreeNode( delivery);
 	}
 	
 	
@@ -381,54 +454,59 @@ public class Window extends JFrame{
 			graphicView.unPaintCircuit( selectedCircuit);
 		}
 		
-		if ( selectedDelivery.getDuration() != -1 ) {
+		int circuitIndex;
+		
+		if ( selectedDelivery != null ) {
 			
-			int circuitIndex =0;
-			
-			for (Circuit circuit : controller.getCircuitManagement().getCircuitsList()) {
-					
-				for ( Delivery delivery :circuit.getDeliveryList()) {
-					if ( selectedDelivery.getPosition() == delivery.getPosition()) {
-						graphicView.paintSelectedCircuit(circuitIndex, true); 
-						hoverCircuit = -1 ;
-						selectedCircuit = circuitIndex;
-					}
-				}
-				circuitIndex++;
+			if (selectedDelivery.getDuration()!= -1)
+				circuitIndex = controller.getCircuitManagement().getCircuitIndexByDelivery( selectedDelivery);
+			else
+				circuitIndex = controller.getCircuitManagement().getCircuitIndexByNode( selectedDelivery);
+
+			if (circuitIndex != -1) {
+				graphicView.paintSelectedCircuit(circuitIndex, true); 
+				hoverCircuit = -1 ;
+				selectedCircuit = circuitIndex;
 			}
 		}
 	}
 	
 	public void circuitHover(Delivery delivery) {
 		//Mouse exit a node
-		if(delivery == null && hoverCircuit!= -1) {
+		if(delivery == null && hoverCircuit != -1) {
 			graphicView.unPaintCircuit( hoverCircuit);
 			hoverCircuit = -1;
 		}
-		//Cannot hover a selected node
-		else if (delivery != null && delivery.getDuration() != -1 ) {
+		//Cannot hover a selected circuit
+		else if (delivery != null ) {
 				
-			int toDrawCircuit = controller.getCircuitManagement().getCircuitIndexByDelivery(delivery);
-			if( toDrawCircuit != selectedCircuit) {
+			int toDrawCircuit = controller.getCircuitManagement().getCircuitIndexByNode(delivery);
+			
+			if( toDrawCircuit != -1 && toDrawCircuit != selectedCircuit) {
 				
 				//Mouse enter a node
-				if( hoverCircuit != -1) {
+				if( hoverCircuit == -1) {
 					graphicView.paintSelectedCircuit( toDrawCircuit, false);
 				}
 				//Mouse pass from one node to another
-				else if(delivery!=null && delivery.getPosition().getId()!=hoverNode.getPosition().getId()) {
-					graphicView.unPaintNode( hoverNode);
+				else if(delivery!=null && toDrawCircuit!= hoverCircuit) {
+					graphicView.unPaintCircuit( hoverCircuit);
 					graphicView.paintSelectedCircuit( toDrawCircuit, false);
 				}
 				hoverCircuit = toDrawCircuit;
 				
+			} else {
+				graphicView.unPaintCircuit( hoverCircuit);
+				hoverCircuit =-1;
 			}
 		}
 	}
 	
 	
 	public void textualCircuitSelected(int circuitIndex) {
+		graphicView.unPaintCircuit(selectedCircuit);
 		graphicView.paintSelectedCircuit(circuitIndex);
+		selectedCircuit = circuitIndex;
 	}	
 	
 	public void nodeHover(Delivery delivery) {
@@ -450,6 +528,10 @@ public class Window extends JFrame{
 			}
 			hoverNode = delivery;
 		}
+		
+		if (controller.getCircuitManagement().getCircuitsList()!= null)
+			circuitHover(delivery);
+		
 	}
 	
 	public void emptySelectedNode() {
@@ -588,4 +670,36 @@ public class Window extends JFrame{
 		}
 	 }
 	 
+	 public void zoom() {
+		graphicView.zoom();
+	 }
+	 
+	 public void unZoom() {
+		graphicView.unZoom();
+	 }
+	 
+	 public void horizontalShift( int right) {
+		 graphicView.horizontalShift(right);
+	 }
+	 
+	 public void verticalShift(int down) {
+		 graphicView.verticalShift(down);
+	 }
+	 
+	 public void emptyColors () {
+		 colors = new HashMap < Integer,Color>();
+	 }
+	 
+	 public void setSelectedTreeNode ( Delivery delivery){
+		 
+		 if ( delivery != null && delivery.getDuration() != -1) {
+			 
+			 int index = controller.getCircuitManagement().getDeliveryIndex(delivery);
+			 String string = "Livraison "+ index +": Duree "+delivery.getDuration()+" s";
+			 cellRenderer.setSelectedUserObject(string);
+		 }else {
+			 cellRenderer.setSelectedUserObject("");
+		 }
+		 ((DefaultTreeModel) textualViewTree.getModel()).reload();
+	 }
 }

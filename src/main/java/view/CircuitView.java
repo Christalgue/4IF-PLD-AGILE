@@ -65,8 +65,8 @@ public class CircuitView extends JPanel {
 		
 		if(circuit != null && circuit.getPath() != null) {
 			for( AtomicPath entry : circuit.getPath()) {
-			    
-				for ( Bow bow: entry.getPath()) {
+			    if(entry != null) {
+			    	for ( Bow bow: entry.getPath()) {
 					
 					drawBow(g, bow);
 					
@@ -90,7 +90,9 @@ public class CircuitView extends JPanel {
 					}*/
 					
 					
-				}
+			    	}
+			    }
+				
 			}
 		}
 		

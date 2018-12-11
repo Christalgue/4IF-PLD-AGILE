@@ -7,8 +7,8 @@ import java.util.Observable;
 
 import main.java.exception.TSPLimitTimeReachedException;
 import main.java.tsp.TSP1;
+import main.java.tsp.TemplateTSP;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Circuit represents the trip that a delivery-man have to accomplish.
  */
@@ -23,6 +23,9 @@ public class Circuit extends Observable {
 
 	/** The circuit's length. */
 	private double circuitLength;
+	
+	/** The circuit duration. */
+	private double circuitDuration;
 
 	/** The path. */
 	private List<AtomicPath> path = null;
@@ -50,9 +53,6 @@ public class Circuit extends Observable {
 
 	/** The calculation is finished. */
 	protected boolean calculationIsFinished = false;
-
-	/** The circuit ID. */
-	protected int circuitID;
 	
 	/**
 	 * Constructor.
@@ -75,7 +75,7 @@ public class Circuit extends Observable {
 	 *
 	 * @throws TSPLimitTimeReachedException when the limitTime is reached before the calculation is finished
 	 */
-	public void createCircuit(/*Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths*/) 
+	public void createCircuit() 
 			throws TSPLimitTimeReachedException {
 		try {
 			calculateTrackTSP(this.repositorySVG, this.allPathsSVG, false);
@@ -84,6 +84,7 @@ public class Circuit extends Observable {
 		}
 		this.calculationIsFinished = true;
 		this.circuitLength = calculateLength();
+		this.circuitDuration = calculateDuration();
 	}
 
 	/**
@@ -98,6 +99,16 @@ public class Circuit extends Observable {
 		}
 		return result;
 	}
+	
+	/**
+	 * Calculate duration.
+	 *
+	 * @return the double
+	 */
+	protected double calculateDuration() {
+		double result = (circuitLength*3600.0)/(15.0*1000.0);
+		return result;
+	}
 
 	/**
 	 * Calculate the best circuit possible.
@@ -105,28 +116,18 @@ public class Circuit extends Observable {
 	 * reorganize the deliveryList for it to be in the right order. And using that order it creates the path.
 	 *
 	 * @param repository the repository
-	 * @param allPaths the all paths
-	 * @param continueInterruptedCalculation if the method is called after having interrupted the calculation at least once
+	 * @param allPaths all the paths between each delivery
+	 * @param continueInterruptedCalculation true if the method is called after having interrupted the calculation at least once
 	 * @throws TSPLimitTimeReachedException when the limitTime is reached before the calculation is finished
 	 */
 	protected void calculateTrackTSP(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths,
 			boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException {
-		//this.tsp = new TSP1();
 		TSPLimitTimeReachedException timeException = null;
 		try {
-			if(!continueInterruptedCalculation) {
-				allPathsSVG = allPaths;
-			}
 			tsp.searchSolution(1000, repository, allPaths, null, continueInterruptedCalculation);
 		} catch (TSPLimitTimeReachedException e) {
-			// TODO Auto-generated catch block
-			///e.printStackTrace();
-			
 			this.calculationIsFinished = false;
-			//saveCurrentStateForCalculation(repository, allPaths);
-			
 			timeException = e;
-			//throw e;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -134,7 +135,7 @@ public class Circuit extends Observable {
 			bestSolution = this.tsp.getBestSolution();
 			List<Delivery> deliveriesOrdered = new ArrayList<Delivery>();
 			List<AtomicPath> finalPath = new ArrayList<AtomicPath>();
-			// add the first Delivery to the deliveryList
+			// add the first Delivery to the deliveryList before the loop to avoid out of bounds exception
 			deliveriesOrdered.add(bestSolution[0]);
 			for (int indexBestSolution = 1; indexBestSolution < bestSolution.length; indexBestSolution++) {
 				deliveriesOrdered.add(bestSolution[indexBestSolution]);
@@ -151,14 +152,7 @@ public class Circuit extends Observable {
 			throw timeException;
 			
 		}
-		this.tsp.setBestSolution(null);
-		
-		
 	}
-	/*private void saveCurrentStateForCalculation(Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
-		this.allPathsSVG = allPaths;
-		this.repositorySVG = repository;
-	}*/
 	
 	/**
 	 * Continue the calculation from where it stopped.
@@ -171,16 +165,16 @@ public class Circuit extends Observable {
 	}
 
 	/**
-	 * Removes the delivery.
+	 * Removes the delivery that is at the index = position of the deliveryList .
 	 *
-	 * @param position the position
+	 * @param position the index of the delivery in the list
 	 */
 	protected void removeDelivery(int position) {
 		this.deliveryList.remove(position);
 	}
 
 	/**
-	 * Adds a delivery to the deliveryList.
+	 * Adds a delivery to the deliveryList at the index = position.
 	 *
 	 * @param deliveryToAdd the delivery to add
 	 * @param position its position in the list
@@ -190,10 +184,10 @@ public class Circuit extends Observable {
 	}
 	
 	/**
-	 * Adds the atomic path.
+	 * Adds the atomic path to the path, at the index = position.
 	 *
 	 * @param pathToAdd the path to add
-	 * @param position the position
+	 * @param position the position where we want it to be
 	 */
 	protected void addAtomicPath(AtomicPath pathToAdd, int position) {
 		this.path.add(position, pathToAdd);
@@ -225,6 +219,15 @@ public class Circuit extends Observable {
 	protected void setCircuitLength(double circuitLength) {
 		this.circuitLength = circuitLength;
 	}
+	
+	/**
+	 * Gets the circuit's duration.
+	 *
+	 * @return the circuit's duration
+	 */
+	public double getCircuitDuration() {
+		return circuitDuration;
+	}
 
 	/**
 	 * Gets the path.
@@ -233,15 +236,6 @@ public class Circuit extends Observable {
 	 */
 	public List<AtomicPath> getPath() {
 		return path;
-	}
-
-	/**
-	 * Sets the path.
-	 *
-	 * @param path the new path
-	 */
-	private void setPath(List<AtomicPath> path) {
-		this.path = path;
 	}
 
 	/**
@@ -263,10 +257,10 @@ public class Circuit extends Observable {
 	}
 	
 	/**
-	 * Check if a node belong to circuit.
+	 * Check if a node belong to the circuit.
 	 *
 	 * @param nodeTested the node tested
-	 * @return the int
+	 * @return the position of the Node in the circuit, or -1 if not contained
 	 */
 	protected int checkNodeInCircuit(Node nodeTested) {
 		int position;
@@ -316,15 +310,5 @@ public class Circuit extends Observable {
 		this.allPathsSVG = allPathsSVG;
 	}
 
-	/**
-	 * Gets the id.
-	 *
-	 * @return the id
-	 */
-	public int getID() {
-		return this.circuitID;
-	}
-	
-	
 
 }

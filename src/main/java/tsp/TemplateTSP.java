@@ -1,50 +1,45 @@
 package main.java.tsp;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
-import main.java.entity.*;
+import main.java.entity.AtomicPath;
+import main.java.entity.Delivery;
+import main.java.entity.Repository;
 import main.java.exception.TSPLimitTimeReachedException;
 
-// TODO: Auto-generated Javadoc
-///////////////////////////::
-//////////////////////////
-///////////////////////////
-//////////////////////////
-/////// ON DIRAIT QUE DES TRUCS MODIFIENT ALLPATHS EN COURS DE ROUTE DANS CONTINUE CALCULATION !!!!!!!
-/////////////////////////////////////
-////////////////////////////////////
 /**
  * The Class TemplateTSP.
  */
-////////////////////////////////////
 public abstract class TemplateTSP implements TSP {
 	
-	/** The best solution. */
+	/** The best solution. Deliveries ordered to have the shortest circuit possible */
 	private Delivery[] bestSolution;
 	
-	/** The cost best solution. */
-	private double costBestSolution = 0;
+	/** The cost best solution. Initialized with the higher value possible*/
+	private double costBestSolution = Double.MAX_VALUE;
 	
-	/** The limit time reached. */
+	/** The limit time has been reached or not. */
 	private Boolean limitTimeReached;
 	
 	
-	/** The current delivery SVG. */
+	/** The current delivery saved in memory to continue the calculation if wanted. */
 	private Delivery currentDeliverySVG;
 	
-	/** The non viewed SVG. */
+	/** The list of the non viewed deliveries saved in memory to continue the calculation if wanted. */
 	private ArrayList<Delivery> nonViewedSVG = null;
 	
-	/** The viewed SVG. */
+	/** The list of the viewed deliveries saved in memory to continue the calculation if wanted. */
 	private ArrayList<Delivery> viewedSVG = null;
 	
-	/** The viewed cost SVG. */
+	/** The cost associated to the list of viewed deliveries saved in memory to continue the calculation if wanted. */
 	private double viewedCostSVG;
 	
-	/** The duration SVG. */
+	/** The duration for each delivery saved in memory to continue the calculation if wanted. @unused */
 	private int[] durationSVG = null;
 	
-	/** The execution stack. */
+	/** The execution stack to keep a trace of where we were when the calculation stopped because of the limit time exception so that we can continue it if wanted. */
 	protected ArrayList<Delivery> executionStack = null;
 	
 	/* (non-Javadoc)
@@ -60,12 +55,12 @@ public abstract class TemplateTSP implements TSP {
 	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException{
 		limitTimeReached = false;
 		if (continueInterruptedCalculation == false) {
-			costBestSolution = Integer.MAX_VALUE;
+			costBestSolution = Double.MAX_VALUE;
 			ArrayList<Delivery> nonViewed = new ArrayList<Delivery>();
 			nonViewed.addAll(allPaths.keySet());
 			nonViewed.remove(repository);
 			ArrayList<Delivery> viewed = new ArrayList<Delivery>();
-			viewed.add(repository); // the first "node" visited in the repository 
+			viewed.add(repository); // the first "node" visited is the repository 
 			this.executionStack = new ArrayList<Delivery>();
 			this.executionStack.add(repository);
 			branchAndBound(repository, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
@@ -73,7 +68,6 @@ public abstract class TemplateTSP implements TSP {
 			
 		} else {
 			continueResearchSolution(limitTime, allPaths, System.currentTimeMillis());
-			//branchAndBound(currentDeliverySVG, nonViewedSVG, viewedSVG, viewedCostSVG, allPathsSVG, durationSVG, System.currentTimeMillis(), limitTime);
 		}
 		
 		// TODO need to consider the time spent delivering the order at each delivery point.
@@ -82,10 +76,10 @@ public abstract class TemplateTSP implements TSP {
 	/**
 	 * Continue research solution.
 	 *
-	 * @param limitTime the limit time
-	 * @param allPaths the all paths
+	 * @param limitTime the limit time after which the calculation have to stop, finished or not
+	 * @param allPaths all the AtomicPath between each Delivery in the deliveryList
 	 * @param startingTime the starting time
-	 * @throws TSPLimitTimeReachedException the TSP limit time reached exception
+	 * @throws TSPLimitTimeReachedException when the limit time we set for the calculation is reached before the end of the calculation
 	 */
 	protected void continueResearchSolution(int limitTime, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, long startingTime) throws TSPLimitTimeReachedException {
 		//end the branch and bound that was ongoing when saving
@@ -95,9 +89,13 @@ public abstract class TemplateTSP implements TSP {
 		branchAndBound(currentDeliverySVG, nonViewed, viewed, viewedCost, allPaths, durationSVG, startingTime, limitTime);
 		Delivery lastDeliveryTreated = currentDeliverySVG;
 		viewed.remove(currentDeliverySVG);
+		
+		// unstack the execution stack
 		this.executionStack.remove(currentDeliverySVG);
 		viewedCost -= allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDeliverySVG).getLength();
 		nonViewed.add(currentDeliverySVG);
+		
+		// set up the initial conditions to continue unstacking
 		Delivery currentDelivery = null;
 		Delivery nextDelivery = null;
 		boolean nextDeliveryFound;
@@ -105,7 +103,8 @@ public abstract class TemplateTSP implements TSP {
 		int compteurTest = 0;
 		while(continueUnstack) {			
 			//continue the branch and bound that was ongoing for the last delivery of the execution stack
-				//create the iterator and fix it to the good value
+			
+			//create the iterator and fix it to the good value
 			currentDelivery = this.executionStack.get(this.executionStack.size()-1);
 			Iterator<Delivery> it = iterator(currentDelivery, nonViewed, allPaths, durationSVG);
 			
@@ -154,35 +153,6 @@ public abstract class TemplateTSP implements TSP {
 	}
 	
 	/**
-	 * Calculate viewed cost.
-	 *
-	 * @param viewed the viewed
-	 * @param allPaths the all paths
-	 * @return the double
-	 */
-	protected double calculateViewedCost(ArrayList<Delivery> viewed, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths) {
-		double viewedCost = 0;
-		if(viewed.size()>1) {
-			for(int indexViewed = 0; indexViewed<viewed.size()-1; indexViewed++) {
-				viewedCost += allPaths.get(viewed.get(indexViewed)).get(viewed.get(indexViewed+1)).getLength();
-			}
-		} else {
-			//viewedCost += 
-		}
-		return viewedCost;
-	}
-	
-	/* (non-Javadoc)
-	 * @see main.java.tsp.TSP#getDeliveryInBestSolutionAtIndex(int)
-	 */
-	public Delivery getDeliveryInBestSolutionAtIndex(int index){
-		if ((bestSolution == null) || (index<0) || (index>=bestSolution.length))
-			return null;
-		return bestSolution[index];
-	}
-	
-	
-	/**
 	 * Gets the best solution.
 	 *
 	 * @return the best solution
@@ -208,17 +178,16 @@ public abstract class TemplateTSP implements TSP {
 	}
 	
 	/**
-	 * Save current state of calculation.
+	 * Save the current state of the calculation when the limit time was reached.
 	 *
 	 * @param currentDelivery the current delivery
-	 * @param nonViewed the non viewed
-	 * @param viewed the viewed
-	 * @param viewedCost the viewed cost
-	 * @param duration the duration
-	 * @param limitTime the limit time
+	 * @param nonViewed the list of non viewed deliveries
+	 * @param viewed the list of viewed deliveries
+	 * @param viewedCost the cost of the circuit composed by the viewed deliveries
+	 * @param duration duration for each delivery @unused
 	 */
 	private void saveCurrentStateOfCalculation(Delivery currentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost,
-			int[] duration, int limitTime) {
+			int[] duration) {
 		this.currentDeliverySVG = currentDelivery;
 		this.nonViewedSVG = nonViewed;
 		this.viewedSVG = viewed;
@@ -232,7 +201,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @param delivery the delivery
 	 * @param nonViewed : list of the deliveries we still need to visit
 	 * @param allPaths : used as cost to go from every delivery to every other
-	 * @param duration : time spent to visit a delivery
+	 * @param duration : duration for each delivery @unused
 	 * @return the minimum path starting and finishing by the repository, passing by every other delivery
 	 */
 	protected abstract int bound(Delivery delivery, ArrayList<Delivery> nonViewed, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration);
@@ -243,22 +212,16 @@ public abstract class TemplateTSP implements TSP {
 	 * @param currentDelivery the current delivery
 	 * @param nonViewed : list of the deliveries we still need to visit
 	 * @param allPaths : used as cost to go from every delivery to every other
-	 * @param durationSVG2 : time spent to visit a delivery
-	 * @return iterator for the non viewed deliveries
+	 * @param duration : duration for each delivery @unused
+	 * @return iterator for the list of non viewed deliveries
 	 */
 	protected abstract Iterator<Delivery> iterator(Delivery currentDelivery, ArrayList<Delivery> nonViewed,
-			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] durationSVG2);
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration);
 	
-	
-	
-	
-	//////////////////////// Sauvegarder pile d'appel et l'utiliser pour reprendre de la ou on en était
-	/////////////////////// ---> ArrayList<Delivery> + gestion de l'iterateur qui parcours tjs dans le meme ordre,
-	/////////////////////// ce qui permet de ne pas reparcourir des branches deja vues
 	/**
-	 * Methode definissant le patron (template) d'une resolution par separation et evaluation (branch and bound) du TSP.
+	 * Method that define the template of a resolution of the TSP by branch and bound 
 	 *
-	 * @param currentDelivery le dernier sommet visite
+	 * @param currentDelivery the last delivery visited
 	 * @param nonViewed : list of the deliveries we still need to visit
 	 * @param viewed : list of the deliveries we have already visited
 	 * @param viewedCost : cost of the path we are building
@@ -266,13 +229,13 @@ public abstract class TemplateTSP implements TSP {
 	 * @param duration : time spent to visit a delivery
 	 * @param startingTime : time when the resolution started
 	 * @param limitTime : maximum time that the resolution is allowed to take
-	 * @throws TSPLimitTimeReachedException the TSP limit time reached exception
+	 * @throws TSPLimitTimeReachedException when the limit time we set for the calculation is reached before the end of the calculation
 	 */	
 	 private void branchAndBound(Delivery currentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration, long startingTime, int limitTime) throws TSPLimitTimeReachedException{
 		 if (System.currentTimeMillis() - startingTime > limitTime){
 			 limitTimeReached = true;
-			 saveCurrentStateOfCalculation(currentDelivery, nonViewed, viewed, viewedCost, duration, limitTime);
-			 throw new TSPLimitTimeReachedException("Branch and Bound of the circuit : " /*+ allPaths.keySet().toString()*/);
+			 saveCurrentStateOfCalculation(currentDelivery, nonViewed, viewed, viewedCost, duration);
+			 throw new TSPLimitTimeReachedException("Branch and Bound of the circuit : " + allPaths.keySet().toString());
 		 }
 	    if (nonViewed.size() == 0){ // all the deliveries have been visited 
 	    	AtomicPath returnToRepository = allPaths.get(currentDelivery).get(viewed.get(0)); //may be split for more readability

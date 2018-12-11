@@ -15,6 +15,7 @@ import main.java.entity.AtomicPath;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
 import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadMapException;
 import main.java.exception.XMLException;
 import main.java.utils.Deserializer;
@@ -24,7 +25,10 @@ class TestAtomicPath {
 	@Test
 	void test() {
 		try {
-			Map map = new Map("resources/tests/AtomicPath/xml/plan.xml");
+			Map map = new Map();
+			try {
+				map.load("resources/tests/AtomicPath/xml/plan.xml");
+			} catch (ForgivableXMLException e) {}
 			List<Delivery> deliveries = Deserializer.loadDeliveries("resources/tests/AtomicPath/xml/delivery.xml", map);
 			
 			String s12="Route :\n1 => 2 (3.0)";

@@ -2,9 +2,13 @@ package main.java.controller;
 
 import java.util.LinkedList;
 
-// TODO: Auto-generated Javadoc
+import main.java.view.Window;
+
+
 /**
  * The Class CommandsList.
+ * Used to implement the Design Pattern Command, it represents the list of command the user will be
+ * able to undo or redo.
  */
 public class CommandsList {
 	
@@ -14,18 +18,24 @@ public class CommandsList {
 	/** The index. */
 	private int index;
 	
+	
+	/** The window. */
+	private Window window;
 	/**
-	 * Instantiates a new commands list.
+	 * Instantiates a new CommandsList.
+	 * @param window the window
 	 */
-	public CommandsList() {
+	public CommandsList(Window window) {
+		this.window = window;
 		commands = new LinkedList<Command>();
 		index = -1;
 	}
 	
+	
 	/**
-	 * Adds the command.
+	 * Adds a command.
 	 *
-	 * @param command the command
+	 * @param command the command to add
 	 */
 	public void addCommand(Command command) {
 		int i = index+1;
@@ -35,21 +45,26 @@ public class CommandsList {
 		index++;
 		commands.add(command);
 		command.doCde();
+		window.enableButtonUndo();
 	}
 	
 	/**
-	 * Undo.
+	 * Undo the command.
 	 */
 	public void undo() {
 		if(index >= 0)
 		{
 			commands.get(index).undoCde();
 			index--;
-		}
+		} 
+		if (index <0) {
+			window.disableButtonUndo();
+		} 
+		window.enableButtonRedo();
 	}
 	
 	/**
-	 * Redo.
+	 * Redo the command.
 	 */
 	public void redo() {
 		if(index<commands.size()-1)
@@ -57,14 +72,20 @@ public class CommandsList {
 			index++;
 			commands.get(index).doCde();
 		}
+		if (index >= (commands.size()-1)) {
+			window.disableButtonRedo();
+		}
+		window.enableButtonUndo();
 	}
 	
 	/**
-	 * Reset.
+	 * Reset the list.
 	 */
 	public void reset() {
 		index = -1;
 		commands.clear();
+		window.disableButtonRedo();
+		window.disableButtonUndo();
 	}
 	
 }

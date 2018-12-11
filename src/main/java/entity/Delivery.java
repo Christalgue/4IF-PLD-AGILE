@@ -1,9 +1,9 @@
 package main.java.entity;
 
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Observable;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Delivery.
  */
@@ -26,7 +26,7 @@ public class Delivery extends Observable{
     	this.duration = duration;
     }
 
-	/** The position. */
+	/** The Node on which the Delivery is. */
     protected Node position;
 
     /** The duration. */

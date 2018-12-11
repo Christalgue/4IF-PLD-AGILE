@@ -1,19 +1,18 @@
 package main.java.controller;
 
 import main.java.entity.Delivery;
-import main.java.entity.Node;
 import main.java.entity.Point;
 import main.java.exception.ManagementException;
 import main.java.view.Window;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface State.
+ * The Interface that will define the different states of the application.
  */
 public interface State {
 	
 	/**
-	 * Load map.
+	 * Load a map from a XML file.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -23,7 +22,7 @@ public interface State {
 	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList);
 	
 	/**
-	 * Load delivery offer.
+	 * Load a delivery offer from a XML file.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -33,17 +32,17 @@ public interface State {
 	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList);
 	
 	/**
-	 * Calculate circuits.
+	 * Calculate the circuits.
 	 *
 	 * @param controller the controller
 	 * @param window the window
-	 * @param nbDeliveryMan the nb delivery man
+	 * @param nbDeliveryMan the number of delivery man
 	 * @param commandsList the commands list
 	 */
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList);
 	
 	/**
-	 * Undo.
+	 * Undo the last action.
 	 *
 	 * @param controller the controller
 	 * @param commandsList the commands list
@@ -51,7 +50,7 @@ public interface State {
 	public void undo(Controller controller, CommandsList commandsList);
 	
 	/**
-	 * Redo.
+	 * Redo the last action.
 	 *
 	 * @param controller the controller
 	 * @param commandsList the commands list
@@ -59,7 +58,7 @@ public interface State {
 	public void redo(Controller controller, CommandsList commandsList);
 	
 	/**
-	 * Adds the delivery.
+	 * Method called when the user clicks on "Ajouter une livraison". Change the current state.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -67,17 +66,17 @@ public interface State {
 	public void addDelivery(Controller controller, Window window);
 	
 	/**
-	 * Validate.
+	 * Validate an action (add a delivery, delete a delivery ..).
 	 *
-	 * @param controler the controler
+	 * @param controller the controller
 	 * @param window the window
 	 * @param commandsList the commands list
 	 * @throws ManagementException the management exception
 	 */
-	public void validate(Controller controler, Window window, CommandsList commandsList) throws ManagementException;
+	public void validate(Controller controller, Window window, CommandsList commandsList) throws ManagementException;
 	
 	/**
-	 * Cancel.
+	 * Cancel an action.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -85,7 +84,7 @@ public interface State {
 	public void cancel(Controller controller, Window window);
 	
 	/**
-	 * Move delivery.
+	 * Method called when the user clicks on "Deplacer la livraison". Change the current state. 
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -93,7 +92,7 @@ public interface State {
 	public void moveDelivery (Controller controller, Window window);
 	
 	/**
-	 * Delete delivery.
+	 * Method called when the user clicks on "Supprimer la livraison". Change the current state.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -101,7 +100,7 @@ public interface State {
 	public void deleteDelivery(Controller controller, Window window);
 	
 	/**
-	 * Right click.
+	 * Method called when the user do a right click.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -109,7 +108,7 @@ public interface State {
 	public void rightClick(Controller controller, Window window);
 	
 	/**
-	 * Left click.
+	 * Method called when the user do a left click.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -118,7 +117,7 @@ public interface State {
 	public void leftClick(Controller controller, Window window, Point point);
 	
 	/**
-	 * Mouse moved.
+	 * Method called when the mouse move.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -127,7 +126,7 @@ public interface State {
 	public void mouseMoved(Controller controller, Window window, Point point);
 	
 	/**
-	 * Validate duration.
+	 * Validate the duration of a delivery.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -137,7 +136,7 @@ public interface State {
 	public void validateDuration (Controller controller, Window window, int duration, CommandsList commandsList);
 	
 	/**
-	 * Continue calculation.
+	 * Continue the circuits calculation.
 	 *
 	 * @param controller the controller
 	 * @param window the window
@@ -145,5 +144,13 @@ public interface State {
 	 */
 	public void continueCalculation(Controller controller, Window window, boolean keepCalculating);
 	
+
+	/**
+	 * Method called when the user clicks on a delivery on the tree of deliveries.
+	 *
+	 * @param controller the controller
+	 * @param window the window
+	 * @param commandsList the commands list
+	 */
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList);
 }

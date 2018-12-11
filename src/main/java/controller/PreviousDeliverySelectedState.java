@@ -7,13 +7,13 @@ import main.java.utils.PointUtil;
 import main.java.utils.PopUpType;
 import main.java.view.Window;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PreviousDeliverySelectedState.
+ * The State when the user has to click on the previous delivery to add a delivery after the circuits calculation.
  */
 public class PreviousDeliverySelectedState extends DefaultState {
 	
-	/** The node. */
+	/** The node to add. */
 	Node node;
 	
 	/** The duration. */
@@ -37,13 +37,14 @@ public class PreviousDeliverySelectedState extends DefaultState {
 		this.duration  = duration;
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.DefaultState#leftClick(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
 	 */
+	@Override
 	public void leftClick(Controller controller, Window window, Point point) {
 		Node previousNode = PointUtil.pointToNode(point, controller.circuitManagement);
-		window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 		if (previousNode != null) {
+			window.setMessage(controller.circuitManagement.getCurrentMap().displayIntersectionNode(node));
 			Delivery isDelivery = controller.getCircuitManagement().isDelivery(node);
 			window.nodeSelected(isDelivery);
 			window.circuitSelected(isDelivery);
@@ -56,15 +57,14 @@ public class PreviousDeliverySelectedState extends DefaultState {
 				controller.setCurrentState(controller.deliveryAddedState);
 				if(controller.getShowPopUp())
 					controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
-			} else {
-				// rajouter erreur IHM
-			}
+			} 
 		}
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
 	 */
+	@Override
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
 		window.nodeSelected(deliverySelected);
 		window.circuitSelected(deliverySelected);
@@ -77,9 +77,10 @@ public class PreviousDeliverySelectedState extends DefaultState {
 			controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
 	 */
+	@Override
 	public void mouseMoved(Controller controller, Window window, Point point) {
 		Node node = PointUtil.pointToNode(point, controller.circuitManagement);
 		if(node!=null) {
@@ -90,9 +91,10 @@ public class PreviousDeliverySelectedState extends DefaultState {
 		}
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see main.java.controller.DefaultState#cancel(main.java.controller.Controller, main.java.view.Window)
 	 */
+	@Override
 	public void cancel (Controller controller, Window window) {
 		controller.setCurrentState(controller.calcState);
 	}

@@ -1,18 +1,11 @@
 package main.java.entity;
 
-import java.util.*;
+import java.util.Calendar;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Repository.
+ * The Class Repository. Used to check if a Delivery is the Repository before editing it because we don't want the repository to be editable.
  */
 public class Repository extends Delivery {
-
-    /**
-     * Default constructor.
-     */
-    public Repository() {
-    }
     
     /**
      * Instantiates a new repository.

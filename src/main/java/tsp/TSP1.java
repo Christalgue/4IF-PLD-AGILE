@@ -1,13 +1,14 @@
 package main.java.tsp;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import main.java.entity.AtomicPath;
 import main.java.entity.Delivery;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class TSP1.
+ * The Class TSP1, implements the abstract superclass TemplateTSP and define its bound() an iterator() methods.
  */
 public class TSP1 extends TemplateTSP {
 
