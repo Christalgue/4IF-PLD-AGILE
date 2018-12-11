@@ -41,6 +41,9 @@ public class DurationChoiceBeforeCalcState extends DefaultState {
 	 */
 	@Override
 	public void cancel (Controller controller, Window window) {
+		window.setMessage("");
+		window.emptySelectedNode();
+		window.emptySelectedCircuit();
 		window.disableButtonAddDelivery();
 		controller.setCurrentState(controller.deliveryLoadedState);
 	}

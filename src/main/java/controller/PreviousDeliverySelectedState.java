@@ -96,6 +96,9 @@ public class PreviousDeliverySelectedState extends DefaultState {
 	 */
 	@Override
 	public void cancel (Controller controller, Window window) {
+		window.setMessage("");
+		window.emptySelectedNode();
+		window.emptySelectedCircuit();
 		controller.setCurrentState(controller.calcState);
 	}
 	

@@ -167,6 +167,7 @@ public void fillDeliveryTree() {
 				int durationMinutes = ((int)duration % 3600) / (int) 60;
 				circuit = new DefaultMutableTreeNode("Tournee "+ 
 						(circuitIndex+1) + ": Duree "+ durationHour + "h" + durationMinutes + "min" + (int)(duration%60) +"s");
+
 				treeModel.insertNodeInto(circuit, treeRoot, circuitIndex++);
 				
 				
