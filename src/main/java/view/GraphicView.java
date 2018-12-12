@@ -15,7 +15,6 @@ import main.java.entity.Point;
 import main.java.entity.Repository;
 import main.java.utils.PointUtil;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class GraphicView is a panel that graphically display the map, the deliveries and the circuits.
  */
