@@ -557,7 +557,7 @@ public class CircuitManagement extends Observable{
     						throw e;
     					}
         			}
-        			Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths);
+        			Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths, 15.0/3.6);
         			this.circuitsList.add(circuit);
         		}
         		//calculate each circuit after having created the instances to avoid the nullpointer exceptions in the view.

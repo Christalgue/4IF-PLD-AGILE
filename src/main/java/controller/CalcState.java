@@ -12,7 +12,6 @@ import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
 import main.java.exception.TSPLimitTimeReachedException;
 import main.java.utils.PointUtil;
-import main.java.utils.PopUpType;
 import main.java.view.Window;
 
 
@@ -33,6 +32,7 @@ public class CalcState extends DefaultState {
 		
 		try {
 			controller.getCircuitManagement().getCircuitsList().clear();
+			window.disableButtonContinueCalculation();
 			window.enableButtonAddDelivery();
 			window.disableGenerateRoadmapButton();
 			window.disableButtonCalculateCircuit();
@@ -61,6 +61,7 @@ public class CalcState extends DefaultState {
 		
 		try {
 			window.setMessage("");
+			window.disableButtonContinueCalculation();
 			controller.getCircuitManagement().getCircuitsList().clear();
 			window.enableButtonCalculateCircuit();
 			window.disableGenerateRoadmapButton();
@@ -86,6 +87,7 @@ public class CalcState extends DefaultState {
 		commandsList.reset();
 		try {
 			window.setMessage("");
+			window.disableButtonContinueCalculation();
 			controller.getCircuitManagement().calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
@@ -99,13 +101,39 @@ public class CalcState extends DefaultState {
 			window.setErrorMessage("Pas d'entrepot");
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
+			window.setMessage("Si vous voulez continuer le calcul veuillez cliquer sur \"continuer le calcul\".");
 			window.drawCircuits();
-			controller.setCurrentState(controller.calculatingState);
-			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+			window.enableButtonContinueCalculation();
 		} catch (DeliveriesNotLoadedException e) {
-			// TODO Auto-generated catch block
+			window.setErrorMessage("Pas de livraisons chargées");
 			e.printStackTrace();
 		}
+	}
+	
+	public void continueCalculation(Controller controller, Window window) {
+		
+			try {
+				window.disableButtonContinueCalculation();
+				controller.getCircuitManagement().calculateCircuits(controller.getCircuitManagement().getNbDeliveryMan(), true);
+				window.setMessage("Calcul Fini !! :D");
+				controller.setCurrentState(controller.calcState);
+			} catch (MapNotChargedException e) {
+				window.setErrorMessage("Carte non chargee");
+				e.printStackTrace();
+			} catch (DijkstraException e) {
+				window.setErrorMessage("Erreur lors du calcul des tournees");
+				e.printStackTrace();
+			} catch (NoRepositoryException e) {
+				window.setErrorMessage("Pas d'entrepot");
+				e.printStackTrace();
+			} catch (TSPLimitTimeReachedException e) {
+				window.setMessage("Si vous voulez continuer le calcul veuillez cliquer sur \"continuer le calcul\".");
+				window.drawCircuits();
+				window.enableButtonContinueCalculation();
+			} catch (DeliveriesNotLoadedException e) {
+				window.setErrorMessage("Pas de livraisons chargées");
+				e.printStackTrace();
+			}
 	}
 	
 	

@@ -25,11 +25,10 @@ public interface TSP {
 	 * @param limitTime the limit time
 	 * @param repository the repository
 	 * @param allPaths all the paths between each delivery
-	 * @param duration duration for each delivery @unused
 	 * @param continueInterruptedCalculation true if the method is called after having interrupted the calculation at least once
 	 * @throws TSPLimitTimeReachedException when the limit time we set for the calculation is reached before the end of the calculation
 	 */
-	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException;
+	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException;
 	
 	/**
 	 * Gets the cost of the best solution.

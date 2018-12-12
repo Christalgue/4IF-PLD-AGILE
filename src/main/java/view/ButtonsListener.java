@@ -70,10 +70,6 @@ public class ButtonsListener implements ActionListener {
 				controller.continueCalculation(true);
 				break;
 				
-			case Window.STOP_CALCULATION:
-				controller.continueCalculation(false);
-				break;
-				
 			case Window.UNDO:
 				controller.undo();
 				break;

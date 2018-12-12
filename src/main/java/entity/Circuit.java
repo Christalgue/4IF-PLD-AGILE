@@ -24,6 +24,9 @@ public class Circuit extends Observable {
 	/** The circuit's length. */
 	private double circuitLength;
 	
+	/** The speed. */
+	private double speed;
+	
 	/** The circuit duration. */
 	private double circuitDuration;
 
@@ -32,7 +35,6 @@ public class Circuit extends Observable {
 
 	/** The delivery list. */
 	private List<Delivery> deliveryList;
-	
 	
 	/** The repository. */
 	private Repository repositorySVG = null;
@@ -60,9 +62,12 @@ public class Circuit extends Observable {
 	 * @param deliveries the deliveries
 	 * @param repository the repository
 	 * @param allPaths all the paths between each delivery
+	 * @param speed the speed of the delivery man
 	 */
-	public Circuit(List<Delivery> deliveries, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
+	public Circuit(List<Delivery> deliveries, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, double speed) {
 		this.tsp = new TSP1();
+		this.speed = speed;
+		tsp.setSpeed(speed);
 		this.deliveryList = deliveries;
 		this.repositorySVG = repository;
 		this.allPathsSVG = allPaths;
@@ -108,7 +113,7 @@ public class Circuit extends Observable {
 	 * @return the double
 	 */
 	protected double calculateDuration() {
-		double result = (circuitLength*3600.0)/(15.0*1000.0);
+		double result = circuitLength/speed;
 		for(Delivery d : deliveryList) {
 			result += d.getDuration();
 		}
@@ -129,7 +134,7 @@ public class Circuit extends Observable {
 			boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException {
 		TSPLimitTimeReachedException timeException = null;
 		try {
-			tsp.searchSolution(1000, repository, allPaths, null, continueInterruptedCalculation);
+			tsp.searchSolution(500, repository, allPaths, continueInterruptedCalculation);
 		} catch (TSPLimitTimeReachedException e) {
 			this.calculationIsFinished = false;
 			timeException = e;
@@ -261,6 +266,15 @@ public class Circuit extends Observable {
 		this.deliveryList = deliveryList;
 	}
 	
+	/**
+	 * Sets the speed.
+	 *
+	 * @param speed the new speed
+	 */
+	protected void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
 	/**
 	 * Check if a node belong to the circuit.
 	 *

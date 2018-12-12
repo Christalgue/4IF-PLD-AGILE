@@ -47,7 +47,6 @@ public class Window extends JFrame{
 	protected static final String DELETE_DELIVERY = "Supprimer la livraison";
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
-	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
 	protected static final String UNDO = "Retour";
 	protected static final String REDO = "Suivant";
 	protected static final String CANCEL = "Annuler";
@@ -69,6 +68,7 @@ public class Window extends JFrame{
 	
 	protected static JButton loadDeliveryList;
 	protected static JButton calculateCircuitButton;
+	protected static JButton continueCalculateCircuitButton;
 	protected static JButton addDeliveryButton;
 	protected static JButton deleteDeliveryButton;
 	protected static JButton moveDeliveryButton;
@@ -84,7 +84,7 @@ public class Window extends JFrame{
 	protected static JButton resetScaleButton;
 	protected static JButton generateRoadmapButton;
 	
-	protected static final int windowWidth = 1400;
+	protected static final int windowWidth = 1500;
 	protected static final int windowHeight = 720;
 	protected static final int buttonPanelHeight =50;
 	protected static final int graphicWidth = 1030;
@@ -366,6 +366,10 @@ public class Window extends JFrame{
 		calculateCircuitButton.setEnabled(false);
 		buttonPanel.add(calculateCircuitButton);
 		
+		continueCalculateCircuitButton = new JButton(CONTINUE_CALCULATION);
+		continueCalculateCircuitButton.addActionListener(buttonsListener);
+		continueCalculateCircuitButton.setEnabled(false);
+		buttonPanel.add(continueCalculateCircuitButton);
 		cancelAddButton = new JButton(CANCEL);
 		cancelAddButton.addActionListener(buttonsListener);
 		cancelAddButton.setEnabled(false);
@@ -497,6 +501,11 @@ public class Window extends JFrame{
 		calculateCircuitButton.setEnabled(true);
 	}	
 	
+	public void enableButtonContinueCalculation() {
+		continueCalculateCircuitButton.setVisible(true);
+		continueCalculateCircuitButton.setEnabled(true);
+	}
+	
 	public void enableButtonUndo() {
 		undoButton.setEnabled(true);
 	}
@@ -554,7 +563,11 @@ public class Window extends JFrame{
 	
 	public void disableButtonCalculateCircuit() {
 		calculateCircuitButton.setEnabled(false);
-	}	
+	}
+	
+	public void disableButtonContinueCalculation() {
+		continueCalculateCircuitButton.setEnabled(false);
+	}
 	
 	public void disableButtonAddDelivery() {
 		addDeliveryButton.setEnabled(false);
