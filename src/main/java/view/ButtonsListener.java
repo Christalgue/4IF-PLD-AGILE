@@ -77,91 +77,114 @@ public class ButtonsListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) { 
 		// Method called by the button listener each time a button is clicked
-		// Send to controller a message associated to the clicked button
+		// Each case call either a method of the controller or a method of the window
 		switch (e.getActionCommand()){
+			// When the user wants to load the map.
 			case  Window.LOAD_MAP:
 				String mapName = controller.getWindow().getFile();
 				if (mapName != "")
 					controller.loadMap(mapName);
 				break;
-				
+			
+			// When the user wants to load the list of the deliveries.
 			case Window.LOAD_DELIVERY_OFFER:
 				String deliveryListName = controller.getWindow().getFile();
 				if (deliveryListName != "")
 					controller.loadDeliveryOffer(deliveryListName);
 				break;
 				
+			// When the user wants to calculate the circuits.
 			case Window.CALCULATE_CIRCUITS: 
 				if (controller.getWindow().getDeliveryMenNumber())
 					controller.calculateCircuits(deliveryMenNumber); 
 				break;
 				
+			// When the user wants to add a delivery.
 			case Window.ADD_DELIVERY: 
 				controller.addDelivery(); 
 				break;
 				
+			// When the user want to find a better circuit after the timeout in the Travelling Salesman Problem.
 			case Window.CONTINUE_CALCULATION:
 				controller.continueCalculation(true);
 				break;
 				
+			// When the user wants to undo his previous action.
 			case Window.UNDO:
 				controller.undo();
 				break;
 			
+			// When the user wants to redo an action he undid.
 			case Window.REDO:
 				controller.redo();
 				break;
 				
+			// When the user wants to zoom using the button.
 			case Window.ZOOM:
 				controller.getWindow().zoom();
 				controller.getWindow().enableResetScaleButton();
 				break;
 			
+			// When the user wants to unzoom using the button.
 			case Window.UNZOOM:
 				controller.getWindow().unZoom();
 				controller.getWindow().enableResetScaleButton();
 				break;
 				
+			// When the user wants to cancel the add or the move of a delivery when he has to select the previous delivery 
+			// to place the added or the moved delivery in the chosen circuit.
 			case Window.CANCEL:
 				controller.cancelAdd();
 				break;
 				
+			// When he user wants to reset the moves, zooms and unzooms he did on the graphic view and go to the initial display
 			case Window.RESET_SCALE:
 				controller.getWindow().resetScale();
 				controller.getWindow().disableResetScaleButton();
 				controller.getWindow().drawCircuits();
 				break;
 				
+			// When the user wants to generate files which contain the road map for the delivery men.
 			case Window.GENERATE_ROADMAP:
 				String folderPath = controller.getWindow().getFolder();
 				if (folderPath != "")
 					Serializer.serializer(folderPath, controller.getCircuitManagement());
 				break;
 				
+			// When the user wants to move a delivery after selected it.
 			case Window.MOVE_DELIVERY: 
 				controller.moveDelivery();
 				break;
 				
+			// When the user wants to delete a delivery after selected it.
 			case Window.DELETE_DELIVERY: 
 				controller.deleteDelivery(); 
 				break;
 				
+			// When the user wants to go up on the map
 			case Window.UP:
+				// Do an upward shift of 50 pixels 
 				controller.getWindow().verticalShift(-50);
 				controller.getWindow().enableResetScaleButton();
 				break;
 			
+			// When the user wants to go down on the map
 			case Window.DOWN:
+				// Do a downward shift of 50 pixels 
 				controller.getWindow().verticalShift(50);
 				controller.getWindow().enableResetScaleButton();
 				break;
 				
+			// When the user wants to go right on the map
 			case Window.RIGHT:
+				// Do a right shift of 50 pixels 
 				controller.getWindow().horizontalShift(50);
 				controller.getWindow().enableResetScaleButton();
 				break;
 			
+			// When the user wants to go left on the map
 			case Window.LEFT:
+				// Do a left shift of 50 pixels 
 				controller.getWindow().horizontalShift(-50);
 				controller.getWindow().enableResetScaleButton();
 				break;
