@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.TextField;
 import java.util.HashMap;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -26,8 +25,6 @@ import main.java.entity.Repository;
 import main.java.exception.ManagementException;
 import main.java.utils.PopUpType;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class Window.
  */
@@ -182,7 +179,7 @@ public class Window extends JFrame{
 	/** The zoom button. */
 	protected JButton zoomButton;
 	
-	/** The un zoom button. */
+	/** The unzoom button. */
 	protected JButton unZoomButton;
 	
 	/** The cancel add button. */
@@ -287,9 +284,11 @@ public class Window extends JFrame{
 		CircuitManagement circuitManagement = controller.getCircuitManagement();
 		
 		//////////////////////////////SET UP THE MAIN WINDOW//////////////////////////////
+		
 		setControllerWindow();
 		
 		//////////////////////////////CREATE THE HEADER PANEL/////////////////////////////
+		
 		JPanel buttonPanel = new JPanel();
 		fillButtonPanel(buttonPanel);
 		
@@ -314,14 +313,15 @@ public class Window extends JFrame{
 		setMessageField(messageField);
 		
 		//////////////////////////////ADD PANELS TO THE WINDOW//////////////////////////////
+		
 		getContentPane().add(buttonPanel);
 		getContentPane().add(textualView);
 		getContentPane().add(messageField);
 		getContentPane().add(graphicView);
 		
 		////////////////////////////// MAKE THE FRAME VISBLE AND PAINTABLE ////////////////////////////////
-		setVisible(true);
 		
+		setVisible(true);
 		graphicView.setGraphics();
 		
 	}
@@ -329,7 +329,7 @@ public class Window extends JFrame{
 	//////////////////////////////PUT COMPOSANTS IN PLACE/////////////////////////////
 
 	/**
-	 * Sets the controller window.
+	 * Sets the parameters of Window.
 	 */
 	public void setControllerWindow() {
 		
@@ -434,10 +434,11 @@ public class Window extends JFrame{
 	/**
 	 * Adds the icon to button.
 	 *
-	 * @param button the button
-	 * @param path the path
+	 * @param button the button which will have the icon
+	 * @param path the path of the icon
 	 */
 	private void addIconToButton (JButton button, String path) {
+		// Catch error if the path for the icon is not correct or does not lead to an icon
 		try {
 		    ImageIcon img = new ImageIcon(path);
 		    button.setIcon(img);
@@ -542,7 +543,6 @@ public class Window extends JFrame{
 		// Create and add button to add a delivery to deliveries' list to textualView
 		addDeliveryButton = new JButton(ADD_DELIVERY);
 		addDeliveryButton.addActionListener(buttonsListener);
-		addDeliveryButton.setVisible(true);
 		addDeliveryButton.setEnabled(false);
 		addDeliveryButton.setLocation(150, windowHeight-buttonPanelHeight-(buttonHeight*3+2*buttonSpace+50));
 		addDeliveryButton.setSize(windowWidth-graphicWidth-160, buttonHeight);
@@ -551,7 +551,6 @@ public class Window extends JFrame{
 		// Create and add button to delete a delivery from deliveries' list to textualView
 		deleteDeliveryButton = new JButton(DELETE_DELIVERY);
 		deleteDeliveryButton.addActionListener(buttonsListener);
-		deleteDeliveryButton.setVisible(true);
 		deleteDeliveryButton.setEnabled(false);
 		deleteDeliveryButton.setLocation(150, windowHeight-buttonPanelHeight-(buttonHeight*2+buttonSpace+50));
 		deleteDeliveryButton.setSize(windowWidth-graphicWidth-160, buttonHeight);
@@ -560,7 +559,6 @@ public class Window extends JFrame{
 		// Create and add button to move a delivery from a circuit to another to textualView
 		moveDeliveryButton = new JButton(MOVE_DELIVERY);
 		moveDeliveryButton.addActionListener(buttonsListener);
-		moveDeliveryButton.setVisible(true);
 		moveDeliveryButton.setEnabled(false);
 		moveDeliveryButton.setLocation(150, windowHeight-buttonPanelHeight-(buttonHeight+50));
 		moveDeliveryButton.setSize(windowWidth-graphicWidth-160, buttonHeight);
@@ -682,18 +680,20 @@ public class Window extends JFrame{
 	
 
 	/**
-	 * Gets the file.
+	 * Gets the file path.
 	 *
-	 * @return the file
+	 * @return the file path of the file to open selected by the user in the file chooser
 	 */
 	//////////////////////////////GET DATAS FROM WINDOW/////////////////////////////
-	protected String getFile () {
-			
+	protected String getFilePath () {
+		
+		// Create and set parameters of the file chooser.
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
 		int returnValue = chooser.showOpenDialog(controller.getWindow());
 		String filePath = "";
 		
+		// Test if the user clicked on the button "Open" of the file chooser
 		if(returnValue == JFileChooser.APPROVE_OPTION){
 			filePath = chooser.getSelectedFile().getAbsolutePath();
 		}
@@ -702,18 +702,20 @@ public class Window extends JFrame{
 	}
 	
 	/**
-	 * Gets the folder.
+	 * Gets the folder path.
 	 *
-	 * @return the folder
+	 * @return the folder path selected by the user in the file chooser
 	 */
-	protected String getFolder() {
+	protected String getFolderPath() {
 		
+		// Create and set parameters of the file chooser.
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int returnValue = chooser.showOpenDialog(controller.getWindow());
 		String folderPath = "";
 		
+		// Test if the user clicked on the button "Open" of the file chooser.
 		if(returnValue == JFileChooser.APPROVE_OPTION){
 			folderPath = chooser.getSelectedFile().getAbsolutePath();
 		}
@@ -722,24 +724,33 @@ public class Window extends JFrame{
 	}
 
 	/**
-	 * Gets the delivery men number.
+	 * Gets the delivery men number entered by the user in the text field.
 	 *
 	 * @return the delivery men number
 	 */
 	public boolean getDeliveryMenNumber() {
 		
+		// Variable to know if the value entered by the user is correct or not.
 		boolean correctValue = false;
 		int numberOfDeliveries = controller.getCircuitManagement().getDeliveryList().size();
+		
 		try{
         	String numberOfDeliveryMen = numberOfDeliveryMenField.getText();
             int numberOfDeliveryMenValue = Integer.parseInt(numberOfDeliveryMen);
+            // Test if the number entered is lesser or equal than 0 and greater than the number of delivery.
+            // The -1 is here because the repository is stocked in the delivery list because it is the starting point of all circuits 
+            // but it doesn't count as a delivery point.
             if (numberOfDeliveryMenValue <= 0 || numberOfDeliveryMenValue > numberOfDeliveries -1) {
+            	// Display the error pop up
             	PopUp.errorPopUp(this, false, numberOfDeliveries);
+        	// If the entry is correct
             } else {
             	buttonsListener.setDeliveryMenNumber(numberOfDeliveryMenValue);
             	correctValue = true;
             }
+        // Catch errors when converting the string of the text field into an integer.
         } catch(Exception parseException) {
+        	// Display the error pop up
         	PopUp.errorPopUp(this, false, numberOfDeliveries);
         }
 		return correctValue;
@@ -751,9 +762,9 @@ public class Window extends JFrame{
 	/**
 	 * Sets the message.
 	 *
-	 * @param string the new message
+	 * @param string a message to display in the message field
 	 */
-	public void setMessage( String string) {
+	public void setMessage(String string) {
 		messageField.setBackground(Color.DARK_GRAY);
 		messageField.setText(string);
 	}
@@ -761,9 +772,9 @@ public class Window extends JFrame{
 	/**
 	 * Sets the error message.
 	 *
-	 * @param string the new error message
+	 * @param string an error message to display in the message field
 	 */
-	public void setErrorMessage( String string) {
+	public void setErrorMessage(String string) {
 		messageField.setBackground(Color.RED);
 		messageField.setText(string);
 	}
@@ -771,7 +782,7 @@ public class Window extends JFrame{
 	/**
 	 * Sets the warning message.
 	 *
-	 * @param string the new warning message
+	 * @param string a warning message to display in the message field
 	 */
 	public void setWarningMessage(String string) {
 		messageField.setBackground(Color.ORANGE);
@@ -810,7 +821,7 @@ public class Window extends JFrame{
 	public void drawCircuits() {
 		drawDeliveries();
 		graphicView.paintCircuits();
-		if ( controller.getCircuitManagement().getCircuitsList()!= null) {
+		if (controller.getCircuitManagement().getCircuitsList()!= null) {
 			textualView.emptyTree();
 			textualView.fillCircuitTree();
 		}
@@ -836,7 +847,6 @@ public class Window extends JFrame{
 	 * Enable button continue calculation.
 	 */
 	public void enableButtonContinueCalculation() {
-		continueCalculateCircuitButton.setVisible(true);
 		continueCalculateCircuitButton.setEnabled(true);
 	}
 	
@@ -995,25 +1005,26 @@ public class Window extends JFrame{
 		generateRoadmapButton.setEnabled(false);
 	}
 	
+	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
+	
 	/**
 	 * Gets the pop up value.
 	 *
-	 * @param message the message
+	 * @param message the message to display in the pop up
 	 * @param window the window
-	 * @return the pop up value
+	 * @return the pop up value corresponding to the button clicked by the user.
 	 */
-	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
 	public int getPopUpValue(PopUpType message, Window window) {
-		
 		return popUp.displayPopUp(message, window);
 	}
 	
 	/**
 	 * Manage add pop up value.
 	 *
-	 * @param userChoice the user choice
+	 * @param userChoice the user choice corresponding to the button clicked by the user
 	 */
 	public void manageAddPopUpValue(int userChoice) {
+		// Test if the user clicked on validate in the pop up.
 		if (userChoice == 0) {
 			try {
 				controller.validateAdd();
@@ -1031,6 +1042,7 @@ public class Window extends JFrame{
 	 * @param userChoice the user choice
 	 */
 	public void manageDeletePopUpValue(int userChoice) {
+		// Test if the user clicked on validate in the pop up.
 		if (userChoice == 0) {
 			try {
 				controller.validateDelete();
@@ -1048,6 +1060,7 @@ public class Window extends JFrame{
  	 * @param inputValue the input value
  	 */
  	public void manageDurationPopUpValue(int inputValue) {
+ 	// Test if the user clicked on validate in the pop up.
 		 if (inputValue >= 0) {
 			try {
 				controller.validateDuration(inputValue);
@@ -1065,6 +1078,7 @@ public class Window extends JFrame{
 	 * @param userChoice the user choice
 	 */
 	public void manageMovePopUpValue(int userChoice) {
+		// Test if the user clicked on validate in the pop up.
 		if (userChoice == 0) {
 			try {
 				controller.validateMove();
@@ -1075,19 +1089,6 @@ public class Window extends JFrame{
 			controller.cancelMove();
 		}
 	}
-	
-	 /**
- 	 * Manage continue pop up value.
- 	 *
- 	 * @param userChoice the user choice
- 	 */
- 	public void manageContinuePopUpValue(int userChoice) {
-		if (userChoice == 0) {
-			controller.continueCalculation(false);
-		} else if (userChoice == 1) {
-			controller.continueCalculation(true);
-		}
-	 }
 	 
 	 //////////////////////////////GRAPHIC DISPLAY/////////////////////////////
 	 
