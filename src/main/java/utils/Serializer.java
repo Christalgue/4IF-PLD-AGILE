@@ -14,6 +14,13 @@ import main.java.entity.Node;
 
 public class Serializer {
 	
+	
+	/**
+	 * Serialize the circuits contained in circuitManager to different files created in the
+	 * repository indicated by path
+	 * @param the path to the repository that will hold the files
+	 * @param CircuitManagement containing the circuits that we want to serialize
+	 */
 	public static void serializer(String path, CircuitManagement circuitManager) {
 		List<Circuit> circuits = circuitManager.getCircuitsList();
 		Circuit circuit;
