@@ -34,6 +34,7 @@ public class DeliveryDeletedState extends DefaultState{
 		commandsList.addCommand(new RemoveDeliveryCommand(window,node,controller.getCircuitManagement()));
 		window.disableButtonDeleteDelivery();
 		window.disableButtonMoveDelivery();
+		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}
 	
@@ -44,6 +45,7 @@ public class DeliveryDeletedState extends DefaultState{
 	public void cancel (Controller controller, Window window) {
 		window.disableButtonDeleteDelivery();
 		window.disableButtonMoveDelivery();
+		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}
 

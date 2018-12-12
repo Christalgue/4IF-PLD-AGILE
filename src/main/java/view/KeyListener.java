@@ -3,18 +3,37 @@ package main.java.view;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
 import main.java.controller.Controller;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The listener interface for receiving key events.
+ * The class that is interested in processing a key
+ * event implements this interface, and the object created
+ * with that class is registered with a component using the
+ * component's <code>addKeyListener<code> method. When
+ * the key event occurs, that object's appropriate
+ * method is invoked.
+ *
+ * @see KeyEvent
+ */
 public class KeyListener extends KeyAdapter {
 
+	/** The controller. */
 	private Controller controller;
 
+	/**
+	 * Instantiates a new key listener.
+	 *
+	 * @param controller the controller
+	 */
 	public KeyListener(Controller controller){
 		this.controller = controller;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.KeyAdapter#keyPressed(java.awt.event.KeyEvent)
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// Called by the key listener each time a key is pressed

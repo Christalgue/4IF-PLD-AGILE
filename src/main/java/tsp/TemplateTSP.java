@@ -9,6 +9,7 @@ import main.java.entity.Delivery;
 import main.java.entity.Repository;
 import main.java.exception.TSPLimitTimeReachedException;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class TemplateTSP.
  */
@@ -23,7 +24,9 @@ public abstract class TemplateTSP implements TSP {
 	/** The limit time has been reached or not. */
 	private Boolean limitTimeReached;
 	
-	
+	/** The speed. */
+	private double speed;
+
 	/** The current delivery saved in memory to continue the calculation if wanted. */
 	private Delivery currentDeliverySVG;
 	
@@ -35,9 +38,6 @@ public abstract class TemplateTSP implements TSP {
 	
 	/** The cost associated to the list of viewed deliveries saved in memory to continue the calculation if wanted. */
 	private double viewedCostSVG;
-	
-	/** The duration for each delivery saved in memory to continue the calculation if wanted. @unused */
-	private int[] durationSVG = null;
 	
 	/** The execution stack to keep a trace of where we were when the calculation stopped because of the limit time exception so that we can continue it if wanted. */
 	protected ArrayList<Delivery> executionStack = null;
@@ -52,7 +52,7 @@ public abstract class TemplateTSP implements TSP {
 	/* (non-Javadoc)
 	 * @see main.java.tsp.TSP#searchSolution(int, main.java.entity.Repository, java.util.HashMap, int[], boolean)
 	 */
-	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException{
+	public void searchSolution(int limitTime, Repository repository, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException{
 		limitTimeReached = false;
 		if (continueInterruptedCalculation == false) {
 			costBestSolution = Double.MAX_VALUE;
@@ -63,7 +63,7 @@ public abstract class TemplateTSP implements TSP {
 			viewed.add(repository); // the first "node" visited is the repository 
 			this.executionStack = new ArrayList<Delivery>();
 			this.executionStack.add(repository);
-			branchAndBound(repository, nonViewed, viewed, 0, allPaths, duration, System.currentTimeMillis(), limitTime);
+			branchAndBound(repository, nonViewed, viewed, 0, allPaths, System.currentTimeMillis(), limitTime);
 
 			
 		} else {
@@ -86,13 +86,13 @@ public abstract class TemplateTSP implements TSP {
 		ArrayList<Delivery> viewed = new ArrayList<Delivery>(viewedSVG);
 		ArrayList<Delivery> nonViewed = new ArrayList<Delivery>(nonViewedSVG);
 		double viewedCost = viewedCostSVG;
-		branchAndBound(currentDeliverySVG, nonViewed, viewed, viewedCost, allPaths, durationSVG, startingTime, limitTime);
+		branchAndBound(currentDeliverySVG, nonViewed, viewed, viewedCost, allPaths, startingTime, limitTime);
 		Delivery lastDeliveryTreated = currentDeliverySVG;
 		viewed.remove(currentDeliverySVG);
 		
 		// unstack the execution stack
 		this.executionStack.remove(currentDeliverySVG);
-		viewedCost -= allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDeliverySVG).getLength();
+		viewedCost -= ( allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDeliverySVG).getLength() ) / this.speed;
 		nonViewed.add(currentDeliverySVG);
 		
 		// set up the initial conditions to continue unstacking
@@ -106,7 +106,7 @@ public abstract class TemplateTSP implements TSP {
 			
 			//create the iterator and fix it to the good value
 			currentDelivery = this.executionStack.get(this.executionStack.size()-1);
-			Iterator<Delivery> it = iterator(currentDelivery, nonViewed, allPaths, durationSVG);
+			Iterator<Delivery> it = iterator(currentDelivery, nonViewed, allPaths, 0);
 			
 			nextDeliveryFound = false;
 			while(it.hasNext() && nextDeliveryFound == false) {
@@ -119,8 +119,8 @@ public abstract class TemplateTSP implements TSP {
 				viewed.add(nextDelivery);
 	        	this.executionStack.add(nextDelivery);
 	        	nonViewed.remove(nextDelivery);
-	        	branchAndBound(nextDelivery, nonViewed, viewed, viewedCost + allPaths.get(currentDelivery).get(nextDelivery).getLength()/*+ duration[prochainSommet]*/,
-	        			allPaths, durationSVG, startingTime, limitTime);
+	        	branchAndBound(nextDelivery, nonViewed, viewed, viewedCost + (allPaths.get(currentDelivery).get(nextDelivery).getLength()/this.speed) + nextDelivery.getDuration(),
+	        			allPaths, startingTime, limitTime);
 	        	viewed.remove(nextDelivery);
 	        	this.executionStack.remove(nextDelivery);
 	        	nonViewed.add(nextDelivery);
@@ -131,8 +131,8 @@ public abstract class TemplateTSP implements TSP {
 		        	
 		        	nonViewed.remove(nextDelivery);
 		        	
-		        	branchAndBound(nextDelivery, nonViewed, viewed, viewedCost + allPaths.get(currentDelivery).get(nextDelivery).getLength()/*+ duration[prochainSommet]*/,
-		        			allPaths, durationSVG, startingTime, limitTime);
+		        	branchAndBound(nextDelivery, nonViewed, viewed, viewedCost + (allPaths.get(currentDelivery).get(nextDelivery).getLength()/this.speed) + nextDelivery.getDuration(),
+		        			allPaths, startingTime, limitTime);
 		        	viewed.remove(nextDelivery);
 		        	this.executionStack.remove(nextDelivery);
 		        	nonViewed.add(nextDelivery);
@@ -144,7 +144,7 @@ public abstract class TemplateTSP implements TSP {
 			viewed.remove(currentDelivery);
 			this.executionStack.remove(currentDelivery);
 			if(this.executionStack.size()>0) {
-				viewedCost -= allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDelivery).getLength();
+				viewedCost -= (allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDelivery).getLength()/speed) + currentDelivery.getDuration();
 				nonViewed.add(currentDelivery);
 			} else {
 				continueUnstack = false;
@@ -170,6 +170,15 @@ public abstract class TemplateTSP implements TSP {
 		this.bestSolution = bestSolution;
 	}
 
+	/**
+	 * Sets the speed.
+	 *
+	 * @param speed the new speed
+	 */
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
 	/* (non-Javadoc)
 	 * @see main.java.tsp.TSP#getCostBestSolution()
 	 */
@@ -184,15 +193,12 @@ public abstract class TemplateTSP implements TSP {
 	 * @param nonViewed the list of non viewed deliveries
 	 * @param viewed the list of viewed deliveries
 	 * @param viewedCost the cost of the circuit composed by the viewed deliveries
-	 * @param duration duration for each delivery @unused
 	 */
-	private void saveCurrentStateOfCalculation(Delivery currentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost,
-			int[] duration) {
+	private void saveCurrentStateOfCalculation(Delivery currentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost) {
 		this.currentDeliverySVG = currentDelivery;
 		this.nonViewedSVG = nonViewed;
 		this.viewedSVG = viewed;
 		this.viewedCostSVG = viewedCost;
-		this.durationSVG = duration;
 	}
 	
 	/**
@@ -201,10 +207,9 @@ public abstract class TemplateTSP implements TSP {
 	 * @param delivery the delivery
 	 * @param nonViewed : list of the deliveries we still need to visit
 	 * @param allPaths : used as cost to go from every delivery to every other
-	 * @param duration : duration for each delivery @unused
 	 * @return the minimum path starting and finishing by the repository, passing by every other delivery
 	 */
-	protected abstract int bound(Delivery delivery, ArrayList<Delivery> nonViewed, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration);
+	protected abstract int bound(Delivery delivery, ArrayList<Delivery> nonViewed, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths);
 	
 	/**
 	 * Method to redefine in the classes that extend TemplateTSP.
@@ -212,29 +217,28 @@ public abstract class TemplateTSP implements TSP {
 	 * @param currentDelivery the current delivery
 	 * @param nonViewed : list of the deliveries we still need to visit
 	 * @param allPaths : used as cost to go from every delivery to every other
-	 * @param duration : duration for each delivery @unused
+	 * @param speed TODO
 	 * @return iterator for the list of non viewed deliveries
 	 */
 	protected abstract Iterator<Delivery> iterator(Delivery currentDelivery, ArrayList<Delivery> nonViewed,
-			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration);
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, double speed);
 	
 	/**
-	 * Method that define the template of a resolution of the TSP by branch and bound 
+	 * Method that define the template of a resolution of the TSP by branch and bound .
 	 *
 	 * @param currentDelivery the last delivery visited
 	 * @param nonViewed : list of the deliveries we still need to visit
 	 * @param viewed : list of the deliveries we have already visited
 	 * @param viewedCost : cost of the path we are building
 	 * @param allPaths : used as cost to go from every delivery to every other
-	 * @param duration : time spent to visit a delivery
 	 * @param startingTime : time when the resolution started
 	 * @param limitTime : maximum time that the resolution is allowed to take
 	 * @throws TSPLimitTimeReachedException when the limit time we set for the calculation is reached before the end of the calculation
 	 */	
-	 private void branchAndBound(Delivery currentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, int[] duration, long startingTime, int limitTime) throws TSPLimitTimeReachedException{
+	 private void branchAndBound(Delivery currentDelivery, ArrayList<Delivery> nonViewed, ArrayList<Delivery> viewed, double viewedCost, HashMap<Delivery,HashMap<Delivery,AtomicPath>> allPaths, long startingTime, int limitTime) throws TSPLimitTimeReachedException{
 		 if (System.currentTimeMillis() - startingTime > limitTime){
 			 limitTimeReached = true;
-			 saveCurrentStateOfCalculation(currentDelivery, nonViewed, viewed, viewedCost, duration);
+			 saveCurrentStateOfCalculation(currentDelivery, nonViewed, viewed, viewedCost);
 			 throw new TSPLimitTimeReachedException("Branch and Bound of the circuit : " + allPaths.keySet().toString());
 		 }
 	    if (nonViewed.size() == 0){ // all the deliveries have been visited 
@@ -249,8 +253,8 @@ public abstract class TemplateTSP implements TSP {
 		    		costBestSolution = viewedCost;
 		    	}
 	    	}
-	    } else if (viewedCost + bound(currentDelivery, nonViewed, allPaths, duration) < costBestSolution){
-	        Iterator<Delivery> it = iterator(currentDelivery, nonViewed, allPaths, duration);
+	    } else if (viewedCost + bound(currentDelivery, nonViewed, allPaths) < costBestSolution){
+	        Iterator<Delivery> it = iterator(currentDelivery, nonViewed, allPaths, this.speed);
 	        while (it.hasNext()){
 	        	Delivery nextDelivery = it.next();
 	        	viewed.add(nextDelivery);
@@ -258,8 +262,8 @@ public abstract class TemplateTSP implements TSP {
 	        	
 	        	nonViewed.remove(nextDelivery);
 	        	
-	        	branchAndBound(nextDelivery, nonViewed, viewed, viewedCost + allPaths.get(currentDelivery).get(nextDelivery).getLength()/*allPathes[indexCurrentDelivery][prochainSommet]*/ /*+ duration[prochainSommet]*/,
-	        			allPaths, duration, startingTime, limitTime);
+	        	branchAndBound(nextDelivery, nonViewed, viewed, viewedCost + (allPaths.get(currentDelivery).get(nextDelivery).getLength()/this.speed) + nextDelivery.getDuration(),
+	        			allPaths, startingTime, limitTime);
 	        	viewed.remove(nextDelivery);
 	        	this.executionStack.remove(nextDelivery);
 	        	nonViewed.add(nextDelivery);

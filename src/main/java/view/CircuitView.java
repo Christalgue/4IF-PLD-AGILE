@@ -1,41 +1,47 @@
 package main.java.view;
 
-import main.java.entity.Circuit;
-
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
 import javax.swing.JPanel;
 
 import main.java.entity.AtomicPath;
 import main.java.entity.Bow;
+import main.java.entity.Circuit;
 import main.java.entity.Node;
-import main.java.entity.Point;  
-
-import java.awt.*;
+import main.java.entity.Point;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CircuitView.
+ */
 public class CircuitView extends JPanel {
 	
 	/**
-     * Default constructor
-     */
+	 * Default constructor.
+	 */
     public CircuitView() {
     }
     
+	/** The graphic view. */
 	private GraphicView graphicView;
     
-    /**
-     * The width of the circuit
-     */
+    /** The width of the circuit. */
     private int roadWidth;
     
+    /** The arrow length. */
     private int arrowLength;
     
+    /** The arrow width. */
     private int arrowWidth;
     
     /**
+     * Instantiates a new circuit view.
+     *
      * @param graphicView The graphic view where the circuit is drawn
-     * @param color The color of the circuit
      * @param width The width of the circuit
      */
     public CircuitView( GraphicView graphicView, int width) {
@@ -46,13 +52,21 @@ public class CircuitView extends JPanel {
     }
     
     /**
-     * 
+     * Gets the road width.
+     *
      * @return The width of the circuit
      */
     protected int getRoadWidth() {
     	return roadWidth;
     }
 
+	/**
+	 * Paint circuit.
+	 *
+	 * @param g the g
+	 * @param circuit the circuit
+	 * @param color the color
+	 */
 	protected void paintCircuit ( Graphics2D g, Circuit circuit, Color color ) {
 		
 		int atomicPathIndex = 0;
@@ -100,6 +114,12 @@ public class CircuitView extends JPanel {
 		
 	}	
 	
+	/**
+	 * Draw bow.
+	 *
+	 * @param g the g
+	 * @param bow the bow
+	 */
 	public void drawBow( Graphics2D g, Bow bow) {
 		
 		Node startNode = bow.getStartNode();
@@ -113,6 +133,13 @@ public class CircuitView extends JPanel {
 		
 	}
 	
+	/**
+	 * Draw arrow.
+	 *
+	 * @param g the g
+	 * @param start the start
+	 * @param end the end
+	 */
 	public void drawArrow( Graphics2D g, Point start, Point end) {
 		
 		int xPoints [] = new int[3];

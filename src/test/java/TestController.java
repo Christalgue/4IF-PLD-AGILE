@@ -61,7 +61,7 @@ class TestController {
 		assertTrue(c.toString().contains("State : DeliveryLoadedState"),"Expected <State : DeliveryLoadedState>, got <"+c.toString()+">");
 		
 		c.leftClick(newDelivery);
-		c.treeDeliverySelected(cm.getDeliveryList().get(0));
+		c.treeDeliverySelected(cm.getDeliveryList().get(1));
 		assertTrue(c.toString().contains("State : DeliverySelectedBeforeCalcState"),"Expected <State : DeliverySelectedBeforeCalcState>, got <"+c.toString()+">");
 
 		c.leftClick(newDelivery);
@@ -95,14 +95,14 @@ class TestController {
 		assertTrue(c.toString().contains("State : MapLoadedState"),"Expected <State : MapLoadedState>, got <"+c.toString()+">");
 
 		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
-		c.treeDeliverySelected(cm.getDeliveryList().get(0));
+		c.treeDeliverySelected(cm.getDeliveryList().get(1));
 		assertTrue(c.toString().contains("State : DeliverySelectedBeforeCalcState"),"Expected <State : DeliverySelectedBeforeCalcState>, got <"+c.toString()+">");
 				
 		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
 		assertTrue(c.toString().contains("State : DeliveryLoadedState"),"Expected <State : DeliveryLoadedState>, got <"+c.toString()+">");
 		
 		c.leftClick(delivery);
-		c.treeDeliverySelected(cm.getDeliveryList().get(0));
+		c.treeDeliverySelected(cm.getDeliveryList().get(1));
 		assertTrue(c.toString().contains("State : DeliverySelectedBeforeCalcState"),"Expected <State : DeliverySelectedBeforeCalcState>, got <"+c.toString()+">");
 		
 		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
@@ -262,19 +262,19 @@ class TestController {
 		
 		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
 		c.calculateCircuits(1);
-		c.treeDeliverySelected(cm.getDeliveryList().get(0));
+		c.treeDeliverySelected(cm.getDeliveryList().get(1));
 		assertTrue(c.toString().contains("State : DeliverySelectedState"),"Expected <State : DeliverySelectedState>, got <"+c.toString()+">");
 		
 		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
 		c.calculateCircuits(1);
 		c.leftClick(delivery);
-		c.treeDeliverySelected(cm.getDeliveryList().get(0));
+		c.treeDeliverySelected(cm.getDeliveryList().get(1));
 		assertTrue(c.toString().contains("State : DeliverySelectedState"),"Expected <State : DeliverySelectedState>, got <"+c.toString()+">");
 		
 		c.loadDeliveryOffer("resources/xml/dl-petit-3.xml");
 		c.calculateCircuits(1);
 		c.leftClick(newDelivery);
-		c.treeDeliverySelected(cm.getDeliveryList().get(0));
+		c.treeDeliverySelected(cm.getDeliveryList().get(1));
 		assertTrue(c.toString().contains("State : DeliverySelectedState"),"Expected <State : DeliverySelectedState>, got <"+c.toString()+">");
 	}
 

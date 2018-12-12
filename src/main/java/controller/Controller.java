@@ -52,9 +52,6 @@ public class Controller {
 	/** The delivery moved state. */
 	protected final DeliveryMovedState deliveryMovedState = new DeliveryMovedState();
 	
-	/** The calculating state. */
-	protected final CalculatingState calculatingState = new CalculatingState();
-	
 	/** The duration choice state. */
 	protected final DurationChoiceState durationChoiceState = new DurationChoiceState ();
 	
@@ -307,7 +304,7 @@ public class Controller {
 	 * @param keepCalculating the boolean which indicates if the program must continue the circuits calculation
 	 */
 	public void continueCalculation(boolean keepCalculating) {
-		currentState.continueCalculation(this, window, keepCalculating);
+		currentState.continueCalculation(this, window);
 		window.requestFocusInWindow();
 	}
 	

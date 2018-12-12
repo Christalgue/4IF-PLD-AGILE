@@ -103,15 +103,16 @@ public class DeliverySelectedState extends DefaultState {
 	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
-			window.disableButtonMoveDelivery();
-			window.disableButtonDeleteDelivery();
-			window.disableButtonCalculateCircuit();
 			try {
 				controller.getCircuitManagement().loadMap(filename);
 				window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			} catch (ForgivableXMLException e) {
 				window.setWarningMessage(e.getMessage());
 			}
+			window.disableGenerateRoadmapButton();
+			window.disableButtonMoveDelivery();
+			window.disableButtonDeleteDelivery();
+			window.disableButtonCalculateCircuit();
 			window.calculateScale();
 			window.drawMap();
 			commandsList.reset();
@@ -130,10 +131,11 @@ public class DeliverySelectedState extends DefaultState {
 	public void loadDeliveryOffer(Controller controller, Window window, String filename, CommandsList commandsList){
 	
 		try {
+			controller.getCircuitManagement().loadDeliveryList(filename);
+			window.disableGenerateRoadmapButton();
 			window.setMessage("");
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
-			controller.getCircuitManagement().loadDeliveryList(filename);
 			commandsList.reset();
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.drawDeliveries();
@@ -152,11 +154,10 @@ public class DeliverySelectedState extends DefaultState {
 	public void calculateCircuits(Controller controller, Window window, int nbDeliveryMan, CommandsList commandsList){
 		commandsList.reset();
 		try {
+			controller.getCircuitManagement().calculateCircuits(nbDeliveryMan, false);
 			window.setMessage("");
 			window.disableButtonMoveDelivery();
 			window.disableButtonDeleteDelivery();
-			controller.getCircuitManagement().calculateCircuits(nbDeliveryMan, false);
-			controller.setCurrentState(controller.calcState);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
 		} catch (MapNotChargedException e) {
@@ -169,11 +170,12 @@ public class DeliverySelectedState extends DefaultState {
 			window.setErrorMessage("Pas d'entrepot");
 			e.printStackTrace();
 		}catch (TSPLimitTimeReachedException e) {
+			window.setMessage("Si vous voulez continuer le calcul veuillez cliquer sur \"continuer le calcul\".");
 			window.drawCircuits();
-			controller.setCurrentState(controller.calculatingState);
-			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+			window.enableButtonContinueCalculation();
+			controller.setCurrentState(controller.calcState);
 		} catch (DeliveriesNotLoadedException e) {
-			// TODO Auto-generated catch block
+			window.setErrorMessage("Pas de livraisons chargées");
 			e.printStackTrace();
 		}
 	
@@ -184,6 +186,8 @@ public class DeliverySelectedState extends DefaultState {
 	 */
 	@Override
 	public void deleteDelivery (Controller controller, Window window) {
+		window.disableGenerateRoadmapButton();
+		window.disableButtonContinueCalculation();
 		controller.deliveryDeletedState.setNode(node);
 		controller.setCurrentState(controller.deliveryDeletedState);
 		if(controller.getShowPopUp())
@@ -194,6 +198,9 @@ public class DeliverySelectedState extends DefaultState {
 	 * @see main.java.controller.DefaultState#moveDelivery(main.java.controller.Controller, main.java.view.Window)
 	 */
 	public void moveDelivery (Controller controller, Window window) {
+		window.disableGenerateRoadmapButton();
+		window.disableButtonContinueCalculation();
+		window.enableCancelButton();
 		window.disableButtonMoveDelivery();
 		window.disableButtonDeleteDelivery();
 		window.setMessage("Veuillez selectionner le point de livraison precedent");

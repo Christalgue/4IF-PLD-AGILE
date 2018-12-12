@@ -2,31 +2,53 @@ package main.java.view;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.util.HashMap;
 
 import javax.swing.JTree;
 import javax.swing.plaf.synth.SynthSeparatorUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MyTreeCellRenderer.
+ */
 public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 	
+	/** The circuit management. */
 	private CircuitManagement circuitManagement;
+	
+	/** The window. */
 	private Window window;
+	
+	/** The selected delivery. */
 	private String selectedDelivery ="";
+	
+	/** The selected circuit. */
 	private String selectedCircuit ="";
+	
+	/** The hover delivery. */
 	private String hoverDelivery ="";
+	
+	/** The hover circuit. */
 	private String hoverCircuit="";
 	
+	/**
+	 * Instantiates a new my tree cell renderer.
+	 *
+	 * @param window the window
+	 * @param circuitManagement the circuit management
+	 */
 	public MyTreeCellRenderer (Window window, CircuitManagement circuitManagement) {
 		this.window = window;
 		this.circuitManagement = circuitManagement;
 	}
 	
+    /* (non-Javadoc)
+     * @see javax.swing.tree.DefaultTreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree, java.lang.Object, boolean, boolean, boolean, int, boolean)
+     */
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
             boolean sel, boolean exp, boolean leaf, int row, boolean hasFocus) {
@@ -87,6 +109,12 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
         return this;
     }
 
+    /**
+     * Sets the selected delivery.
+     *
+     * @param string the string
+     * @param selected the selected
+     */
     public void setSelectedDelivery ( String string, boolean selected) {    	
     	if (selected) {
     		this.selectedDelivery = string;
@@ -95,6 +123,12 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
     	}
     }
     
+    /**
+     * Sets the selected circuit.
+     *
+     * @param string the string
+     * @param selected the selected
+     */
     public void setSelectedCircuit ( String string, boolean selected) {    	
     	if (selected) {
     		this.selectedCircuit = string;

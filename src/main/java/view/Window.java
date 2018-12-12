@@ -5,6 +5,7 @@ import java.awt.TextField;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -46,14 +47,18 @@ public class Window extends JFrame{
 	protected static final String DELETE_DELIVERY = "Supprimer la livraison";
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
-	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
-	protected static final String UNDO = "Annuler";
-	protected static final String REDO = "Retablir";
-	protected static final String CANCEL = "Cancel";
+	protected static final String UNDO = "Retour";
+	protected static final String REDO = "Suivant";
+	protected static final String CANCEL = "Annuler";
 	protected static final String RESET_SCALE = "Retablir l'echelle";
+	protected static final String GENERATE_ROADMAP = "Generer la feuille de route";
+	protected static final String UP = "U";
+	protected static final String DOWN = "D";
+	protected static final String RIGHT = "R";
+	protected static final String LEFT = "L";
 	
-	protected static final String ZOOM = "+";
-	protected static final String UNZOOM = "-";
+	protected static final String ZOOM = "Zoomer";
+	protected static final String UNZOOM = "Dezoomer";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
@@ -63,6 +68,7 @@ public class Window extends JFrame{
 	
 	protected static JButton loadDeliveryList;
 	protected static JButton calculateCircuitButton;
+	protected static JButton continueCalculateCircuitButton;
 	protected static JButton addDeliveryButton;
 	protected static JButton deleteDeliveryButton;
 	protected static JButton moveDeliveryButton;
@@ -76,8 +82,9 @@ public class Window extends JFrame{
 	protected static JButton unZoomButton;
 	protected static JButton cancelAddButton;
 	protected static JButton resetScaleButton;
+	protected static JButton generateRoadmapButton;
 	
-	protected static final int windowWidth = 1600;
+	protected static final int windowWidth = 1500;
 	protected static final int windowHeight = 720;
 	protected static final int buttonPanelHeight =50;
 	protected static final int graphicWidth = 1030;
@@ -209,6 +216,15 @@ public class Window extends JFrame{
 		window.graphicView.addMouseMotionListener(mouseListener);
 	}
 	
+	private static void addIconToButton (JButton button, String path) {
+		try {
+		    ImageIcon img = new ImageIcon(path);
+		    button.setIcon(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	private static void setTextualView(TextualView textualView) {
 		
 		textualView.setLocation(graphicWidth, buttonPanelHeight);
@@ -216,28 +232,91 @@ public class Window extends JFrame{
 		textualView.setSize(windowWidth-graphicWidth, windowHeight-buttonPanelHeight);
 		textualView.setLayout(null);
 		
+		zoomButton = new JButton();
+		zoomButton.setActionCommand(ZOOM);
+		addIconToButton(zoomButton, "resources/img/zoom-in.png");
+		zoomButton.addActionListener(buttonsListener);
+		zoomButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight*3+2*buttonSpace+50));
+		zoomButton.setSize(40, buttonHeight);
+		zoomButton.setEnabled(false);
+		textualView.add(zoomButton);
+		
+		resetScaleButton = new JButton();
+		resetScaleButton.setActionCommand(RESET_SCALE);
+		addIconToButton(resetScaleButton, "resources/img/zoom-1:1.png");
+		resetScaleButton.addActionListener(buttonsListener);
+		resetScaleButton.setLocation(55, windowHeight-buttonPanelHeight-(buttonHeight*3+2*buttonSpace+50));
+		resetScaleButton.setSize(40, buttonHeight);
+		resetScaleButton.setEnabled(false);
+		textualView.add(resetScaleButton);
+		
+		unZoomButton = new JButton();
+		unZoomButton.setActionCommand(UNZOOM);
+		addIconToButton(unZoomButton, "resources/img/zoom-out.png");
+		unZoomButton.addActionListener(buttonsListener);
+		unZoomButton.setLocation(100, windowHeight-buttonPanelHeight-(buttonHeight*3+2*buttonSpace+50));
+		unZoomButton.setSize(40, buttonHeight);
+		unZoomButton.setEnabled(false);
+		textualView.add(unZoomButton);
+		
+		upButton = new JButton();
+		upButton.setActionCommand(UP);
+		addIconToButton(upButton, "resources/img/chevron-up.png");
+		upButton.addActionListener(buttonsListener);
+		upButton.setLocation(60, windowHeight-buttonPanelHeight-(buttonHeight*2+buttonSpace+50));
+		upButton.setSize(30, 30);
+		upButton.setEnabled(false);
+		textualView.add(upButton);
+		
+		downButton = new JButton();
+		downButton.setActionCommand(DOWN);
+		addIconToButton(downButton, "resources/img/chevron-down.png");
+		downButton.addActionListener(buttonsListener);
+		downButton.setLocation(60, windowHeight-buttonPanelHeight-(buttonHeight+40));
+		downButton.setSize(30, 30);
+		downButton.setEnabled(false);
+		textualView.add(downButton);
+		
+		rightButton = new JButton();
+		rightButton.setActionCommand(RIGHT);
+		addIconToButton(rightButton, "resources/img/chevron-right.png");
+		rightButton.addActionListener(buttonsListener);
+		rightButton.setLocation(90, windowHeight-buttonPanelHeight-(buttonHeight+70));
+		rightButton.setSize(30, 30);
+		rightButton.setEnabled(false);
+		textualView.add(rightButton);
+		
+		leftButton = new JButton();
+		leftButton.setActionCommand(LEFT);
+		addIconToButton(leftButton, "resources/img/chevron-left.png");
+		leftButton.addActionListener(buttonsListener);
+		leftButton.setLocation(30, windowHeight-buttonPanelHeight-(buttonHeight+70));
+		leftButton.setSize(30, 30);
+		leftButton.setEnabled(false);
+		textualView.add(leftButton);
+		
 		addDeliveryButton = new JButton(ADD_DELIVERY);
 		addDeliveryButton.addActionListener(buttonsListener);
 		addDeliveryButton.setVisible(true);
 		addDeliveryButton.setEnabled(false);
-		addDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight*3+2*buttonSpace+50));
-		addDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
+		addDeliveryButton.setLocation(150, windowHeight-buttonPanelHeight-(buttonHeight*3+2*buttonSpace+50));
+		addDeliveryButton.setSize(windowWidth-graphicWidth-160, buttonHeight);
 		textualView.add(addDeliveryButton);
 	
 		deleteDeliveryButton = new JButton(DELETE_DELIVERY);
 		deleteDeliveryButton.addActionListener(buttonsListener);
 		deleteDeliveryButton.setVisible(true);
 		deleteDeliveryButton.setEnabled(false);
-		deleteDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight*2+buttonSpace+50));
-		deleteDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
+		deleteDeliveryButton.setLocation(150, windowHeight-buttonPanelHeight-(buttonHeight*2+buttonSpace+50));
+		deleteDeliveryButton.setSize(windowWidth-graphicWidth-160, buttonHeight);
 		textualView.add(deleteDeliveryButton);	
 	
 		moveDeliveryButton = new JButton(MOVE_DELIVERY);
 		moveDeliveryButton.addActionListener(buttonsListener);
 		moveDeliveryButton.setVisible(true);
 		moveDeliveryButton.setEnabled(false);
-		moveDeliveryButton.setLocation(10, windowHeight-buttonPanelHeight-(buttonHeight+50));
-		moveDeliveryButton.setSize(windowWidth-graphicWidth-20, buttonHeight);
+		moveDeliveryButton.setLocation(150, windowHeight-buttonPanelHeight-(buttonHeight+50));
+		moveDeliveryButton.setSize(windowWidth-graphicWidth-160, buttonHeight);
 		textualView.add(moveDeliveryButton);
 		
 			
@@ -246,26 +325,26 @@ public class Window extends JFrame{
 	
 	public static void fillButtonPanel(JPanel buttonPanel) {
 		
+		undoButton = new JButton();
+		undoButton.setActionCommand(UNDO);
+		addIconToButton(undoButton, "resources/img/backward.png");
+		buttonPanel.add(undoButton);
+		undoButton.addActionListener(buttonsListener);
+		undoButton.setEnabled(false);
+
+		redoButton = new JButton();
+		redoButton.setActionCommand(REDO);
+		addIconToButton(redoButton, "resources/img/forward.png");
+		buttonPanel.add(redoButton);
+		redoButton.addActionListener(buttonsListener);	
+		redoButton.setEnabled(false);
+		
 		buttonPanel.setSize(windowWidth, buttonPanelHeight);
 		buttonPanel.setBackground(Color.WHITE);
-		
-		resetScaleButton = new JButton(RESET_SCALE);
-		resetScaleButton.addActionListener(buttonsListener);
-		resetScaleButton.setEnabled(false);
-		buttonPanel.add(resetScaleButton);
-		
-		setNameOfMap = new TextField();
-		setNameOfMap.setText("resources/xml/moyenPlan.xml");
-		buttonPanel.add(setNameOfMap);
 		
 		JButton loadMapButton = new JButton(LOAD_MAP);
 		loadMapButton.addActionListener(buttonsListener);
 		buttonPanel.add(loadMapButton);
-		
-		setNameOfDeliveryList = new TextField();
-		setNameOfDeliveryList.setText("resources/xml/dl-moyen-9.xml");
-		setNameOfDeliveryList.setEditable(true);
-		buttonPanel.add(setNameOfDeliveryList);
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
 		loadDeliveryList.addActionListener(buttonsListener);
@@ -281,43 +360,32 @@ public class Window extends JFrame{
 		numberOfDeliveryMenField.setText("1");
 		numberOfDeliveryMenField.setEditable(true);
 		buttonPanel.add(numberOfDeliveryMenField);
-	
-		undoButton = new JButton(UNDO);
-		buttonPanel.add(undoButton);
-		undoButton.addActionListener(buttonsListener);
-		undoButton.setEnabled(false);
-		
-
-		redoButton = new JButton(REDO);
-		buttonPanel.add(redoButton);
-		redoButton.addActionListener(buttonsListener);	
-		redoButton.setEnabled(false);
 		
 		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
 		calculateCircuitButton.addActionListener(buttonsListener);
 		calculateCircuitButton.setEnabled(false);
 		buttonPanel.add(calculateCircuitButton);
 		
-		zoomButton = new JButton(ZOOM);
-		zoomButton.addActionListener(buttonsListener);
-		zoomButton.setEnabled(false);
-		buttonPanel.add(zoomButton);
-		
-		unZoomButton = new JButton(UNZOOM);
-		unZoomButton.addActionListener(buttonsListener);
-		unZoomButton.setEnabled(false);
-		buttonPanel.add(unZoomButton);
-		
+		continueCalculateCircuitButton = new JButton(CONTINUE_CALCULATION);
+		continueCalculateCircuitButton.addActionListener(buttonsListener);
+		continueCalculateCircuitButton.setEnabled(false);
+		buttonPanel.add(continueCalculateCircuitButton);
 		cancelAddButton = new JButton(CANCEL);
 		cancelAddButton.addActionListener(buttonsListener);
-		cancelAddButton.setEnabled(true);
+		cancelAddButton.setEnabled(false);
 		buttonPanel.add(cancelAddButton);
+		
+		generateRoadmapButton = new JButton(GENERATE_ROADMAP);
+		generateRoadmapButton.addActionListener(buttonsListener);
+		generateRoadmapButton.setEnabled(false);
+		buttonPanel.add(generateRoadmapButton);
 	}
 	
 	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
 	protected String getFile () {
 			
 		chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new java.io.File("."));
 		int returnValue = chooser.showOpenDialog(controller.getWindow());
 		String filePath = "";
 		
@@ -325,22 +393,39 @@ public class Window extends JFrame{
 			filePath = chooser.getSelectedFile().getAbsolutePath();
 		}
 		return filePath;
+		
+	}
+	
+	protected String getFolder() {
+		
+		chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new java.io.File("."));
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int returnValue = chooser.showOpenDialog(controller.getWindow());
+		String folderPath = "";
+		
+		if(returnValue == JFileChooser.APPROVE_OPTION){
+			folderPath = chooser.getSelectedFile().getAbsolutePath();
+		}
+		return folderPath;
+		
 	}
 
 	public boolean getDeliveryMenNumber() {
 		
 		boolean correctValue = false;
+		int numberOfDeliveries = controller.getCircuitManagement().getDeliveryList().size();
 		try{
         	String numberOfDeliveryMen = numberOfDeliveryMenField.getText();
             int numberOfDeliveryMenValue = Integer.parseInt(numberOfDeliveryMen);
-            if (numberOfDeliveryMenValue <= 0) {
-            	PopUp.errorPopUp(this, false);
+            if (numberOfDeliveryMenValue <= 0 || numberOfDeliveryMenValue > numberOfDeliveries -1) {
+            	PopUp.errorPopUp(this, false, numberOfDeliveries);
             } else {
             	buttonsListener.setDeliveryMenNumber(numberOfDeliveryMenValue);
             	correctValue = true;
             }
         } catch(Exception parseException) {
-        	PopUp.errorPopUp(this, false);
+        	PopUp.errorPopUp(this, false, numberOfDeliveries);
         }
 		return correctValue;
 		
@@ -416,6 +501,11 @@ public class Window extends JFrame{
 		calculateCircuitButton.setEnabled(true);
 	}	
 	
+	public void enableButtonContinueCalculation() {
+		continueCalculateCircuitButton.setVisible(true);
+		continueCalculateCircuitButton.setEnabled(true);
+	}
+	
 	public void enableButtonUndo() {
 		undoButton.setEnabled(true);
 	}
@@ -455,6 +545,17 @@ public class Window extends JFrame{
 		resetScaleButton.setEnabled(true);
 	}
 	
+	public void enableGenerateRoadmapButton () {
+		generateRoadmapButton.setEnabled(true);
+	}
+	
+	public void enableArrows() {
+		upButton.setEnabled(true);
+		downButton.setEnabled(true);
+		rightButton.setEnabled(true);
+		leftButton.setEnabled(true);
+	}
+	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
 	public void disableButtonLoadDeliveriesList() {
 		loadDeliveryList.setEnabled(false);
@@ -462,7 +563,11 @@ public class Window extends JFrame{
 	
 	public void disableButtonCalculateCircuit() {
 		calculateCircuitButton.setEnabled(false);
-	}	
+	}
+	
+	public void disableButtonContinueCalculation() {
+		continueCalculateCircuitButton.setEnabled(false);
+	}
 	
 	public void disableButtonAddDelivery() {
 		addDeliveryButton.setEnabled(false);
@@ -498,6 +603,17 @@ public class Window extends JFrame{
 	
 	public void disableResetScaleButton() {
 		resetScaleButton.setEnabled(false);
+	}
+	
+	public void disableGenerateRoadmapButton () {
+		generateRoadmapButton.setEnabled(false);
+	}
+	
+	public void disableArrows() {
+		upButton.setEnabled(false);
+		downButton.setEnabled(false);
+		rightButton.setEnabled(false);
+		leftButton.setEnabled(false);
 	}
 	
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////

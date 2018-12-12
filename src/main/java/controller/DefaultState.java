@@ -77,9 +77,9 @@ public abstract class DefaultState implements State {
 	public void leftClick(Controller controller, Window window, Point point){}
 	
 	/**
-	 * @see main.java.controller.State#continueCalculation(main.java.controller.Controller, main.java.view.Window, boolean)
+	 * @see main.java.controller.State#continueCalculation(main.java.controller.Controller, main.java.view.Window)
 	 */
-	public void continueCalculation(Controller controller, Window window, boolean keepCalculating){}
+	public void continueCalculation(Controller controller, Window window){}
 	
 	/**
 	 * @see main.java.controller.State#validateDuration(main.java.controller.Controller, main.java.view.Window, int, main.java.controller.CommandsList)

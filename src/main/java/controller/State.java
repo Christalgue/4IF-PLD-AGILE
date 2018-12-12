@@ -140,9 +140,8 @@ public interface State {
 	 *
 	 * @param controller the controller
 	 * @param window the window
-	 * @param keepCalculating the keep calculating
 	 */
-	public void continueCalculation(Controller controller, Window window, boolean keepCalculating);
+	public void continueCalculation(Controller controller, Window window);
 	
 
 	/**

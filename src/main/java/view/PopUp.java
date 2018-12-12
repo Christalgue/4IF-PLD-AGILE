@@ -87,7 +87,7 @@ public class PopUp extends JFrame {
 	        	                    	String duration = durationTextField.getText();
 	        	                        int durationValue = Integer.parseInt(duration);
 	        	                        if (durationValue < 0) {
-	        	                        	errorPopUp(window, true);
+	        	                        	errorPopUp(window, true, 0);
 	        	                        	popUp.setValue(42);
 	        	            
 	        	                        } else {
@@ -95,7 +95,7 @@ public class PopUp extends JFrame {
 	        	                        	durationDialog.dispose();
 	        	                        }
 	        	                    } catch(Exception parseException) {
-	        	                    	errorPopUp(window, true);
+	        	                    	errorPopUp(window, true, 0);
 	        	                    	popUp.setValue(42);
 	        	                    	popUp.requestFocusInWindow();
 	        	                    }
@@ -153,12 +153,12 @@ public class PopUp extends JFrame {
 		return userChoice;
 	}
 	
-	public static void errorPopUp(Window window, boolean zero) {
+	public static void errorPopUp(Window window, boolean zero, int numberOfDeliveries) {
 		String errorPopUpText;
 		if (zero)
 			errorPopUpText = "Veuillez entrer un nombre entier superieur ou egal a 0.";
 		else
-			errorPopUpText = "Veuillez entrer un nombre entier superieur a 0.";
+			errorPopUpText = "Veuillez entrer un nombre entier superieur a 0 et inferieur a " + numberOfDeliveries + ".";
 		JOptionPane.showMessageDialog(window,
 				errorPopUpText,
                 "Entree invalide.",
