@@ -570,6 +570,10 @@ public class CircuitManagement extends Observable{
         			}
         			Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths, 15.0/3.6);
         			this.circuitsList.add(circuit);
+        			System.out.println("Circuit added : " + circuit.toString());
+        			/*System.out.println("arrivalDeliveries : " + arrivalDeliveries.toString());
+        			System.out.println("repository : " + repository.toString());
+        			System.out.println("allPaths : " + allPaths.toString());*/
         		}
         		//calculate each circuit after having created the instances to avoid the nullpointer exceptions in the view.
         		for(Circuit circuit : this.circuitsList) {
@@ -584,7 +588,8 @@ public class CircuitManagement extends Observable{
     		//if we are continuing the calculation we check for each circuit if its calculation is finished and if not we continue it.
     		for(Circuit circuitTested : this.circuitsList)
     		{
-    			if(circuitTested.calculationIsFinished == false) {
+    			if(circuitTested.calculationIsFinished < 1) {
+    				System.out.println("continue calculation de circuit : " + circuitTested.toString());
     				circuitTested.continueCalculation();
     			}
     		}

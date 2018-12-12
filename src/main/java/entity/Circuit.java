@@ -54,7 +54,7 @@ public class Circuit extends Observable {
 	protected TSP1 tsp;
 
 	/** The calculation is finished. */
-	protected boolean calculationIsFinished = false;
+	protected int calculationIsFinished = -1;
 	
 	/**
 	 * Constructor.
@@ -89,7 +89,7 @@ public class Circuit extends Observable {
 			this.circuitDuration = calculateDuration();
 			throw e;
 		}
-		this.calculationIsFinished = true;
+		this.calculationIsFinished = 1;
 		this.circuitLength = calculateLength();
 		this.circuitDuration = calculateDuration();
 	}
@@ -136,7 +136,7 @@ public class Circuit extends Observable {
 		try {
 			tsp.searchSolution(500, repository, allPaths, continueInterruptedCalculation);
 		} catch (TSPLimitTimeReachedException e) {
-			this.calculationIsFinished = false;
+			this.calculationIsFinished = 0;
 			timeException = e;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -171,6 +171,9 @@ public class Circuit extends Observable {
 	 */
 	public void continueCalculation() throws TSPLimitTimeReachedException {
 		//load the save and continue the calculation.
+		if(this.calculationIsFinished == -1) {
+			calculateTrackTSP(repositorySVG, allPathsSVG, false);
+		}
 		calculateTrackTSP(repositorySVG, allPathsSVG, true);
 	}
 
