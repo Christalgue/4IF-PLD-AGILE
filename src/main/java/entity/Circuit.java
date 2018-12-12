@@ -129,7 +129,7 @@ public class Circuit extends Observable {
 			boolean continueInterruptedCalculation) throws TSPLimitTimeReachedException {
 		TSPLimitTimeReachedException timeException = null;
 		try {
-			tsp.searchSolution(1000, repository, allPaths, null, continueInterruptedCalculation);
+			tsp.searchSolution(500, repository, allPaths, null, continueInterruptedCalculation);
 		} catch (TSPLimitTimeReachedException e) {
 			this.calculationIsFinished = false;
 			timeException = e;

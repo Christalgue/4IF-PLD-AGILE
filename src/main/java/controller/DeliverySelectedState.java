@@ -170,9 +170,10 @@ public class DeliverySelectedState extends DefaultState {
 			window.setErrorMessage("Pas d'entrepot");
 			e.printStackTrace();
 		}catch (TSPLimitTimeReachedException e) {
+			window.setMessage("Si vous voulez continuer le calcul veuillez cliquer sur \"continuer le calcul\".");
 			window.drawCircuits();
-			controller.setCurrentState(controller.calculatingState);
-			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+			window.enableButtonContinueCalculation();
+			controller.setCurrentState(controller.calcState);
 		} catch (DeliveriesNotLoadedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
