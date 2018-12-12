@@ -88,10 +88,12 @@ public abstract class TemplateTSP implements TSP {
 		Delivery lastDeliveryTreated = currentDeliverySVG;
 		viewed.remove(currentDeliverySVG);
 		
-		// unstack the execution stack
-		this.executionStack.remove(currentDeliverySVG);
-		viewedCost -= ( allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDeliverySVG).getLength() ) / this.speed;
-		nonViewed.add(currentDeliverySVG);
+		// unstack the execution stack for the first time if we need
+		if(this.executionStack.size()>1) {
+			this.executionStack.remove(currentDeliverySVG);
+			viewedCost -= ( allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDeliverySVG).getLength() ) / this.speed;
+			nonViewed.add(currentDeliverySVG);
+		}
 		
 		// set up the initial conditions to continue unstacking
 		Delivery currentDelivery = null;
