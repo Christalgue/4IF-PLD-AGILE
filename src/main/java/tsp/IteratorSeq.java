@@ -25,26 +25,25 @@ public class IteratorSeq implements Iterator<Delivery> {
 	 * @param nonViewed the non viewed deliveries
 	 * @param currentDelivery the current delivery
 	 * @param allPaths all the AtomicPath between each Delivery in the deliveryList
-	 * @param duration duration for each delivery @unused
 	 */
-	public IteratorSeq(Collection<Delivery> nonViewed, Delivery currentDelivery, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration){
+	public IteratorSeq(Collection<Delivery> nonViewed, Delivery currentDelivery, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, double speed){
 		this.candidates = new Delivery[nonViewed.size()];
 		nbCandidates = 0;
 		ArrayList<Delivery> stillToAdd = new ArrayList<Delivery>(nonViewed);
 		for(int nbDeliveriesAddedToIteratorFromNonViewed = 0; nbDeliveriesAddedToIteratorFromNonViewed < nonViewed.size(); nbDeliveriesAddedToIteratorFromNonViewed++) {
-			double maxDistance = Double.MIN_VALUE;
+			double maxTime = Double.MIN_VALUE;
 			Delivery toAdd = null;
 			Delivery dontAdd = null;
 			//add every delivery in the candidates array sorted by proximity from the current delivery, the most distant is the first one to be added 
-			for(Delivery d : stillToAdd) {
-				if(allPaths.get(currentDelivery).containsKey(d)) {
-					double distance = allPaths.get(currentDelivery).get(d).getLength();
-					if(distance > maxDistance) {
-						toAdd = d;
-						maxDistance = distance;
+			for(Delivery deliveryTested : stillToAdd) {
+				if(allPaths.get(currentDelivery).containsKey(deliveryTested)) {
+					double time = allPaths.get(currentDelivery).get(deliveryTested).getLength()/speed + deliveryTested.getDuration();
+					if(time > maxTime) {
+						toAdd = deliveryTested;
+						maxTime = time;
 					} 
 				} else {						//if we can't go from the current delivery to the delivery d then don't add it to the list that will be iterated
-					dontAdd = d;
+					dontAdd = deliveryTested;
 					break;
 				}
 			}

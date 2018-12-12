@@ -17,7 +17,7 @@ public class TSP1 extends TemplateTSP {
 	 */
 	@Override
 	protected int bound(Delivery delivery, ArrayList<Delivery> nonViewed,
-			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths,int[] duration) {
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -27,8 +27,8 @@ public class TSP1 extends TemplateTSP {
 	 */
 	@Override
 	protected Iterator<Delivery> iterator(Delivery currentDelivery, ArrayList<Delivery> nonViewed,
-			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, int[] duration) {
+			HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, double speed) {
 		
-		return new IteratorSeq(nonViewed, currentDelivery, allPaths, duration);
+		return new IteratorSeq(nonViewed, currentDelivery, allPaths, speed);
 	}
 }
