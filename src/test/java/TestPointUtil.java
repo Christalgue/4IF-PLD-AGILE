@@ -14,6 +14,9 @@ import main.java.utils.PointUtil;
 class TestPointUtil {
 
 	@Test
+	/**
+	 * Test if pointToNode return the nearest node (if in range) of the map when we send him coordinates
+	 */
 	void testPointToNode() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();

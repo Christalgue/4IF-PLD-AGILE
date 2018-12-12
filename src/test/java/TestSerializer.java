@@ -24,6 +24,9 @@ import main.java.utils.Serializer;
 class TestSerializer {
 
 	@Test
+	/**
+	 * Test if the serializer generates a correct file containing the paths of a circuit
+	 */
 	void testSerializer() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();

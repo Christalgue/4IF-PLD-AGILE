@@ -2,6 +2,7 @@ package main.java.view;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 
 import main.java.controller.Controller;
 
@@ -21,6 +22,10 @@ public class KeyListener extends KeyAdapter {
 
 	/** The controller. */
 	private Controller controller;
+	
+	private boolean zoomEnable = false;
+	private boolean unZoomEnable = false;
+	private boolean shiftEnable = false;
 
 	/**
 	 * Instantiates a new key listener.
@@ -43,28 +48,40 @@ public class KeyListener extends KeyAdapter {
 		if((e.getModifiers() & KeyEvent.CTRL_MASK)==0 ){
 			switch( keyCode ) { 
 		        case KeyEvent.VK_UP:
-		        	controller.getWindow().verticalShift(-50);
-		        	controller.getWindow().enableResetScaleButton();
+		        	if (shiftEnable) {
+			        	controller.getWindow().verticalShift(-50);
+			        	controller.getWindow().enableResetScaleButton();
+		        	}
 		            break;
 		        case KeyEvent.VK_DOWN:
-		        	controller.getWindow().verticalShift(50);
-		        	controller.getWindow().enableResetScaleButton();
+		        	if (shiftEnable) {
+		        		controller.getWindow().verticalShift(50);
+		        		controller.getWindow().enableResetScaleButton();
+		        	}
 		            break;
 		        case KeyEvent.VK_LEFT:
-		        	controller.getWindow().horizontalShift(-50);
-		        	controller.getWindow().enableResetScaleButton();
+			        if (shiftEnable) {
+			        	controller.getWindow().horizontalShift(-50);
+			        	controller.getWindow().enableResetScaleButton();
+		        	}
 		            break;
 		        case KeyEvent.VK_RIGHT :
-		        	controller.getWindow().horizontalShift(50);
-		        	controller.getWindow().enableResetScaleButton();
+		        	if (shiftEnable) {
+		        		controller.getWindow().horizontalShift(50);
+		        		controller.getWindow().enableResetScaleButton();
+		        	}
 		            break;
 		        case KeyEvent.VK_Z:
-		        	controller.getWindow().zoom();
-		        	controller.getWindow().enableResetScaleButton();
+		        	if (zoomEnable) {
+		        		controller.getWindow().zoom();
+		        		controller.getWindow().enableResetScaleButton();
+		        	}
 		        	break;
 		        case KeyEvent.VK_D:
-		        	controller.getWindow().unZoom();
-		        	controller.getWindow().enableResetScaleButton();
+		        	if(unZoomEnable) {
+			        	controller.getWindow().unZoom();
+			        	controller.getWindow().enableResetScaleButton();
+		        	}
 		        	break;
 		        	
 		     }
@@ -78,4 +95,16 @@ public class KeyListener extends KeyAdapter {
 		} 
 	}
 
+
+	public void shiftEnable(boolean shift ) {
+		shiftEnable = shift;
+	}
+
+	public void zoomEnable(boolean zoom) {
+		zoomEnable = zoom;
+	}
+
+	public void unZoomEnable(boolean unZoom) {
+		unZoomEnable = unZoom;
+	}
 }
