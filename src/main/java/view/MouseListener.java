@@ -33,6 +33,7 @@ public class MouseListener extends MouseAdapter {
 	/** The last clicked point. */
 	private Point lastClickedPoint;
 
+	
 	/**
 	 * Instantiates a new mouse listener.
 	 *
@@ -59,7 +60,6 @@ public class MouseListener extends MouseAdapter {
 			Point p = new Point (evt.getX(), evt.getY());
 			p = graphicView.pointToLatLong(p);
 			controller.leftClick(p);
-
 		}
 	}
 
@@ -94,7 +94,6 @@ public class MouseListener extends MouseAdapter {
 			controller.getWindow().enableResetScaleButton();
 		}
 		
-		
 	}
 	
 	
@@ -107,6 +106,7 @@ public class MouseListener extends MouseAdapter {
 		Point p = new Point ( evt.getX(), evt.getY());
 		p = graphicView.pointToLatLong(p);
 		controller.mouseMoved(p);
+		
 	}
 	
 /*    public void mouseWheelMoved(MouseWheelEvent e) {

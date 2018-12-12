@@ -531,10 +531,12 @@ public class Window extends JFrame{
 	
 	public void enableZoomButton() {
 		zoomButton.setEnabled(true);
+		keyListener.zoomEnable(true);
 	}
 
 	public void enableDeZoomButton() {
 		unZoomButton.setEnabled(true);
+		keyListener.unZoomEnable(true);
 	}
 
 	public void enableCancelButton() {
@@ -554,6 +556,7 @@ public class Window extends JFrame{
 		downButton.setEnabled(true);
 		rightButton.setEnabled(true);
 		leftButton.setEnabled(true);
+		keyListener.shiftEnable(true);
 	}
 	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
