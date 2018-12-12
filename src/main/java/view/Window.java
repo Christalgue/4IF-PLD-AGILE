@@ -225,6 +225,7 @@ public class Window extends JFrame{
 		}
 	}
 	
+	
 	private static void setTextualView(TextualView textualView) {
 		
 		textualView.setLocation(graphicWidth, buttonPanelHeight);
