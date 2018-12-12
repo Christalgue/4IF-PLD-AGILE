@@ -1307,7 +1307,7 @@ public class Window extends JFrame{
 		graphicView.unPaintCircuit(selectedCircuit);
 		
 		// Then the new one is painted and set as selectedCircuit 
-		graphicView.paintSelectedCircuit(circuitIndex);
+		graphicView.paintSelectedCircuit(circuitIndex, true);
 		selectedCircuit = circuitIndex;
 		
 		// It is selected in textualView as well
