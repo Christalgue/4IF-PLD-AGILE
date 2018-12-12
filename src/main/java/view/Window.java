@@ -51,14 +51,14 @@ public class Window extends JFrame{
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
 	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
-	protected static final String UNDO = " ";
-	protected static final String REDO = ".";
+	protected static final String UNDO = "\u200E";
+	protected static final String REDO = "\u200F";
 	protected static final String CANCEL = "Cancel";
 	protected static final String RESET_SCALE = "Retablir l'echelle";
 	protected static final String GENERATE_ROADMAP = "Generer la feuille de route";
 	
-	protected static final String ZOOM = "+";
-	protected static final String UNZOOM = "-";
+	protected static final String ZOOM = "\u200D";
+	protected static final String UNZOOM = " \u200C";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
@@ -317,11 +317,23 @@ public class Window extends JFrame{
 		buttonPanel.add(calculateCircuitButton);
 		
 		zoomButton = new JButton(ZOOM);
+		try {
+		    ImageIcon img = new ImageIcon("resources/img/zoom-in.png");
+		    zoomButton.setIcon(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		zoomButton.addActionListener(buttonsListener);
 		zoomButton.setEnabled(false);
 		buttonPanel.add(zoomButton);
 		
 		unZoomButton = new JButton(UNZOOM);
+		try {
+		    ImageIcon img = new ImageIcon("resources/img/zoom-out.png");
+		    unZoomButton.setIcon(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		unZoomButton.addActionListener(buttonsListener);
 		unZoomButton.setEnabled(false);
 		buttonPanel.add(unZoomButton);
