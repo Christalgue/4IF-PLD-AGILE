@@ -34,6 +34,7 @@ public class CalcState extends DefaultState {
 		try {
 			controller.getCircuitManagement().getCircuitsList().clear();
 			window.enableButtonAddDelivery();
+			window.disableGenerateRoadmapButton();
 			window.disableButtonCalculateCircuit();
 			try {
 				controller.getCircuitManagement().loadMap(filename);
@@ -62,6 +63,7 @@ public class CalcState extends DefaultState {
 			window.setMessage("");
 			controller.getCircuitManagement().getCircuitsList().clear();
 			window.enableButtonCalculateCircuit();
+			window.disableGenerateRoadmapButton();
 			controller.getCircuitManagement().loadDeliveryList(filename);
 			commandsList.reset();
 			controller.setCurrentState(controller.deliveryLoadedState);

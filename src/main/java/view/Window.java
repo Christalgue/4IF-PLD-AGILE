@@ -340,12 +340,12 @@ public class Window extends JFrame{
 		
 		cancelAddButton = new JButton(CANCEL);
 		cancelAddButton.addActionListener(buttonsListener);
-		cancelAddButton.setEnabled(true);
+		cancelAddButton.setEnabled(false);
 		buttonPanel.add(cancelAddButton);
 		
 		generateRoadmapButton = new JButton(GENERATE_ROADMAP);
 		generateRoadmapButton.addActionListener(buttonsListener);
-		generateRoadmapButton.setEnabled(true);
+		generateRoadmapButton.setEnabled(false);
 		buttonPanel.add(generateRoadmapButton);
 	}
 	
@@ -512,6 +512,10 @@ public class Window extends JFrame{
 		resetScaleButton.setEnabled(true);
 	}
 	
+	public void enableGenerateRoadmapButton () {
+		generateRoadmapButton.setEnabled(true);
+	}
+	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
 	public void disableButtonLoadDeliveriesList() {
 		loadDeliveryList.setEnabled(false);
@@ -555,6 +559,10 @@ public class Window extends JFrame{
 	
 	public void disableResetScaleButton() {
 		resetScaleButton.setEnabled(false);
+	}
+	
+	public void disableGenerateRoadmapButton () {
+		generateRoadmapButton.setEnabled(false);
 	}
 	
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
