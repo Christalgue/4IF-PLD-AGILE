@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import main.java.controller.Controller;
 import main.java.utils.Serializer;
 
-// TODO: Auto-generated Javadoc
 /**
  * The listener interface for receiving buttons events.
  * The class that is interested in processing a buttons
@@ -26,32 +25,8 @@ public class ButtonsListener implements ActionListener {
 	/** The controller. */
 	private Controller controller;
 	
-	/** The map. */
-	private String map;
-	
-	/** The delivery list. */
-	private String deliveryList; 
-	
 	/** The delivery men number. */
 	private int deliveryMenNumber;
-	
-	/**
-	 * Sets the map.
-	 *
-	 * @param map the new map
-	 */
-	public void setMap( String map) {
-		this.map = map;
-	}
-	
-	/**
-	 * Sets the delivery list.
-	 *
-	 * @param deliveryList the new delivery list
-	 */
-	public void setDeliveryList( String deliveryList) {
-		this.deliveryList = deliveryList;
-	}
 	
 	/**
 	 * Sets the delivery men number.
@@ -73,22 +48,23 @@ public class ButtonsListener implements ActionListener {
 
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * 
+	 * Method called by the button listener each time a button is clicked.
+	 * Each case call either a method of the controller or a method of the window.
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) { 
-		// Method called by the button listener each time a button is clicked
-		// Each case call either a method of the controller or a method of the window
+	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()){
 			// When the user wants to load the map.
 			case  Window.LOAD_MAP:
-				String mapName = controller.getWindow().getFile();
+				String mapName = controller.getWindow().getFilePath();
 				if (mapName != "")
 					controller.loadMap(mapName);
 				break;
 			
 			// When the user wants to load the list of the deliveries.
 			case Window.LOAD_DELIVERY_OFFER:
-				String deliveryListName = controller.getWindow().getFile();
+				String deliveryListName = controller.getWindow().getFilePath();
 				if (deliveryListName != "")
 					controller.loadDeliveryOffer(deliveryListName);
 				break;
@@ -146,7 +122,7 @@ public class ButtonsListener implements ActionListener {
 				
 			// When the user wants to generate files which contain the road map for the delivery men.
 			case Window.GENERATE_ROADMAP:
-				String folderPath = controller.getWindow().getFolder();
+				String folderPath = controller.getWindow().getFolderPath();
 				if (folderPath != "")
 					Serializer.serializer(folderPath, controller.getCircuitManagement());
 				break;
@@ -161,30 +137,30 @@ public class ButtonsListener implements ActionListener {
 				controller.deleteDelivery(); 
 				break;
 				
-			// When the user wants to go up on the map
+			// When the user wants to go up on the map.
 			case Window.UP:
-				// Do an upward shift of 50 pixels 
+				// Do an upward shift of 50 pixels.
 				controller.getWindow().verticalShift(-50);
 				controller.getWindow().enableResetScaleButton();
 				break;
 			
-			// When the user wants to go down on the map
+			// When the user wants to go down on the map.
 			case Window.DOWN:
-				// Do a downward shift of 50 pixels 
+				// Do a downward shift of 50 pixels.
 				controller.getWindow().verticalShift(50);
 				controller.getWindow().enableResetScaleButton();
 				break;
 				
-			// When the user wants to go right on the map
+			// When the user wants to go right on the map.
 			case Window.RIGHT:
-				// Do a right shift of 50 pixels 
+				// Do a right shift of 50 pixels.
 				controller.getWindow().horizontalShift(50);
 				controller.getWindow().enableResetScaleButton();
 				break;
 			
-			// When the user wants to go left on the map
+			// When the user wants to go left on the map.
 			case Window.LEFT:
-				// Do a left shift of 50 pixels 
+				// Do a left shift of 50 pixels.
 				controller.getWindow().horizontalShift(-50);
 				controller.getWindow().enableResetScaleButton();
 				break;

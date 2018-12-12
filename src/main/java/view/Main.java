@@ -3,7 +3,6 @@ package main.java.view;
 import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Main.
  */
