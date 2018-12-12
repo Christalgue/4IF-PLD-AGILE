@@ -44,6 +44,8 @@ public class CalcState extends DefaultState {
 			}
 			window.calculateScale();
 			window.drawMap();
+			controller.getCircuitManagement().setCircuitsList(null);
+			controller.getCircuitManagement().setDeliveryList(null);
 			commandsList.reset();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
@@ -68,6 +70,7 @@ public class CalcState extends DefaultState {
 			controller.getCircuitManagement().loadDeliveryList(filename);
 			commandsList.reset();
 			controller.setCurrentState(controller.deliveryLoadedState);
+			controller.getCircuitManagement().setCircuitsList(null);
 			window.drawDeliveries();
 		} catch (LoadDeliveryException l)
 		{

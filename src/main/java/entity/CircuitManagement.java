@@ -66,6 +66,15 @@ public class CircuitManagement extends Observable{
     }
     
     /**
+	 * Sets the circuits list.
+	 *
+	 * @param circuitsList the new circuits list
+	 */
+	public void setCircuitsList(List<Circuit> circuitsList) {
+		this.circuitsList = circuitsList;
+	}
+    
+    /**
      * Gets the circuits list.
      *
      * @return the circuits list

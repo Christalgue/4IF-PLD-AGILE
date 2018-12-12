@@ -30,6 +30,8 @@ public class MapLoadedState extends DefaultState{
 				window.setWarningMessage(e.getMessage());
 			}
 			window.calculateScale();
+			controller.getCircuitManagement().setCircuitsList(null);
+			controller.getCircuitManagement().setDeliveryList(null);
 			window.drawMap();
 		} catch (LoadMapException l)
 		{
@@ -51,6 +53,7 @@ public class MapLoadedState extends DefaultState{
 			window.setMessage("");
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.drawDeliveries();
+			controller.getCircuitManagement().setCircuitsList(null);
 
 		} catch (LoadDeliveryException l)
 		{
