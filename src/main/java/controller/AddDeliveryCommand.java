@@ -49,7 +49,10 @@ public class AddDeliveryCommand implements Command {
 	@Override
 	public void doCde() {
 		circuitManagement.addDelivery(node, duration, previousNode);
-		window.drawCircuits();
+		if (circuitManagement.getCircuitsList()!= null) 
+			window.drawCircuits();
+		else
+			window.drawDeliveries();
 	}
 
 	/**
@@ -60,7 +63,10 @@ public class AddDeliveryCommand implements Command {
 		try {
 			previousNode = circuitManagement.getPreviousNode(node);
 			circuitManagement.removeDelivery(node);
-			window.drawCircuits();
+			if (circuitManagement.getCircuitsList()!= null) 
+				window.drawCircuits();
+			else
+				window.drawDeliveries();
 		} catch (ManagementException e) {
 			e.printStackTrace();
 		}

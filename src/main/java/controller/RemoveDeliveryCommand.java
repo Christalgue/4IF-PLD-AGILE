@@ -48,7 +48,10 @@ public class RemoveDeliveryCommand implements Command {
 	public void doCde() {
 		try {
 			circuitManagement.removeDelivery(node);
-			window.drawCircuits();
+			if (circuitManagement.getCircuitsList()!= null) 
+				window.drawCircuits();
+			else
+				window.drawDeliveries();
 		} catch (ManagementException e) {
 			e.printStackTrace();
 		}
@@ -60,7 +63,10 @@ public class RemoveDeliveryCommand implements Command {
 	@Override
 	public void undoCde() {
 		circuitManagement.addDelivery(node,duration, previousNode);
-		window.drawCircuits();
+		if (circuitManagement.getCircuitsList()!= null) 
+			window.drawCircuits();
+		else
+			window.drawDeliveries();
 	}
 
 }
