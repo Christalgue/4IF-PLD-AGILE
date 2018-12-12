@@ -23,8 +23,13 @@ public class KeyListener extends KeyAdapter {
 	/** The controller. */
 	private Controller controller;
 	
+	/** The zoom enable. */
 	private boolean zoomEnable = false;
+	
+	/** The unzoom enable. */
 	private boolean unZoomEnable = false;
+	
+	/** The shift enable. */
 	private boolean shiftEnable = false;
 
 	/**
@@ -96,14 +101,29 @@ public class KeyListener extends KeyAdapter {
 	}
 
 
+	/**
+	 * Shift enable.
+	 *
+	 * @param shift the shift
+	 */
 	public void shiftEnable(boolean shift ) {
 		shiftEnable = shift;
 	}
 
+	/**
+	 * Zoom enable.
+	 *
+	 * @param zoom the zoom
+	 */
 	public void zoomEnable(boolean zoom) {
 		zoomEnable = zoom;
 	}
 
+	/**
+	 * Un zoom enable.
+	 *
+	 * @param unZoom the un zoom
+	 */
 	public void unZoomEnable(boolean unZoom) {
 		unZoomEnable = unZoom;
 	}

@@ -121,6 +121,9 @@ public void emptyTree() {
 	treeModel.reload();
 }
 	
+/**
+ * Fill delivery tree.
+ */
 public void fillDeliveryTree() {
 
 		setBorder(BorderFactory.createTitledBorder("Livraisons"));

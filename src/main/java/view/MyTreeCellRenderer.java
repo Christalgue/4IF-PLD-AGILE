@@ -36,6 +36,7 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 	/** The hover circuit. */
 	private String hoverCircuit="";
 	
+	/** The repository circuit. */
 	private String repositoryCircuit="";
 	
 	/**
@@ -200,6 +201,11 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
     	}
     }
     
+    /**
+     * Sets the repository circuit.
+     *
+     * @param circuit the new repository circuit
+     */
     public void setRepositoryCircuit ( String circuit) {
     	this.repositoryCircuit = circuit;
     }

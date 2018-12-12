@@ -27,128 +27,245 @@ import main.java.exception.ManagementException;
 import main.java.utils.PopUpType;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Window.
+ */
 public class Window extends JFrame{
 	
+	/** The controller. */
 	private Controller controller;
 	
 	//////////////////////////////LISTENERS/////////////////////////////
 
+	/** The buttons listener. */
 	protected ButtonsListener buttonsListener;
+	
+	/** The mouse listener. */
 	protected MouseListener mouseListener;	
+	
+	/** The key listener. */
 	protected KeyListener keyListener;
 	
 	//////////////////////////////GRAPHIC COMPOSANTS/////////////////////////////
 
+	/** The graphic view. */
 	// View in which map, deliveries and circuits are painted
 	private GraphicView graphicView;
 	
+	/** The textual view. */
 	// View in which deliveries and circuits list are displayed
 	private TextualView textualView;
+	
+	/** The textual view tree. */
 	// Display deliveries and circuits list
 	protected JTree textualViewTree;
+	
+	/** The tree root. */
 	// textualViewTree's root node
 	protected DefaultMutableTreeNode treeRoot;
+	
+	/** The cell renderer. */
 	// textualViewTree's custom cell renderer
 	public MyTreeCellRenderer cellRenderer; 
 	
+	/** The message field. */
 	// Field to display messages ( errors, warnings, indications )
 	protected JLabel messageField;
 	
+	/** The pop up. */
 	// Validation and error Pop Up
 	protected PopUp popUp;
 	
+	/** The chooser. */
 	// File chooser for deliveries list and map to load
 	private JFileChooser chooser;
 	
+	/** The number of delivery men field. */
 	// Field to enter delivery men number
 	protected TextField numberOfDeliveryMenField;
 
 	//////////////////////////////BUTTONS/////////////////////////////
 	
+	/** The Constant LOAD_MAP. */
 	//Buttons constants 
 	protected static final String LOAD_MAP = "Charger un plan";
+	
+	/** The Constant LOAD_DELIVERY_OFFER. */
 	protected static final String LOAD_DELIVERY_OFFER = "Charger une demande de livraison";
+	
+	/** The Constant CALCULATE_CIRCUITS. */
 	protected static final String CALCULATE_CIRCUITS = "Calculer les tournees";
+	
+	/** The Constant ADD_DELIVERY. */
 	protected static final String ADD_DELIVERY = "Ajouter une livraison";
+	
+	/** The Constant DELETE_DELIVERY. */
 	protected static final String DELETE_DELIVERY = "Supprimer la livraison";
+	
+	/** The Constant MOVE_DELIVERY. */
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
+	
+	/** The Constant CONTINUE_CALCULATION. */
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
+	
+	/** The Constant UNDO. */
 	protected static final String UNDO = "Retour";
+	
+	/** The Constant REDO. */
 	protected static final String REDO = "Suivant";
+	
+	/** The Constant CANCEL. */
 	protected static final String CANCEL = "Annuler";
+	
+	/** The Constant RESET_SCALE. */
 	protected static final String RESET_SCALE = "Retablir l'echelle";
+	
+	/** The Constant GENERATE_ROADMAP. */
 	protected static final String GENERATE_ROADMAP = "Generer la feuille de route";
+	
+	/** The Constant UP. */
 	protected static final String UP = "U";
+	
+	/** The Constant DOWN. */
 	protected static final String DOWN = "D";
+	
+	/** The Constant RIGHT. */
 	protected static final String RIGHT = "R";
+	
+	/** The Constant LEFT. */
 	protected static final String LEFT = "L";
+	
+	/** The Constant ZOOM. */
 	protected static final String ZOOM = "Zoomer";
+	
+	/** The Constant UNZOOM. */
 	protected static final String UNZOOM = "Dezoomer";
 	
+	/** The load delivery list. */
 	// Buttons
 	protected JButton loadDeliveryList;
+	
+	/** The calculate circuit button. */
 	protected JButton calculateCircuitButton;
+	
+	/** The continue calculate circuit button. */
 	protected JButton continueCalculateCircuitButton;
+	
+	/** The add delivery button. */
 	protected JButton addDeliveryButton;
+	
+	/** The delete delivery button. */
 	protected JButton deleteDeliveryButton;
+	
+	/** The move delivery button. */
 	protected JButton moveDeliveryButton;
+	
+	/** The undo button. */
 	protected JButton undoButton;	
+	
+	/** The redo button. */
 	protected JButton redoButton;
+	
+	/** The up button. */
 	protected JButton upButton;
+	
+	/** The down button. */
 	protected JButton downButton;
+	
+	/** The right button. */
 	protected JButton rightButton;
+	
+	/** The left button. */
 	protected JButton leftButton;
+	
+	/** The zoom button. */
 	protected JButton zoomButton;
+	
+	/** The un zoom button. */
 	protected JButton unZoomButton;
+	
+	/** The cancel add button. */
 	protected JButton cancelAddButton;
+	
+	/** The reset scale button. */
 	protected JButton resetScaleButton;
+	
+	/** The generate roadmap button. */
 	protected JButton generateRoadmapButton;
 
 	//////////////////////////////COMPOSANTS SIZE/////////////////////////////
 
+	/** The window width. */
 	protected final int windowWidth = 1500;
+	
+	/** The window height. */
 	protected final int windowHeight = 720;
+	
+	/** The button panel height. */
 	protected final int buttonPanelHeight =50;
+	
+	/** The graphic width. */
 	protected final int graphicWidth = 1030;
+	
+	/** The message field height. */
 	protected final int messageFieldHeight = 40;
 	
+	/** The button height. */
 	// Button height in textual view
 	protected final int buttonHeight = 40;
+	
+	/** The button space. */
 	// Vertical gap between two buttons in textualView
 	protected final int buttonSpace = 10; 	
 	
+	/** The path width. */
 	// Width of a map or circuit bow in graphicview
 	protected final int pathWidth = 2;
 
 	//////////////////////////////SELECTION AND HOVERING/////////////////////////////
 	
+	/** The selected node. */
 	// Last selected node
 	protected Delivery selectedNode;
+	
+	/** The hover node. */
 	// Last hovered node
 	protected Delivery hoverNode;
 	
+	/** The selected circuit. */
 	// Last selected circuit, "-1" means none
 	protected int selectedCircuit = -1;
+	
+	/** The hover circuit. */
 	// Last hovered circuit, "-1" means none
 	protected int hoverCircuit = -1;
 	
 	//////////////////////////////COLORS/////////////////////////////
 
+	/** The selected color. */
 	// Selected items color in both views
 	protected Color selectedColor = new Color(0,150,0);
+	
+	/** The hover color. */
 	// Hovered items color in both views
 	protected Color hoverColor = Color.BLUE;
+	
+	/** The delivery color. */
 	// Deliveries color in both views
 	protected Color deliveryColor = Color.RED;
+	
+	/** The repository color. */
 	// Repository color in both views
 	protected Color repositoryColor = Color.DARK_GRAY;
 	
+	/** The colors. */
 	// Contains each circuit's color, with circuit's index in CircuitManagement's circuitsList as key
 	protected HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
 
 	
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public Window () {
 		
@@ -156,6 +273,8 @@ public class Window extends JFrame{
 	
 	/**
 	 * Create the application.
+	 *
+	 * @param controller the controller
 	 */
 	public Window (Controller controller){
 		
@@ -209,6 +328,9 @@ public class Window extends JFrame{
 
 	//////////////////////////////PUT COMPOSANTS IN PLACE/////////////////////////////
 
+	/**
+	 * Sets the controller window.
+	 */
 	public void setControllerWindow() {
 		
 		setLayout(null);
@@ -220,6 +342,11 @@ public class Window extends JFrame{
 	
 	}
 	
+	/**
+	 * Fill button panel.
+	 *
+	 * @param buttonPanel the button panel
+	 */
 	public void fillButtonPanel(JPanel buttonPanel) {
 		
 		buttonPanel.setSize(windowWidth, buttonPanelHeight);
@@ -290,6 +417,11 @@ public class Window extends JFrame{
 		buttonPanel.add(generateRoadmapButton);
 	}
 	
+	/**
+	 * Sets the graphic view.
+	 *
+	 * @param graphicView the new graphic view
+	 */
 	private void setGraphicView(GraphicView graphicView) {
 		
 		graphicView.setLocation(0, buttonPanelHeight+messageFieldHeight);
@@ -299,6 +431,12 @@ public class Window extends JFrame{
 		
 	}
 	
+	/**
+	 * Adds the icon to button.
+	 *
+	 * @param button the button
+	 * @param path the path
+	 */
 	private void addIconToButton (JButton button, String path) {
 		try {
 		    ImageIcon img = new ImageIcon(path);
@@ -308,12 +446,22 @@ public class Window extends JFrame{
 		}
 	}
 	
+	/**
+	 * Creates the tree root.
+	 *
+	 * @return the default mutable tree node
+	 */
 	private DefaultMutableTreeNode createTreeRoot() {
 		
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
 		return root;
 	}
 	
+	/**
+	 * Sets the textual view.
+	 *
+	 * @param textualView the new textual view
+	 */
 	private void setTextualView(TextualView textualView) {
 		
 		textualView.setLocation(graphicWidth, buttonPanelHeight);
@@ -420,7 +568,10 @@ public class Window extends JFrame{
 			
 	}
 	
-	 public void addTreeListener () {
+	 /**
+ 	 * Adds the tree listener.
+ 	 */
+ 	public void addTreeListener () {
 		 
 		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
 		    public void valueChanged(TreeSelectionEvent e) {
@@ -506,6 +657,11 @@ public class Window extends JFrame{
 		 });
 	}
 	
+	/**
+	 * Sets the message field.
+	 *
+	 * @param messageField the new message field
+	 */
 	private void setMessageField(JLabel messageField) {
 		messageField.setSize( graphicWidth, messageFieldHeight);
 		messageField.setLocation(0, buttonPanelHeight);
@@ -516,12 +672,20 @@ public class Window extends JFrame{
 		messageField.setText("Veuillez selectionner un plan a charger");
 	}
 	
+	/**
+	 * Sets the mouse listener.
+	 */
 	public void setMouseListener() {
 		this.graphicView.addMouseListener(mouseListener);
 		this.graphicView.addMouseMotionListener(mouseListener);
 	}
 	
 
+	/**
+	 * Gets the file.
+	 *
+	 * @return the file
+	 */
 	//////////////////////////////GET DATAS FROM WINDOW/////////////////////////////
 	protected String getFile () {
 			
@@ -537,6 +701,11 @@ public class Window extends JFrame{
 		
 	}
 	
+	/**
+	 * Gets the folder.
+	 *
+	 * @return the folder
+	 */
 	protected String getFolder() {
 		
 		chooser = new JFileChooser();
@@ -552,6 +721,11 @@ public class Window extends JFrame{
 		
 	}
 
+	/**
+	 * Gets the delivery men number.
+	 *
+	 * @return the delivery men number
+	 */
 	public boolean getDeliveryMenNumber() {
 		
 		boolean correctValue = false;
@@ -574,16 +748,31 @@ public class Window extends JFrame{
 	
 	//////////////////////////////CHANGE DISPLAYED TEXT/////////////////////////////
 	
+	/**
+	 * Sets the message.
+	 *
+	 * @param string the new message
+	 */
 	public void setMessage( String string) {
 		messageField.setBackground(Color.DARK_GRAY);
 		messageField.setText(string);
 	}
 	
+	/**
+	 * Sets the error message.
+	 *
+	 * @param string the new error message
+	 */
 	public void setErrorMessage( String string) {
 		messageField.setBackground(Color.RED);
 		messageField.setText(string);
 	}
 	
+	/**
+	 * Sets the warning message.
+	 *
+	 * @param string the new warning message
+	 */
 	public void setWarningMessage(String string) {
 		messageField.setBackground(Color.ORANGE);
 		messageField.setText(string);
@@ -591,21 +780,33 @@ public class Window extends JFrame{
 	
 	//////////////////////////////DRAW COMPOSANTS/////////////////////////////
 	
+	/**
+	 * Calculate scale.
+	 */
 	public void calculateScale() {
 		graphicView.calculateScale(controller.getCircuitManagement());
 	}
 	
+	/**
+	 * Draw map.
+	 */
 	public void drawMap() {
 		textualView.emptyTree();
 		graphicView.paintMap();
 	}
 	
+	/**
+	 * Draw deliveries.
+	 */
 	public void drawDeliveries() {
 		drawMap();
 		graphicView.paintDeliveries();
 		textualView.fillDeliveryTree();
 	}
 	
+	/**
+	 * Draw circuits.
+	 */
 	public void drawCircuits() {
 		drawDeliveries();
 		graphicView.paintCircuits();
@@ -617,61 +818,103 @@ public class Window extends JFrame{
 	
 	//////////////////////////////BUTTON ACTIVATION/////////////////////////////
 	
+	/**
+	 * Enable button load deliveries list.
+	 */
 	public void enableButtonLoadDeliveriesList() {
 		loadDeliveryList.setEnabled(true);
 	}
 	
+	/**
+	 * Enable button calculate circuit.
+	 */
 	public void enableButtonCalculateCircuit() {
 		calculateCircuitButton.setEnabled(true);
 	}	
 	
+	/**
+	 * Enable button continue calculation.
+	 */
 	public void enableButtonContinueCalculation() {
 		continueCalculateCircuitButton.setVisible(true);
 		continueCalculateCircuitButton.setEnabled(true);
 	}
 	
+	/**
+	 * Enable button undo.
+	 */
 	public void enableButtonUndo() {
 		undoButton.setEnabled(true);
 	}
 	
+	/**
+	 * Enable button redo.
+	 */
 	public void enableButtonRedo() {
 		redoButton.setEnabled(true);
 	}
 	
+	/**
+	 * Enable button add delivery.
+	 */
 	public void enableButtonAddDelivery() {
 		addDeliveryButton.setEnabled(true);
 	}
 	
+	/**
+	 * Enable button delete delivery.
+	 */
 	public void enableButtonDeleteDelivery() {
 		deleteDeliveryButton.setEnabled(true);
 	}
 	
+	/**
+	 * Enable button move delivery.
+	 */
 	public void enableButtonMoveDelivery() {
 		moveDeliveryButton.setEnabled(true);
 	}
 	
+	/**
+	 * Enable zoom button.
+	 */
 	public void enableZoomButton() {
 		zoomButton.setEnabled(true);
 		keyListener.zoomEnable(true);
 	}
 
+	/**
+	 * Enable de zoom button.
+	 */
 	public void enableDeZoomButton() {
 		unZoomButton.setEnabled(true);
 		keyListener.unZoomEnable(true);
 	}
 
+	/**
+	 * Enable cancel button.
+	 */
 	public void enableCancelButton() {
 		cancelAddButton.setEnabled(true);
 	}
 	
+	/**
+	 * Enable reset scale button.
+	 */
 	public void enableResetScaleButton() {
 		resetScaleButton.setEnabled(true);
 	}
 	
+	/**
+	 * Enable generate roadmap button.
+	 */
 	public void enableGenerateRoadmapButton () {
 		generateRoadmapButton.setEnabled(true);
 	}
 	
+	/**
+	 * Enable arrows.
+	 */
 	public void enableArrows() {
 		upButton.setEnabled(true);
 		downButton.setEnabled(true);
@@ -682,52 +925,94 @@ public class Window extends JFrame{
 	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
 
+	/**
+	 * Disable button calculate circuit.
+	 */
 	public void disableButtonCalculateCircuit() {
 		calculateCircuitButton.setEnabled(false);
 	}
 	
+	/**
+	 * Disable button continue calculation.
+	 */
 	public void disableButtonContinueCalculation() {
 		continueCalculateCircuitButton.setEnabled(false);
 	}
 	
+	/**
+	 * Disable button add delivery.
+	 */
 	public void disableButtonAddDelivery() {
 		addDeliveryButton.setEnabled(false);
 	}
 	
+	/**
+	 * Disable button delete delivery.
+	 */
 	public void disableButtonDeleteDelivery() {
 		deleteDeliveryButton.setEnabled(false);
 	}
 	
+	/**
+	 * Disable button move delivery.
+	 */
 	public void disableButtonMoveDelivery() {
 		moveDeliveryButton.setEnabled(false);
 	}
 	
+	/**
+	 * Disable button undo.
+	 */
 	public void disableButtonUndo() {
 		undoButton.setEnabled(false);
 	}
 	
+	/**
+	 * Disable button redo.
+	 */
 	public void disableButtonRedo() {
 		redoButton.setEnabled(false);
 	}
 
+	/**
+	 * Disable cancel button.
+	 */
 	public void disableCancelButton() {
 		cancelAddButton.setEnabled(false);
 	}
 	
+	/**
+	 * Disable reset scale button.
+	 */
 	public void disableResetScaleButton() {
 		resetScaleButton.setEnabled(false);
 	}
 	
+	/**
+	 * Disable generate roadmap button.
+	 */
 	public void disableGenerateRoadmapButton () {
 		generateRoadmapButton.setEnabled(false);
 	}
 	
+	/**
+	 * Gets the pop up value.
+	 *
+	 * @param message the message
+	 * @param window the window
+	 * @return the pop up value
+	 */
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
 	public int getPopUpValue(PopUpType message, Window window) {
 		
 		return popUp.displayPopUp(message, window);
 	}
 	
+	/**
+	 * Manage add pop up value.
+	 *
+	 * @param userChoice the user choice
+	 */
 	public void manageAddPopUpValue(int userChoice) {
 		if (userChoice == 0) {
 			try {
@@ -740,6 +1025,11 @@ public class Window extends JFrame{
 		}
 	}
 	
+	/**
+	 * Manage delete pop up value.
+	 *
+	 * @param userChoice the user choice
+	 */
 	public void manageDeletePopUpValue(int userChoice) {
 		if (userChoice == 0) {
 			try {
@@ -752,7 +1042,12 @@ public class Window extends JFrame{
 		}
 	}
 	
-	 public void manageDurationPopUpValue(int inputValue) {
+	 /**
+ 	 * Manage duration pop up value.
+ 	 *
+ 	 * @param inputValue the input value
+ 	 */
+ 	public void manageDurationPopUpValue(int inputValue) {
 		 if (inputValue >= 0) {
 			try {
 				controller.validateDuration(inputValue);
@@ -764,6 +1059,11 @@ public class Window extends JFrame{
 		}
 	}
 	
+	/**
+	 * Manage move pop up value.
+	 *
+	 * @param userChoice the user choice
+	 */
 	public void manageMovePopUpValue(int userChoice) {
 		if (userChoice == 0) {
 			try {
@@ -776,7 +1076,12 @@ public class Window extends JFrame{
 		}
 	}
 	
-	 public void manageContinuePopUpValue(int userChoice) {
+	 /**
+ 	 * Manage continue pop up value.
+ 	 *
+ 	 * @param userChoice the user choice
+ 	 */
+ 	public void manageContinuePopUpValue(int userChoice) {
 		if (userChoice == 0) {
 			controller.continueCalculation(false);
 		} else if (userChoice == 1) {
@@ -786,33 +1091,60 @@ public class Window extends JFrame{
 	 
 	 //////////////////////////////GRAPHIC DISPLAY/////////////////////////////
 	 
-	 public void zoom() {
+	 /**
+ 	 * Zoom.
+ 	 */
+ 	public void zoom() {
 		graphicView.zoom();
 	 }
 	 
-	 public void unZoom() {
+	 /**
+ 	 * Un zoom.
+ 	 */
+ 	public void unZoom() {
 		graphicView.unZoom();
 	 }
 	 
-	 public void horizontalShift( int right) {
+	 /**
+ 	 * Horizontal shift.
+ 	 *
+ 	 * @param right the right
+ 	 */
+ 	public void horizontalShift( int right) {
 		 graphicView.horizontalShift(right);
 	 }
 	 
-	 public void verticalShift(int down) {
+	 /**
+ 	 * Vertical shift.
+ 	 *
+ 	 * @param down the down
+ 	 */
+ 	public void verticalShift(int down) {
 		 graphicView.verticalShift(down);
 	 }
 	 
-	 public void resetScale() {
+	 /**
+ 	 * Reset scale.
+ 	 */
+ 	public void resetScale() {
 		 graphicView.resetDefaultValues();
 	 }
 	 
-	 public void emptyColors () {
+	 /**
+ 	 * Empty colors.
+ 	 */
+ 	public void emptyColors () {
 		 colors = new HashMap < Integer,Color>();
 	 }
 	 
 	 //////////////////////////////SELECTION/////////////////////////////
 	 
-	public void nodeSelected(Delivery delivery) {
+	/**
+ 	 * Node selected.
+ 	 *
+ 	 * @param delivery the delivery
+ 	 */
+ 	public void nodeSelected(Delivery delivery) {
 		
 		// If there is a node already selected
 		if(selectedNode!=null){
@@ -836,6 +1168,11 @@ public class Window extends JFrame{
 		
 	}
 		
+	/**
+	 * Node hover.
+	 *
+	 * @param delivery the delivery
+	 */
 	public void nodeHover(Delivery delivery) {
 		
 		// If the mouse exit a node
@@ -872,6 +1209,11 @@ public class Window extends JFrame{
 			
 	}
 		
+	/**
+	 * Circuit selected.
+	 *
+	 * @param selectedDelivery the selected delivery
+	 */
 	public void circuitSelected(Delivery selectedDelivery) {
 
 		// If the newer selected node isn't null and circuits are displayed
@@ -907,6 +1249,11 @@ public class Window extends JFrame{
 		
 	}
 
+	/**
+	 * Circuit hover.
+	 *
+	 * @param delivery the delivery
+	 */
 	public void circuitHover(Delivery delivery) {
 					
 		int toDrawCircuit = controller.getCircuitManagement().getCircuitIndexByNode(delivery);
@@ -949,6 +1296,11 @@ public class Window extends JFrame{
 		setSelectedTreeNode (toDrawCircuit, false);
 	}		
 		
+	/**
+	 * Textual circuit selected.
+	 *
+	 * @param circuitIndex the circuit index
+	 */
 	public void textualCircuitSelected(int circuitIndex) {
 		
 		// The former selected circuit is unpainted
@@ -962,7 +1314,13 @@ public class Window extends JFrame{
 		setSelectedTreeNode (circuitIndex, true);
 	}	
 	
-	 public void setSelectedTreeNode ( Delivery delivery, boolean selected ){
+	 /**
+ 	 * Sets the selected tree node.
+ 	 *
+ 	 * @param delivery the delivery
+ 	 * @param selected the selected
+ 	 */
+ 	public void setSelectedTreeNode ( Delivery delivery, boolean selected ){
 		
 		 // If a delivery is selected or hovered, it is put in the right color in the textualViewTree  
 		 if ( delivery != null && delivery.getDuration() != -1) {
@@ -985,6 +1343,12 @@ public class Window extends JFrame{
 
 	 }
 		
+	/**
+	 * Sets the selected tree node.
+	 *
+	 * @param circuitIndex the circuit index
+	 * @param selected the selected
+	 */
 	private void setSelectedTreeNode(int circuitIndex, boolean selected) {
 		
 		// If a delivery is selected or hovered, it is put in the right color in the textualViewTree  
@@ -1008,6 +1372,11 @@ public class Window extends JFrame{
 
 	}
 
+	/**
+	 * Sets the repository circuit.
+	 *
+	 * @param circuitIndex the new repository circuit
+	 */
 	private void setRepositoryCircuit(int circuitIndex) {
 		
 		// If the repository is selected via textualView and it belongs to a circuit,
@@ -1026,6 +1395,9 @@ public class Window extends JFrame{
 		}
 	}  
 		
+	/**
+	 * Empty selected node.
+	 */
 	public void emptySelectedNode() {
 		
 		// If a node is selected, it is unpainted an selectedNode is
@@ -1036,6 +1408,9 @@ public class Window extends JFrame{
 		}
 	}
 	
+	/**
+	 * Empty selected circuit.
+	 */
 	public void emptySelectedCircuit() {
 		
 		// If a circuit is selected, it is unpainted an selectedCircuit is

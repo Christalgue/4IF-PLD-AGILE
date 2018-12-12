@@ -6,40 +6,74 @@ import java.awt.event.ActionListener;
 import main.java.controller.Controller;
 import main.java.utils.Serializer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The listener interface for receiving buttons events.
+ * The class that is interested in processing a buttons
+ * event implements this interface, and the object created
+ * with that class is registered with a component using the
+ * component's <code>addButtonsListener<code> method. When
+ * the buttons event occurs, that object's appropriate
+ * method is invoked.
+ *
+ * @see ButtonsEvent
+ */
 /*
  * 
  */
 public class ButtonsListener implements ActionListener {
 
-	/**
-	 * 
-	 */
+	/** The controller. */
 	private Controller controller;
 	
+	/** The map. */
 	private String map;
+	
+	/** The delivery list. */
 	private String deliveryList; 
+	
+	/** The delivery men number. */
 	private int deliveryMenNumber;
 	
+	/**
+	 * Sets the map.
+	 *
+	 * @param map the new map
+	 */
 	public void setMap( String map) {
 		this.map = map;
 	}
 	
+	/**
+	 * Sets the delivery list.
+	 *
+	 * @param deliveryList the new delivery list
+	 */
 	public void setDeliveryList( String deliveryList) {
 		this.deliveryList = deliveryList;
 	}
 	
+	/**
+	 * Sets the delivery men number.
+	 *
+	 * @param deliveryMenNumber the new delivery men number
+	 */
 	public void setDeliveryMenNumber( int deliveryMenNumber) {
 		this.deliveryMenNumber = deliveryMenNumber;
 	}
 	
 	/**
-	 * 
-	 * @param controller
+	 * Instantiates a new buttons listener.
+	 *
+	 * @param controller the controller
 	 */
 	public ButtonsListener(Controller controller){
 		this.controller = controller;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) { 
 		// Method called by the button listener each time a button is clicked
