@@ -94,7 +94,7 @@ public class CalcState extends DefaultState {
 			e.printStackTrace();
 		} catch (TSPLimitTimeReachedException e) {
 			window.drawCircuits();
-			controller.setCurrentState(controller.calculatingState);
+			controller.setCurrentState(controller.calcState);
 			window.enableButtonContinueCalculation();
 			//controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		}
