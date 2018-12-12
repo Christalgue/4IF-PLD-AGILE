@@ -18,17 +18,17 @@ public class InitialState extends DefaultState {
 	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
-			window.enableDeZoomButton();
-			window.enableZoomButton();
-			window.enableArrows();
 			window.setMessage("");
-			window.enableButtonLoadDeliveriesList();
 			try {
 				controller.getCircuitManagement().loadMap(filename);
 				window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
 			} catch (ForgivableXMLException e) {
 				window.setWarningMessage(e.getMessage());
 			}
+			window.enableDeZoomButton();
+			window.enableZoomButton();
+			window.enableArrows();
+			window.enableButtonLoadDeliveriesList();
 			window.calculateScale();
 			window.drawMap();
 			controller.getCircuitManagement().setCircuitsList(null);

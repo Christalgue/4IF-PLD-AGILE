@@ -144,10 +144,12 @@ public class CircuitManagement extends Observable{
 	 * @throws ForgivableXMLException when a problem occurred while loading the map but without avoiding it to be created
 	 */
     public void loadMap(String filename) throws LoadMapException, ForgivableXMLException {
-    	currentMap = new Map();
+    	Map map = new Map();
         try {
-			currentMap.load(filename);
+        	map.load(filename);
+            currentMap = map;
 		} catch (ForgivableXMLException e) {
+			currentMap = map;
 			throw e; 
 		} catch (LoadMapException e) {
 			throw e; 

@@ -226,15 +226,15 @@ class TestCircuitManagement {
 			circuitManager.calculateCircuits(1, false);
 			
 			//Assert new circuit has been correctly calculated
-			String s13 = "Route :\n1 => 3 (1.0)";
-			String s32 = "Route :\n3 => 1 (1.0)\n1 => 2 (2.0)";
-			String s21 = "Route :\n2 => 1 (1.0)";
+			String s12 = "Route :\n1 => 2 (2.0)";
+			String s23 = "Route :\n2 => 1 (1.0)\n1 => 3 (1.0)";
+			String s31 = "Route :\n3 => 1 (1.0)";
 			
 			Circuit circuit = circuitManager.getCircuitsList().get(0);
 			assertTrue(circuit.getPath().size()==3,"Error, size of paths is incorrect, expected : 3 got : "+circuit.getPath().size());
-			assertTrue(circuit.getPath().get(0).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(0).toString());
-			assertTrue(circuit.getPath().get(1).toString().contains(s32),"Error, expected : {"+s32+"}, got : "+circuit.getPath().get(1).toString());
-			assertTrue(circuit.getPath().get(2).toString().contains(s21),"Error, expected : {"+s21+"}, got : "+circuit.getPath().get(2).toString());
+			assertTrue(circuit.getPath().get(0).toString().contains(s12),"Error, expected : {"+s12+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s23),"Error, expected : {"+s23+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s31),"Error, expected : {"+s31+"}, got : "+circuit.getPath().get(2).toString());
 
 		} catch (LoadMapException e) {
 			fail("LoadMapException : "+e.getMessage());
