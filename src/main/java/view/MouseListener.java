@@ -27,7 +27,6 @@ public class MouseListener extends MouseAdapter {
 	private GraphicView graphicView;
 	
 	/** The window. */
-	//private TextualView textualView;
 	private Window window;
 	
 	/** The last clicked point. */
@@ -42,10 +41,8 @@ public class MouseListener extends MouseAdapter {
 	 * @param window the window
 	 */
 	public MouseListener(Controller controller, GraphicView graphicView, Window window){
-	//public MouseListener(Controller controller, GraphicView graphicView, TextualView textualView, Window window){
 		this.controller = controller;
 		this.graphicView = graphicView;
-		//this.textualView = textualView;
 		this.window = window;
 	}
 
@@ -66,6 +63,7 @@ public class MouseListener extends MouseAdapter {
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseAdapter#mousePressed(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mousePressed (MouseEvent evt) {
 		
 		if ( evt.getButton() == MouseEvent.BUTTON1) { 
@@ -77,6 +75,7 @@ public class MouseListener extends MouseAdapter {
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseAdapter#mouseReleased(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mouseReleased(MouseEvent evt) {
 		
 		int x = evt.getX();
@@ -96,7 +95,6 @@ public class MouseListener extends MouseAdapter {
 		
 	}
 	
-	
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseAdapter#mouseMoved(java.awt.event.MouseEvent)
 	 */
@@ -108,20 +106,4 @@ public class MouseListener extends MouseAdapter {
 		controller.mouseMoved(p);
 		
 	}
-	
-/*    public void mouseWheelMoved(MouseWheelEvent e) {
-        
-        int notches = e.getWheelRotation();
-        if (notches < 0) {
-            System.out.println("ZOOOOM");
-        } else {
-            System.out.println("DEZOOOM");
-        }
-        if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
-            System.out.println("MROUUUUUW");
-        } else { //scroll type == MouseWheelEvent.WHEEL_BLOCK_SCROLL
-            System.out.println("MYSTERYYY");
-        }
-     }*/
-
 }

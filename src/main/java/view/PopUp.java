@@ -10,23 +10,47 @@ import javax.swing.JTextField;
 
 import main.java.utils.PopUpType;
 
+/**
+ * The Class PopUp.
+ */
 public class PopUp extends JFrame {
 
+	/** The Constant VALIDATE_ADD. */
 	protected static final String VALIDATE_ADD = "Voulez-vous vraiment ajouter ce point de livraison ?";
+	
+	/** The Constant VALIDATE_ADD_DURATION. */
 	protected static final String VALIDATE_ADD_DURATION = "Veuillez entrer la duree de la livraison.";
+	
+	/** The Constant VALIDATE_MOVE. */
 	protected static final String VALIDATE_MOVE = "Voulez-vous vraiment deplacer cette livraison ?";
+	
+	/** The Constant VALIDATE_DELETE. */
 	protected static final String VALIDATE_DELETE = "Voulez-vous vraiment supprimer ce point de livraison ?";
+	
+	/** The Constant VALIDATE_CONTINUE. */
 	protected static final String VALIDATE_CONTINUE = "Voulez-vous continuer la recherche de chemins ?";
 	
+	/** The pop up. */
 	protected static JOptionPane popUp;
 	
+	/**
+	 * Instantiates a new pop up.
+	 */
 	public PopUp() {
 		popUp = new JOptionPane();
 	}
 	
+	/**
+	 * Display pop up.
+	 *
+	 * @param message the message displayed in the pop up
+	 * @param window the window which call the pop up
+	 * @return the value got by clicking on the pop up's buttons.
+	 */
 	public static int displayPopUp (PopUpType message, Window window) {
 		int userChoice = 0;
 		switch (message){
+			// Confirmation pop up for when the user want to add of a delivery
 			case ADD: 
 				Object[] validateOptions = {"Valider", "Annuler"};
 				userChoice = JOptionPane.showOptionDialog(window,
@@ -41,6 +65,7 @@ public class PopUp extends JFrame {
 				window.manageAddPopUpValue(userChoice);
 			break;
 			
+			// Confirmation pop up for when the user want to delete a delivery
 			case DELETE: 
 				Object[] deleteOptions = {"Valider", "Annuler"};
 				userChoice = JOptionPane.showOptionDialog(window,
@@ -54,7 +79,8 @@ public class PopUp extends JFrame {
 													);
 				window.manageDeletePopUpValue(userChoice);
 				break;
-				
+			
+			// Pop up to take the duration in second of a new delivery a user wants to add
 			case DURATION: 
 				JTextField durationTextField = new JTextField(10);
 		        String durationMessage = "Duree de la livraison en secondes";
@@ -76,6 +102,8 @@ public class PopUp extends JFrame {
 		        durationDialog.setContentPane(popUp);
 		        durationDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		        
+		        // Detect a change in the value of the event
+		        // Allow to not close the pop up directly after a click on its buttons to allow us to verify the entry of the user
 		        popUp.addPropertyChangeListener(
 	        	    new PropertyChangeListener() {
 	        	        public void propertyChange(PropertyChangeEvent e) {
@@ -112,11 +140,12 @@ public class PopUp extends JFrame {
 		        durationDialog.setVisible(true);
 				break;
 				
+			// Confirmation pop up for when the user want to move a delivery
 			case MOVE: 
 				Object[] moveOptions = {"Valider", "Anuler"};
 				userChoice = JOptionPane.showOptionDialog(window,
 													VALIDATE_MOVE,
-													"Valider la suppression de la livraison",
+													"Valider le déplacement de la livraison",
 													JOptionPane.YES_NO_OPTION,
 													JOptionPane.QUESTION_MESSAGE,
 													null,
@@ -125,34 +154,17 @@ public class PopUp extends JFrame {
 													); 
 				window.manageMovePopUpValue(userChoice);
 				break;
-				
-			case CONTINUE: 
-				Object[] continueOptions = {"Garder", "Continuer"};
-				userChoice = JOptionPane.showOptionDialog(window,
-											VALIDATE_CONTINUE,
-											"Meilleure tournee actuelle",
-											JOptionPane.YES_NO_CANCEL_OPTION,
-											JOptionPane.QUESTION_MESSAGE,
-											null,
-											continueOptions,
-											continueOptions[0]
-											);
-				window.manageContinuePopUpValue(userChoice);
-				break;
-				
-			case ERROR:
-				Object[] errorOptions = {"OK"};
-				userChoice = 0;
-				JOptionPane.showMessageDialog(window,
-											"Une erreur dans le fichier XML a été détectée",
-											"Erreur fichier XML",
-											JOptionPane.WARNING_MESSAGE);
-				window.manageContinuePopUpValue(userChoice);
-				break;
 		}
 		return userChoice;
 	}
 	
+	/**
+	 * Error pop up.
+	 *
+	 * @param window the window
+	 * @param zero to precise if the value can be 0 or not
+	 * @param numberOfDeliveries the number of deliveries
+	 */
 	public static void errorPopUp(Window window, boolean zero, int numberOfDeliveries) {
 		String errorPopUpText;
 		if (zero)

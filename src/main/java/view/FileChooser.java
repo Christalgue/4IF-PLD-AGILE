@@ -5,8 +5,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileSystemView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FileChooser.
+ */
 public class FileChooser extends JFrame {
 
+	/** The chooser. */
 	private JFileChooser chooser;
 
 	/**
@@ -24,6 +29,11 @@ public class FileChooser extends JFrame {
 		
 	}
 	
+	/**
+	 * Gets the chooser.
+	 *
+	 * @return the chooser
+	 */
 	public JFileChooser getChooser() {
 		return chooser;
 	}

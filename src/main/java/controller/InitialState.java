@@ -31,7 +31,7 @@ public class InitialState extends DefaultState {
 			}
 			window.calculateScale();
 			window.drawMap();
-			Window.setMouseListener(window);
+			window.setMouseListener();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
 		{
