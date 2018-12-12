@@ -115,11 +115,14 @@ public class TextualView extends JPanel{
 	/**
  * Fill delivery tree.
  */
+
+public void emptyTree() {
+	treeRoot.removeAllChildren();
+	treeModel.reload();
+}
+	
 public void fillDeliveryTree() {
 
-		treeRoot.removeAllChildren();
-		treeModel.reload();
-		
 		setBorder(BorderFactory.createTitledBorder("Livraisons"));
 		
 		int deliveryListIndex = 0;
@@ -149,9 +152,6 @@ public void fillDeliveryTree() {
 	 * Fill circuit tree.
 	 */
 	public void fillCircuitTree() {
-		
-		treeRoot.removeAllChildren();
-		treeModel.reload();
 		
 		int deliveryIndex =0;
 		int circuitIndex= 0;

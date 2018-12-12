@@ -63,7 +63,6 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
        if (selectedDelivery.equals(node) || selectedCircuit.equals(node)) {
     	   setForeground ( window.selectedColor);
        } else if (hoverDelivery.equals(node) || hoverCircuit.equals(node)){
-    	   System.out.println("NYAH");
     	   setForeground ( window.hoverColor);
        } else {
 	        if ( window.colors.get(0) != null) {
