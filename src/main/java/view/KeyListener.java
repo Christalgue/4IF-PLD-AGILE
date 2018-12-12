@@ -47,51 +47,68 @@ public class KeyListener extends KeyAdapter {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// Called by the key listener each time a key is pressed
-		// Interesting keys are SUPPR, CRTL+Z, and numbers ( for delivery men number ) 
+		// Interesting keys are SUPPR, CRTL+Z, CTRL+Y, Z, D and the arrow
 		int keyCode = e.getKeyCode();
 	    
+		// Test if the ctrl key is pressed
 		if((e.getModifiers() & KeyEvent.CTRL_MASK)==0 ){
 			switch( keyCode ) { 
+				
+				// When the user wants to go up on the map using the key arrow up
 		        case KeyEvent.VK_UP:
 		        	if (shiftEnable) {
+		        		// Do an upward shift of 50 pixels 
 			        	controller.getWindow().verticalShift(-50);
 			        	controller.getWindow().enableResetScaleButton();
 		        	}
 		            break;
+		            
+		        // When the user wants to go up on the map using the key arrow down
 		        case KeyEvent.VK_DOWN:
 		        	if (shiftEnable) {
+		        		// Do a downward shift of 50 pixels 
 		        		controller.getWindow().verticalShift(50);
 		        		controller.getWindow().enableResetScaleButton();
 		        	}
 		            break;
+		            
+		        // When the user wants to go up on the map using the key arrow left
 		        case KeyEvent.VK_LEFT:
 			        if (shiftEnable) {
+			        	// Do a left shift of 50 pixels 
 			        	controller.getWindow().horizontalShift(-50);
 			        	controller.getWindow().enableResetScaleButton();
 		        	}
 		            break;
+		            
+		        // When the user wants to go up on the map using the key arrow right
 		        case KeyEvent.VK_RIGHT :
 		        	if (shiftEnable) {
+		        		// Do a right shift of 50 pixels 
 		        		controller.getWindow().horizontalShift(50);
 		        		controller.getWindow().enableResetScaleButton();
 		        	}
 		            break;
+		            
+		        // When the user wants to zoom on the map using the key Z
 		        case KeyEvent.VK_Z:
 		        	if (zoomEnable) {
 		        		controller.getWindow().zoom();
 		        		controller.getWindow().enableResetScaleButton();
 		        	}
 		        	break;
+		        	
+	        	// When the user wants to unzoom on the map using the key D
 		        case KeyEvent.VK_D:
 		        	if(unZoomEnable) {
 			        	controller.getWindow().unZoom();
 			        	controller.getWindow().enableResetScaleButton();
 		        	}
 		        	break;
-		        	
 		     }
 		}
 		
+		// Test if the CTRL key is pressed to know if it is a undo with a CTRL+Z or a redo with a CTRL+Y
 		if (keyCode== KeyEvent.VK_Z && ((e.getModifiers() & KeyEvent.CTRL_MASK)!=0 )) {
 			controller.undo();
 			
@@ -100,11 +117,10 @@ public class KeyListener extends KeyAdapter {
 		} 
 	}
 
-
 	/**
 	 * Shift enable.
 	 *
-	 * @param shift the shift
+	 * @param shift the boolean used to enable or not the shift
 	 */
 	public void shiftEnable(boolean shift ) {
 		shiftEnable = shift;
@@ -113,7 +129,7 @@ public class KeyListener extends KeyAdapter {
 	/**
 	 * Zoom enable.
 	 *
-	 * @param zoom the zoom
+	 * @param zoom the boolean used to enable or not the zoom
 	 */
 	public void zoomEnable(boolean zoom) {
 		zoomEnable = zoom;
@@ -122,7 +138,7 @@ public class KeyListener extends KeyAdapter {
 	/**
 	 * Un zoom enable.
 	 *
-	 * @param unZoom the un zoom
+	 * @param unZoom the boolean used to enable or not the unzoom
 	 */
 	public void unZoomEnable(boolean unZoom) {
 		unZoomEnable = unZoom;
