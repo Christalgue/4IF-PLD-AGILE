@@ -13,18 +13,10 @@ import main.java.entity.Circuit;
 import main.java.entity.Node;
 import main.java.entity.Point;
 
-
-// TODO: Auto-generated Javadoc
 /**
- * The Class CircuitView.
+ * The Class CircuitView paint the circuits in the graphicView panel
  */
-public class CircuitView extends JPanel {
-	
-	/**
-	 * Default constructor.
-	 */
-    public CircuitView() {
-    }
+public class CircuitView {
     
 	/** The graphic view. */
 	private GraphicView graphicView;
@@ -32,11 +24,17 @@ public class CircuitView extends JPanel {
     /** The width of the circuit. */
     private int roadWidth;
     
-    /** The arrow length. */
+    /** The arrow's head length. */
     private int arrowLength;
     
-    /** The arrow width. */
+    /** The arrow's head width. */
     private int arrowWidth;
+    
+	/**
+	 * Default constructor.
+	 */
+    public CircuitView() {
+    }
     
     /**
      * Instantiates a new circuit view.
@@ -51,100 +49,60 @@ public class CircuitView extends JPanel {
     	this.arrowWidth = 2*width;
     }
     
-    /**
-     * Gets the road width.
-     *
-     * @return The width of the circuit
-     */
-    protected int getRoadWidth() {
-    	return roadWidth;
-    }
 
 	/**
-	 * Paint circuit.
+	 * Paint a circuit.
 	 *
-	 * @param g the g
-	 * @param circuit the circuit
-	 * @param color the color
+	 * @param g the graphics
+	 * @param circuit the circuit to paint
+	 * @param color the color in which the circuit is painted
 	 */
 	protected void paintCircuit ( Graphics2D g, Circuit circuit, Color color ) {
 		
-		int atomicPathIndex = 0;
 		Point start;
 		Point end;
 		boolean arrow = false;
 		
-		super.paintComponent(g);
 		g.setColor(color);
 		
+		// If the circuit's path isn't empty
 		if(circuit != null && circuit.getPath() != null) {
+			
 			for( AtomicPath entry : circuit.getPath()) {
-			    if(entry != null) {
+			    
+				if(entry != null) {
+			    	
+					// For each one of its bow
 			    	for ( Bow bow: entry.getPath()) {
 					
-					drawBow(g, bow);
-					
-					
-					if (arrow) {
-						start = graphicView.nodeToPoint( bow.getStartNode());
-						end = graphicView.nodeToPoint ( bow.getEndNode());
-						drawArrow(g, start, end);
-					}
-					
-					arrow = !arrow;
-					
-					/*atomicPathIndex++;
-					
-					if ( atomicPathIndex == entry.getPath().size() ) {	
+			    		// It is painted
+						graphicView.drawBow( bow);
+			    		
+			    		// An arrow is painted at the end of half of the bows
+						if (arrow) {
+							start = graphicView.nodeToPoint( bow.getStartNode());
+							end = graphicView.nodeToPoint ( bow.getEndNode());
+							drawArrow(g, start, end);
+						}
 						
-						start = graphicView.nodeToPoint( bow.getStartNode());
-					 	end = graphicView.nodeToPoint ( bow.getEndNode());
-						drawArrow(g, start, end);
-						atomicPathIndex =0;
-					}*/
-					
+						arrow = !arrow;
 					
 			    	}
 			    }
-				
 			}
 		}
-		
-		
 		
 	}	
 	
 	/**
-	 * Draw bow.
+	 * Draw an arrow.
 	 *
-	 * @param g the g
-	 * @param bow the bow
-	 */
-	public void drawBow( Graphics2D g, Bow bow) {
-		
-		Node startNode = bow.getStartNode();
-		Node endNode = bow.getEndNode();
-		
-		Point start = graphicView.nodeToPoint( startNode );
-		Point end = graphicView.nodeToPoint ( endNode);
-		
-		g.setStroke(new BasicStroke(roadWidth));
-        g.draw(new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()));
-		
-	}
-	
-	/**
-	 * Draw arrow.
-	 *
-	 * @param g the g
-	 * @param start the start
-	 * @param end the end
+	 * @param g the graphics
+	 * @param start the start of the bow at the end of which the arrow is painted
+	 * @param end the end of the bow at the end of which the arrow is painted
 	 */
 	public void drawArrow( Graphics2D g, Point start, Point end) {
-		
-		int xPoints [] = new int[3];
-		int yPoints[] = new int[3];
-		
+				
 		double startX = start.getX();
 		double startY = start.getY();	
 		double endX = end.getX();
@@ -165,21 +123,9 @@ public class CircuitView extends JPanel {
 		double point2X = orthoPointX + sinus*arrowWidth;
 		double point2Y = orthoPointY - cosinus*arrowWidth;
 		
-		xPoints[0] =(int) endX;
-		yPoints[0] = (int) endY;
-		
-		xPoints[1]= (int) point1X; 
-		yPoints[1]= (int)point1Y;
-		
-		xPoints[2]= (int) point2X;
-		yPoints[2]= (int) point2Y;
-		
-		//g.fillPolygon( xPoints, yPoints, 3);
-		
 		g.setStroke(new BasicStroke(roadWidth));
-        g.draw(new Line2D.Double(xPoints[0], yPoints[0], xPoints[1], yPoints[1]));
-        g.draw(new Line2D.Double(xPoints[0], yPoints[0], xPoints[2], yPoints[2]));
-		
+        g.draw(new Line2D.Double(endX, endY, point1X, point1Y));
+        g.draw(new Line2D.Double(endX, endY, point2X, point2Y));
 		
 	}
 

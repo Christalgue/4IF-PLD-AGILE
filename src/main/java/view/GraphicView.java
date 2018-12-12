@@ -1,12 +1,15 @@
 package main.java.view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
 
+import main.java.entity.Bow;
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
@@ -443,7 +446,7 @@ public class GraphicView extends JPanel {
 	}
 	
 	/**
-	 * Reset default values, displaying the whole map in the center of the view.
+	 * Reset default values, displaying the whole map at the center of the view.
 	 */
 	public void resetDefaultValues() {
 		heightScale = defaultHeightScale;
@@ -451,4 +454,28 @@ public class GraphicView extends JPanel {
 		horizontalOffset = 0;
 		verticalOffset = 0;
 	}
+
+	/**
+	 * Paint a bow.
+	 *
+	 * @param g the graphics
+	 * @param bow the bow to draw
+	 */
+	public void drawBow( Bow bow) {
+		
+		Node startNode = bow.getStartNode();
+		Node endNode = bow.getEndNode();
+		
+		// The start and end nodes of the bow are converted
+		// from latitude/longitude to pixel
+		Point start = nodeToPoint( startNode );
+		Point end = nodeToPoint ( endNode);
+		
+		// And are the start and end point of a stroke
+		// with a width of roadWidth and a color of roadColor
+		g.setStroke(new BasicStroke(width));
+        g.draw(new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()));
+		
+	}
+
 }
