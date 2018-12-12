@@ -14,6 +14,13 @@ import main.java.entity.Node;
 
 public class Serializer {
 	
+	
+	/**
+	 * Serialize the circuits contained in circuitManager to different files created in the
+	 * repository indicated by path
+	 * @param the path to the repository that will hold the files
+	 * @param CircuitManagement containing the circuits that we want to serialize
+	 */
 	public static void serializer(String path, CircuitManagement circuitManager) {
 		List<Circuit> circuits = circuitManager.getCircuitsList();
 		Circuit circuit;
@@ -21,11 +28,11 @@ public class Serializer {
 			for(int i = 0; i<circuits.size(); i++) {
 				//Tournées différentes
 				circuit = circuits.get(i);
-				File file = new File(path+"/Tournée_"+(i+1)+".txt");
+				File file = new File(path+"/Tournee_"+(i+1)+".txt");
 				file.createNewFile();
 				BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 				
-				writer.write("Tournée n°"+(i+1));
+				writer.write("Tournee n°"+(i+1));
 				writer.newLine();
 				
 				int deliveryNumber = 0;
@@ -34,12 +41,12 @@ public class Serializer {
 				for(int indexAtomicPath = 0; indexAtomicPath<atomicPaths.size(); indexAtomicPath++) {
 					//Livraisons différentes
 					String start = "Chemin de la Livraison n°"+deliveryNumber;
-					String end = " à la Livraison n°"+(deliveryNumber+1)+",";
+					String end = " a la Livraison n°"+(deliveryNumber+1)+",";
 					String destination;
 					if(circuitManager.isDelivery(atomicPaths.get(indexAtomicPath).getStartNode()).getClass().getSimpleName().contains("Repository")) 
-						start =  "Chemin de l'entrepôt";
+						start =  "Chemin de l'entrepot";
 					if(circuitManager.isDelivery(atomicPaths.get(indexAtomicPath).getEndNode()).getClass().getSimpleName().contains("Repository")) 
-						end =  " à l'entrepôt,";
+						end =  " a l'entrepot,";
 					
 					double distance = atomicPaths.get(indexAtomicPath).getLength();
 					int km = (int) (distance/1000);
@@ -49,9 +56,9 @@ public class Serializer {
 					
 					int min = (int)(atomicPaths.get(indexAtomicPath).getDuration()/60);
 					if(min==0) 
-						writer.write(" durée : moins de 1min ");
+						writer.write(" duree : moins de 1min ");
 					else
-						writer.write(" durée : "+min+"min ");
+						writer.write(" duree : "+min+"min ");
 					
 					writer.write("(");
 					if(km!=0)
@@ -73,9 +80,9 @@ public class Serializer {
 								start = "Prendre //";
 							
 							if(bows.get(indexBow).getStreetName().length()!=0)
-								end = " jusqu'à "+bows.get(indexBow).getStreetName();
+								end = " jusqu'a "+bows.get(indexBow).getStreetName();
 							else
-								end = " jusqu'à //";
+								end = " jusqu'a //";
 							
 							writer.write(start+end+". (");
 							
@@ -103,15 +110,15 @@ public class Serializer {
 						
 						List<Bow> endIntersection = circuitManager.getCurrentMap().getBowsIntersection(node);
 
-						end = " jusqu'à //";
+						end = " jusqu'a //";
 						for(Bow intersection : endIntersection) {
 							if(!bows.get(bows.size()-1).getStreetName().contains(intersection.getStreetName()) && intersection.getStreetName().length()!=0) {
-								end = " jusqu'à "+intersection.getStreetName();
+								end = " jusqu'a "+intersection.getStreetName();
 								break;
 							}
 						}
 						
-						destination = "Vous êtes arrivé à destination, votre livraison doit durer environ : ";
+						destination = "Vous etes arrive a destination, votre livraison doit durer environ : ";
 						min = (int)(circuitManager.isDelivery(bows.get(bows.size()-1).getEndNode()).getDuration()/60);
 						if(min==0)
 							destination+= "moins de 1min";
@@ -120,8 +127,8 @@ public class Serializer {
 					}
 					else {
 						//Dernier chemin de la tournée
-						end = " jusqu'à l'entrepôt";
-						destination = "Vous avez terminé votre tournée";
+						end = " jusqu'a l'entrepot";
+						destination = "Vous avez termine votre tournee";
 					}
 					writer.write(start+end);
 					writer.write(". (");

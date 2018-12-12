@@ -807,6 +807,10 @@ public class Window extends JFrame{
 		textualView.emptyTree();
 		textualView.fillCircuitTree();
 	}
+
+	public void fillDeliveryTree() {
+		textualView.fillDeliveryTree();
+	}
 	
 	//////////////////////////////BUTTON ACTIVATION/////////////////////////////
 	

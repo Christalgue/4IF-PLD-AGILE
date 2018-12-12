@@ -1,0 +1,15 @@
+Tournee n°1
+  Chemin de l'entrepot a la Livraison n°1, duree : moins de 1min (14m)
+    ->Prendre Eb jusqu'a bc. (7m)
+    ->Prendre bc jusqu'a cd. (7m)
+    ->Vous etes arrive a destination, votre livraison doit durer environ : moins de 1min
+
+  Chemin de la Livraison n°1 a la Livraison n°2, duree : moins de 1min (8m)
+    ->Prendre cd jusqu'a de. (7m)
+    ->Prendre de jusqu'a Ee. (1m)
+    ->Vous etes arrive a destination, votre livraison doit durer environ : moins de 1min
+
+  Chemin de la Livraison n°2 a l'entrepot, duree : moins de 1min (7m)
+    ->Prendre eE jusqu'a l'entrepot. (7m)
+    ->Vous avez termine votre tournee
+

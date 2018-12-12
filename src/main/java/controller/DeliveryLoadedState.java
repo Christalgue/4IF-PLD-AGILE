@@ -32,6 +32,7 @@ public class DeliveryLoadedState extends DefaultState {
 			commandsList.reset();
 			window.setMessage("");
 			window.drawDeliveries();
+			controller.getCircuitManagement().setCircuitsList(null);
 		} catch (LoadDeliveryException e)
 		{
 			window.setErrorMessage("Fichier XML invalide");
@@ -47,7 +48,6 @@ public class DeliveryLoadedState extends DefaultState {
 	public void loadMap(Controller controller, Window window, String filename, CommandsList commandsList) {
 		
 		try {
-			window.disableButtonCalculateCircuit();
 			try {
 				controller.getCircuitManagement().loadMap(filename);
 				window.setMessage("Veuillez selectionner un fichier de demande de livraisons");
@@ -56,7 +56,10 @@ public class DeliveryLoadedState extends DefaultState {
 			}
 			window.calculateScale();
 			window.drawMap();
+			controller.getCircuitManagement().setCircuitsList(null);
+			controller.getCircuitManagement().setDeliveryList(null);
 			commandsList.reset();
+			window.disableButtonCalculateCircuit();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
 		{

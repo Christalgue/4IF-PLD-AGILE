@@ -23,6 +23,9 @@ import main.java.utils.Deserializer;
 class TestMap {
 
 	@Test
+	/**
+	 * Test if the map find the shortest path from a node to another node
+	 */
 	void testFindShortestPath() {
 		Map map = new Map();
 		List<Delivery> deliveries;
@@ -69,6 +72,9 @@ class TestMap {
 	}
 
 	@Test
+	/**
+	 * Test if the method return the correct id of a node if we send its coordinates
+	 */
 	void testGetIdFromNode() {
 		Map map = new Map();
 		

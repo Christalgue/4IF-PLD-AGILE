@@ -24,6 +24,9 @@ import main.java.utils.Serializer;
 class TestSerializer {
 
 	@Test
+	/**
+	 * Test if the serializer generates a correct file containing the paths of a circuit
+	 */
 	void testSerializer() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
@@ -38,30 +41,30 @@ class TestSerializer {
 			
 			Serializer.serializer(path, circuitManager);
 			
-			BufferedReader reader = new BufferedReader(new FileReader(path+"/Tournée_1.txt"));
+			BufferedReader reader = new BufferedReader(new FileReader(path+"/Tournee_1.txt"));
 			
 			String line;
 			String expectation;
 			
 			line = reader.readLine();
-			expectation  = "Tournée n°1";
+			expectation  = "Tournee n°1";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 			
 			line = reader.readLine();
-			expectation  = "  Chemin de l'entrepôt à la Livraison n°1, durée : moins de 1min (14m)";
+			expectation  = "  Chemin de l'entrepot a la Livraison n°1, duree : moins de 1min (14m)";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 			
 			line = reader.readLine();
-			expectation  = "    ->Prendre Eb jusqu'à bc. (7m)";
+			expectation  = "    ->Prendre Eb jusqu'a bc. (7m)";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 			
 			line = reader.readLine();
-			expectation  = "    ->Prendre bc jusqu'à cd. (7m)";
+			expectation  = "    ->Prendre bc jusqu'a cd. (7m)";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			
 			line = reader.readLine();
-			expectation  = "    ->Vous êtes arrivé à destination, votre livraison doit durer environ : moins de 1min";
+			expectation  = "    ->Vous etes arrive a destination, votre livraison doit durer environ : moins de 1min";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			line = reader.readLine();
@@ -69,19 +72,19 @@ class TestSerializer {
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			line = reader.readLine();
-			expectation  = "  Chemin de la Livraison n°1 à la Livraison n°2, durée : moins de 1min (8m)";
+			expectation  = "  Chemin de la Livraison n°1 a la Livraison n°2, duree : moins de 1min (8m)";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			line = reader.readLine();
-			expectation  = "    ->Prendre cd jusqu'à de. (7m)";
+			expectation  = "    ->Prendre cd jusqu'a de. (7m)";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			line = reader.readLine();
-			expectation  = "    ->Prendre de jusqu'à Ee. (1m)";
+			expectation  = "    ->Prendre de jusqu'a Ee. (1m)";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			line = reader.readLine();
-			expectation  = "    ->Vous êtes arrivé à destination, votre livraison doit durer environ : moins de 1min";
+			expectation  = "    ->Vous etes arrive a destination, votre livraison doit durer environ : moins de 1min";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			line = reader.readLine();
@@ -89,15 +92,15 @@ class TestSerializer {
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			line = reader.readLine();
-			expectation  = "  Chemin de la Livraison n°2 à l'entrepôt, durée : moins de 1min (7m)";
+			expectation  = "  Chemin de la Livraison n°2 a l'entrepot, duree : moins de 1min (7m)";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			line = reader.readLine();
-			expectation  = "    ->Prendre eE jusqu'à l'entrepôt. (7m)";
+			expectation  = "    ->Prendre eE jusqu'a l'entrepot. (7m)";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 
 			line = reader.readLine();
-			expectation  = "    ->Vous avez terminé votre tournée";
+			expectation  = "    ->Vous avez termine votre tournee";
 			assertTrue(line.contains(expectation),"Error expected : "+expectation+", got : "+line);
 			
 			reader.close();

@@ -14,7 +14,7 @@ class TestController {
 
 	@Test
 	/**
-	 * 
+	 * Test every single one changes of state
 	 */
 	void testChangeState() {
 		CircuitManagement cm = new CircuitManagement();

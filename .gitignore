@@ -27,3 +27,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#ignore diagrams
+/src/diagram

@@ -28,6 +28,9 @@ import main.java.exception.TSPLimitTimeReachedException;
 class TestCircuitManagement {
 
 	@Test
+	/**
+	 * Test if the CircuitManagement loads correctly a map
+	 */
 	void testLoadMap() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
@@ -101,6 +104,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if the CircuitManagement loads correctly a list of deliveries
+	 */
 	void testLoadDeliveries() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
@@ -126,6 +132,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if the Cluster balances correctly the different nodes according to their location
+	 */
 	void testCluster() {
 		
 		try {
@@ -192,6 +201,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method returns true if a node is contained in its deliveries list and false otherwise
+	 */
 	void checkNodeInDeliveryList() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
@@ -215,6 +227,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method initialize correctly an AtomicPath
+	 */
 	void testCalculateCircuits() {
 		
 		try {
@@ -226,15 +241,15 @@ class TestCircuitManagement {
 			circuitManager.calculateCircuits(1, false);
 			
 			//Assert new circuit has been correctly calculated
-			String s13 = "Route :\n1 => 3 (1.0)";
-			String s32 = "Route :\n3 => 1 (1.0)\n1 => 2 (2.0)";
-			String s21 = "Route :\n2 => 1 (1.0)";
+			String s12 = "Route :\n1 => 2 (2.0)";
+			String s23 = "Route :\n2 => 1 (1.0)\n1 => 3 (1.0)";
+			String s31 = "Route :\n3 => 1 (1.0)";
 			
 			Circuit circuit = circuitManager.getCircuitsList().get(0);
 			assertTrue(circuit.getPath().size()==3,"Error, size of paths is incorrect, expected : 3 got : "+circuit.getPath().size());
-			assertTrue(circuit.getPath().get(0).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(0).toString());
-			assertTrue(circuit.getPath().get(1).toString().contains(s32),"Error, expected : {"+s32+"}, got : "+circuit.getPath().get(1).toString());
-			assertTrue(circuit.getPath().get(2).toString().contains(s21),"Error, expected : {"+s21+"}, got : "+circuit.getPath().get(2).toString());
+			assertTrue(circuit.getPath().get(0).toString().contains(s12),"Error, expected : {"+s12+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s23),"Error, expected : {"+s23+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s31),"Error, expected : {"+s31+"}, got : "+circuit.getPath().get(2).toString());
 
 		} catch (LoadMapException e) {
 			fail("LoadMapException : "+e.getMessage());
@@ -255,6 +270,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method add correctly a delivery to the AtomicPath and to the deliveries list
+	 */
 	void testAddDelivery() {
 		try {
 			//Trying to put a delivery at the beginning or in the middle
@@ -339,6 +357,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method remove correctly a delivery from the AtomicPath and from the deliveries list
+	 */
 	void testRemoveDelivery() {
 		try {
 			//Trying to remove a delivery
@@ -422,6 +443,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method move correctly a delivery from the AtomicPath and do not modify deliveries list
+	 */
 	void testMoveDelivery() {
 		try {
 			//Trying to remove a delivery

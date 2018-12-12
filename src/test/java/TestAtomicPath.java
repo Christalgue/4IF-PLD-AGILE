@@ -23,6 +23,9 @@ import main.java.utils.Deserializer;
 class TestAtomicPath {
 
 	@Test
+	/**
+	 * Test if an AtomicPath return the correct order of deliveries
+	 */
 	void test() {
 		try {
 			Map map = new Map();
