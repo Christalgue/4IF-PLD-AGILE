@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -256,18 +257,18 @@ public class Window extends JFrame{
 		resetScaleButton.setEnabled(false);
 		buttonPanel.add(resetScaleButton);
 		
-		setNameOfMap = new TextField();
+		/*setNameOfMap = new TextField();
 		setNameOfMap.setText("resources/xml/moyenPlan.xml");
-		buttonPanel.add(setNameOfMap);
+		buttonPanel.add(setNameOfMap);*/
 		
 		JButton loadMapButton = new JButton(LOAD_MAP);
 		loadMapButton.addActionListener(buttonsListener);
 		buttonPanel.add(loadMapButton);
 		
-		setNameOfDeliveryList = new TextField();
+		/*setNameOfDeliveryList = new TextField();
 		setNameOfDeliveryList.setText("resources/xml/dl-moyen-9.xml");
 		setNameOfDeliveryList.setEditable(true);
-		buttonPanel.add(setNameOfDeliveryList);
+		buttonPanel.add(setNameOfDeliveryList);*/
 		
 		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
 		loadDeliveryList.addActionListener(buttonsListener);
@@ -333,9 +334,11 @@ public class Window extends JFrame{
 			filePath = chooser.getSelectedFile().getAbsolutePath();
 		}
 		return filePath;
+		
 	}
 	
 	protected String getFolder() {
+		
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -343,33 +346,27 @@ public class Window extends JFrame{
 		String folderPath = "";
 		
 		if(returnValue == JFileChooser.APPROVE_OPTION){
-			folderPath = chooser.getCurrentDirectory().getAbsolutePath();
+			folderPath = chooser.getSelectedFile().getAbsolutePath();
 		}
 		return folderPath;
+		
 	}
-	
-	/*private JFileChooser displayFileChooser() {
-		chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new java.io.File("."));
-		int returnValue = chooser.showOpenDialog(controller.getWindow());
-		String folderPath = "";
-		return chooser;
-	}*/
 
 	public boolean getDeliveryMenNumber() {
 		
 		boolean correctValue = false;
+		int numberOfDeliveries = controller.getCircuitManagement().getDeliveryList().size();
 		try{
         	String numberOfDeliveryMen = numberOfDeliveryMenField.getText();
             int numberOfDeliveryMenValue = Integer.parseInt(numberOfDeliveryMen);
-            if (numberOfDeliveryMenValue <= 0) {
-            	PopUp.errorPopUp(this, false);
+            if (numberOfDeliveryMenValue <= 0 || numberOfDeliveryMenValue > numberOfDeliveries -1) {
+            	PopUp.errorPopUp(this, false, numberOfDeliveries);
             } else {
             	buttonsListener.setDeliveryMenNumber(numberOfDeliveryMenValue);
             	correctValue = true;
             }
         } catch(Exception parseException) {
-        	PopUp.errorPopUp(this, false);
+        	PopUp.errorPopUp(this, false, numberOfDeliveries);
         }
 		return correctValue;
 		
