@@ -45,6 +45,7 @@ public class DeliveryMovedState extends DefaultState {
 		window.setMessage("");
 		window.emptySelectedNode();
 		window.emptySelectedCircuit();
+		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}
 	
@@ -56,6 +57,7 @@ public class DeliveryMovedState extends DefaultState {
 		window.setMessage("");
 		window.emptySelectedNode();
 		commandsList.addCommand(new MoveDeliveryCommand(window,node,previousNode,controller.getCircuitManagement()));
+		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}
 

@@ -54,6 +54,7 @@ public class PreviousDeliverySelectedState extends DefaultState {
 				controller.deliveryAddedState.setPreviousNode(previousNode);
 				controller.deliveryAddedState.setDuration(duration);
 				window.setMessage("");
+				window.disableCancelButton();
 				controller.setCurrentState(controller.deliveryAddedState);
 				if(controller.getShowPopUp())
 					controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
@@ -72,6 +73,7 @@ public class PreviousDeliverySelectedState extends DefaultState {
 		controller.deliveryAddedState.setNode(node);
 		controller.deliveryAddedState.setDuration(duration);
 		controller.deliveryAddedState.setPreviousNode(deliverySelected.getPosition());
+		window.disableCancelButton();
 		controller.setCurrentState(controller.deliveryAddedState);
 		if(controller.getShowPopUp())
 			controller.getWindow().getPopUpValue(PopUpType.ADD, controller.getWindow());
@@ -99,6 +101,8 @@ public class PreviousDeliverySelectedState extends DefaultState {
 		window.setMessage("");
 		window.emptySelectedNode();
 		window.emptySelectedCircuit();
+		window.disableCancelButton();
+		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}
 	

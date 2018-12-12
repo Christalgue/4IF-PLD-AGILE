@@ -42,6 +42,7 @@ public class SelectedPreviousMovedState extends DefaultState {
 			if (controller.getCircuitManagement().checkNodeInDeliveryList(previousNode)) {
 				controller.deliveryMovedState.setNode(node);
 				controller.deliveryMovedState.setPreviousNode(previousNode);
+				window.disableCancelButton();
 				controller.setCurrentState(controller.deliveryMovedState);
 				if(controller.getShowPopUp())
 					controller.getWindow().getPopUpValue(PopUpType.MOVE, controller.getWindow());
@@ -59,6 +60,7 @@ public class SelectedPreviousMovedState extends DefaultState {
 			window.nodeSelected(deliverySelected);
 			window.circuitSelected(deliverySelected);
 			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
+			window.disableCancelButton();
 			controller.deliveryMovedState.setNode(node);
 			controller.deliveryMovedState.setPreviousNode(deliverySelected.getPosition());
 			controller.setCurrentState(controller.deliveryMovedState);
@@ -88,6 +90,8 @@ public class SelectedPreviousMovedState extends DefaultState {
 		window.setMessage("");
 		window.emptySelectedNode();
 		window.emptySelectedCircuit();
+		window.disableCancelButton();
+		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}
 	

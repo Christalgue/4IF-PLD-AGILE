@@ -1,10 +1,14 @@
 package main.java.view;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.TextField;
+import java.io.File;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -48,14 +52,14 @@ public class Window extends JFrame{
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
 	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
-	protected static final String UNDO = "Annuler";
-	protected static final String REDO = "Retablir";
+	protected static final String UNDO = "\u200E";
+	protected static final String REDO = "\u200F";
 	protected static final String CANCEL = "Cancel";
 	protected static final String RESET_SCALE = "Retablir l'echelle";
 	protected static final String GENERATE_ROADMAP = "Generer la feuille de route";
 	
-	protected static final String ZOOM = "+";
-	protected static final String UNZOOM = "-";
+	protected static final String ZOOM = "\u200D";
+	protected static final String UNZOOM = " \u200C";
 	
 	protected static TextField setNameOfMap;
 	protected static TextField setNameOfDeliveryList;
@@ -286,12 +290,24 @@ public class Window extends JFrame{
 		buttonPanel.add(numberOfDeliveryMenField);
 	
 		undoButton = new JButton(UNDO);
+		try {
+		    ImageIcon img = new ImageIcon("resources/img/backward.png");
+		    undoButton.setIcon(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		buttonPanel.add(undoButton);
 		undoButton.addActionListener(buttonsListener);
 		undoButton.setEnabled(false);
 		
 
 		redoButton = new JButton(REDO);
+		try {
+		    ImageIcon img = new ImageIcon("resources/img/forward.png");
+		    redoButton.setIcon(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		buttonPanel.add(redoButton);
 		redoButton.addActionListener(buttonsListener);	
 		redoButton.setEnabled(false);
@@ -302,23 +318,35 @@ public class Window extends JFrame{
 		buttonPanel.add(calculateCircuitButton);
 		
 		zoomButton = new JButton(ZOOM);
+		try {
+		    ImageIcon img = new ImageIcon("resources/img/zoom-in.png");
+		    zoomButton.setIcon(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		zoomButton.addActionListener(buttonsListener);
 		zoomButton.setEnabled(false);
 		buttonPanel.add(zoomButton);
 		
 		unZoomButton = new JButton(UNZOOM);
+		try {
+		    ImageIcon img = new ImageIcon("resources/img/zoom-out.png");
+		    unZoomButton.setIcon(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		unZoomButton.addActionListener(buttonsListener);
 		unZoomButton.setEnabled(false);
 		buttonPanel.add(unZoomButton);
 		
 		cancelAddButton = new JButton(CANCEL);
 		cancelAddButton.addActionListener(buttonsListener);
-		cancelAddButton.setEnabled(true);
+		cancelAddButton.setEnabled(false);
 		buttonPanel.add(cancelAddButton);
 		
 		generateRoadmapButton = new JButton(GENERATE_ROADMAP);
 		generateRoadmapButton.addActionListener(buttonsListener);
-		generateRoadmapButton.setEnabled(true);
+		generateRoadmapButton.setEnabled(false);
 		buttonPanel.add(generateRoadmapButton);
 	}
 	
@@ -481,6 +509,10 @@ public class Window extends JFrame{
 		resetScaleButton.setEnabled(true);
 	}
 	
+	public void enableGenerateRoadmapButton () {
+		generateRoadmapButton.setEnabled(true);
+	}
+	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
 	public void disableButtonLoadDeliveriesList() {
 		loadDeliveryList.setEnabled(false);
@@ -524,6 +556,10 @@ public class Window extends JFrame{
 	
 	public void disableResetScaleButton() {
 		resetScaleButton.setEnabled(false);
+	}
+	
+	public void disableGenerateRoadmapButton () {
+		generateRoadmapButton.setEnabled(false);
 	}
 	
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////

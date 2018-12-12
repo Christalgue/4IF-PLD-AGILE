@@ -76,6 +76,7 @@ public class DeliveryLoadedState extends DefaultState {
 		window.emptyColors();
 		try {
 			window.setMessage("");
+			window.enableGenerateRoadmapButton();
 			controller.getCircuitManagement().calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);

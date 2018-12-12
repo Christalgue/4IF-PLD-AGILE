@@ -56,6 +56,7 @@ public class DeliveryAddedState extends DefaultState{
 		commandsList.addCommand(new AddDeliveryCommand(window, node, duration, previousNode, controller.getCircuitManagement()));
 		window.emptySelectedNode();
 		window.emptySelectedCircuit();
+		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}
 	
@@ -67,6 +68,7 @@ public class DeliveryAddedState extends DefaultState{
 		window.setMessage("");
 		window.emptySelectedNode();
 		window.emptySelectedCircuit();
+		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}
 	

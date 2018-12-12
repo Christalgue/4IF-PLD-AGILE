@@ -32,6 +32,7 @@ public class DurationChoiceState extends DefaultState {
 		controller.previousDeliverySelectedState.setDuration(duration);
 		window.disableButtonAddDelivery();
 		window.setMessage("Veuillez choisir la livraison precedente");
+		window.enableCancelButton();
 		controller.setCurrentState(controller.previousDeliverySelectedState);
 		
 	}
@@ -42,6 +43,7 @@ public class DurationChoiceState extends DefaultState {
 	@Override
 	public void cancel (Controller controller, Window window) {
 		window.disableButtonAddDelivery();
+		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}
 
