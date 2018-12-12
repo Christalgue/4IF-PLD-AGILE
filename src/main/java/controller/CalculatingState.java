@@ -38,7 +38,8 @@ public class CalculatingState extends DefaultState {
 				e.printStackTrace();
 			} catch (TSPLimitTimeReachedException e) {
 				window.drawCircuits();
-				controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+				window.enableButtonContinueCalculation();
+				//controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 			}
 		} else {
 			controller.setCurrentState(controller.calcState);

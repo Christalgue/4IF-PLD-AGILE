@@ -68,6 +68,7 @@ public class DeliveryLoadedState extends DefaultState {
 		commandsList.reset();
 		try {
 			window.setMessage("");
+			window.disableButtonContinueCalculation();
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
@@ -86,7 +87,8 @@ public class DeliveryLoadedState extends DefaultState {
 		} catch (TSPLimitTimeReachedException e) {
 			window.drawCircuits();
 			controller.setCurrentState(controller.calculatingState);
-			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+			window.enableButtonContinueCalculation();
+			//controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
 		}
 	}
 	

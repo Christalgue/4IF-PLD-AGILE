@@ -510,6 +510,11 @@ public class Window extends JFrame{
 		moveDeliveryButton.setVisible(true);;
 		moveDeliveryButton.setEnabled(true);
 	}
+	
+	public void enableButtonContinueCalculation() {
+		continueCalculateCircuitButton.setVisible(true);
+		continueCalculateCircuitButton.setEnabled(true);
+	}
 
 	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
@@ -539,6 +544,9 @@ public class Window extends JFrame{
 	
 	public void disableButtonRedo() {
 		redoButton.setEnabled(false);
+	}
+	public void disableButtonContinueCalculation() {
+		continueCalculateCircuitButton.setEnabled(false);
 	}
 	
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////

@@ -96,12 +96,15 @@ public abstract class TemplateTSP implements TSP {
 		Delivery lastDeliveryTreated = currentDeliverySVG;
 		viewed.remove(currentDeliverySVG);
 		this.executionStack.remove(currentDeliverySVG);
-		viewedCost -= allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDeliverySVG).getLength();
-		nonViewed.add(currentDeliverySVG);
+		boolean continueUnstack = this.executionStack.size()>0;
+		if(continueUnstack) {
+			viewedCost -= allPaths.get(this.executionStack.get(this.executionStack.size()-1)).get(currentDeliverySVG).getLength();
+			nonViewed.add(currentDeliverySVG);
+		}
+		continueUnstack = this.executionStack.size()>0;
 		Delivery currentDelivery = null;
 		Delivery nextDelivery = null;
 		boolean nextDeliveryFound;
-		boolean continueUnstack = this.executionStack.size()>0;
 		int compteurTest = 0;
 		while(continueUnstack) {			
 			//continue the branch and bound that was ongoing for the last delivery of the execution stack

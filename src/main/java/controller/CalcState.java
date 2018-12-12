@@ -76,6 +76,7 @@ public class CalcState extends DefaultState {
 		commandsList.reset();
 		try {
 			window.setMessage("");
+			window.disableButtonContinueCalculation();
 			controller.circuitManagement.calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);
@@ -94,7 +95,36 @@ public class CalcState extends DefaultState {
 		} catch (TSPLimitTimeReachedException e) {
 			window.drawCircuits();
 			controller.setCurrentState(controller.calculatingState);
-			controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+			window.enableButtonContinueCalculation();
+			//controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+		}
+	}
+	
+	
+	public void continueCalculation(Controller controller, Window window, boolean keepCalculating) {
+		if(keepCalculating == true) {
+			try {
+				window.disableButtonContinueCalculation();
+				controller.circuitManagement.calculateCircuits(controller.circuitManagement.getNbDeliveryMan(), keepCalculating);
+				controller.setCurrentState(controller.calcState);
+			} catch (MapNotChargedException e) {
+				window.setErrorMessage("Carte non chargee");
+				e.printStackTrace();
+			} catch (LoadDeliveryException e) {
+				window.setErrorMessage("Fichier XML invalide");
+				e.printStackTrace();
+			} catch (DijkstraException e) {
+				window.setErrorMessage("Erreur lors du calcul des tournees");
+				e.printStackTrace();
+			} catch (NoRepositoryException e) {
+				window.setErrorMessage("Pas d'entrepot");
+				e.printStackTrace();
+			} catch (TSPLimitTimeReachedException e) {
+				window.drawCircuits();
+				controller.getWindow().getPopUpValue(PopUpType.CONTINUE, controller.getWindow());
+			}
+		} else {
+			controller.setCurrentState(controller.calcState);
 		}
 	}
 	
