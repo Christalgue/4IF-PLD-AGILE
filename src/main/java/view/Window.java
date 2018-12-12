@@ -30,17 +30,42 @@ import main.java.utils.PopUpType;
 public class Window extends JFrame{
 	
 	private Controller controller;
-	private GraphicView graphicView;
-	private TextualView textualView;
 	
+	//////////////////////////////LISTENERS/////////////////////////////
+
+	protected ButtonsListener buttonsListener;
+	protected MouseListener mouseListener;	
+	protected KeyListener keyListener;
+	
+	//////////////////////////////GRAPHIC COMPOSANTS/////////////////////////////
+
+	// View in which map, deliveries and circuits are painted
+	private GraphicView graphicView;
+	
+	// View in which deliveries and circuits list are displayed
+	private TextualView textualView;
+	// Display deliveries and circuits list
+	protected JTree textualViewTree;
+	// textualViewTree's root node
+	protected DefaultMutableTreeNode treeRoot;
+	// textualViewTree's custom cell renderer
+	public MyTreeCellRenderer cellRenderer; 
+	
+	// Field to display messages ( errors, warnings, indications )
 	protected JLabel messageField;
 	
-	private static JFileChooser chooser;
-
-	protected static ButtonsListener buttonsListener;
-	protected static MouseListener mouseListener;	
-	protected static KeyListener keyListener;
+	// Validation and error Pop Up
+	protected PopUp popUp;
 	
+	// File chooser for deliveries list and map to load
+	private JFileChooser chooser;
+	
+	// Field to enter delivery men number
+	protected TextField numberOfDeliveryMenField;
+
+	//////////////////////////////BUTTONS/////////////////////////////
+	
+	//Buttons constants 
 	protected static final String LOAD_MAP = "Charger un plan";
 	protected static final String LOAD_DELIVERY_OFFER = "Charger une demande de livraison";
 	protected static final String CALCULATE_CIRCUITS = "Calculer les tournees";
@@ -57,62 +82,70 @@ public class Window extends JFrame{
 	protected static final String DOWN = "D";
 	protected static final String RIGHT = "R";
 	protected static final String LEFT = "L";
-	
 	protected static final String ZOOM = "Zoomer";
 	protected static final String UNZOOM = "Dezoomer";
 	
-	protected static TextField setNameOfMap;
-	protected static TextField setNameOfDeliveryList;
-	protected static TextField numberOfDeliveryMenField;
+	// Buttons
+	protected JButton loadDeliveryList;
+	protected JButton calculateCircuitButton;
+	protected JButton continueCalculateCircuitButton;
+	protected JButton addDeliveryButton;
+	protected JButton deleteDeliveryButton;
+	protected JButton moveDeliveryButton;
+	protected JButton undoButton;	
+	protected JButton redoButton;
+	protected JButton upButton;
+	protected JButton downButton;
+	protected JButton rightButton;
+	protected JButton leftButton;
+	protected JButton zoomButton;
+	protected JButton unZoomButton;
+	protected JButton cancelAddButton;
+	protected JButton resetScaleButton;
+	protected JButton generateRoadmapButton;
+
+	//////////////////////////////COMPOSANTS SIZE/////////////////////////////
+
+	protected final int windowWidth = 1500;
+	protected final int windowHeight = 720;
+	protected final int buttonPanelHeight =50;
+	protected final int graphicWidth = 1030;
+	protected final int messageFieldHeight = 40;
 	
-	protected static PopUp popUp;
+	// Button height in textual view
+	protected final int buttonHeight = 40;
+	// Vertical gap between two buttons in textualView
+	protected final int buttonSpace = 10; 	
 	
-	protected static JButton loadDeliveryList;
-	protected static JButton calculateCircuitButton;
-	protected static JButton continueCalculateCircuitButton;
-	protected static JButton addDeliveryButton;
-	protected static JButton deleteDeliveryButton;
-	protected static JButton moveDeliveryButton;
-	protected static JButton undoButton;	
-	protected static JButton redoButton;
-	protected static JButton upButton;
-	protected static JButton downButton;
-	protected static JButton rightButton;
-	protected static JButton leftButton;
-	protected static JButton zoomButton;
-	protected static JButton unZoomButton;
-	protected static JButton cancelAddButton;
-	protected static JButton resetScaleButton;
-	protected static JButton generateRoadmapButton;
+	// Width of a map or circuit bow in graphicview
+	protected final int pathWidth = 2;
+
+	//////////////////////////////SELECTION AND HOVERING/////////////////////////////
 	
-	protected static final int windowWidth = 1500;
-	protected static final int windowHeight = 720;
-	protected static final int buttonPanelHeight =50;
-	protected static final int graphicWidth = 1030;
-	protected static final int messageFieldHeight = 40;
-	protected static final int buttonHeight = 40;
-	protected static final int buttonSpace = 10;
-	
-	
-	protected static final int pathWidth = 2;
-	
-	protected JTree textualViewTree;
-	protected DefaultMutableTreeNode treeRoot;
-	
+	// Last selected node
 	protected Delivery selectedNode;
+	// Last hovered node
 	protected Delivery hoverNode;
 	
+	// Last selected circuit, "-1" means none
 	protected int selectedCircuit = -1;
+	// Last hovered circuit, "-1" means none
 	protected int hoverCircuit = -1;
 	
+	//////////////////////////////COLORS/////////////////////////////
 
-	protected HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
-	public MyTreeCellRenderer cellRenderer; 
+	// Selected items color in both views
+	protected Color selectedColor = new Color(0,150,0);
+	// Hovered items color in both views
+	protected Color hoverColor = Color.BLUE;
+	// Deliveries color in both views
+	protected Color deliveryColor = Color.RED;
+	// Repository color in both views
+	protected Color repositoryColor = Color.DARK_GRAY;
 	
-	protected static Color selectedColor = new Color(0,150,0);
-	protected static Color hoverColor = Color.BLUE;
-	protected static Color deliveryColor = Color.RED;
-	protected static Color repositoryColor = Color.DARK_GRAY;
+	// Contains each circuit's color, with circuit's index in CircuitManagement's circuitsList as key
+	protected HashMap <Integer, Color> colors = new HashMap < Integer,Color>();
+
 	
 	/**
 	 * Default constructor
@@ -134,8 +167,8 @@ public class Window extends JFrame{
 		addKeyListener(keyListener);
 		CircuitManagement circuitManagement = controller.getCircuitManagement();
 		
-		//////////////////////////////CREATE THE MAIN WINDOW//////////////////////////////
-		setControllerWindow(this);
+		//////////////////////////////SET UP THE MAIN WINDOW//////////////////////////////
+		setControllerWindow();
 		
 		//////////////////////////////CREATE THE HEADER PANEL/////////////////////////////
 		JPanel buttonPanel = new JPanel();
@@ -149,7 +182,7 @@ public class Window extends JFrame{
 		
 		//////////////////////////////CREATE THE TEXTUAL VIEW/////////////////////////////
 		
-		treeRoot = createTree();
+		treeRoot = createTreeRoot();
 		textualViewTree = new JTree (treeRoot);
 		cellRenderer = new MyTreeCellRenderer(this, circuitManagement);
 		textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this);
@@ -173,37 +206,91 @@ public class Window extends JFrame{
 		graphicView.setGraphics();
 		
 	}
-	
-	private static DefaultMutableTreeNode createTree() {
-		
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
-		return root;
-	}
 
 	//////////////////////////////PUT COMPOSANTS IN PLACE/////////////////////////////
-	private static void setMessageField(JLabel messageField) {
-		messageField.setSize( graphicWidth, messageFieldHeight);
-		messageField.setLocation(0, buttonPanelHeight);
-		messageField.setOpaque(true);
-		messageField.setForeground(Color.WHITE);
-		messageField.setBackground(Color.DARK_GRAY);
-		messageField.setHorizontalTextPosition(JLabel.CENTER);
-		messageField.setText("Veuillez selectionner un plan a charger");
-	
-	}
 
-	public static void setControllerWindow(Window window) {
+	public void setControllerWindow() {
 		
-		window.setLayout(null);
-		window.setSize(windowWidth, windowHeight);
-		window.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		window.setTitle("Deliver'IF");
-		window.setResizable(false);
-		window.setLocationRelativeTo(null);
+		setLayout(null);
+		setSize(windowWidth, windowHeight);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setTitle("Deliver'IF");
+		setResizable(false);
+		setLocationRelativeTo(null);
 	
 	}
 	
-	private static void setGraphicView(GraphicView graphicView) {
+	public void fillButtonPanel(JPanel buttonPanel) {
+		
+		buttonPanel.setSize(windowWidth, buttonPanelHeight);
+		buttonPanel.setBackground(Color.WHITE);
+		
+		// Create and add button to undo actions to panel
+		undoButton = new JButton();
+		undoButton.setActionCommand(UNDO);
+		addIconToButton(undoButton, "resources/img/backward.png");
+		buttonPanel.add(undoButton);
+		undoButton.addActionListener(buttonsListener);
+		undoButton.setEnabled(false);
+		
+		// Create and add button to redo actions to panel
+		redoButton = new JButton();
+		redoButton.setActionCommand(REDO);
+		addIconToButton(redoButton, "resources/img/forward.png");
+		buttonPanel.add(redoButton);
+		redoButton.addActionListener(buttonsListener);	
+		redoButton.setEnabled(false);
+		
+		// Create and add button to load map to panel
+		JButton loadMapButton = new JButton(LOAD_MAP);
+		loadMapButton.addActionListener(buttonsListener);
+		buttonPanel.add(loadMapButton);
+		
+		// Create and add button to load delivery list to panel
+		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
+		loadDeliveryList.addActionListener(buttonsListener);
+		loadDeliveryList.setEnabled(false);
+		buttonPanel.add(loadDeliveryList);
+		
+		// Create and add label about delivery men to panel
+		JTextArea labelNumberOfDeliveryMen = new JTextArea();
+		labelNumberOfDeliveryMen.setText("Nombre de livreurs :");
+		labelNumberOfDeliveryMen.setEditable(false);
+		buttonPanel.add(labelNumberOfDeliveryMen);
+		
+		// Create and add field to enter number of deliverymen to panel
+		// Default value is 1
+		numberOfDeliveryMenField = new TextField();
+		numberOfDeliveryMenField.setText("1");
+		numberOfDeliveryMenField.setEditable(true);
+		buttonPanel.add(numberOfDeliveryMenField);
+		
+		// Create and add button to calculate circuits to panel
+		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
+		calculateCircuitButton.addActionListener(buttonsListener);
+		calculateCircuitButton.setEnabled(false);
+		buttonPanel.add(calculateCircuitButton);
+		
+		// Create and add button to continue calculation to panel
+		continueCalculateCircuitButton = new JButton(CONTINUE_CALCULATION);
+		continueCalculateCircuitButton.addActionListener(buttonsListener);
+		continueCalculateCircuitButton.setEnabled(false);
+		buttonPanel.add(continueCalculateCircuitButton);
+		
+		// Create and add button to cancel current action to panel
+		cancelAddButton = new JButton(CANCEL);
+		cancelAddButton.addActionListener(buttonsListener);
+		cancelAddButton.setEnabled(false);
+		buttonPanel.add(cancelAddButton);
+		
+		// Create and add button to generate road map to panel
+		generateRoadmapButton = new JButton(GENERATE_ROADMAP);
+		generateRoadmapButton.addActionListener(buttonsListener);
+		generateRoadmapButton.setEnabled(false);
+		buttonPanel.add(generateRoadmapButton);
+	}
+	
+	private void setGraphicView(GraphicView graphicView) {
 		
 		graphicView.setLocation(0, buttonPanelHeight+messageFieldHeight);
 		graphicView.setLayout(null);
@@ -212,12 +299,7 @@ public class Window extends JFrame{
 		
 	}
 	
-	public static void setMouseListener(Window window) {
-		window.graphicView.addMouseListener(mouseListener);
-		window.graphicView.addMouseMotionListener(mouseListener);
-	}
-	
-	private static void addIconToButton (JButton button, String path) {
+	private void addIconToButton (JButton button, String path) {
 		try {
 		    ImageIcon img = new ImageIcon(path);
 		    button.setIcon(img);
@@ -226,13 +308,20 @@ public class Window extends JFrame{
 		}
 	}
 	
-	private static void setTextualView(TextualView textualView) {
+	private DefaultMutableTreeNode createTreeRoot() {
+		
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("");
+		return root;
+	}
+	
+	private void setTextualView(TextualView textualView) {
 		
 		textualView.setLocation(graphicWidth, buttonPanelHeight);
 		textualView.setBackground(Color.WHITE);
 		textualView.setSize(windowWidth-graphicWidth, windowHeight-buttonPanelHeight);
 		textualView.setLayout(null);
 		
+		// Create and add button to zoom on graphicView to textualView
 		zoomButton = new JButton();
 		zoomButton.setActionCommand(ZOOM);
 		addIconToButton(zoomButton, "resources/img/zoom-in.png");
@@ -242,6 +331,7 @@ public class Window extends JFrame{
 		zoomButton.setEnabled(false);
 		textualView.add(zoomButton);
 		
+		// Create and add button to reset graphicView's offsets and scale to textualView
 		resetScaleButton = new JButton();
 		resetScaleButton.setActionCommand(RESET_SCALE);
 		addIconToButton(resetScaleButton, "resources/img/zoom-1:1.png");
@@ -251,6 +341,7 @@ public class Window extends JFrame{
 		resetScaleButton.setEnabled(false);
 		textualView.add(resetScaleButton);
 		
+		// Create and add button to unzoom on graphicView to textualView
 		unZoomButton = new JButton();
 		unZoomButton.setActionCommand(UNZOOM);
 		addIconToButton(unZoomButton, "resources/img/zoom-out.png");
@@ -260,6 +351,7 @@ public class Window extends JFrame{
 		unZoomButton.setEnabled(false);
 		textualView.add(unZoomButton);
 		
+		// Create and add button to "move up" in graphic view to textualView
 		upButton = new JButton();
 		upButton.setActionCommand(UP);
 		addIconToButton(upButton, "resources/img/chevron-up.png");
@@ -269,6 +361,7 @@ public class Window extends JFrame{
 		upButton.setEnabled(false);
 		textualView.add(upButton);
 		
+		// Create and add button to "move down" in graphic view to textualView
 		downButton = new JButton();
 		downButton.setActionCommand(DOWN);
 		addIconToButton(downButton, "resources/img/chevron-down.png");
@@ -278,6 +371,7 @@ public class Window extends JFrame{
 		downButton.setEnabled(false);
 		textualView.add(downButton);
 		
+		// Create and add button to "move right" in graphic view to textualView
 		rightButton = new JButton();
 		rightButton.setActionCommand(RIGHT);
 		addIconToButton(rightButton, "resources/img/chevron-right.png");
@@ -287,6 +381,7 @@ public class Window extends JFrame{
 		rightButton.setEnabled(false);
 		textualView.add(rightButton);
 		
+		// Create and add button to "move left" in graphic view to textualView
 		leftButton = new JButton();
 		leftButton.setActionCommand(LEFT);
 		addIconToButton(leftButton, "resources/img/chevron-left.png");
@@ -296,6 +391,7 @@ public class Window extends JFrame{
 		leftButton.setEnabled(false);
 		textualView.add(leftButton);
 		
+		// Create and add button to add a delivery to deliveries' list to textualView
 		addDeliveryButton = new JButton(ADD_DELIVERY);
 		addDeliveryButton.addActionListener(buttonsListener);
 		addDeliveryButton.setVisible(true);
@@ -304,6 +400,7 @@ public class Window extends JFrame{
 		addDeliveryButton.setSize(windowWidth-graphicWidth-160, buttonHeight);
 		textualView.add(addDeliveryButton);
 	
+		// Create and add button to delete a delivery from deliveries' list to textualView
 		deleteDeliveryButton = new JButton(DELETE_DELIVERY);
 		deleteDeliveryButton.addActionListener(buttonsListener);
 		deleteDeliveryButton.setVisible(true);
@@ -311,78 +408,121 @@ public class Window extends JFrame{
 		deleteDeliveryButton.setLocation(150, windowHeight-buttonPanelHeight-(buttonHeight*2+buttonSpace+50));
 		deleteDeliveryButton.setSize(windowWidth-graphicWidth-160, buttonHeight);
 		textualView.add(deleteDeliveryButton);	
-	
+
+		// Create and add button to move a delivery from a circuit to another to textualView
 		moveDeliveryButton = new JButton(MOVE_DELIVERY);
 		moveDeliveryButton.addActionListener(buttonsListener);
 		moveDeliveryButton.setVisible(true);
 		moveDeliveryButton.setEnabled(false);
 		moveDeliveryButton.setLocation(150, windowHeight-buttonPanelHeight-(buttonHeight+50));
 		moveDeliveryButton.setSize(windowWidth-graphicWidth-160, buttonHeight);
-		textualView.add(moveDeliveryButton);
-		
+		textualView.add(moveDeliveryButton);	
 			
 	}
 	
-	
-	public static void fillButtonPanel(JPanel buttonPanel) {
-		
-		undoButton = new JButton();
-		undoButton.setActionCommand(UNDO);
-		addIconToButton(undoButton, "resources/img/backward.png");
-		buttonPanel.add(undoButton);
-		undoButton.addActionListener(buttonsListener);
-		undoButton.setEnabled(false);
-
-		redoButton = new JButton();
-		redoButton.setActionCommand(REDO);
-		addIconToButton(redoButton, "resources/img/forward.png");
-		buttonPanel.add(redoButton);
-		redoButton.addActionListener(buttonsListener);	
-		redoButton.setEnabled(false);
-		
-		buttonPanel.setSize(windowWidth, buttonPanelHeight);
-		buttonPanel.setBackground(Color.WHITE);
-		
-		JButton loadMapButton = new JButton(LOAD_MAP);
-		loadMapButton.addActionListener(buttonsListener);
-		buttonPanel.add(loadMapButton);
-		
-		loadDeliveryList = new JButton(LOAD_DELIVERY_OFFER);
-		loadDeliveryList.addActionListener(buttonsListener);
-		loadDeliveryList.setEnabled(false);
-		buttonPanel.add(loadDeliveryList);
-		
-		JTextArea labelNumberOfDeliveryMen = new JTextArea();
-		labelNumberOfDeliveryMen.setText("Nombre de livreurs :");
-		labelNumberOfDeliveryMen.setEditable(false);
-		buttonPanel.add(labelNumberOfDeliveryMen);
-		
-		numberOfDeliveryMenField = new TextField();
-		numberOfDeliveryMenField.setText("1");
-		numberOfDeliveryMenField.setEditable(true);
-		buttonPanel.add(numberOfDeliveryMenField);
-		
-		calculateCircuitButton = new JButton(CALCULATE_CIRCUITS);
-		calculateCircuitButton.addActionListener(buttonsListener);
-		calculateCircuitButton.setEnabled(false);
-		buttonPanel.add(calculateCircuitButton);
-		
-		continueCalculateCircuitButton = new JButton(CONTINUE_CALCULATION);
-		continueCalculateCircuitButton.addActionListener(buttonsListener);
-		continueCalculateCircuitButton.setEnabled(false);
-		buttonPanel.add(continueCalculateCircuitButton);
-		cancelAddButton = new JButton(CANCEL);
-		cancelAddButton.addActionListener(buttonsListener);
-		cancelAddButton.setEnabled(false);
-		buttonPanel.add(cancelAddButton);
-		
-		generateRoadmapButton = new JButton(GENERATE_ROADMAP);
-		generateRoadmapButton.addActionListener(buttonsListener);
-		generateRoadmapButton.setEnabled(false);
-		buttonPanel.add(generateRoadmapButton);
+	 public void addTreeListener () {
+		 
+		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
+		    public void valueChanged(TreeSelectionEvent e) {
+		        
+		    	// If the tree isn't empty
+		    	if ( treeRoot.getChildCount() != 0) {
+		    		
+			    	DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
+			    	
+		        	// If a tree node is selected
+			    	if ( deliveryPoint != null ) {
+				        String deliveryInfo = (String) deliveryPoint.getUserObject();
+				        
+				        // If it isn't the repository
+				        if (!deliveryInfo.startsWith("Entrepot")) {
+				        	
+				        	// There is no repository's parent circuit to indicate
+				        	setRepositoryCircuit(-1);
+				        	
+				        	// If it is a delivery
+				        	if (!deliveryInfo.startsWith("Tournee")) {
+				        		
+				        		// Its index is got
+				        		String secondPart = deliveryInfo.substring(10);
+				        		String[] split = secondPart.split(":");
+				        		String deliveryNumber = split[0];
+				        		int deliveryIndex = Integer.parseInt(deliveryNumber);
+				        		
+				        		// Then the delivery
+				        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
+				        		
+				        		// The node is selected in graphicView and the controller is worn 
+				        		nodeSelected(delivery);
+				        		controller.treeDeliverySelected(delivery);
+				        	
+				        	// If it is a circuit
+				        	} else {
+				        		
+				        		// Its index is got
+				        		String secondPart = deliveryInfo.substring(8);
+				        		String[] split = secondPart.split(":");
+				        		String circuitNumber = split[0];
+				        		int circuitIndex = Integer.parseInt(circuitNumber);	
+				        		
+				        		// It is selected in both views
+				        		textualCircuitSelected(circuitIndex-1);
+				        	}
+				        	
+				        // If it is the repository
+				        } else {
+				        	TreeNode parentCircuit = deliveryPoint.getParent();
+				        	
+				        	// It is selected in graphicView and the controller is worn
+				        	Delivery delivery = controller.getCircuitManagement().getDeliveryList().get(0);
+			        		nodeSelected(delivery);
+				        	controller.treeDeliverySelected(delivery);
+				        	
+				        	// If its parent is a circuit
+				        	if ( parentCircuit != treeRoot) {
+				        		
+				        		// The circuit's index is got
+				        		String circuitInfo = (String) ((DefaultMutableTreeNode) parentCircuit).getUserObject();
+				        		String secondPart = circuitInfo.substring(8);
+				        		String[] split = secondPart.split(":");
+				        		String circuitNumber = split[0];
+				        		int circuitIndex = Integer.parseInt(circuitNumber);
+				        		
+				        		// It is selected in both views
+				        		textualCircuitSelected(circuitIndex-1);
+				        		// It is set as repository's parent circuit
+				        		setRepositoryCircuit (circuitIndex);
+				        	
+				        	// If there is no parent circuit
+				        	} else {
+				        		setRepositoryCircuit(-1);
+				        	}
+				        }
+				        
+			    	}
+		    	}
+		    }
+   
+		 });
 	}
 	
-	//////////////////////////////GET DATA FROM WINDOW/////////////////////////////
+	private void setMessageField(JLabel messageField) {
+		messageField.setSize( graphicWidth, messageFieldHeight);
+		messageField.setLocation(0, buttonPanelHeight);
+		messageField.setOpaque(true);
+		messageField.setForeground(Color.WHITE);
+		messageField.setBackground(Color.DARK_GRAY);
+		messageField.setHorizontalTextPosition(JLabel.CENTER);
+		messageField.setText("Veuillez selectionner un plan a charger");
+	}
+	
+	public void setMouseListener() {
+		this.graphicView.addMouseListener(mouseListener);
+		this.graphicView.addMouseMotionListener(mouseListener);
+	}
+	
+
+	//////////////////////////////GET DATAS FROM WINDOW/////////////////////////////
 	protected String getFile () {
 			
 		chooser = new JFileChooser();
@@ -432,23 +572,7 @@ public class Window extends JFrame{
 		
 	}
 	
-	public static void getMapName() {
-		
-		buttonsListener.setMap(setNameOfMap.getText());
-		
-	}
-	/////
-	
-	public static void getDeliveryListName() {
-		
-		buttonsListener.setDeliveryList(setNameOfDeliveryList.getText());
-		
-	}
-	
 	//////////////////////////////CHANGE DISPLAYED TEXT/////////////////////////////
-	public void setTextualViewBorderTitle( String string) {	
-		textualView.setBorder(BorderFactory.createTitledBorder(string));
-	}
 	
 	public void setMessage( String string) {
 		messageField.setBackground(Color.DARK_GRAY);
@@ -464,7 +588,9 @@ public class Window extends JFrame{
 		messageField.setBackground(Color.ORANGE);
 		messageField.setText(string);
 	}
+	
 	//////////////////////////////DRAW COMPOSANTS/////////////////////////////
+	
 	public void calculateScale() {
 		graphicView.calculateScale(controller.getCircuitManagement());
 	}
@@ -488,12 +614,9 @@ public class Window extends JFrame{
 			textualView.fillCircuitTree();
 		}
 	}
-
-	public void fillDeliveryTree() {
-		textualView.fillDeliveryTree();
-	}
 	
 	//////////////////////////////BUTTON ACTIVATION/////////////////////////////
+	
 	public void enableButtonLoadDeliveriesList() {
 		loadDeliveryList.setEnabled(true);
 	}
@@ -516,17 +639,14 @@ public class Window extends JFrame{
 	}
 	
 	public void enableButtonAddDelivery() {
-		addDeliveryButton.setVisible(true);
 		addDeliveryButton.setEnabled(true);
 	}
 	
 	public void enableButtonDeleteDelivery() {
-		deleteDeliveryButton.setVisible(true);;
 		deleteDeliveryButton.setEnabled(true);
 	}
 	
 	public void enableButtonMoveDelivery() {
-		moveDeliveryButton.setVisible(true);;
 		moveDeliveryButton.setEnabled(true);
 	}
 	
@@ -561,10 +681,7 @@ public class Window extends JFrame{
 	}
 	
 	//////////////////////////////BUTTON DESACTIVATION/////////////////////////////
-	public void disableButtonLoadDeliveriesList() {
-		loadDeliveryList.setEnabled(false);
-	}
-	
+
 	public void disableButtonCalculateCircuit() {
 		calculateCircuitButton.setEnabled(false);
 	}
@@ -592,14 +709,6 @@ public class Window extends JFrame{
 	public void disableButtonRedo() {
 		redoButton.setEnabled(false);
 	}
-	
-	public void disableZoomButton() {
-		zoomButton.setEnabled(false);
-	}
-		
-	public void disableDeZoomButton() {
-		unZoomButton.setEnabled(false);
-	}
 
 	public void disableCancelButton() {
 		cancelAddButton.setEnabled(false);
@@ -611,13 +720,6 @@ public class Window extends JFrame{
 	
 	public void disableGenerateRoadmapButton () {
 		generateRoadmapButton.setEnabled(false);
-	}
-	
-	public void disableArrows() {
-		upButton.setEnabled(false);
-		downButton.setEnabled(false);
-		rightButton.setEnabled(false);
-		leftButton.setEnabled(false);
 	}
 	
 	//////////////////////////////POP UP MANAGEMENT/////////////////////////////
@@ -682,6 +784,8 @@ public class Window extends JFrame{
 		}
 	 }
 	 
+	 //////////////////////////////GRAPHIC DISPLAY/////////////////////////////
+	 
 	 public void zoom() {
 		graphicView.zoom();
 	 }
@@ -698,131 +802,106 @@ public class Window extends JFrame{
 		 graphicView.verticalShift(down);
 	 }
 	 
+	 public void resetScale() {
+		 graphicView.resetDefaultValues();
+	 }
+	 
 	 public void emptyColors () {
 		 colors = new HashMap < Integer,Color>();
 	 }
 	 
-	 public void addTreeListener () {
-		 
-		 textualViewTree.addTreeSelectionListener(new TreeSelectionListener() {
-		    public void valueChanged(TreeSelectionEvent e) {
-		        
-		    	if ( treeRoot.getChildCount() != 0) {
-		    		
-			    	DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
-			        
-		        	setRepositoryCircuit(-1);
-			    	
-			    	if ( deliveryPoint != null ) {
-				        String deliveryInfo = (String) deliveryPoint.getUserObject();
-				        
-				        if (!deliveryInfo.startsWith("Entrepot")) {
-				        	
-				        	if (!deliveryInfo.startsWith("Tournee")) {
-				        		String secondPart = deliveryInfo.substring(10);
-				        		String[] split = secondPart.split(":");
-				        		String deliveryNumber = split[0];
-				        		int deliveryIndex = Integer.parseInt(deliveryNumber);
-				        		Delivery delivery = controller.getCircuitManagement().getDeliveryByIndex(deliveryIndex); 
-				        		nodeSelected(delivery);
-				        		controller.treeDeliverySelected(delivery);
-				        	} else {
-				        		String secondPart = deliveryInfo.substring(8);
-				        		String[] split = secondPart.split(":");
-				        		String circuitNumber = split[0];
-				        		int circuitIndex = Integer.parseInt(circuitNumber);	
-				        		textualCircuitSelected(circuitIndex-1);
-				        	}
-				        } else {
-				        	TreeNode parentCircuit = deliveryPoint.getParent();
-				        	
-				        	Delivery delivery = controller.getCircuitManagement().getDeliveryList().get(0);
-			        		nodeSelected(delivery);
-				        	controller.treeDeliverySelected(delivery);
-				        
-				        	if ( parentCircuit != null) {
-				        		String circuitInfo = (String) ((DefaultMutableTreeNode) parentCircuit).getUserObject();
-				        		String secondPart = circuitInfo.substring(8);
-				        		String[] split = secondPart.split(":");
-				        		String circuitNumber = split[0];
-				        		int circuitIndex = Integer.parseInt(circuitNumber);	
-				        		textualCircuitSelected(circuitIndex-1);
-				        		setRepositoryCircuit (circuitIndex);
-				        	}
-				        }
-				        
-			    	}
-		    	}
-		    }
-   
-		 });
-	}
+	 //////////////////////////////SELECTION/////////////////////////////
 	 
 	public void nodeSelected(Delivery delivery) {
 		
+		// If there is a node already selected
 		if(selectedNode!=null){
+			//It is paint back to its former color
 			graphicView.unPaintNode( selectedNode);
 		}
-			
+		
+		// The current selected node is paint to selection color
+		// and set as selected node
 		graphicView.paintSelectedNode( delivery, true);
-		hoverNode = null;
 		selectedNode = delivery;
 		
+		// The hover node is emptied, since it is currently the selected node
+		// and the selection is prior to hovering
+		hoverNode = null;
+		
+		// The selected node wasn't selected via textualView
 		setRepositoryCircuit(-1);
+		// Set node in selectedColor in textualView, if it exists
 		setSelectedTreeNode( delivery,true);
 		
 	}
 		
 	public void nodeHover(Delivery delivery) {
-		//Mouse exit a node
+		
+		// If the mouse exit a node
 		if(delivery == null && hoverNode!=null) {
+			// The last hoverNode is unpaint and set to null
 			graphicView.unPaintNode( hoverNode);
-			hoverNode = delivery;
+			hoverNode = null;
 		}
-		//Cannot hover a selected node
+		// If the mouse hover a node that isn't selected 
 		else if ( delivery != null && (selectedNode == null || delivery.getPosition().getId()!=selectedNode.getPosition().getId())){
-			//Mouse enter a node
-			if(delivery!=null && hoverNode == null) {
+			
+			//If the mouse enter a node, it is painted
+			if( hoverNode == null) {
 				graphicView.paintSelectedNode( delivery, false);
 			}
-			//Mouse pass from one node to another
-			else if(delivery!=null && delivery.getPosition().getId()!=hoverNode.getPosition().getId()) {
+			//If the mouse pass from one node to another, the former hoverNode is unpainted and the new is painted
+			else if(delivery.getPosition().getId()!=hoverNode.getPosition().getId()) {
 				graphicView.unPaintNode( hoverNode);
 				graphicView.paintSelectedNode( delivery, false);
 			}
+			
+			// The hovered node is set as hoverNode
 			hoverNode = delivery;
-		
+			
+			//If circuits are displayed
 			if ( controller.getCircuitManagement().getCircuitsList()!= null) {
 				circuitHover(delivery);
 			}		
 			
 		}
 		
+		// Set node in hoverColor in textualView, if it exists
 		setSelectedTreeNode (delivery, false);
 			
 	}
 		
 	public void circuitSelected(Delivery selectedDelivery) {
 
+		// If the newer selected node isn't null and circuits are displayed
 		if (selectedDelivery != null && controller.getCircuitManagement().getCircuitsList()!= null) {
 			
 			int circuitIndex;
-								
-			if (selectedDelivery.getDuration()!= -1)
+			
+			// If the newer selected node is a delivery, the circuit index is get from its delivery list
+			if (selectedDelivery.getDuration()!= -1) {
 				circuitIndex = controller.getCircuitManagement().getCircuitIndexByDelivery( selectedDelivery);
-			else
+			// Else, the circuit index is get from its path
+			} else {
 				circuitIndex = controller.getCircuitManagement().getCircuitIndexByNode( selectedDelivery);
-
+			}
+			
+			// If another circuit is already selected, it is unpainted
 			if(selectedCircuit!= -1 && selectedCircuit != circuitIndex){
 				graphicView.unPaintCircuit( selectedCircuit);
 			}
 			
+			// If newer selected node belong to a circuit
+			// it is painted an set as selectedCircuit
+			// while hoverCircuit is set to -1 ( because selection is prior to hovering)
 			if (circuitIndex != -1) {
 				graphicView.paintSelectedCircuit(circuitIndex, true); 
 				hoverCircuit = -1 ;
 				selectedCircuit = circuitIndex;
 			}
 			
+			// Set the circuit selectedColor in textual view
 			setSelectedTreeNode(circuitIndex, true);
 		}
 		
@@ -831,20 +910,26 @@ public class Window extends JFrame{
 	public void circuitHover(Delivery delivery) {
 					
 		int toDrawCircuit = controller.getCircuitManagement().getCircuitIndexByNode(delivery);
-				
+		
+		// If the hovered node belong to a circuit
 		if( toDrawCircuit != -1 ) {
 			
+			// If the hovered circuit is not the selected one
 			if( toDrawCircuit != selectedCircuit) {
 					
-				//Mouse enter a node
+				//If the mouse enter a circuit, the circuit is paint in hoverColor
 				if( hoverCircuit == -1) {
 					graphicView.paintSelectedCircuit( toDrawCircuit, false);
 				}
-				//Mouse pass from one node to another
+				
+				// If the mouse pass from one circuit to another, the first one is unpainted
+				// while the second is painted
 				else if( toDrawCircuit != hoverCircuit) {
 					graphicView.unPaintCircuit( hoverCircuit);
 					graphicView.paintSelectedCircuit( toDrawCircuit, false);
 				}
+				
+				// The hovered circuit is set as hoverCircuit
 				hoverCircuit = toDrawCircuit;
 					
 			} else if ( toDrawCircuit == selectedCircuit) {
@@ -853,23 +938,33 @@ public class Window extends JFrame{
 			hoverCircuit = -1;
 			
 			}
+			
+		// Else the former hoverCircuit is unpainted 
 		} else {
 			graphicView.unPaintCircuit( hoverCircuit);
 			hoverCircuit =-1;
 		}
 		
+		// Set circuit in hoverColor in textualView, if it exists
 		setSelectedTreeNode (toDrawCircuit, false);
 	}		
 		
 	public void textualCircuitSelected(int circuitIndex) {
+		
+		// The former selected circuit is unpainted
 		graphicView.unPaintCircuit(selectedCircuit);
+		
+		// Then the new one is painted and set as selectedCircuit 
 		graphicView.paintSelectedCircuit(circuitIndex);
 		selectedCircuit = circuitIndex;
+		
+		// It is selected in textualView as well
 		setSelectedTreeNode (circuitIndex, true);
 	}	
 	
 	 public void setSelectedTreeNode ( Delivery delivery, boolean selected ){
-			 
+		
+		 // If a delivery is selected or hovered, it is put in the right color in the textualViewTree  
 		 if ( delivery != null && delivery.getDuration() != -1) {
 			 
 			 if ( delivery instanceof Repository ) {
@@ -880,40 +975,43 @@ public class Window extends JFrame{
 							index +": Duree "+(int)(delivery.getDuration()/60)+"min"+(int)(delivery.getDuration()%60)+"s";
 				 cellRenderer.setSelectedDelivery(string, selected);
 			 }
+		 // Else the selected node in textualView is emptied
 		 }else {
 			 cellRenderer.setSelectedDelivery("", selected);
 		 }
 		 
+		 // Update the textualViewTree
 		 ((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
 
 	 }
-	 
-	 public void resetScale() {
-		 graphicView.resetDefaultValues();
-	 }
 		
 	private void setSelectedTreeNode(int circuitIndex, boolean selected) {
-			
+		
+		// If a delivery is selected or hovered, it is put in the right color in the textualViewTree  
 		if ( circuitIndex != -1 ) {
-			 double duration = controller.getCircuitManagement().getCircuitByIndex(circuitIndex).getCircuitDuration();
+			 
+			double duration = controller.getCircuitManagement().getCircuitByIndex(circuitIndex).getCircuitDuration();
 			 int durationHour = (int) duration / (int) 3600;
 			 int durationMinutes = ((int)duration % 3600) / (int) 60;
 			 String string = "Tournee "+ 
 						(circuitIndex+1) + ": Duree "+ durationHour + "h" + durationMinutes + "min" + (int)(duration%60) +"s";
 			 cellRenderer.setSelectedCircuit(string, selected);
-		
+			 
+		// Else the selected circuit in textualView is emptied
 		} else {
 			 cellRenderer.setSelectedCircuit("", selected);
 
-		 }
-		 
-		 ((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
+		}
+		
+		// Update the textualViewTree
+		((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
 
 	}
-	
 
 	private void setRepositoryCircuit(int circuitIndex) {
 		
+		// If the repository is selected via textualView and it belongs to a circuit,
+		// this circuit's node is colored in selectedColor in textualView
 		if (circuitIndex !=-1) {
 			 double duration = controller.getCircuitManagement().getCircuitByIndex(circuitIndex-1).getCircuitDuration();
 			 int durationHour = (int) duration / (int) 3600;
@@ -921,25 +1019,30 @@ public class Window extends JFrame{
 			 String string = "Tournee "+ 
 						(circuitIndex) + ": Duree "+ durationHour + "h" + durationMinutes + "min" + (int)(duration%60) +"s";
 			 cellRenderer.setRepositoryCircuit(string);
+			 
+		// Else the repositoryCircuit is emptied
 		} else {
 			 cellRenderer.setRepositoryCircuit("");
-	
-		 }
+		}
 	}  
 		
 	public void emptySelectedNode() {
+		
+		// If a node is selected, it is unpainted an selectedNode is
+		// set to  null
 		if(selectedNode!=null){
 			graphicView.unPaintNode( selectedNode);
+			selectedNode = null;
 		}
-		
-		selectedNode = null;
 	}
 	
 	public void emptySelectedCircuit() {
+		
+		// If a circuit is selected, it is unpainted an selectedCircuit is
+		// set to  null
 		if(selectedCircuit!= -1){
 			graphicView.unPaintCircuit( selectedCircuit);
+			selectedCircuit = -1;
 		}
-		
-		selectedCircuit = -1;
 	}
 }
