@@ -43,7 +43,7 @@ public class KeyListener extends KeyAdapter {
 	 * @see java.awt.event.KeyAdapter#keyPressed(java.awt.event.KeyEvent)
 	 * 
 	 *  Called by the key listener each time a key is pressed.
- 	 *	Interesting keys are SUPPR, CRTL+Z, CTRL+Y, Z, D and the arrow.
+ 	 *	Interesting keys are SUPPR, CRTL+Z, CTRL+Y, Z, D and the arrows.
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -118,7 +118,7 @@ public class KeyListener extends KeyAdapter {
 	}
 
 	/**
-	 * Shift enable.
+	 * Enable shifting on the graphic view.
 	 *
 	 * @param shift the boolean used to enable or not the shift
 	 */
@@ -127,7 +127,7 @@ public class KeyListener extends KeyAdapter {
 	}
 
 	/**
-	 * Zoom enable.
+	 * Enable zooming on the graphic view.
 	 *
 	 * @param zoom the boolean used to enable or not the zoom
 	 */
@@ -136,7 +136,7 @@ public class KeyListener extends KeyAdapter {
 	}
 
 	/**
-	 * Un zoom enable.
+	 * Enable unzooming on the graphic view.
 	 *
 	 * @param unZoom the boolean used to enable or not the unzoom
 	 */

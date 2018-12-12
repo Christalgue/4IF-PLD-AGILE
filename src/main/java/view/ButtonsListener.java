@@ -113,7 +113,7 @@ public class ButtonsListener implements ActionListener {
 				controller.cancelAdd();
 				break;
 				
-			// When he user wants to reset the moves, zooms and unzooms he did on the graphic view and go to the initial display
+			// When he user wants to reset the moves, zooms and unzooms he did on the graphic view and go back to the initial display
 			case Window.RESET_SCALE:
 				controller.getWindow().resetScale();
 				controller.getWindow().disableResetScaleButton();
@@ -127,12 +127,12 @@ public class ButtonsListener implements ActionListener {
 					Serializer.serializer(folderPath, controller.getCircuitManagement());
 				break;
 				
-			// When the user wants to move a delivery after selected it.
+			// When the user wants to move a delivery after having selected it.
 			case Window.MOVE_DELIVERY: 
 				controller.moveDelivery();
 				break;
 				
-			// When the user wants to delete a delivery after selected it.
+			// When the user wants to delete a delivery after having selected it.
 			case Window.DELETE_DELIVERY: 
 				controller.deleteDelivery(); 
 				break;

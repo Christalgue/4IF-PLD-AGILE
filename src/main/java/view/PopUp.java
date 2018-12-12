@@ -41,7 +41,7 @@ public class PopUp extends JFrame {
 	}
 	
 	/**
-	 * Display pop up.
+	 * Display a pop up.
 	 *
 	 * @param message the message displayed in the pop up
 	 * @param window the window which call the pop up
@@ -50,7 +50,7 @@ public class PopUp extends JFrame {
 	public static int displayPopUp (PopUpType message, Window window) {
 		int userChoice = 0;
 		switch (message){
-			// Confirmation pop up for when the user want to add of a delivery
+			// Confirmation pop up displayed when the user want to add a delivery
 			case ADD: 
 				Object[] validateOptions = {"Valider", "Annuler"};
 				userChoice = JOptionPane.showOptionDialog(window,
@@ -65,7 +65,7 @@ public class PopUp extends JFrame {
 				window.manageAddPopUpValue(userChoice);
 			break;
 			
-			// Confirmation pop up for when the user want to delete a delivery
+			// Confirmation pop up displayed when the user want to delete a delivery
 			case DELETE: 
 				Object[] deleteOptions = {"Valider", "Annuler"};
 				userChoice = JOptionPane.showOptionDialog(window,
@@ -80,7 +80,7 @@ public class PopUp extends JFrame {
 				window.manageDeletePopUpValue(userChoice);
 				break;
 			
-			// Pop up to take the duration in second of a new delivery a user wants to add
+			// Pop up to ask the user the duration in second of the new delivery he wants to add
 			case DURATION: 
 				JTextField durationTextField = new JTextField(10);
 		        String durationMessage = "Duree de la livraison en secondes";
@@ -102,8 +102,9 @@ public class PopUp extends JFrame {
 		        durationDialog.setContentPane(popUp);
 		        durationDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		        
-		        // Detect a change in the value of the event
-		        // Allow to not close the pop up directly after a click on its buttons to allow us to verify the entry of the user
+		        // Detect any change in the value of a property
+		        // Allow to not close the pop up immediately after a click on its buttons 
+		        // to check the entry of the user
 		        popUp.addPropertyChangeListener(
 	        	    new PropertyChangeListener() {
 	        	        public void propertyChange(PropertyChangeEvent e) {
@@ -140,7 +141,7 @@ public class PopUp extends JFrame {
 		        durationDialog.setVisible(true);
 				break;
 				
-			// Confirmation pop up for when the user want to move a delivery
+			// Confirmation pop up displayed when the user want to move a delivery
 			case MOVE: 
 				Object[] moveOptions = {"Valider", "Anuler"};
 				userChoice = JOptionPane.showOptionDialog(window,
@@ -162,7 +163,7 @@ public class PopUp extends JFrame {
 	 * Error pop up.
 	 *
 	 * @param window the window
-	 * @param zero to precise if the value can be 0 or not
+	 * @param zero Indicate if the value can be 0 or not
 	 * @param numberOfDeliveries the number of deliveries
 	 */
 	public static void errorPopUp(Window window, boolean zero, int numberOfDeliveries) {

@@ -12,9 +12,8 @@ import javax.swing.tree.TreeNode;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class MyTreeCellRenderer.
+ * The Class MyTreeCellRenderer is a custom TreeCellRenderer to customize displaying in the textual view's tree.
  */
 public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 	
@@ -30,17 +29,17 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 	/** The selected circuit. */
 	private String selectedCircuit ="";
 	
-	/** The hover delivery. */
+	/** The hovered delivery. */
 	private String hoverDelivery ="";
 	
-	/** The hover circuit. */
+	/** The hovered circuit. */
 	private String hoverCircuit="";
 	
-	/** The repository circuit. */
-	private String repositoryCircuit="";
+	/** Indicate the if the repository is selected. */
+	private boolean repositorySelected = false;
 	
 	/**
-	 * Instantiates a new my tree cell renderer.
+	 * Instantiates a new custom tree cell renderer.
 	 *
 	 * @param window the window
 	 * @param circuitManagement the circuit management
@@ -52,87 +51,95 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 	
     /* (non-Javadoc)
      * @see javax.swing.tree.DefaultTreeCellRenderer#getTreeCellRendererComponent(javax.swing.JTree, java.lang.Object, boolean, boolean, boolean, int, boolean)
+     * Function applied to each node of the tree each time a node change
      */
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
             boolean sel, boolean exp, boolean leaf, int row, boolean hasFocus) {
         super.getTreeCellRendererComponent(tree, value, sel, exp, leaf, row, hasFocus);
 
-        // Assuming you have a tree of Strings
         String node = (String) ((DefaultMutableTreeNode) value).getUserObject();
+
         String parentCircuitNode;
         
         setBackgroundSelectionColor(Color.WHITE);
         setTextSelectionColor(window.selectedColor);
-        
-       if ( !repositoryCircuit.equals("")) {
-    	   
+
+        // If the repository is selected via the textual view as
+        // the circuit are displayed
+        if ( repositorySelected) {
+    	   //System.out.println(selectedDelivery);
     	   TreeNode parentValue = ((TreeNode) value).getParent();
     	   
+    	   // If the current node has a parent, its displayed string is stored
     	   if ( parentValue != null) {
     	   
     		   parentCircuitNode = (String) ((DefaultMutableTreeNode) parentValue).getUserObject();
     		   
     	   } else {
-		   parentCircuitNode = "Panda";
+    		   parentCircuitNode = "Panda";
     	   }
     	   
-    	   if ( (repositoryCircuit.equals(parentCircuitNode) && selectedDelivery.equals(node)) || selectedCircuit.equals(node)) {
+    	   // If the current node is the repository and the parent is the corresponding circuit's node
+    	   // Or if the current node is the selected circuit, the current node is painted on selectedColor
+    	   if ( (selectedCircuit.equals(parentCircuitNode) && selectedDelivery.equals(node)) || selectedCircuit.equals(node)) {
 	    	   setForeground ( window.selectedColor);
+	       // Else if the current node is the hovered delivery or circuit, it is painted hoverColor
     	   }else if (hoverDelivery.equals(node) || hoverCircuit.equals(node)){
 	    	   setForeground ( window.hoverColor);
-	       } else {
-		        if ( window.colors.get(0) != null) {
+		   
+	        // Else if the current node is the circuit or
+	   	   // one of its deliveries, it is painted in the circuit's color  
+    	   } else {
 		        
-		        	if (!node.startsWith("Tournee")) {
+	        	if (!node.startsWith("Tournee")) {
 		        		
-		        		if ( node.startsWith("Entrepot")){
-		        			setForeground(window.repositoryColor);
-		        		} else if ( node.length() >= 10){
+	        		// Except the repository, which is painted in repositoryColor
+	        		if ( node.startsWith("Entrepot")){
+	        			setForeground(window.repositoryColor);
+	        		} else if ( node.length() >= 10){
 		        		
-			        		String secondPart = node.substring(10);
-			        		String[] split = secondPart.split(":");
-			        		String deliveryNumber = split[0];
-			        		int deliveryIndex = Integer.parseInt(deliveryNumber);
-			        		Delivery delivery = circuitManagement.getDeliveryByIndex(deliveryIndex); 
-			        		int circuitIndex = circuitManagement.getCircuitIndexByDelivery(delivery);
-			        		Color color = window.colors.get(circuitIndex);
-			        		setForeground(color);
-			        		
-		        		}
-		        	
-		        	} else if (node.length() >= 8){
-		        		String secondPart = node.substring(8);
+		        		String secondPart = node.substring(10);
 		        		String[] split = secondPart.split(":");
-		        		String circuitNumber = split[0];
-		        		int circuitIndex = Integer.parseInt(circuitNumber);	
-		        		Color color = window.colors.get(circuitIndex-1);
+		        		String deliveryNumber = split[0];
+		        		int deliveryIndex = Integer.parseInt(deliveryNumber);
+		        		Delivery delivery = circuitManagement.getDeliveryByIndex(deliveryIndex); 
+		        		int circuitIndex = circuitManagement.getCircuitIndexByDelivery(delivery);
+		        		Color color = window.colors.get(circuitIndex);
 		        		setForeground(color);
-		        	}
+		        		
+	        		}
 		        	
-		        	
-		        }else if ( circuitManagement.getDeliveryList() !=null) {
-		        	
-		        	if ( node.startsWith("Entrepot")) {
-		        		setForeground(window.repositoryColor);
-		        	} else {
-		        		setForeground(window.deliveryColor);
-		        	}
-		        	
-		        }	
-	        }
-    	   
+	        	} else if (node.length() >= 8){
+	        		String secondPart = node.substring(8);
+	        		String[] split = secondPart.split(":");
+	        		String circuitNumber = split[0];
+	        		int circuitIndex = Integer.parseInt(circuitNumber);	
+	        		Color color = window.colors.get(circuitIndex-1);
+	        		setForeground(color);
+	        	}
+        }
+      
        } else {     
  
+    	   // If the current node is the selected delivery or the selected circuit
+    	   // it is painted on selectedColor
 	       if (( selectedDelivery.equals(node) || selectedCircuit.equals(node))) {
 	    	   setForeground ( window.selectedColor);
+	       
+		   // Else if the current node is the hovered delivery or circuit, it is painted hoverColor
 	       } else if (hoverDelivery.equals(node) || hoverCircuit.equals(node)){
 	    	   setForeground ( window.hoverColor);
+	       
 	       } else {
-		        if ( window.colors.get(0) != null) {
+	    	   
+	    	   // Else if the circuits are displayed, if the current node is the circuit or
+		       // one of its deliveries, it is painted in the circuit's color 
+	    	   if ( window.colors.get(0) != null) {
 		        
 		        	if (!node.startsWith("Tournee")) {
 		        		
+		        		// Except the repository, which is painted in repositoryColor
 		        		if ( node.startsWith("Entrepot")){
 		        			setForeground(window.repositoryColor);
 		        		} else if ( node.length() >= 10){
@@ -157,7 +164,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 		        		setForeground(color);
 		        	}
 		        	
-		        	
+		        // Else if the circuits aren't displayed, every node is painted 
+			    // in deliveryColor, except the repository, which is painted in repositoryColor
 		        }else if ( circuitManagement.getDeliveryList() !=null) {
 		        	
 		        	if ( node.startsWith("Entrepot")) {
@@ -176,38 +184,47 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
     /**
      * Sets the selected delivery.
      *
-     * @param string the string
-     * @param selected the selected
+     * @param string the delivery
+     * @param selected indicate if the delivery is selected (true) or hovered (false)
      */
-    public void setSelectedDelivery ( String string, boolean selected) {    	
+    public void setSelectedDelivery ( String delivery, boolean selected) {    	
     	if (selected) {
-    		this.selectedDelivery = string;
+    		this.selectedDelivery = delivery;
     	} else {
-    		this.hoverDelivery = string; 
+    		this.hoverDelivery = delivery; 
     	}
     }
     
     /**
      * Sets the selected circuit.
      *
-     * @param string the string
-     * @param selected the selected
+     * @param string the circuit
+     * @param selected indicate if the delivery is selected (true) or hovered (false)
      */
-    public void setSelectedCircuit ( String string, boolean selected) {    	
+    public void setSelectedCircuit ( String circuit, boolean selected) {    	
     	if (selected) {
-    		this.selectedCircuit = string;
+    		this.selectedCircuit = circuit;
     	} else {
-    		this.hoverCircuit = string; 
+    		this.hoverCircuit = circuit; 
     	}
     }
     
     /**
-     * Sets the repository circuit.
-     *
-     * @param circuit the new repository circuit
+     * Gets the selected delivery.
+     * 
+     * @return the selected delivery
      */
-    public void setRepositoryCircuit ( String circuit) {
-    	this.repositoryCircuit = circuit;
+    public String getSelectedDelivery() {
+    	return selectedDelivery; 
+    }
+    
+    /**
+     * Indicate if the repository is selected.
+     *
+     * @param selected Indicate if the repository is selected
+     */
+    public void setRepositorySelected ( boolean selected) {
+    	this.repositorySelected = selected;
     }
     
     

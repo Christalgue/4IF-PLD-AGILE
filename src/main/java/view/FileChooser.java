@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileSystemView;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FileChooser.
  */
