@@ -25,6 +25,9 @@ public class RemoveDeliveryCommand implements Command {
 	
 	/** The duration. */
 	private int duration;
+	
+	/** The index of the initial circuit. */
+	private int initialIndexCircuit;
 
 	/**
 	 * Instantiates a new RemoveDeliveryCommand.
@@ -37,6 +40,7 @@ public class RemoveDeliveryCommand implements Command {
 		this.node = node;
 		this.circuitManagement = circuitManagement;
 		this.duration = circuitManagement.isDelivery(node).getDuration();
+		this.initialIndexCircuit = circuitManagement.getCircuitIndexByNode(circuitManagement.isDelivery(node));
 		this.previousNode = circuitManagement.getPreviousNode(node);
 		this.window = window;
 	}
@@ -59,7 +63,7 @@ public class RemoveDeliveryCommand implements Command {
 	 */
 	@Override
 	public void undoCde() {
-		circuitManagement.addDelivery(node,duration, previousNode);
+		circuitManagement.addDelivery(node,duration, previousNode, initialIndexCircuit);
 		window.drawCircuits();
 	}
 

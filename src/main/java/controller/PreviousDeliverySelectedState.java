@@ -52,6 +52,7 @@ public class PreviousDeliverySelectedState extends DefaultState {
 			if (controller.getCircuitManagement().checkNodeInDeliveryList(previousNode)) {
 				controller.deliveryAddedState.setNode(node);
 				controller.deliveryAddedState.setPreviousNode(previousNode);
+				controller.deliveryAddedState.setindexCircuit(-1);
 				controller.deliveryAddedState.setDuration(duration);
 				window.setMessage("");
 				window.disableCancelButton();
@@ -66,12 +67,13 @@ public class PreviousDeliverySelectedState extends DefaultState {
 	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
 	 */
 	@Override
-	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, int indexCircuit, CommandsList commandsList) {
 		window.nodeSelected(deliverySelected);
 		window.circuitSelected(deliverySelected);
 		window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		controller.deliveryAddedState.setNode(node);
 		controller.deliveryAddedState.setDuration(duration);
+		controller.deliveryAddedState.setindexCircuit(indexCircuit);
 		controller.deliveryAddedState.setPreviousNode(deliverySelected.getPosition());
 		window.disableCancelButton();
 		controller.setCurrentState(controller.deliveryAddedState);

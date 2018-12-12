@@ -131,7 +131,7 @@ public class DeliveryLoadedState extends DefaultState {
 	 * @see main.java.controller.DefaultState#mouseMoved(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
 	 */
 	@Override
-	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, int indexCircuit, CommandsList commandsList) {
 		if (!controller.getCircuitManagement().isRepository(deliverySelected.getPosition())) {
 			
 			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));

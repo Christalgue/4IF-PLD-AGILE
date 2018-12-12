@@ -27,6 +27,12 @@ public class MoveDeliveryCommand implements Command {
 	/** The initial previous node. */
 	private Node initialPreviousNode;
 	
+	/** The index of the circuit. */
+	private int indexCircuit;
+	
+	/** The index of the initial circuit. */
+	private int initialIndexCircuit;
+	
 	/**
 	 * Instantiates a new MoveDeliveryCommand.
 	 *
@@ -35,13 +41,14 @@ public class MoveDeliveryCommand implements Command {
 	 * @param node2 the previous node
 	 * @param circuitManagement the circuit management
 	 */
-	public MoveDeliveryCommand(Window window, Node node1, Node node2, CircuitManagement circuitManagement) {
+	public MoveDeliveryCommand(Window window, Node node1, Node node2, int indexCircuit, CircuitManagement circuitManagement) {
 		this.node1 = node1;
 		this.node2 = node2;
 		this.initialPreviousNode = circuitManagement.getPreviousNode(node1);
-		
+		this.indexCircuit = indexCircuit;
 		this.window = window;
 		this.circuitManagement = circuitManagement;
+		this.initialIndexCircuit = circuitManagement.getCircuitIndexByNode(circuitManagement.isDelivery(node1));
 	}
 
 	/**
@@ -50,7 +57,7 @@ public class MoveDeliveryCommand implements Command {
 	@Override
 	public void doCde() {
 		try {
-			circuitManagement.moveDelivery(node1, node2);
+			circuitManagement.moveDelivery(node1, node2, indexCircuit);
 			window.drawCircuits();
 		} catch (ManagementException e) {
 			e.printStackTrace();
@@ -63,7 +70,7 @@ public class MoveDeliveryCommand implements Command {
 	@Override
 	public void undoCde() {
 		try {
-			circuitManagement.moveDelivery(node1, initialPreviousNode);
+			circuitManagement.moveDelivery(node1, initialPreviousNode, initialIndexCircuit);
 			window.drawCircuits();
 		} catch (ManagementException e) {
 			e.printStackTrace();

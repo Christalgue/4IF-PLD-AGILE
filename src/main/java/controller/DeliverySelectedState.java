@@ -25,6 +25,7 @@ public class DeliverySelectedState extends DefaultState {
 	/** The node selected. */
 	Node node;
 	
+	
 	/**
 	 * Sets the node.
 	 *
@@ -33,6 +34,8 @@ public class DeliverySelectedState extends DefaultState {
 	protected void setNode (Node node) {
 		this.node =  node;
 	}
+	
+	
 	
 	/**
 	 * @see main.java.controller.DefaultState#leftClick(main.java.controller.Controller, main.java.view.Window, main.java.entity.Point)
@@ -71,7 +74,7 @@ public class DeliverySelectedState extends DefaultState {
 	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
 	 */
 	@Override
-	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, int indexCircuit, CommandsList commandsList) {
 		if (!controller.getCircuitManagement().isRepository(deliverySelected.getPosition()))
 		{
 			window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(node));
@@ -175,7 +178,7 @@ public class DeliverySelectedState extends DefaultState {
 			window.enableButtonContinueCalculation();
 			controller.setCurrentState(controller.calcState);
 		} catch (DeliveriesNotLoadedException e) {
-			window.setErrorMessage("Pas de livraisons chargées");
+			window.setErrorMessage("Pas de livraisons chargï¿½es");
 			e.printStackTrace();
 		}
 	

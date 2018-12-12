@@ -543,7 +543,8 @@ public class Window extends JFrame{
 			
 	}
 	
-	 /**
+	
+	/**
  	 * Adds the tree listener to the textual view tree.
  	 */
  	public void addTreeListener () {
@@ -580,7 +581,7 @@ public class Window extends JFrame{
 				        		
 				        		// The node is selected in graphicView and the controller is worn 
 				        		nodeSelected(delivery);
-				        		controller.treeDeliverySelected(delivery);
+				        		controller.treeDeliverySelected(delivery, -1);
 				        	
 				        	// If it is a circuit
 				        	} else {
@@ -599,10 +600,12 @@ public class Window extends JFrame{
 				        } else {
 				        	TreeNode parentCircuit = deliveryPoint.getParent();
 				        	
+				        	int circuitIndex = -1;
+				        	
 				        	// It is selected in graphicView and the controller is worn
 				        	Delivery delivery = controller.getCircuitManagement().getDeliveryList().get(0);
 			        		nodeSelected(delivery);
-				        	controller.treeDeliverySelected(delivery);
+				        	//controller.treeDeliverySelected(delivery);
 				        	
 				        	// If its parent is a circuit
 				        	if ( parentCircuit != treeRoot) {
@@ -612,7 +615,7 @@ public class Window extends JFrame{
 				        		String secondPart = circuitInfo.substring(8);
 				        		String[] split = secondPart.split(":");
 				        		String circuitNumber = split[0];
-				        		int circuitIndex = Integer.parseInt(circuitNumber);
+				        		circuitIndex = Integer.parseInt(circuitNumber);
 				        		
 				        		// It is selected in both views
 				        		textualCircuitSelected(circuitIndex-1);
@@ -623,6 +626,9 @@ public class Window extends JFrame{
 				        	} else {
 				        		setRepositorySelected(-1);
 				        	}
+				        	
+				        	controller.treeDeliverySelected(delivery, circuitIndex-1);
+
 				        }
 				        
 			    	}

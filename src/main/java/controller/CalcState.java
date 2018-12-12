@@ -105,7 +105,7 @@ public class CalcState extends DefaultState {
 			window.drawCircuits();
 			window.enableButtonContinueCalculation();
 		} catch (DeliveriesNotLoadedException e) {
-			window.setErrorMessage("Pas de livraisons chargées");
+			window.setErrorMessage("Pas de livraisons chargï¿½es");
 			e.printStackTrace();
 		}
 	}
@@ -131,7 +131,7 @@ public class CalcState extends DefaultState {
 				window.drawCircuits();
 				window.enableButtonContinueCalculation();
 			} catch (DeliveriesNotLoadedException e) {
-				window.setErrorMessage("Pas de livraisons chargées");
+				window.setErrorMessage("Pas de livraisons chargï¿½es");
 				e.printStackTrace();
 			}
 	}
@@ -172,7 +172,7 @@ public class CalcState extends DefaultState {
 	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
 	 */
 	@Override
-	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, int indexCircuit, CommandsList commandsList) {
 		window.setMessage(controller.getCircuitManagement().getCurrentMap().displayIntersectionNode(deliverySelected.getPosition()));
 		if (!controller.getCircuitManagement().isRepository(deliverySelected.getPosition()))
 		{
