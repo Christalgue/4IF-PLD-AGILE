@@ -288,7 +288,7 @@ class TestCircuitManagement {
 			
 			Node newDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
 			Node previousDelivery = circuitManager.getDeliveryList().get(0).getPosition();
-			circuitManager.addDelivery(newDelivery, 20, previousDelivery);
+			circuitManager.addDelivery(newDelivery, 20, previousDelivery, -1);
 			
 			//Assert new delivery has been added to the list
 			List<Delivery> deliveries = circuitManager.getDeliveryList();
@@ -319,7 +319,7 @@ class TestCircuitManagement {
 			
 			newDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
 			previousDelivery = circuitManager.getDeliveryList().get(1).getPosition();
-			circuitManager.addDelivery(newDelivery, 20, previousDelivery);
+			circuitManager.addDelivery(newDelivery, 20, previousDelivery, -1);
 			
 			//Assert new delivery has been added to the list
 			deliveries = circuitManager.getDeliveryList();
@@ -477,7 +477,7 @@ class TestCircuitManagement {
 			
 			Node previousDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
 			Node moveDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)1);
-			circuitManager.moveDelivery(moveDelivery, previousDelivery);
+			circuitManager.moveDelivery(moveDelivery, previousDelivery, -1);
 			
 			//Assert new delivery has not been moved in the list
 			deliveries = circuitManager.getDeliveryList();
