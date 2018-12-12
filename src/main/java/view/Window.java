@@ -1,10 +1,14 @@
 package main.java.view;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.TextField;
+import java.io.File;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -47,8 +51,8 @@ public class Window extends JFrame{
 	protected static final String MOVE_DELIVERY = "Deplacer la livraison";
 	protected static final String CONTINUE_CALCULATION = "Continuer le calcul des tournees";
 	protected static final String STOP_CALCULATION = "Arreter le calcul des tournees";
-	protected static final String UNDO = "Annuler";
-	protected static final String REDO = "Retablir";
+	protected static final String UNDO = " ";
+	protected static final String REDO = ".";
 	protected static final String CANCEL = "Cancel";
 	protected static final String RESET_SCALE = "Retablir l'echelle";
 	
@@ -283,12 +287,24 @@ public class Window extends JFrame{
 		buttonPanel.add(numberOfDeliveryMenField);
 	
 		undoButton = new JButton(UNDO);
+		try {
+		    ImageIcon img = new ImageIcon("resources/img/backward.png");
+		    undoButton.setIcon(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		buttonPanel.add(undoButton);
 		undoButton.addActionListener(buttonsListener);
 		undoButton.setEnabled(false);
 		
 
 		redoButton = new JButton(REDO);
+		try {
+		    ImageIcon img = new ImageIcon("resources/img/forward.png");
+		    redoButton.setIcon(img);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		buttonPanel.add(redoButton);
 		redoButton.addActionListener(buttonsListener);	
 		redoButton.setEnabled(false);
