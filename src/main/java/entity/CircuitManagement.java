@@ -510,7 +510,7 @@ public class CircuitManagement extends Observable{
     }
 
     /**
-     * generic method to call when calculation of the circuits is asked by HCI
+     * Generic method to call when calculation of the circuits is asked by HCI
      * call the cluster method and create the circuits one by one after having 
      *      calculated the atomic path between each delivery.
      *
@@ -570,10 +570,6 @@ public class CircuitManagement extends Observable{
         			}
         			Circuit circuit = new Circuit(arrivalDeliveries, repository, allPaths, 15.0/3.6);
         			this.circuitsList.add(circuit);
-        			System.out.println("Circuit added : " + circuit.toString());
-        			/*System.out.println("arrivalDeliveries : " + arrivalDeliveries.toString());
-        			System.out.println("repository : " + repository.toString());
-        			System.out.println("allPaths : " + allPaths.toString());*/
         		}
         		//calculate each circuit after having created the instances to avoid the nullpointer exceptions in the view.
         		for(Circuit circuit : this.circuitsList) {
@@ -589,7 +585,6 @@ public class CircuitManagement extends Observable{
     		for(Circuit circuitTested : this.circuitsList)
     		{
     			if(circuitTested.calculationIsFinished < 1) {
-    				System.out.println("continue calculation de circuit : " + circuitTested.toString());
     				circuitTested.continueCalculation();
     			}
     		}

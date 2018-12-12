@@ -69,8 +69,6 @@ public abstract class TemplateTSP implements TSP {
 		} else {
 			continueResearchSolution(limitTime, allPaths, System.currentTimeMillis());
 		}
-		
-		// TODO need to consider the time spent delivering the order at each delivery point.
 	}
 	
 	/**
