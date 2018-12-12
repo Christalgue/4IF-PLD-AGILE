@@ -202,7 +202,7 @@ class TestCircuitManagement {
 	
 	@Test
 	/**
-	 * Test if this method returns true if a node is contains in its deliveries list and false otherwise
+	 * Test if this method returns true if a node is contained in its deliveries list and false otherwise
 	 */
 	void checkNodeInDeliveryList() {
 		try {
