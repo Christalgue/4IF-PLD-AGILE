@@ -469,8 +469,7 @@ public class Window extends JFrame{
 	}
 	
 	public void drawMap() {
-		//graphicView.removeAll();
-		//graphicView.update(graphicView.getGraphics());
+		textualView.emptyTree();
 		graphicView.paintMap();
 	}
 	
@@ -484,6 +483,7 @@ public class Window extends JFrame{
 		drawDeliveries();
 		graphicView.paintCircuits();
 		if ( controller.getCircuitManagement().getCircuitsList()!= null) {
+			textualView.emptyTree();
 			textualView.fillCircuitTree();
 		}
 	}
@@ -854,7 +854,8 @@ public class Window extends JFrame{
 				 cellRenderer.setSelectedDelivery("Entrepot: Duree 0s", selected);
 			 } else {
 				 int index = controller.getCircuitManagement().getDeliveryIndex(delivery);
-				 String string = "Livraison "+ index +": Duree "+delivery.getDuration()+" s";
+				 String string = "Livraison "+ 
+							index +": Duree "+(int)(delivery.getDuration()/60)+"min"+(int)(delivery.getDuration()%60)+"s";
 				 cellRenderer.setSelectedDelivery(string, selected);
 			 }
 		 }else {
@@ -873,13 +874,18 @@ public class Window extends JFrame{
 	private void setSelectedTreeNode(int circuitIndex, boolean selected) {
 			
 		if ( circuitIndex != -1 ) {
-			 cellRenderer.setSelectedCircuit("Tournee "+(circuitIndex+1) +": Duree "+controller.getCircuitManagement().getCircuitByIndex(circuitIndex).getCircuitLength()+" s", selected);
-		 } else {
+			 double duration = controller.getCircuitManagement().getCircuitByIndex(circuitIndex).getCircuitDuration();
+			 int durationHour = (int) duration / (int) 3600;
+			 int durationMinutes = ((int)duration % 3600) / (int) 60;
+			 String string = "Tournee "+ 
+						(circuitIndex+1) + ": Duree "+ durationHour + "h" + durationMinutes + "min" + (int)(duration%60) +"s";
+			 cellRenderer.setSelectedCircuit(string, selected);
+		
+		} else {
 			 cellRenderer.setSelectedCircuit("", selected);
 
 		 }
 		 
-		 //((DefaultTreeModel) textualViewTree.getModel()).reload();
 		 ((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
 
 	}			
