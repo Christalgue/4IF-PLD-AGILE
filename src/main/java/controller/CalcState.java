@@ -115,7 +115,7 @@ public class CalcState extends DefaultState {
 			try {
 				window.disableButtonContinueCalculation();
 				controller.getCircuitManagement().calculateCircuits(controller.getCircuitManagement().getNbDeliveryMan(), true);
-				window.setMessage("Calcul Fini !! :D");
+				window.setMessage("Meilleure solution trouvee.");
 				controller.setCurrentState(controller.calcState);
 			} catch (MapNotChargedException e) {
 				window.setErrorMessage("Carte non chargee");
