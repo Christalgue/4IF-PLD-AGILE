@@ -757,13 +757,14 @@ public class Window extends JFrame{
 	private void setSelectedTreeNode(int circuitIndex, boolean selected) {
 			
 		if ( circuitIndex != -1 ) {
-			 cellRenderer.setSelectedCircuit("Tournee "+(circuitIndex+1) +": Duree "+controller.getCircuitManagement().getCircuitByIndex(circuitIndex).getCircuitLength()+" s", selected);
-		 } else {
+			 String string = "Tournee "+(circuitIndex+1) +": Duree "+(int) controller.getCircuitManagement().getCircuitByIndex(circuitIndex).getCircuitDuration()+" s";
+			 cellRenderer.setSelectedCircuit(string, selected);
+		
+		} else {
 			 cellRenderer.setSelectedCircuit("", selected);
 
 		 }
 		 
-		 //((DefaultTreeModel) textualViewTree.getModel()).reload();
 		 ((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
 
 	}			
