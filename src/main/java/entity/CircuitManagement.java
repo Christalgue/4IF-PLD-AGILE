@@ -605,14 +605,17 @@ public class CircuitManagement extends Observable{
 	public int getCircuitIndexByDelivery( Delivery delivery) {
 		
 		int circuitIndex =0;
-		for(Circuit circuitTested : this.circuitsList){
-			for ( Delivery deliveryTested : circuitTested.getDeliveryList()) {
-				if ( deliveryTested.getPosition() == delivery.getPosition())
-					return circuitIndex;
+		if ( circuitsList != null) {
+			for(Circuit circuitTested : this.circuitsList){
+				for ( Delivery deliveryTested : circuitTested.getDeliveryList()) {
+					if ( deliveryTested.getPosition() == delivery.getPosition())
+						return circuitIndex;
+				}
+				circuitIndex++;
 			}
-			circuitIndex++;
 		}
 		return -1;
+		
 	}
 	
 	/**
