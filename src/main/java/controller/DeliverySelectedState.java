@@ -175,7 +175,7 @@ public class DeliverySelectedState extends DefaultState {
 			window.enableButtonContinueCalculation();
 			controller.setCurrentState(controller.calcState);
 		} catch (DeliveriesNotLoadedException e) {
-			// TODO Auto-generated catch block
+			window.setErrorMessage("Pas de livraisons chargées");
 			e.printStackTrace();
 		}
 	
@@ -187,6 +187,7 @@ public class DeliverySelectedState extends DefaultState {
 	@Override
 	public void deleteDelivery (Controller controller, Window window) {
 		window.disableGenerateRoadmapButton();
+		window.disableButtonContinueCalculation();
 		controller.deliveryDeletedState.setNode(node);
 		controller.setCurrentState(controller.deliveryDeletedState);
 		if(controller.getShowPopUp())
@@ -198,6 +199,7 @@ public class DeliverySelectedState extends DefaultState {
 	 */
 	public void moveDelivery (Controller controller, Window window) {
 		window.disableGenerateRoadmapButton();
+		window.disableButtonContinueCalculation();
 		window.enableCancelButton();
 		window.disableButtonMoveDelivery();
 		window.disableButtonDeleteDelivery();

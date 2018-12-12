@@ -12,7 +12,6 @@ import main.java.exception.MapNotChargedException;
 import main.java.exception.NoRepositoryException;
 import main.java.exception.TSPLimitTimeReachedException;
 import main.java.utils.PointUtil;
-import main.java.utils.PopUpType;
 import main.java.view.Window;
 
 
@@ -33,6 +32,7 @@ public class CalcState extends DefaultState {
 		
 		try {
 			controller.getCircuitManagement().getCircuitsList().clear();
+			window.disableButtonContinueCalculation();
 			window.enableButtonAddDelivery();
 			window.disableGenerateRoadmapButton();
 			window.disableButtonCalculateCircuit();
@@ -61,6 +61,7 @@ public class CalcState extends DefaultState {
 		
 		try {
 			window.setMessage("");
+			window.disableButtonContinueCalculation();
 			controller.getCircuitManagement().getCircuitsList().clear();
 			window.enableButtonCalculateCircuit();
 			window.disableGenerateRoadmapButton();
@@ -86,6 +87,7 @@ public class CalcState extends DefaultState {
 		commandsList.reset();
 		try {
 			window.setMessage("");
+			window.disableButtonContinueCalculation();
 			controller.getCircuitManagement().calculateCircuits(nbDeliveryMan, false);
 			window.drawCircuits();
 			controller.setCurrentState(controller.calcState);

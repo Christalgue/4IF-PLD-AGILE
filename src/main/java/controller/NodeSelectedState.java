@@ -38,6 +38,7 @@ public class NodeSelectedState extends DefaultState {
 	 */
 	@Override
 	public void addDelivery(Controller controller, Window window) {
+		window.disableButtonContinueCalculation();
 		controller.durationChoiceState.setNode(node);
 		controller.setCurrentState(controller.durationChoiceState);
 		if(controller.getShowPopUp())
