@@ -798,10 +798,8 @@ public class Window extends JFrame{
 	public void drawCircuits() {
 		drawDeliveries();
 		graphicView.paintCircuits();
-		if (controller.getCircuitManagement().getCircuitsList()!= null) {
-			textualView.emptyTree();
-			textualView.fillCircuitTree();
-		}
+		textualView.emptyTree();
+		textualView.fillCircuitTree();
 	}
 	
 	//////////////////////////////BUTTON ACTIVATION/////////////////////////////
