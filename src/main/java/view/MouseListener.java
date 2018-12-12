@@ -2,24 +2,44 @@ package main.java.view;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-
-import javax.swing.SwingUtilities;
 
 import main.java.controller.Controller;
-import main.java.entity.Delivery;
-import main.java.entity.Node;
 import main.java.entity.Point;
-import main.java.utils.PointUtil;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The listener interface for receiving mouse events.
+ * The class that is interested in processing a mouse
+ * event implements this interface, and the object created
+ * with that class is registered with a component using the
+ * component's <code>addMouseListener<code> method. When
+ * the mouse event occurs, that object's appropriate
+ * method is invoked.
+ *
+ * @see MouseEvent
+ */
 public class MouseListener extends MouseAdapter {
 
+	/** The controller. */
 	private Controller controller;
+	
+	/** The graphic view. */
 	private GraphicView graphicView;
+	
+	/** The window. */
 	//private TextualView textualView;
 	private Window window;
+	
+	/** The last clicked point. */
 	private Point lastClickedPoint;
 
+	/**
+	 * Instantiates a new mouse listener.
+	 *
+	 * @param controller the controller
+	 * @param graphicView the graphic view
+	 * @param window the window
+	 */
 	public MouseListener(Controller controller, GraphicView graphicView, Window window){
 	//public MouseListener(Controller controller, GraphicView graphicView, TextualView textualView, Window window){
 		this.controller = controller;
@@ -28,6 +48,9 @@ public class MouseListener extends MouseAdapter {
 		this.window = window;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mouseClicked(MouseEvent evt) { 
 		// Called by MouseAdapter each time the mouse is clicked
@@ -40,6 +63,9 @@ public class MouseListener extends MouseAdapter {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseAdapter#mousePressed(java.awt.event.MouseEvent)
+	 */
 	public void mousePressed (MouseEvent evt) {
 		
 		if ( evt.getButton() == MouseEvent.BUTTON1) { 
@@ -48,6 +74,9 @@ public class MouseListener extends MouseAdapter {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseAdapter#mouseReleased(java.awt.event.MouseEvent)
+	 */
 	public void mouseReleased(MouseEvent evt) {
 		
 		int x = evt.getX();
@@ -69,6 +98,9 @@ public class MouseListener extends MouseAdapter {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.MouseAdapter#mouseMoved(java.awt.event.MouseEvent)
+	 */
 	@Override
 	public void mouseMoved(MouseEvent evt) {
 		

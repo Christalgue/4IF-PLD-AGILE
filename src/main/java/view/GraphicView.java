@@ -2,7 +2,6 @@ package main.java.view;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,46 +15,88 @@ import main.java.entity.Point;
 import main.java.entity.Repository;
 import main.java.utils.PointUtil;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GraphicView.
+ */
 public class GraphicView extends JPanel {
 
+	/** The height scale. */
 	private double heightScale;
+	
+	/** The width scale. */
 	private double widthScale;
 	
+	/** The default width scale. */
 	private double defaultWidthScale;
+	
+	/** The default height scale. */
 	private double defaultHeightScale;
 
+	/** The origin lat. */
 	protected double originLat;
+	
+	/** The origin long. */
 	protected double originLong;
 
+	/** The view height. */
 	private int viewHeight;
+	
+	/** The view width. */
 	private int viewWidth;
 
+	/** The circuit management. */
 	private CircuitManagement circuitManagement;
+	
+	/** The g. */
 	private Graphics2D g;
 
+	/** The map view. */
 	private MapView mapView;
+	
+	/** The circuit view. */
 	private CircuitView circuitView;
+	
+	/** The delivery view. */
 	private DeliveryView deliveryView;
 
+	/** The width. */
 	private int width;
+	
+	/** The delivery radius. */
 	private int deliveryRadius;
+	
+	/** The repository radius. */
 	private int repositoryRadius;
 
+	/** The node color. */
 	private static Color nodeColor = Color.WHITE;
 
 	//private Color color[] = { Color.CYAN, Color.BLUE, Color.GRAY, Color.ORANGE, Color.PINK };
 	
+	/** The min lat. */
 	protected double minLat;
+	
+	/** The max long. */
 	protected double maxLong;
 	
+	/** The horizontal offset. */
 	private int horizontalOffset =0;
+	
+	/** The vertical offset. */
 	private int verticalOffset =0;
+	
+	/** The window. */
 	private Window window;
 
 	/**
-	 * Create the graphic view where the map will be drawn in Window windows
-	 * 
+	 * Create the graphic view where the map will be drawn in Window windows.
+	 *
 	 * @param circuitManagement the CircuitManagement
+	 * @param viewHeight the view height
+	 * @param viewWidth the view width
+	 * @param width the width
+	 * @param window the window
 	 */
 	public GraphicView(CircuitManagement circuitManagement, int viewHeight, int viewWidth, int width, 
 			Window window ) {
@@ -77,6 +118,11 @@ public class GraphicView extends JPanel {
 
 	}
 
+	/**
+	 * Calculate scale.
+	 *
+	 * @param circuitManagement the circuit management
+	 */
 	protected void calculateScale(CircuitManagement circuitManagement) {
 
 		HashMap<Long, Node> nodeMap = circuitManagement.getCurrentMap().getNodeMap();
@@ -134,10 +180,22 @@ public class GraphicView extends JPanel {
 		verticalOffset =0;
 	}
 
+	/**
+	 * Point to node.
+	 *
+	 * @param point the point
+	 * @return the node
+	 */
 	public Node pointToNode(Point point) {
 		return PointUtil.pointToNode(point, circuitManagement);
 	}
 
+	/**
+	 * Node to point.
+	 *
+	 * @param node the node
+	 * @return the point
+	 */
 	public Point nodeToPoint(Node node) {
 
 		Point p = new Point(((node.getLongitude() - originLong) / widthScale)+10 - horizontalOffset,
@@ -146,6 +204,12 @@ public class GraphicView extends JPanel {
 
 	}
 
+	/**
+	 * Point to lat long.
+	 *
+	 * @param point the point
+	 * @return the point
+	 */
 	public Point pointToLatLong(Point point) {
 		Point p = new Point((point.getX()-10+horizontalOffset) * widthScale + originLong, -(point.getY()-10+verticalOffset) * heightScale + originLat);
 		return p;
@@ -153,7 +217,7 @@ public class GraphicView extends JPanel {
 	}
 
 	/**
-	 * Methode appelee a chaque fois que VueGraphique doit etre redessinee
+	 * Methode appelee a chaque fois que VueGraphique doit etre redessinee.
 	 */
 	public void paintComponent() {
 
@@ -166,16 +230,25 @@ public class GraphicView extends JPanel {
 	}
 
 	
+	/**
+	 * Paint map.
+	 */
 	public void paintMap() {
 		this.removeAll();
 		this.update(g);
 		mapView.paintMap(g, circuitManagement.getCurrentMap());
 	}
 
+	/**
+	 * Paint deliveries.
+	 */
 	public void paintDeliveries() {
 		deliveryView.paintDeliveries(g, circuitManagement.getDeliveryList());
 	}
 
+	/**
+	 * Paint circuits.
+	 */
 	public void paintCircuits() {
 
 		int circuitIndex = 0;
@@ -198,10 +271,16 @@ public class GraphicView extends JPanel {
 		paintDeliveries();
 	}
 
+	/**
+	 * Sets the graphics.
+	 */
 	protected void setGraphics() {
 		g = (Graphics2D) this.getGraphics();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.Component#toString()
+	 */
 	@Override
 	public String toString() {
 		return "GraphicView [heightScale=" + heightScale + ", widthScale=" + widthScale + ", originLat=" + originLat
@@ -210,6 +289,12 @@ public class GraphicView extends JPanel {
 				+ ", deliveryView=" + deliveryView + ", color=" +  "]";
 	}
 
+	/**
+	 * Paint selected node.
+	 *
+	 * @param delivery the delivery
+	 * @param clicked the clicked
+	 */
 	public void paintSelectedNode(Delivery delivery, boolean clicked) {
 
 		if (clicked) {
@@ -230,6 +315,11 @@ public class GraphicView extends JPanel {
 		}
 	}
 
+	/**
+	 * Un paint node.
+	 *
+	 * @param delivery the delivery
+	 */
 	public void unPaintNode ( Delivery delivery) {
 		
 		if (delivery.getDuration() == -1) {
@@ -248,10 +338,20 @@ public class GraphicView extends JPanel {
 	}
 
 
+	/**
+	 * Paint selected circuit.
+	 *
+	 * @param circuitIndex the circuit index
+	 */
 	public void paintSelectedCircuit(int circuitIndex) {
 		circuitView.paintCircuit(g, circuitManagement.getCircuitByIndex(circuitIndex), window.selectedColor);
 	}
 
+	/**
+	 * Un paint circuit.
+	 *
+	 * @param selectedCircuit the selected circuit
+	 */
 	public void unPaintCircuit(int selectedCircuit) {
 
 		g.setColor(window.deliveryColor);
@@ -259,6 +359,12 @@ public class GraphicView extends JPanel {
 
 	}
 
+	/**
+	 * Paint selected circuit.
+	 *
+	 * @param circuit the circuit
+	 * @param clicked the clicked
+	 */
 	public void paintSelectedCircuit(int circuit, boolean clicked) {
 		
 		if (clicked) {
@@ -269,6 +375,9 @@ public class GraphicView extends JPanel {
 		
 	}
 
+	/**
+	 * Zoom.
+	 */
 	public void zoom() {
 		heightScale = heightScale/2;
 		widthScale = widthScale/2;
@@ -276,6 +385,9 @@ public class GraphicView extends JPanel {
 
 	}
 	
+	/**
+	 * Un zoom.
+	 */
 	public void unZoom (){
 		heightScale = heightScale*2;
 		widthScale = widthScale*2;
@@ -283,22 +395,41 @@ public class GraphicView extends JPanel {
 		
 	}
 
+	/**
+	 * Horizontal shift.
+	 *
+	 * @param right the right
+	 */
 	public void horizontalShift(int right) {
 		horizontalOffset +=right;
 		paintComponent();
 	}
 
+	/**
+	 * Vertical shift.
+	 *
+	 * @param down the down
+	 */
 	public void verticalShift(int down) {
 		verticalOffset +=down;
 		paintComponent();
 	}
 	
+	/**
+	 * Shift.
+	 *
+	 * @param right the right
+	 * @param down the down
+	 */
 	public void shift(int right, int down) {
 		horizontalOffset +=right;
 		verticalOffset +=down;
 		paintComponent();
 	}
 	
+	/**
+	 * Reset default values.
+	 */
 	public void resetDefaultValues() {
 		heightScale = defaultHeightScale;
 		widthScale = defaultWidthScale;

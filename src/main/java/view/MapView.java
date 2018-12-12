@@ -1,9 +1,11 @@
 package main.java.view;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JPanel;
@@ -14,36 +16,37 @@ import main.java.entity.Node;
 import main.java.entity.Point;
 
 
-import java.awt.*;
-
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MapView.
+ */
 public class MapView extends JPanel {
 	
+	/** The graphic view. */
 	private GraphicView graphicView;
 	
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public MapView () {
 		
 	}
 	
-	/**
-     * The color of the road
-     */
+	/** The color of the road. */
 	private Color colorRoad;
 	
-	/**
-     * The width of the road
-     */
+	/** The width of the road. */
 	private int roadWidth;
 	
+	/** The node radius. */
 	private int nodeRadius;
 	
 	/**
-	 * 
+	 * Instantiates a new map view.
+	 *
 	 * @param colorRoad 		The color of the road
 	 * @param roadWidth 			The width of the road
+	 * @param graphicView the graphic view
 	 */
 	public MapView(Color colorRoad, int roadWidth, GraphicView graphicView) {
 		this.colorRoad = colorRoad;
@@ -53,7 +56,8 @@ public class MapView extends JPanel {
 	}
 	
 	/**
-	 * 
+	 * Gets the color road.
+	 *
 	 * @return The color of the road
 	 */
 	protected Color getColorRoad () {
@@ -61,7 +65,8 @@ public class MapView extends JPanel {
 	}
 	
 	/**
-	 * 
+	 * Gets the width.
+	 *
 	 * @return The width of the road
 	 */
 	public int getWidth() {
@@ -70,13 +75,20 @@ public class MapView extends JPanel {
 	
 	
 	/**
-	 * 
+	 * Gets the radius.
+	 *
 	 * @return The radius of the node
 	 */
 	public int getRadius() {
 		return nodeRadius;
 	}	
 	
+	/**
+	 * Paint map.
+	 *
+	 * @param g the g
+	 * @param map the map
+	 */
 	protected void paintMap ( Graphics2D g, main.java.entity.Map map ) {
 		
 		g.setColor(colorRoad);
@@ -103,6 +115,12 @@ public class MapView extends JPanel {
 		
 	}
 	
+	/**
+	 * Draw bow.
+	 *
+	 * @param g the g
+	 * @param bow the bow
+	 */
 	public void drawBow( Graphics2D g, Bow bow) {
 		
 		Node startNode = bow.getStartNode();
@@ -116,6 +134,12 @@ public class MapView extends JPanel {
 		
 	}
 	
+	/**
+	 * Draw node.
+	 *
+	 * @param g the g
+	 * @param node the node
+	 */
 	public void drawNode( Graphics2D g, Node node) {
 		
 		/*if (node.getLongitude() == graphicView.originLong || node.getLongitude()== graphicView.maxLong || node.getLatitude()== graphicView.originLat || node.getLatitude()==graphicView.minLat) {
@@ -131,6 +155,11 @@ public class MapView extends JPanel {
 	}
 	
 	
+	/**
+	 * Test arrow.
+	 *
+	 * @param g the g
+	 */
 	// pour tester
 	public void testArrow(Graphics2D g) {
 		
@@ -158,6 +187,13 @@ public class MapView extends JPanel {
         
 	}
 	
+	/**
+	 * Draw arrow.
+	 *
+	 * @param g the g
+	 * @param start the start
+	 * @param end the end
+	 */
 	public void drawArrow( Graphics2D g, Point start, Point end) {
 		
 		int arrowLength = 10;

@@ -80,6 +80,8 @@ public class Circuit extends Observable {
 		try {
 			calculateTrackTSP(this.repositorySVG, this.allPathsSVG, false);
 		} catch (TSPLimitTimeReachedException e) {
+			this.circuitLength = calculateLength();
+			this.circuitDuration = calculateDuration();
 			throw e;
 		}
 		this.calculationIsFinished = true;
