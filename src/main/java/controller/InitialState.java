@@ -20,6 +20,7 @@ public class InitialState extends DefaultState {
 		try {
 			window.enableDeZoomButton();
 			window.enableZoomButton();
+			window.enableArrows();
 			window.setMessage("");
 			window.enableButtonLoadDeliveriesList();
 			try {

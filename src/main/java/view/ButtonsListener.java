@@ -45,7 +45,7 @@ public class ButtonsListener implements ActionListener {
 		// Method called by the button listener each time a button is clicked
 		// Send to controller a message associated to the clicked button
 		switch (e.getActionCommand()){
-			case Window.LOAD_MAP:
+			case  Window.LOAD_MAP:
 				String mapName = controller.getWindow().getFile();
 				if (mapName != "")
 					controller.loadMap(mapName);
@@ -105,7 +105,7 @@ public class ButtonsListener implements ActionListener {
 			case Window.GENERATE_ROADMAP:
 				String folderPath = controller.getWindow().getFolder();
 				if (folderPath != "")
-					Serializer.serializer(controller.getWindow().getFolder(), controller.getCircuitManagement());
+					Serializer.serializer(folderPath, controller.getCircuitManagement());
 				break;
 				
 			case Window.MOVE_DELIVERY: 
@@ -114,6 +114,26 @@ public class ButtonsListener implements ActionListener {
 				
 			case Window.DELETE_DELIVERY: 
 				controller.deleteDelivery(); 
+				break;
+				
+			case Window.UP:
+				controller.getWindow().verticalShift(-50);
+				controller.getWindow().enableResetScaleButton();
+				break;
+			
+			case Window.DOWN:
+				controller.getWindow().verticalShift(50);
+				controller.getWindow().enableResetScaleButton();
+				break;
+				
+			case Window.RIGHT:
+				controller.getWindow().horizontalShift(50);
+				controller.getWindow().enableResetScaleButton();
+				break;
+			
+			case Window.LEFT:
+				controller.getWindow().horizontalShift(-50);
+				controller.getWindow().enableResetScaleButton();
 				break;
 		}
 	}
