@@ -133,7 +133,7 @@ class TestCircuitManagement {
 	
 	@Test
 	/**
-	 * Test if the Cluster balance correctly the different nodes according to their location
+	 * Test if the Cluster balancesd correctly the different nodes according to their location
 	 */
 	void testCluster() {
 		
@@ -202,7 +202,7 @@ class TestCircuitManagement {
 	
 	@Test
 	/**
-	 * Test if this method returns true if a node contains in its deliveries list and false otherwise
+	 * Test if this method returns true if a node is contains in its deliveries list and false otherwise
 	 */
 	void checkNodeInDeliveryList() {
 		try {
