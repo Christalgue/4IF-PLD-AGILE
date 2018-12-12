@@ -17,6 +17,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 import main.java.controller.Controller;
 import main.java.entity.CircuitManagement;
@@ -129,8 +130,8 @@ public class Window extends JFrame{
 		
 		buttonsListener = new ButtonsListener(controller);
 		keyListener = new KeyListener(controller);
-		this.setFocusable(true);
-		this.addKeyListener(keyListener);
+		setFocusable(true);
+		addKeyListener(keyListener);
 		CircuitManagement circuitManagement = controller.getCircuitManagement();
 		
 		//////////////////////////////CREATE THE MAIN WINDOW//////////////////////////////
@@ -142,34 +143,34 @@ public class Window extends JFrame{
 		
 		//////////////////////////////CREATE THE GRAPHIC VIEW//////////////////////////////
 		
-		this.graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth,this);
-		setGraphicView(this.graphicView);
-		mouseListener = new MouseListener(controller, this.graphicView, this);
+		graphicView = new GraphicView (circuitManagement, windowHeight-buttonPanelHeight-messageFieldHeight, graphicWidth, pathWidth,this);
+		setGraphicView(graphicView);
+		mouseListener = new MouseListener(controller, graphicView, this);
 		
 		//////////////////////////////CREATE THE TEXTUAL VIEW/////////////////////////////
 		
-		this.treeRoot = createTree();
-		this.textualViewTree = new JTree (this.treeRoot);
-		this.cellRenderer = new MyTreeCellRenderer(this, circuitManagement);
-		this.textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this);
-		setTextualView(this.textualView);
+		treeRoot = createTree();
+		textualViewTree = new JTree (treeRoot);
+		cellRenderer = new MyTreeCellRenderer(this, circuitManagement);
+		textualView = new TextualView (circuitManagement, windowHeight-buttonPanelHeight, windowWidth-graphicWidth, this);
+		setTextualView(textualView);
 		addTreeListener();
 		
 		//////////////////////////////CREATE THE MESSAGE FIELD/////////////////////////////
 		
-		this.messageField = new JLabel();
-		setMessageField(this.messageField);
+		messageField = new JLabel();
+		setMessageField(messageField);
 		
 		//////////////////////////////ADD PANELS TO THE WINDOW//////////////////////////////
-		this.getContentPane().add(buttonPanel);
-		this.getContentPane().add(this.textualView);
-		this.getContentPane().add(this.messageField);
-		this.getContentPane().add(this.graphicView);
+		getContentPane().add(buttonPanel);
+		getContentPane().add(textualView);
+		getContentPane().add(messageField);
+		getContentPane().add(graphicView);
 		
 		////////////////////////////// MAKE THE FRAME VISBLE AND PAINTABLE ////////////////////////////////
-		this.setVisible(true);
+		setVisible(true);
 		
-		this.graphicView.setGraphics();
+		graphicView.setGraphics();
 		
 	}
 	
@@ -710,6 +711,8 @@ public class Window extends JFrame{
 		    		
 			    	DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) textualViewTree.getLastSelectedPathComponent();
 			        
+		        	setRepositoryCircuit(-1);
+			    	
 			    	if ( deliveryPoint != null ) {
 				        String deliveryInfo = (String) deliveryPoint.getUserObject();
 				        
@@ -731,18 +734,32 @@ public class Window extends JFrame{
 				        		textualCircuitSelected(circuitIndex-1);
 				        	}
 				        } else {
+				        	TreeNode parentCircuit = deliveryPoint.getParent();
+				        	
 				        	Delivery delivery = controller.getCircuitManagement().getDeliveryList().get(0);
 			        		nodeSelected(delivery);
 				        	controller.treeDeliverySelected(delivery);
+				        
+				        	if ( parentCircuit != null) {
+				        		String circuitInfo = (String) ((DefaultMutableTreeNode) parentCircuit).getUserObject();
+				        		String secondPart = circuitInfo.substring(8);
+				        		String[] split = secondPart.split(":");
+				        		String circuitNumber = split[0];
+				        		int circuitIndex = Integer.parseInt(circuitNumber);	
+				        		textualCircuitSelected(circuitIndex-1);
+				        		setRepositoryCircuit (circuitIndex);
+				        	}
 				        }
 				        
 			    	}
 		    	}
-		    }     
+		    }
+   
 		 });
 	}
 	 
 	public void nodeSelected(Delivery delivery) {
+		
 		if(selectedNode!=null){
 			graphicView.unPaintNode( selectedNode);
 		}
@@ -750,8 +767,10 @@ public class Window extends JFrame{
 		graphicView.paintSelectedNode( delivery, true);
 		hoverNode = null;
 		selectedNode = delivery;
-			
+		
+		setRepositoryCircuit(-1);
 		setSelectedTreeNode( delivery,true);
+		
 	}
 		
 	public void nodeHover(Delivery delivery) {
@@ -865,7 +884,6 @@ public class Window extends JFrame{
 			 cellRenderer.setSelectedDelivery("", selected);
 		 }
 		 
-		 //((DefaultTreeModel) textualViewTree.getModel()).reload();
 		 ((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
 
 	 }
@@ -891,7 +909,23 @@ public class Window extends JFrame{
 		 
 		 ((DefaultTreeModel) textualViewTree.getModel()).nodeChanged(treeRoot);
 
-	}			
+	}
+	
+
+	private void setRepositoryCircuit(int circuitIndex) {
+		
+		if (circuitIndex !=-1) {
+			 double duration = controller.getCircuitManagement().getCircuitByIndex(circuitIndex-1).getCircuitDuration();
+			 int durationHour = (int) duration / (int) 3600;
+			 int durationMinutes = ((int)duration % 3600) / (int) 60;
+			 String string = "Tournee "+ 
+						(circuitIndex) + ": Duree "+ durationHour + "h" + durationMinutes + "min" + (int)(duration%60) +"s";
+			 cellRenderer.setRepositoryCircuit(string);
+		} else {
+			 cellRenderer.setRepositoryCircuit("");
+	
+		 }
+	}  
 		
 	public void emptySelectedNode() {
 		if(selectedNode!=null){
