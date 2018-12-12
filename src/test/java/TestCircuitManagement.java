@@ -28,6 +28,9 @@ import main.java.exception.TSPLimitTimeReachedException;
 class TestCircuitManagement {
 
 	@Test
+	/**
+	 * Test if the CircuitManagement loads correctly a map
+	 */
 	void testLoadMap() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
@@ -101,6 +104,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if the CircuitManagement loads correctly a list of deliveries
+	 */
 	void testLoadDeliveries() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
@@ -126,6 +132,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if the Cluster balance correctly the different nodes according to their location
+	 */
 	void testCluster() {
 		
 		try {
@@ -192,6 +201,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method returns true if a node contains in its deliveries list and false otherwise
+	 */
 	void checkNodeInDeliveryList() {
 		try {
 			CircuitManagement circuitManager = new CircuitManagement();
@@ -215,6 +227,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method initialize correctly an AtomicPath
+	 */
 	void testCalculateCircuits() {
 		
 		try {
@@ -255,6 +270,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method add correctly a delivery to the AtomicPath and to the deliveries list
+	 */
 	void testAddDelivery() {
 		try {
 			//Trying to put a delivery at the beginning or in the middle
@@ -339,6 +357,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method remove correctly a delivery from the AtomicPath and from the deliveries list
+	 */
 	void testRemoveDelivery() {
 		try {
 			//Trying to remove a delivery
@@ -422,6 +443,9 @@ class TestCircuitManagement {
 	}
 	
 	@Test
+	/**
+	 * Test if this method move correctly a delivery from the AtomicPath and do not modify deliveries list
+	 */
 	void testMoveDelivery() {
 		try {
 			//Trying to remove a delivery

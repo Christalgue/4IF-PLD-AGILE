@@ -24,6 +24,7 @@ class TestDeserializer {
 
 	@Test
 	/**
+	 * Test every different exceptions and a correct deserialization
 	 * 1) The file does not exist
 	 * 2) The file is not valid
 	 * 3) The file is empty
@@ -171,9 +172,9 @@ class TestDeserializer {
 		} catch (IOException e) {
 			fail("8) IO Exception");
 		} catch (XMLException e) {
-			fail("8) XMLException");
+			assertTrue(e.getMessage().contains("Une valeur incorrecte a ete trouvee dans le fichier xml"),"8) Wrong XMLException"+e.getMessage());
 		}catch (ForgivableXMLException e) {
-			assertTrue(e.getMessage().contains("Une valeur incorrecte a ete trouvee dans le fichier xml"),"8) Wrong ForgivableXMLException"+e.getMessage());
+			fail("8) ForgivableXMLException");
 		}
 		
 		//9
@@ -195,6 +196,7 @@ class TestDeserializer {
 
 	@Test
 	/**
+	 * Test every different exceptions and a correct deserialization
 	 * 1) The file does not exist
 	 * 2) The file is not valid
 	 * 3) The file has an incorrect number of repository

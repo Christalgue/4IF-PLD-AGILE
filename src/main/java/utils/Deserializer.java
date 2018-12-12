@@ -148,7 +148,7 @@ public class Deserializer {
 			}
 		}
 		catch(NumberFormatException e) {
-			errors.add(new ForgivableXMLException("Une valeur incorrecte a ete trouvee dans le fichier xml"));
+			throw new XMLException("Une valeur incorrecte a ete trouvee dans le fichier xml");
 		}
 		
 		if(errors.size()!=0) {
