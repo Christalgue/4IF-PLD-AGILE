@@ -133,7 +133,7 @@ class TestCircuitManagement {
 	
 	@Test
 	/**
-	 * Test if the Cluster balancesd correctly the different nodes according to their location
+	 * Test if the Cluster balances correctly the different nodes according to their location
 	 */
 	void testCluster() {
 		
