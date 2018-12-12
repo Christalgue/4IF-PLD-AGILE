@@ -31,9 +31,7 @@ public class InitialState extends DefaultState {
 			window.enableButtonLoadDeliveriesList();
 			window.calculateScale();
 			window.drawMap();
-			controller.getCircuitManagement().setCircuitsList(null);
-			controller.getCircuitManagement().setDeliveryList(null);
-			Window.setMouseListener(window);
+			window.setMouseListener();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException l)
 		{

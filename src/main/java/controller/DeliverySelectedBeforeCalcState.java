@@ -68,7 +68,7 @@ public class DeliverySelectedBeforeCalcState extends DefaultState {
 	 * @see main.java.controller.DefaultState#treeDeliverySelected(main.java.controller.Controller, main.java.view.Window, main.java.entity.Delivery, main.java.controller.CommandsList)
 	 */
 	@Override
-	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList) {
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, int indexCircuit, CommandsList commandsList) {
 		if (!controller.getCircuitManagement().isRepository(deliverySelected.getPosition()))
 		{
 			window.nodeSelected(deliverySelected);

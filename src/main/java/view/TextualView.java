@@ -10,10 +10,10 @@ import javax.swing.tree.DefaultTreeModel;
 import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
+import main.java.entity.Repository;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class TextualView.
+ * The Class TextualView is a panel that display a tree filled with every deliveries and/or circuits
  */
 public class TextualView extends JPanel{
 
@@ -26,23 +26,23 @@ public class TextualView extends JPanel{
 	/** The view width. */
 	private int viewWidth;	
 	
-	/** The delivery tree. */
-	private JTree deliveryTree;
+	/** The deliveries and circuits tree. */
+	private JTree tree;
 	
 	/** The tree model. */
 	private DefaultTreeModel treeModel;
 	
-	/** The tree root. */
+	/** The tree root node. */
 	private DefaultMutableTreeNode treeRoot;
 	
-	/** The scroll pane. */
+	/** The scroll pane in which the tree is displayed. */
 	private JScrollPane scrollPane;
 	
-	/** The window. */
+	/** The window to which the view belongs. */
 	private Window window;
 	
 	/**
-	 * Instantiates a new textual view.
+	 * Default constructor
 	 */
 	public TextualView () {
 		
@@ -65,20 +65,21 @@ public class TextualView extends JPanel{
 		this.viewHeight = viewHeight;
 		this.viewWidth = viewWidth;
 		
-		this.deliveryTree = window.textualViewTree;
-		this.treeRoot = (DefaultMutableTreeNode) deliveryTree.getModel().getRoot();
+		this.tree = window.textualViewTree;
+		this.treeRoot = (DefaultMutableTreeNode) tree.getModel().getRoot();
 		
-		//this.addTreeListener();
 		this.window = window;
 		
-		this.deliveryTree.expandRow(0);
-		this.deliveryTree.setRootVisible(false);
-		this.deliveryTree.setShowsRootHandles(true);
-		this.deliveryTree.setCellRenderer(window.cellRenderer);
+		// The tree's root is hidden and our custom renderer is applied
+		this.tree.expandRow(0);
+		this.tree.setRootVisible(false);
+		this.tree.setShowsRootHandles(true);
+		this.tree.setCellRenderer(window.cellRenderer);
 		
-		this.treeModel = (DefaultTreeModel) this.deliveryTree.getModel();
+		this.treeModel = (DefaultTreeModel) this.tree.getModel();
 		
-		this.scrollPane = new JScrollPane(this.deliveryTree);
+		// The tree is added to a scroll pane, which is added to the textualView 
+		this.scrollPane = new JScrollPane(this.tree);
 		scrollPane.setSize(viewWidth-20, viewHeight-220);
 		scrollPane.setLocation(10, 20);
 		this.add(scrollPane);
@@ -86,52 +87,35 @@ public class TextualView extends JPanel{
 		
 	}
 	
-/*	 public void addTreeListener () {
-		 
-		 deliveryTree.addTreeSelectionListener(new TreeSelectionListener() {
-		    public void valueChanged(TreeSelectionEvent e) {
-		        DefaultMutableTreeNode deliveryPoint = (DefaultMutableTreeNode) deliveryTree.getLastSelectedPathComponent();
-		        
-		        String deliveryInfo = (String) deliveryPoint.getUserObject();
-		        
-		        if (!deliveryInfo.startsWith("Entrepot")) {
-		        	
-		        	if (!deliveryInfo.startsWith("Tournee")) {
-		        		String secondPart = deliveryInfo.substring(10);
-		        		String[] split = secondPart.split(":");
-		        		String deliveryNumber = split[0];
-		        		int deliveryIndex = Integer.parseInt(deliveryNumber);
-		        	} else {
-		        		String secondPart = deliveryInfo.substring(8);
-		        		String[] split = secondPart.split(":");
-		        		String circuitNumber = split[0];
-		        		int circuitIndex = Integer.parseInt(circuitNumber);	        		
-		        	}
-		        }
-		    }     
-});
-		}*/
+
 
 	/**
- * Fill delivery tree.
- */
-
-public void emptyTree() {
-	treeRoot.removeAllChildren();
-	treeModel.reload();
-}
+	 * Empty the tree.
+	 */
+	public void emptyTree() {
+		treeRoot.removeAllChildren();
+		treeModel.reload();
+	}
 	
-public void fillDeliveryTree() {
+	/**
+	 * Fill the tree, based on the circuitManagement's deliveryList
+	 */
+	public void fillDeliveryTree() {
 
+		// Display a textualView's border
 		setBorder(BorderFactory.createTitledBorder("Livraisons"));
 		
-		int deliveryListIndex = 0;
-		
+		// If circuitManagement's deliveryList is not empty
 		if (circuitManagement.getDeliveryList() != null) {
+			
+			int deliveryListIndex = 0;
+			
+			// For each delivery in it, it is inserted in the tree, displaying
+			// its index and duration
 			for( Delivery entry : circuitManagement.getDeliveryList() ) {
-	
-				if (deliveryListIndex == 0) {
-					
+				
+				if ( entry instanceof Repository) {
+
 					treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: Duree 0s"),
 							treeRoot, deliveryListIndex++);
 				
@@ -142,26 +126,35 @@ public void fillDeliveryTree() {
 								treeRoot, deliveryListIndex++);				
 				}
 			}
+			
+			// Update the tree
+			treeModel.nodeStructureChanged( treeRoot );
+
 		}
-		
-		treeModel.nodeStructureChanged( treeRoot );
-		
+				
 	}
 	
 	/**
-	 * Fill circuit tree.
+	 * Fill the tree, based on circuitManagement's circuitsList
 	 */
 	public void fillCircuitTree() {
-		
-		int deliveryIndex =0;
-		int circuitIndex= 0;
-		
-		DefaultMutableTreeNode circuit;
-		
+
+		// Display a textualView's border
 		setBorder(BorderFactory.createTitledBorder("Tournees"));
+		
+		// If circuitManagement's circuitsList is not empty
 		if(circuitManagement.getCircuitsList()!=null)
 		{
+			
+			int deliveryIndex =0;
+			int circuitIndex= 0;
+			
+			DefaultMutableTreeNode circuit;
+
+			// For each circuit in it, it is inserted in the tree, displaying
+			// its index and duration
 			for( Circuit entry : circuitManagement.getCircuitsList() ) {
+				
 				double duration = entry.getCircuitDuration();
 				int durationHour = (int) duration / (int) 3600;
 				int durationMinutes = ((int)duration % 3600) / (int) 60;
@@ -170,10 +163,11 @@ public void fillDeliveryTree() {
 
 				treeModel.insertNodeInto(circuit, treeRoot, circuitIndex++);
 				
-				
+				// For each delivery in the circuit, it is inserted in the tree, displaying
+				// its index and duration
 				for ( Delivery delivery : entry.getDeliveryList()) {
 					
-					if (deliveryIndex == 0) {
+					if (delivery instanceof Repository) {
 						
 						treeModel.insertNodeInto(new DefaultMutableTreeNode ("Entrepot: Duree 0s"),
 								circuit, deliveryIndex++);
@@ -188,9 +182,10 @@ public void fillDeliveryTree() {
 				
 				deliveryIndex =0;
 			}
-		}
 		
-		treeModel.nodeStructureChanged( treeRoot );
+			treeModel.nodeStructureChanged( treeRoot );
+			
+		}
 		
 	}
 	

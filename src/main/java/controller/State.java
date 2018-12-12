@@ -151,5 +151,5 @@ public interface State {
 	 * @param window the window
 	 * @param commandsList the commands list
 	 */
-	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, CommandsList commandsList);
+	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, int indexCircuit, CommandsList commandsList);
 }

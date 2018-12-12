@@ -25,6 +25,9 @@ public class AddDeliveryCommand implements Command {
 	
 	/** The duration. */
 	private int duration;
+	
+	/** The index of the circuit. */
+	private int indexCircuit;
 
 	/**
 	 * Instantiates a new AddDeliveryCommand.
@@ -35,12 +38,13 @@ public class AddDeliveryCommand implements Command {
 	 * @param previousNode the previous node
 	 * @param circuitManagement the circuit management
 	 */
-	public AddDeliveryCommand(Window window, Node node, int duration, Node previousNode, CircuitManagement circuitManagement) {
+	public AddDeliveryCommand(Window window, Node node, int duration, Node previousNode, int indexCircuit, CircuitManagement circuitManagement) {
 		this.duration = duration;
 		this.node = node;
 		this.previousNode = previousNode;
 		this.circuitManagement = circuitManagement;
 		this.window = window;
+		this.indexCircuit = indexCircuit;
 	}
 	
 	/**
@@ -48,11 +52,8 @@ public class AddDeliveryCommand implements Command {
 	 */
 	@Override
 	public void doCde() {
-		circuitManagement.addDelivery(node, duration, previousNode);
-		if (circuitManagement.getCircuitsList()!= null) 
-			window.drawCircuits();
-		else
-			window.drawDeliveries();
+		circuitManagement.addDelivery(node, duration, previousNode, indexCircuit);
+		window.drawCircuits();
 	}
 
 	/**

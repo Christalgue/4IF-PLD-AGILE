@@ -282,9 +282,9 @@ public class Controller {
 	 *
 	 * @param deliverySelected the delivery selected
 	 */
-	public void treeDeliverySelected(Delivery deliverySelected) {
+	public void treeDeliverySelected(Delivery deliverySelected, int indexCircuit) {
 		
-		currentState.treeDeliverySelected(this, window, deliverySelected, commandsList);
+		currentState.treeDeliverySelected(this, window, deliverySelected, indexCircuit, commandsList);
 		
 	}
 	

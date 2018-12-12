@@ -18,6 +18,9 @@ public class DeliveryMovedState extends DefaultState {
 	/** The previous node. */
 	Node previousNode;
 	
+	/** The index of the circuit to which the delivery belong*/
+	int indexCircuit;
+	
 	/**
 	 * Sets the node.
 	 *
@@ -34,6 +37,15 @@ public class DeliveryMovedState extends DefaultState {
 	 */
 	protected void setPreviousNode (Node previousNode) {
 		this.previousNode =  previousNode;
+	}
+	
+	/**
+	 * Sets the circuit index.
+	 *
+	 * @param the new circuit index
+	 */
+	protected void setindexCircuit (int indexCircuit) {
+		this.indexCircuit =  indexCircuit;
 	}
 	
 	
@@ -56,7 +68,7 @@ public class DeliveryMovedState extends DefaultState {
 	public void validate (Controller controller, Window window, CommandsList commandsList) throws ManagementException {
 		window.setMessage("");
 		window.emptySelectedNode();
-		commandsList.addCommand(new MoveDeliveryCommand(window,node,previousNode,controller.getCircuitManagement()));
+		commandsList.addCommand(new MoveDeliveryCommand(window,node,previousNode, indexCircuit, controller.getCircuitManagement()));
 		window.enableGenerateRoadmapButton();
 		controller.setCurrentState(controller.calcState);
 	}

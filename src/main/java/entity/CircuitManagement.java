@@ -755,8 +755,8 @@ public class CircuitManagement extends Observable{
 	 * @param duration the duration of the delivery
 	 * @param previousNode the previous node
 	 */
-	public void addDelivery (Node nodeDelivery, int duration, Node previousNode) {
-		addDelivery(nodeDelivery, duration, previousNode, true);
+	public void addDelivery (Node nodeDelivery, int duration, Node previousNode, int indexCircuit) {
+		addDelivery(nodeDelivery, duration, previousNode, indexCircuit, true);
 	}
 	
 	/**
@@ -767,12 +767,72 @@ public class CircuitManagement extends Observable{
 	 * @param previousNode the previous node
 	 * @param changeDeliveryList if we modify the delivery list by adding the delivery TODO check if correct because sounds weird
 	 */
-	private void addDelivery (Node nodeDelivery, int duration, Node previousNode, boolean changeDeliveryList) {
+	private void addDelivery (Node nodeDelivery, int duration, Node previousNode, int indexCircuit, boolean changeDeliveryList) {
 		Delivery delivery = new Delivery (nodeDelivery, duration);
 		
 		int position;
 		if(circuitsList!=null && circuitsList.size()!=0) {
-			for (Circuit circuit : this.circuitsList) {
+			if(indexCircuit==-1) {
+				for (Circuit circuit : this.circuitsList) {
+					if ((position=circuit.checkNodeInCircuit(previousNode))!=-1) {
+						// we add the delivery to the list and we delete the atomicPath between the previous delivery and the next one
+						circuit.addDelivery(delivery, (position+1));
+						circuit.removeAtomicPath(position);
+						
+						// we get the previous and the next delivery
+						Delivery previousDelivery = circuit.getDeliveryList().get(position);
+						
+						// we build the lists that we will send to the Dijstra algorithm to find the shortest paths we want
+						List<Delivery> newDeliveryList = new ArrayList<Delivery>();
+						newDeliveryList.add(previousDelivery);
+						newDeliveryList.add(delivery);
+						
+						try {
+							HashMap<Delivery,AtomicPath> deliveryPrevious = this.currentMap.findShortestPath(previousDelivery, newDeliveryList);
+							circuit.addAtomicPath(deliveryPrevious.get(delivery), (position));
+						} catch (DijkstraException e) {
+							// TODO does we really catch this Exception here ? Or do we let it be thrown higher in the execution stack ?
+							e.printStackTrace();
+						}
+						
+						//If a node other than the repository follows the delivery added
+						if(position+2!=circuit.getDeliveryList().size())
+						{
+							Delivery nextDelivery = circuit.getDeliveryList().get((position+2));
+							
+							List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
+							nextDeliveryList.add(delivery);
+							nextDeliveryList.add(nextDelivery);
+							
+							try {
+								HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(delivery, nextDeliveryList);
+								circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+1));
+							} catch (DijkstraException e) {
+								// TODO Same as previously
+								e.printStackTrace();
+							}
+						}
+						else {
+							Delivery nextDelivery = circuit.getDeliveryList().get((0));
+							
+							List<Delivery> nextDeliveryList = new ArrayList<Delivery>();
+							nextDeliveryList.add(delivery);
+							nextDeliveryList.add(nextDelivery);
+							
+							try {
+								HashMap<Delivery,AtomicPath> deliveryNew = this.currentMap.findShortestPath(delivery, nextDeliveryList);
+								circuit.addAtomicPath(deliveryNew.get(nextDelivery), (position+1));
+							} catch (DijkstraException e) {
+								// TODO Same as previously
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}
+			else {
+				Circuit circuit = circuitsList.get(indexCircuit);
+				
 				if ((position=circuit.checkNodeInCircuit(previousNode))!=-1) {
 					// we add the delivery to the list and we delete the atomicPath between the previous delivery and the next one
 					circuit.addDelivery(delivery, (position+1));
@@ -834,7 +894,6 @@ public class CircuitManagement extends Observable{
 		else {
 			deliveryList.add(delivery);
 		}
-		
 	}
 	
 	/**
@@ -909,11 +968,12 @@ public class CircuitManagement extends Observable{
 	 * @param previousNode the previous node
 	 * @throws ManagementException the management exception
 	 */
-	public void moveDelivery(Node node, Node previousNode) throws ManagementException {
+	public void moveDelivery(Node node, Node previousNode, int indexCircuit) throws ManagementException {
 		Delivery delivery = isDelivery(node);
 		removeDelivery(node,false);
-		addDelivery(node, delivery.getDuration(), previousNode,false);
+		addDelivery(node, delivery.getDuration(), previousNode, indexCircuit,false);
 	}
+	
 	
 	/**
 	 * Gets the previous node in the circuit for the delivery placed at the node selected.

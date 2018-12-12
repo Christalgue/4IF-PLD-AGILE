@@ -18,6 +18,9 @@ public class DeliveryAddedState extends DefaultState{
 	/** The duration. */
 	int duration;
 	
+
+	/** The index of the circuit to which the delivery belong*/
+	int indexCircuit;
 	
 	/**
 	 * Sets the node.
@@ -28,6 +31,14 @@ public class DeliveryAddedState extends DefaultState{
 		this.node =  node;
 	}
 	
+	/**
+	 * Sets the circuit index.
+	 *
+	 * @param the new circuit index
+	 */
+	protected void setindexCircuit (int indexCircuit) {
+		this.indexCircuit =  indexCircuit;
+	}
 	
 	/**
 	 * Sets the previous node.
@@ -53,7 +64,7 @@ public class DeliveryAddedState extends DefaultState{
 	 */
 	@Override
 	public void validate(Controller controller, Window window, CommandsList commandsList){
-		commandsList.addCommand(new AddDeliveryCommand(window, node, duration, previousNode, controller.getCircuitManagement()));
+		commandsList.addCommand(new AddDeliveryCommand(window, node, duration, previousNode, indexCircuit, controller.getCircuitManagement()));
 		window.emptySelectedNode();
 		window.emptySelectedCircuit();
 		window.enableGenerateRoadmapButton();
