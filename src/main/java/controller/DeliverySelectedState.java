@@ -115,6 +115,8 @@ public class DeliverySelectedState extends DefaultState {
 			window.disableButtonCalculateCircuit();
 			window.calculateScale();
 			window.drawMap();
+			controller.getCircuitManagement().setCircuitsList(null);
+			controller.getCircuitManagement().setDeliveryList(null);
 			commandsList.reset();
 			controller.setCurrentState(controller.mapLoadedState);
 		} catch (LoadMapException e)
@@ -139,6 +141,7 @@ public class DeliverySelectedState extends DefaultState {
 			commandsList.reset();
 			controller.setCurrentState(controller.deliveryLoadedState);
 			window.drawDeliveries();
+			controller.getCircuitManagement().setCircuitsList(null);
 		} catch (LoadDeliveryException e)
 		{
 			window.setErrorMessage("Fichier XML invalide");
