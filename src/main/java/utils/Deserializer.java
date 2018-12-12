@@ -1,5 +1,4 @@
 package main.java.utils;
-import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,20 +20,50 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry.Entry;
+
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Deserializer.
+ */
 public class Deserializer {
 	
 	
-	public static void loadMap(String path, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
+	/**
+	 * Load map.
+	 *
+	 * @param path the path
+	 * @param map the map
+	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws SAXException the SAX exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws XMLException the XML exception
+	 * @throws ForgivableXMLException 
+	 */
+	public static void loadMap(String path, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException, ForgivableXMLException{
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    final DocumentBuilder builder = factory.newDocumentBuilder();		
 	    final Document document= builder.parse(path);
 	    final Element root = document.getDocumentElement();
+	    
 	    if (root.getNodeName().equals("reseau")) 
 	        fillMap(root, map);
 	    else
 	    	throw new XMLException("The file is not valid");
 	}
 	
+	/**
+	 * Load deliveries.
+	 *
+	 * @param path the path
+	 * @param map the map
+	 * @return the list
+	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws SAXException the SAX exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws XMLException the XML exception
+	 */
 	public static List<Delivery> loadDeliveries(String path, Map map)throws ParserConfigurationException, SAXException, IOException, XMLException{
 		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    final DocumentBuilder builder = factory.newDocumentBuilder();		
@@ -46,58 +75,95 @@ public class Deserializer {
 	    	throw new XMLException("The file is not valid");
 	}
 	
-	private static void fillMap(Element root, Map map) throws XMLException{
+	/**
+	 * Fill map.
+	 *
+	 * @param root the root
+	 * @param map the map
+	 * @throws XMLException the XML exception
+	 * @throws ForgivableXMLException 
+	 */
+	private static void fillMap(Element root, Map map) throws XMLException, ForgivableXMLException{
 		final NodeList nodes = root.getElementsByTagName("noeud");
 		final NodeList bows = root.getElementsByTagName("troncon");
 		final int nbNodes = nodes.getLength();
 		final int nbBows = bows.getLength();
 		
+		List<ForgivableXMLException> errors = new ArrayList<ForgivableXMLException>();
+		
 		HashMap<Long, Node> tempNodeMap = new HashMap<Long, Node>();
 		HashMap<Long,Set<Bow>> tempBowMap = new HashMap<Long,Set<Bow>>();
 		
-		for (int i = 0; i<nbNodes; i++) {
-			Element element = (Element) nodes.item(i);
-			tempNodeMap.put(Long.parseLong(element.getAttribute("id")), new Node(Long.parseLong(element.getAttribute("id")),Double.parseDouble(element.getAttribute("latitude")),Double.parseDouble(element.getAttribute("longitude"))));
-		}
+		HashMap<Long, Boolean> nodeIsConnected = new HashMap<Long,Boolean>();
 		
-		if (tempNodeMap.size()==0)
-		{
-			throw new XMLException("The file is empty");
-		}
-		
-		for (int i = 0; i<nbBows; i++) {
-			Element element = (Element) bows.item(i);
-			
-			long origin = Long.parseLong(element.getAttribute("origine"));
-			long arrival = Long.parseLong(element.getAttribute("destination"));
-			double length = Double.parseDouble(element.getAttribute("longueur"));
-			
-			if(!tempNodeMap.containsKey(origin) || !tempNodeMap.containsKey(arrival)) {
-				throw new XMLException("The node of a bow does not exist");
+		try {
+			for (int i = 0; i<nbNodes; i++) {
+				Element element = (Element) nodes.item(i);
+				tempNodeMap.put(Long.parseLong(element.getAttribute("id")), new Node(Long.parseLong(element.getAttribute("id")),Double.parseDouble(element.getAttribute("latitude")),Double.parseDouble(element.getAttribute("longitude"))));
+				nodeIsConnected.put(Long.parseLong(element.getAttribute("id")), false);
 			}
-			if (length < 0) {
-				throw new XMLException("The length of a bow is negative");
-			}
-			String streetName = element.getAttribute("nomRue");
 			
-			if(!tempBowMap.containsKey(origin)){
-				tempBowMap.put(origin, new HashSet<Bow>());
-			}
-			else
+			if (tempNodeMap.size()==0)
 			{
-				for(Bow b : tempBowMap.get(origin)) {
-					if(b.getEndNode().getId()==arrival) {
-						throw new XMLException("Duplicate bow detected");
+				throw new XMLException("The file is empty");
+			}
+			
+			for (int i = 0; i<nbBows; i++) {
+				Element element = (Element) bows.item(i);
+				
+				long origin = Long.parseLong(element.getAttribute("origine"));
+				long arrival = Long.parseLong(element.getAttribute("destination"));
+				double length = Double.parseDouble(element.getAttribute("longueur"));
+				
+				if(!tempNodeMap.containsKey(origin) || !tempNodeMap.containsKey(arrival)) {
+					throw new XMLException("The node of a bow does not exist : bow ("+origin+" - "+arrival+")");
+				}
+				if (length < 0) {
+					errors.add(new ForgivableXMLException("Un arc a une longueur negative : arc ("+origin+" - "+arrival+")"));
+				}
+				String streetName = element.getAttribute("nomRue");
+				
+				if(!tempBowMap.containsKey(origin)){
+					tempBowMap.put(origin, new HashSet<Bow>());
+				}
+				else
+				{
+					for(Bow b : tempBowMap.get(origin)) {
+						if(b.getEndNode().getId()==arrival) {
+							errors.add(new ForgivableXMLException("Un doublon d'arcs a ete detectee : arc ("+origin+" - "+arrival+")"));
+						}
 					}
 				}
+				tempBowMap.get(origin).add(new Bow(tempNodeMap.get(origin),tempNodeMap.get(arrival),streetName,length));
+				
+				nodeIsConnected.put(origin,true);
+				nodeIsConnected.put(arrival,true);
 			}
-			tempBowMap.get(origin).add(new Bow(tempNodeMap.get(origin),tempNodeMap.get(arrival),streetName,length));
+			map.setNodeMap(tempNodeMap);
+			map.setBowMap(tempBowMap);
+			
+			for(HashMap.Entry<Long, Boolean> connection : nodeIsConnected.entrySet()) {
+				if(!connection.getValue())
+					errors.add(new ForgivableXMLException("Un point n'est connecte a aucune rue, point : "+connection.getKey()));
+			}
+		}
+		catch(NumberFormatException e) {
+			errors.add(new ForgivableXMLException("Une valeur incorrecte a ete trouvee dans le fichier xml"));
 		}
 		
-		map.setNodeMap(tempNodeMap);
-		map.setBowMap(tempBowMap);
+		if(errors.size()!=0) {
+			throw errors.get(0);
+		}
 	}
 	
+	/**
+	 * Fill deliveries.
+	 *
+	 * @param root the root
+	 * @param map the map
+	 * @return the list
+	 * @throws XMLException the XML exception
+	 */
 	private static List<Delivery> fillDeliveries(Element root, Map map) throws XMLException{
 		final NodeList repositories = root.getElementsByTagName("entrepot");
 		final NodeList deliveries = root.getElementsByTagName("livraison");
@@ -147,34 +213,4 @@ public class Deserializer {
 		
 		return tempDeliveriesList;
 	}
-	
-	/*
-	public static void main (String[] args)
-	{
-		try {
-			Map map = new Map();
-			List<Delivery> deliveries = new ArrayList<Delivery>();
-			loadMap("resources/xml/petitPlan.xml",map);
-			loadDeliveries("resources/xml/dl-petit-3.xml",deliveries,map);
-			
-			System.out.println(map.toString());
-			
-			for(Delivery d : deliveries){
-				System.out.println(d.toString());
-			}
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XMLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	*/
 }

@@ -2,69 +2,491 @@ package test.java;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.jupiter.api.Test;
-import org.xml.sax.SAXException;
 
-import javafx.util.Pair;
+import main.java.entity.Bow;
+import main.java.entity.Circuit;
 import main.java.entity.CircuitManagement;
 import main.java.entity.Delivery;
 import main.java.entity.Map;
-import main.java.exception.ClusteringException;
+import main.java.entity.Node;
+import main.java.exception.DeliveriesNotLoadedException;
+import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadDeliveryException;
 import main.java.exception.LoadMapException;
-import main.java.exception.XMLException;
-import main.java.utils.Deserializer;
+import main.java.exception.ManagementException;
+import main.java.exception.MapNotChargedException;
+import main.java.exception.NoRepositoryException;
+import main.java.exception.TSPLimitTimeReachedException;
 
 class TestCircuitManagement {
 
 	@Test
+	void testLoadMap() {
+		try {
+			CircuitManagement circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_simple.xml");
+			} catch (ForgivableXMLException e) {}
+			
+			Map map = circuitManager.getCurrentMap();
+
+			assertTrue(map.getNodeMap().containsKey((long)1),"Nodes do not contain key 1");
+			assertTrue(map.getNodeMap().containsKey((long)2),"Nodes do not contain key 2");
+			assertTrue(map.getNodeMap().get((long)1).getId()==1,"wrong ID (1) : "+map.getNodeMap().get((long)1).getId());
+			assertTrue(map.getNodeMap().get((long)1).getLatitude()==45.75406,"wrong latitude (45.75406) : "+map.getNodeMap().get((long)1).getLatitude());
+			assertTrue(map.getNodeMap().get((long)1).getLongitude()==4.857418,"wrong longitude (4.857418) : "+map.getNodeMap().get((long)1).getLongitude());
+			assertTrue(map.getNodeMap().get((long)2).getId()==2,"wrong ID (2) : "+map.getNodeMap().get((long)2).getId());
+			assertTrue(map.getNodeMap().get((long)2).getLatitude()==45.750404,"wrong latitude (45.750404) : "+map.getNodeMap().get((long)2).getLatitude());
+			assertTrue(map.getNodeMap().get((long)2).getLongitude()==4.8744674,"wrong longitude (4.8744674) : "+map.getNodeMap().get((long)2).getLongitude());
+			assertTrue(map.getNodeMap().get((long)3).getId()==3,"wrong ID (3) : "+map.getNodeMap().get((long)3).getId());
+			assertTrue(map.getNodeMap().get((long)3).getLatitude()==45.76000,"wrong latitude (45.76000) : "+map.getNodeMap().get((long)3).getLatitude());
+			assertTrue(map.getNodeMap().get((long)3).getLongitude()==4.89,"wrong longitude (4.89) : "+map.getNodeMap().get((long)3).getLongitude());
+			assertTrue(map.getBowMap().containsKey((long)1),"Bows do not contain key 1");
+			assertTrue(map.getBowMap().containsKey((long)2),"Bows do not contain key 2");
+			assertTrue(map.getBowMap().containsKey((long)3),"Bows do not contain key 3");
+			
+			for(Bow tempBow : map.getBowMap().get((long)1))
+			{
+				if(tempBow.getEndNode().getId()==3){
+					assertTrue(tempBow.getStartNode().getId()==1,"wrong start node (1) : "+tempBow.getStartNode().getId());
+					assertTrue(tempBow.getLength()==1.0,"wrong length (1.0) : "+tempBow.getLength());
+					assertTrue(tempBow.getStreetName().contains("Rue machin"),"wrong street name (Rue machin) : "+tempBow.getStreetName());
+				}
+				
+				else if(tempBow.getEndNode().getId()==2){
+					assertTrue(tempBow.getStartNode().getId()==1,"wrong start node (1) : "+tempBow.getStartNode().getId());
+					assertTrue(tempBow.getLength()==2.0,"wrong length (2.0) : "+tempBow.getLength());
+					assertTrue(tempBow.getStreetName().contains("Rue Edouard Aynard"),"wrong street name (Rue Edouard Aynard) : "+tempBow.getStreetName());
+				}
+				
+				else {
+					fail("wrong end node for bow 1 (2,3) : "+tempBow.getEndNode().getId());
+				}
+			}
+			
+			for(Bow tempBow : map.getBowMap().get((long)2))
+			{
+				if(tempBow.getEndNode().getId()==3){
+					assertTrue(tempBow.getStartNode().getId()==2,"wrong start node (2) : "+tempBow.getStartNode().getId());
+					assertTrue(tempBow.getLength()==5.0,"wrong length (5.0) : "+tempBow.getLength());
+					assertTrue(tempBow.getStreetName().contains("Avenue Polygon"),"wrong street name (Avenue Polygon) : "+tempBow.getStreetName());
+				}
+				
+				else if(tempBow.getEndNode().getId()==1){
+					assertTrue(tempBow.getStartNode().getId()==2,"wrong start node (2) : "+tempBow.getStartNode().getId());
+					assertTrue(tempBow.getLength()==1.0,"wrong length (1.0) : "+tempBow.getLength());
+					assertTrue(tempBow.getStreetName().contains("Rue Edouard Aynard"),"wrong street name (Rue Edouard Aynard) : "+tempBow.getStreetName());
+				}
+				
+				else {
+					fail("wrong end node for bow 2 (2,3) : "+tempBow.getEndNode().getId());
+				}
+			}
+			
+			Bow tempBow = map.getBowMap().get((long)3).iterator().next();
+			assertTrue(tempBow.getStartNode().getId()==3,"wrong start node (3) : "+tempBow.getStartNode().getId());
+			assertTrue(tempBow.getEndNode().getId()==1,"wrong end node (1) : "+tempBow.getEndNode().getId());
+			assertTrue(tempBow.getLength()==1.0,"wrong length (1.0) : "+tempBow.getLength());
+			assertTrue(tempBow.getStreetName().contains("Rue machin"),"wrong street name (Rue machin) : "+tempBow.getStreetName());
+		} catch (LoadMapException e) {
+			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
+		}
+	}
+	
+	@Test
+	void testLoadDeliveries() {
+		try {
+			CircuitManagement circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_simple.xml");
+			} catch (ForgivableXMLException e) {}
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_simple.xml");
+			List<Delivery> deliveries = circuitManager.getDeliveryList();
+			
+			int UTC = TimeZone.getDefault().getRawOffset();
+			assertTrue(deliveries.get(0).getClass().getName().contains("main.java.entity.Repository"),"First delivery is not repository");
+			assertTrue(deliveries.get(0).getDuration()==0,"Wrong duration (0)"+deliveries.get(0).getDuration());
+			assertTrue(deliveries.get(0).getHourOfArrival().getTimeInMillis()+UTC==28800000,"Wrong hour of departure (28800000)"+(deliveries.get(0).getHourOfArrival().getTimeInMillis()+UTC));
+			assertTrue(deliveries.get(0).getHourOfDeparture().getTimeInMillis()+UTC==28800000,"rong hour of arrival (28800000)"+(deliveries.get(0).getHourOfDeparture().getTimeInMillis()+UTC));
+			assertTrue(deliveries.get(0).getPosition().getId()==1,"Wrong node (1)"+deliveries.get(0).getPosition().getId());
+			assertTrue(deliveries.get(1).getDuration()==60,"Wrong duration (60)"+deliveries.get(1).getDuration());
+			assertTrue(deliveries.get(1).getPosition().getId()==2,"Wrong node (2)"+deliveries.get(1).getPosition());
+		} catch (LoadMapException e) {
+			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException, report to TestDeserializer : "+e.getMessage());
+		}
+	}
+	
+	@Test
 	void testCluster() {
 		
 		try {
-			/*Map map = new Map("resources/tests/Cluster/xml/plan.xml");
-			List<Delivery> arrivalDeliveries = Deserializer.loadDeliveries("resources/tests/Cluster/xml/delivery.xml", map);*/
+			CircuitManagement circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan.xml");
+			} catch (ForgivableXMLException e) {}
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
+			//circuitManager.loadMap("resources/tests/Global/xml/plan_balance.xml");
+			//circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_balance.xml");
 			
-			CircuitManagement CircuitManager = new CircuitManagement();
-			CircuitManager.loadMap("resources/tests/Global/xml/plan.xml");
-			CircuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
 			
-			CircuitManager.setNbDeliveryMan(2);
+			circuitManager.setNbDeliveryMan(2);
 	    	
-	    	List<ArrayList<Delivery>> distribution = CircuitManager.cluster();
+	    	List<ArrayList<Delivery>> distribution = circuitManager.cluster();
 	    	int nbDeliveries1 = distribution.get(0).size();
 	    	int nbDeliveries2 = distribution.get(1).size();
 	    	
-	    	for (ArrayList<Delivery> deliveries : distribution) {
-	    		System.out.println("");
-	    		System.out.println("Livreur : ");
-	    		for (Delivery del : deliveries) {
-	    			System.out.println("Livraison "+del.getPosition().getId());
-	    		}
-	    	}
+
+	    	List<Long> positions1 = new ArrayList<Long>();
+	    	positions1.add((long)0);
+	    	positions1.add((long)3);
+	    	positions1.add((long)8);
+	    	positions1.add((long)9);
+	    	
+	    	List<Long> positions2 = new ArrayList<Long>();
+	    	positions2.add((long)0);
+	    	positions2.add((long)5);
+	    	positions2.add((long)10);
 	    	
 	    	assertTrue(nbDeliveries1<=nbDeliveries2+1 || nbDeliveries1>=nbDeliveries1-1, "Error, bad repartition of deliveries => "+nbDeliveries1+" vs "+nbDeliveries2);
+	    	
+	    	ArrayList<Delivery> deliveries = distribution.get(0);
+	    	if(deliveries.size()==4) {
+		    	assertTrue(positions1.contains(deliveries.get(0).getPosition().getId()),"Error, delivery 1 should contains {0,3,8,9}, got :"+deliveries.get(0).getPosition().getId());
+		    	assertTrue(positions1.contains(deliveries.get(1).getPosition().getId()),"Error, delivery 1 should contains {0,3,8,9}, got :"+deliveries.get(1).getPosition().getId());
+		    	assertTrue(positions1.contains(deliveries.get(2).getPosition().getId()),"Error, delivery 1 should contains {0,3,8,9}, got :"+deliveries.get(2).getPosition().getId());
+		    	assertTrue(positions1.contains(deliveries.get(3).getPosition().getId()),"Error, delivery 1 should contains {0,3,8,9}, got :"+deliveries.get(3).getPosition().getId());
+		    	
+		    	deliveries = distribution.get(1);
+		    	assertTrue(positions2.contains(deliveries.get(0).getPosition().getId()),"Error, delivery 2 should contains {0,5,10}, got :"+deliveries.get(0).getPosition().getId());
+		    	assertTrue(positions2.contains(deliveries.get(1).getPosition().getId()),"Error, delivery 2 should contains {0,5,10}, got :"+deliveries.get(1).getPosition().getId());
+		    	assertTrue(positions2.contains(deliveries.get(2).getPosition().getId()),"Error, delivery 2 should contains {0,5,10}, got :"+deliveries.get(2).getPosition().getId());
+	    	}
+	    	else {
+	    		assertTrue(positions2.contains(deliveries.get(0).getPosition().getId()),"Error, delivery 2 should contains {0,5,10}, got :"+deliveries.get(0).getPosition().getId());
+		    	assertTrue(positions2.contains(deliveries.get(1).getPosition().getId()),"Error, delivery 2 should contains {0,5,10}, got :"+deliveries.get(1).getPosition().getId());
+		    	assertTrue(positions2.contains(deliveries.get(2).getPosition().getId()),"Error, delivery 2 should contains {0,5,10}, got :"+deliveries.get(2).getPosition().getId());
+		    	
+		    	deliveries = distribution.get(1);
+		    	assertTrue(positions1.contains(deliveries.get(0).getPosition().getId()),"Error, delivery 1 should contains {0,3,8,9}, got :"+deliveries.get(0).getPosition().getId());
+		    	assertTrue(positions1.contains(deliveries.get(1).getPosition().getId()),"Error, delivery 1 should contains {0,3,8,9}, got :"+deliveries.get(1).getPosition().getId());
+		    	assertTrue(positions1.contains(deliveries.get(2).getPosition().getId()),"Error, delivery 1 should contains {0,3,8,9}, got :"+deliveries.get(2).getPosition().getId());
+		    	assertTrue(positions1.contains(deliveries.get(3).getPosition().getId()),"Error, delivery 1 should contains {0,3,8,9}, got :"+deliveries.get(3).getPosition().getId());
+	    	}
 
 		} catch (LoadMapException e) {
 			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
-			/*
-		} catch (ParserConfigurationException e) {
-			fail("ParserConfigurationException, report to TestDeserializer");
-		} catch (SAXException e) {
-			fail("SAXException, report to TestDeserializer");
-		} catch (IOException e) {
-			fail("IOException, report to TestDeserializer");
-		} catch (XMLException e) {
-			fail("XMLException, report to TestDeserializer : "+e.getMessage()); */
-		} catch (ClusteringException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (NoRepositoryException e) {
+			fail("NoRepositoryException"+e.getMessage());
 		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException"+e.getMessage());
+		}
+	}
+	
+	@Test
+	void checkNodeInDeliveryList() {
+		try {
+			CircuitManagement circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan.xml");
+			} catch (ForgivableXMLException e) {}
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery.xml");
+			
+			Node inList = circuitManager.getCurrentMap().getNodeMap().get((long)5);
+			Node notInList = circuitManager.getCurrentMap().getNodeMap().get((long)7);
+			
+			assertTrue(circuitManager.checkNodeInDeliveryList(inList),"Error, expected True for the delivery 5");
+			assertFalse(circuitManager.checkNodeInDeliveryList(notInList),"Error, expected False for the delivery 7");
+			
+
+		} catch (LoadMapException e) {
+			fail("LoadMapException : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException : "+e.getMessage());
+		}
+	}
+	
+	@Test
+	void testCalculateCircuits() {
+		
+		try {
+			CircuitManagement circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_simple.xml");
+			} catch (ForgivableXMLException e) {}
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_simple.xml");
+			circuitManager.calculateCircuits(1, false);
+			
+			//Assert new circuit has been correctly calculated
+			String s13 = "Route :\n1 => 3 (1.0)";
+			String s32 = "Route :\n3 => 1 (1.0)\n1 => 2 (2.0)";
+			String s21 = "Route :\n2 => 1 (1.0)";
+			
+			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3,"Error, size of paths is incorrect, expected : 3 got : "+circuit.getPath().size());
+			assertTrue(circuit.getPath().get(0).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s32),"Error, expected : {"+s32+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s21),"Error, expected : {"+s21+"}, got : "+circuit.getPath().get(2).toString());
+
+		} catch (LoadMapException e) {
+			fail("LoadMapException : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException : "+e.getMessage());
+		} catch (MapNotChargedException e) {
+			fail("MapNotChargedException : "+e.getMessage());
+		} catch (DijkstraException e) {
+			fail("DijkstraException : "+e.getMessage());
+		} catch (NoRepositoryException e) {
+			fail("NoRepositoryException : "+e.getMessage());
+		} catch (TSPLimitTimeReachedException e) {
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test
+	void testAddDelivery() {
+		try {
+			//Trying to put a delivery at the beginning or in the middle
+			CircuitManagement circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			} catch (ForgivableXMLException e) {}
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
+			circuitManager.calculateCircuits(1, false);
+			
+			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==2, "AtomicPath has not been added to the list (expected 2, got "+circuit.getPath().size()+")");
+			
+			Node newDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
+			Node previousDelivery = circuitManager.getDeliveryList().get(0).getPosition();
+			circuitManager.addDelivery(newDelivery, 20, previousDelivery);
+			
+			//Assert new delivery has been added to the list
+			List<Delivery> deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==3, "delivery has not been added to the list (expected 3, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=20]"),"Error, expected : {Delivery [position=3, duration=20]}, got : "+deliveries.get(2).toString());
+			
+			//Assert new circuit has been correctly calculated
+			String s01 = "Route :\n0 => 1 (1.0)\n1 => 3 (1.0)";
+			String s13 = "Route :\n3 => 1 (1.0)";
+			String s30 = "Route :\n1 => 0 (1.0)";
+			
+			circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been added to the list (expected 3, got "+circuit.getPath().size()+")");
+			assertTrue(circuit.getPath().get(0).toString().contains(s01),"Error, expected : {"+s01+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s30),"Error, expected : {"+s30+"}, got : "+circuit.getPath().get(2).toString());
+			
+			
+			//Trying to put a delivery at the end
+			circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			} catch (ForgivableXMLException e) {}
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
+			circuitManager.calculateCircuits(1, false);
+			
+			newDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
+			previousDelivery = circuitManager.getDeliveryList().get(1).getPosition();
+			circuitManager.addDelivery(newDelivery, 20, previousDelivery);
+			
+			//Assert new delivery has been added to the list
+			deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==3, "delivery has not been added to the list (expected 3, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=20]"),"Error, expected : {Delivery [position=3, duration=20]}, got : "+deliveries.get(2).toString());
+			
+			//Assert new circuit has been correctly calculated
+			s01 = "Route :\n0 => 1 (1.0)";
+			s13 = "Route :\n1 => 3 (1.0)";
+			s30 = "Route :\n3 => 0 (1.0)";
+			
+			circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been added to the list (expected 3, got "+circuit.getPath().size()+")");
+			assertTrue(circuit.getPath().get(0).toString().contains(s01),"Error, expected : {"+s01+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s30),"Error, expected : {"+s30+"}, got : "+circuit.getPath().get(2).toString());
+
+		} catch (LoadMapException e) {
+			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException"+e.getMessage());
+		} catch (MapNotChargedException e) {
+			fail("MapNotChargedException : "+e.getMessage());
+		} catch (DijkstraException e) {
+			fail("DijkstraException : "+e.getMessage());
+		} catch (NoRepositoryException e) {
+			fail("NoRepositoryException : "+e.getMessage());
+		} catch (TSPLimitTimeReachedException e) {
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	@Test
+	void testRemoveDelivery() {
+		try {
+			//Trying to remove a delivery
+			CircuitManagement circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_remove.xml");
+			} catch (ForgivableXMLException e) {}
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_remove.xml");
+			circuitManager.calculateCircuits(1, false);
+
+			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been removed from the list (expected 3, got "+circuit.getPath().size()+")");
+			
+			Node oldDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
+			circuitManager.removeDelivery(oldDelivery);
+			
+			//Assert new delivery has been removed from the list
+			List<Delivery> deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==2, "delivery has not been removed from the list (expected 2, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			
+			//Assert new circuit has been correctly calculated
+			String s01 = "Route :\n0 => 1 (1.0)";
+			String s13 = "Route :\n1 => 0 (1.0)";
+			
+			circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==2, "AtomicPath has not been removed from the list (expected 2, got "+circuit.getPath().size()+")");
+			assertTrue(circuit.getPath().get(0).toString().contains(s01),"Error, expected : {"+s01+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(1).toString());
+		} catch (LoadMapException e) {
+			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException"+e.getMessage());
+		} catch (MapNotChargedException e) {
+			fail("MapNotChargedException : "+e.getMessage());
+		} catch (DijkstraException e) {
+			fail("DijkstraException : "+e.getMessage());
+		} catch (NoRepositoryException e) {
+			fail("NoRepositoryException : "+e.getMessage());
+		} catch (TSPLimitTimeReachedException e) {
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
+		} catch (ManagementException e) {
+			fail("ManagementException : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+
+			//Trying to remove the repository
+			CircuitManagement circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_add.xml");
+			} catch (ForgivableXMLException e) {}
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_add.xml");
+			circuitManager.calculateCircuits(1, false);
+			
+			Node oldDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)0);
+			circuitManager.removeDelivery(oldDelivery);
+			
+			fail("No error were sent for removing the repository");
+
+		} catch (LoadMapException e) {
+			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException"+e.getMessage());
+		} catch (MapNotChargedException e) {
+			fail("MapNotChargedException : "+e.getMessage());
+		} catch (DijkstraException e) {
+			fail("DijkstraException : "+e.getMessage());
+		} catch (NoRepositoryException e) {
+			fail("NoRepositoryException : "+e.getMessage());
+		} catch (TSPLimitTimeReachedException e) {
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
+		} catch (ManagementException e) {
+			assertTrue(e.getMessage().contains("You cannot remove a repository"),"The ManagementException is not the one expected, got : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	void testMoveDelivery() {
+		try {
+			//Trying to remove a delivery
+			CircuitManagement circuitManager = new CircuitManagement();
+			try {
+				circuitManager.loadMap("resources/tests/Global/xml/plan_move.xml");
+			} catch (ForgivableXMLException e) {}
+			circuitManager.loadDeliveryList("resources/tests/Global/xml/delivery_move.xml");
+			circuitManager.calculateCircuits(1, false);
+			
+			//Assert initial deliveries have been correctly placed in the list
+			List<Delivery> deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==3, "delivery list has not the expected size (expected 3, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=40]"),"Error, expected : {Delivery [position=3, duration=40]}, got : "+deliveries.get(2).toString());
+			
+			//Assert initial circuit has been correctly calculated
+			String s12 = "Route :\n0 => 1 (1.0)";
+			String s23 = "Route :\n1 => 3 (1.0)";
+			String s31 = "Route :\n3 => 0 (1.0)";
+
+			Circuit circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been correctly initialized (expected 3, got "+circuit.getPath().size()+")");
+			assertTrue(circuit.getPath().get(0).toString().contains(s12),"Error, expected : {"+s12+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s23),"Error, expected : {"+s23+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s31),"Error, expected : {"+s31+"}, got : "+circuit.getPath().get(2).toString());
+			
+			
+			Node previousDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)3);
+			Node moveDelivery = circuitManager.getCurrentMap().getNodeMap().get((long)1);
+			circuitManager.moveDelivery(moveDelivery, previousDelivery);
+			
+			//Assert new delivery has not been moved in the list
+			deliveries = circuitManager.getDeliveryList();
+			assertTrue(deliveries.size()==3, "delivery list has not the expected size (expected 3, got "+deliveries.size()+")");
+			assertTrue(deliveries.get(0).toString().contains("Delivery [position=0, duration=0]"),"Error, expected : {Delivery [position=0, duration=0]}, got : "+deliveries.get(0).toString());
+			assertTrue(deliveries.get(1).toString().contains("Delivery [position=1, duration=60]"),"Error, expected : {Delivery [position=1, duration=60]}, got : "+deliveries.get(1).toString());
+			assertTrue(deliveries.get(2).toString().contains("Delivery [position=3, duration=40]"),"Error, expected : {Delivery [position=3, duration=40]}, got : "+deliveries.get(2).toString());
+			
+			//Assert new circuit has been correctly calculated
+			String s13 = "Route :\n0 => 1 (1.0)\n1 => 3 (1.0)";
+			String s32 = "Route :\n3 => 1 (1.0)";
+			String s21 = "Route :\n1 => 0 (1.0)";
+			
+			circuit = circuitManager.getCircuitsList().get(0);
+			assertTrue(circuit.getPath().size()==3, "AtomicPath has not been correctly calculated(expected 3, got "+circuit.getPath().size()+")");
+			assertTrue(circuit.getPath().get(0).toString().contains(s13),"Error, expected : {"+s13+"}, got : "+circuit.getPath().get(0).toString());
+			assertTrue(circuit.getPath().get(1).toString().contains(s32),"Error, expected : {"+s32+"}, got : "+circuit.getPath().get(1).toString());
+			assertTrue(circuit.getPath().get(2).toString().contains(s21),"Error, expected : {"+s21+"}, got : "+circuit.getPath().get(2).toString());
+		} catch (LoadMapException e) {
+			fail("LoadMapException, report to TestDeserializer : "+e.getMessage());
+		} catch (LoadDeliveryException e) {
+			fail("LoadDeliveryException"+e.getMessage());
+		} catch (MapNotChargedException e) {
+			fail("MapNotChargedException : "+e.getMessage());
+		} catch (DijkstraException e) {
+			fail("DijkstraException : "+e.getMessage());
+		} catch (NoRepositoryException e) {
+			fail("NoRepositoryException : "+e.getMessage());
+		} catch (TSPLimitTimeReachedException e) {
+			fail("TSPLimitTimeReachedException : "+e.getMessage());
+		} catch (ManagementException e) {
+			fail("ManagementException : "+e.getMessage());
+		} catch (DeliveriesNotLoadedException e) {
 			e.printStackTrace();
 		}
 	}

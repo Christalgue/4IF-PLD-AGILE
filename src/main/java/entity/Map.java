@@ -2,84 +2,111 @@ package main.java.entity;
 
 
 import java.util.*;
+
 import javafx.util.Pair;
 
 import main.java.exception.DijkstraException;
+import main.java.exception.ForgivableXMLException;
 import main.java.exception.LoadMapException;
 import main.java.utils.Deserializer;
 
 /**
- * 
+ * The Class Map represent all streets and addresses.
  */
 public class Map extends Observable{
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     public Map() {
     }
 
-    /**
-     * 
+    /** The node map which contains all addresses.
+     * 	The id of an element is the node id and its value is the node.
      */
     protected HashMap<Long, Node> nodeMap;
 
-    /**
-     * 
+    /** The bow map which contains all streets.
+     *  The id of an element is the id of a node and its value is a set of 
+     *  all the streets which have this node as origin.
      */
     protected HashMap<Long,Set<Bow>> bowMap;
 
 
     /**
-     * appel au serializer etc
-     * @param filename
-     * @throws LoadMapException 
+     * Fill the Map with a xml file containing all streets and addresses
+     *
+     * @param filename the name of the file
+     * @throws LoadMapException the load map exception
+     * @throws ForgivableXMLException 
      */
-    public Map(String filename) throws LoadMapException {
+    public void load (String filename)throws LoadMapException, ForgivableXMLException {
         // TODO implement here
     	try {
     		Deserializer.loadMap(filename, this);
+		} catch (ForgivableXMLException e) {
+			throw new ForgivableXMLException(e.getMessage());
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new LoadMapException(e.getMessage());
 		}
     	
     }
+    
 
 
+    /**
+     * Gets the node map.
+     *
+     * @return the map containing all addresses
+     */
     public HashMap<Long, Node> getNodeMap() {
 		return nodeMap;
 	}
 
+	/**
+	 * Sets the node map.
+	 *
+	 * @param nodeMap the map containing all addresses
+	 */
 	public void setNodeMap(HashMap<Long, Node> nodeMap) {
 		this.nodeMap = new HashMap<Long, Node>(nodeMap);
 	}
 
+	/**
+	 * Gets the bow map.
+	 *
+	 * @return the map containing all streets
+	 */
 	public HashMap<Long, Set<Bow>> getBowMap() {
 		return bowMap;
 	}
 
+	/**
+	 * Sets the bow map.
+	 *
+	 * @param bowMap the map containing all streets
+	 */
 	public void setBowMap(HashMap<Long, Set<Bow>> bowMap) {
 		this.bowMap = new HashMap<Long, Set<Bow>>(bowMap);
 	}
 
 	/**
-     * 
-     * Dijkstra & co ;)
-     * @param Node startNode; Node endNode 
-     * @return
-	 * @throws DijkstraException 
-     */
+	 * Dijkstra algorithm to find shortest path from a given start to all others delivery.
+	 * The graph exploration stops when all shortest paths to the deliveries have been explored.
+	 *
+	 * @param startDelivery the start delivery
+	 * @param arrivalDeliveries the list of deliveries to reach
+	 * @return hash map containing for each delivery, an atomic path beginning from the start delivery to itself
+	 * @throws DijkstraException if the start delivery is not in the list of deliveries to reach
+	 */
 	
-	// use nodes instead of deliveries ? -> if we have the type it could be a good idea to generalize the algorithm
-	// from any departureNode any List of arrivalNodes
     public HashMap<Delivery,AtomicPath> findShortestPath(Delivery startDelivery, List<Delivery> arrivalDeliveries) throws DijkstraException {
         if (!arrivalDeliveries.contains(startDelivery)) {
         	throw new DijkstraException("Deliveries does not contains startDelivery.");
         }
         
         HashMap<Delivery,AtomicPath> AtomicPaths = new HashMap<Delivery,AtomicPath>();
-        		//new AtomicPath[arrivalDeliveries.size()-1];
     	
         HashMap<Node, Double> nodeDistances = new HashMap<Node, Double>();
         HashMap<Node, Node> nodePrecedences = new HashMap<Node, Node>();
@@ -90,7 +117,6 @@ public class Map extends Observable{
         
         grayNodes.add(startDelivery.getPosition());
         nodeDistances.put(startDelivery.getPosition(), (double)0 );
-        //nodePrecedences.put(startDelivery.getPosition(), startDelivery.getPosition());
         
     	while(grayNodes.size()!=0) {
     		Pair<Long,Node> minimumDistanceNode = getLowestDistanceNode(grayNodes, nodeDistances);
@@ -119,16 +145,8 @@ public class Map extends Observable{
     		}
     	}
     	
-    	for (HashMap.Entry<Node,Double> e : nodeDistances.entrySet()) {
-    		//System.out.println("Distance du node "+e.getKey().getId()+" : "+e.getValue());
-    	}
-    	for (HashMap.Entry<Node,Node> e : nodePrecedences.entrySet()) {
-    		//System.out.println("Precedent du node "+e.getKey().getId()+" : "+e.getValue().getId());
-    	}
-    	
     	for (Delivery currentDelivery : arrivalDeliveries) {
     		if (!currentDelivery.equals(startDelivery)) {
-    			//System.out.println("Delivery : "+currentDelivery.getPosition());
         		List<Bow> bowList = new ArrayList<Bow>();
         		Node currentNode = currentDelivery.getPosition();
         		while (nodePrecedences.containsKey(currentNode)) {
@@ -144,20 +162,22 @@ public class Map extends Observable{
         			bowList.add(0, bowToAddToAtomicPath);
         			currentNode = precedentNode;
         		}
-        		/*System.out.println("Taille de atomic path : "+bowList.size());
-        		System.out.println("Atomic path : "+AtomicPathsIndex);
-        		for (Bow b : bowList) {
-        			System.out.println(b.getStartNode().getId()+" => "+b.getEndNode().getId());
-        		}
-        		System.out.println("");*/
         		
         		AtomicPath optimalPath = new AtomicPath(bowList);
         		AtomicPaths.put(currentDelivery, optimalPath);
     		}
-    	}    	
+    	}  
         return AtomicPaths;
     }
     
+    /**
+     * Release a bow.
+     * Updates the distance to the end node of the bow and the precedences.
+     *
+     * @param currentBow the current bow to release
+     * @param nodeDistances contains for each node, the distance from the start node
+     * @param nodePrecedences contains for each node, the precedent node in the shortest path
+     */
     protected static void releaseBow(Bow currentBow, HashMap<Node, Double> nodeDistances, HashMap<Node, Node> nodePrecedences) {
     	Double newDistance = nodeDistances.get(currentBow.getStartNode()) + currentBow.getLength();
     	if (nodeDistances.containsKey(currentBow.getEndNode())) {
@@ -174,6 +194,13 @@ public class Map extends Observable{
     	
     }
     
+    /**
+     * Gets the node with the lowest distance .
+     *
+     * @param nodeSet the set containing all nodes
+     * @param nodeDistances containing for each node its distance from the start node
+     * @return the node with the lowest distance from the start node
+     */
     protected static Pair<Long, Node> getLowestDistanceNode(Set<Node> nodeSet, HashMap<Node, Double> nodeDistances) {
     	Pair<Long, Node> minimumDistanceNodeEntry = null;
     	Double minimumDistance = Double.MAX_VALUE;
@@ -191,7 +218,97 @@ public class Map extends Observable{
     	return minimumDistanceNodeEntry; 
     }
     
+    /**
+     * Gets the id from the node which corresponds to the given coordinates.
+     *
+     * @param longitude the longitude
+     * @param latitude the latitude
+     * @return the id from the node
+     */
+    public long getIdFromCorrespondingNode (double longitude, double latitude) {
+
+		for( HashMap.Entry<Long, Node> entry : nodeMap.entrySet()) {
+		    
+			Node currentNode = entry.getValue();
+			if (currentNode.getLongitude() == longitude && currentNode.getLatitude() == latitude)	{
+				return currentNode.getId();
+			}
+		}
+		return 0;
+    }
     
+    /**
+     * Return two different street names which both connect to a same node.
+     * If a node has less than two streets connected to it, return there names.
+     *
+     * @param the node of the intersection
+     * @return the string containing the street names
+     */
+	public String displayIntersectionNode (Node node) {
+		long id = -1;
+		if(node!=null)
+			id = node.getId();
+		String temp = "";
+		String finalString = "";
+		int i=0;
+		
+		List<Bow> bows = getBowsIntersection(node);
+		for( Bow bow : bows ) {
+        	if (!(bow.getStreetName() == "")) {
+	        	if(i == 0) {
+			        
+		            temp = temp + bow.getStreetName();	
+		            i++;
+	        	}
+		        else if (i == 1 && (!temp.contains(bow.getStreetName()))) {
+			       	temp = temp +" et " + bow.getStreetName();
+			       	i++;
+	     	    }
+        	}
+        	if (i == 2) {
+	        	break;
+	        }
+        }
+		if (i == 0) {
+			finalString = "-";
+		}
+		else if (i == 2) {
+			finalString = "Intersection entre " + temp;
+		} else if (i==1) {
+			finalString = "Impasse : " + temp;
+		} 
+		return finalString;
+	}
+	
+	/**
+     * Return a list of every bows containing the given node.
+     *
+     * @param the node of the intersection
+     * @return the list of bows containing the node
+     */
+	public List<Bow> getBowsIntersection (Node node){
+		List<Bow> connections = new ArrayList<Bow>();
+		long id = -1;
+		if(node!=null)
+			id = node.getId();
+		
+		for( HashMap.Entry<Long,Set<Bow>> bowSet : bowMap.entrySet() ) {
+			
+			Iterator<Bow> iterator = bowSet.getValue().iterator();
+		    while(iterator.hasNext()) {
+		        Bow setElement = iterator.next();
+		        if (setElement.getStartNode().getId() == id || setElement.getEndNode().getId()==id) {
+		        	connections.add(setElement);
+		        }
+		    }
+		}
+		return connections;
+	}
+    
+    
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		String s = "";
