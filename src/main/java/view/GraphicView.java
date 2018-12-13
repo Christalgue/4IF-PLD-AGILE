@@ -458,7 +458,6 @@ public class GraphicView extends JPanel {
 	/**
 	 * Paint a bow.
 	 *
-	 * @param g the graphics
 	 * @param bow the bow to draw
 	 */
 	public void drawBow( Bow bow) {

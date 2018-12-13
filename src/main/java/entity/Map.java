@@ -241,7 +241,7 @@ public class Map extends Observable{
      * Return two different street names which both connect to a same node.
      * If a node has less than two streets connected to it, return there names.
      *
-     * @param the node of the intersection
+     * @param node of the intersection
      * @return the string containing the street names
      */
 	public String displayIntersectionNode (Node node) {
@@ -283,7 +283,7 @@ public class Map extends Observable{
 	/**
      * Return a list of every bows containing the given node.
      *
-     * @param the node of the intersection
+     * @param node of the intersection
      * @return the list of bows containing the node
      */
 	public List<Bow> getBowsIntersection (Node node){

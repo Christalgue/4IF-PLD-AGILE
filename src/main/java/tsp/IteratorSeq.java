@@ -25,6 +25,7 @@ public class IteratorSeq implements Iterator<Delivery> {
 	 * @param nonViewed the non viewed deliveries
 	 * @param currentDelivery the current delivery
 	 * @param allPaths all the AtomicPath between each Delivery in the deliveryList
+	 * @param speed the average speed of a delivery man
 	 */
 	public IteratorSeq(Collection<Delivery> nonViewed, Delivery currentDelivery, HashMap<Delivery, HashMap<Delivery, AtomicPath>> allPaths, double speed){
 		this.candidates = new Delivery[nonViewed.size()];

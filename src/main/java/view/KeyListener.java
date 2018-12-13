@@ -10,7 +10,7 @@ import main.java.controller.Controller;
  * The class that is interested in processing a key
  * event implements this interface, and the object created
  * with that class is registered with a component using the
- * component's <code>addKeyListener<code> method. When
+ * component's <code>addKeyListener</code> method. When
  * the key event occurs, that object's appropriate
  * method is invoked.
  *

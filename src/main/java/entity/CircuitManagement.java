@@ -754,6 +754,7 @@ public class CircuitManagement extends Observable{
 	 * @param nodeDelivery the node where the new delivery will be
 	 * @param duration the duration of the delivery
 	 * @param previousNode the previous node
+	 * @param indexCircuit : the index of the circuit which contains the node
 	 */
 	public void addDelivery (Node nodeDelivery, int duration, Node previousNode, int indexCircuit) {
 		addDelivery(nodeDelivery, duration, previousNode, indexCircuit, true);
@@ -966,6 +967,7 @@ public class CircuitManagement extends Observable{
 	 *
 	 * @param node the node
 	 * @param previousNode the previous node
+	 * @param indexCircuit : the index of the circuit which contains the node
 	 * @throws ManagementException the management exception
 	 */
 	public void moveDelivery(Node node, Node previousNode, int indexCircuit) throws ManagementException {

@@ -184,7 +184,7 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
     /**
      * Sets the selected delivery.
      *
-     * @param string the delivery
+     * @param delivery : the name of the delivery
      * @param selected indicate if the delivery is selected (true) or hovered (false)
      */
     public void setSelectedDelivery ( String delivery, boolean selected) {    	
@@ -198,7 +198,7 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
     /**
      * Sets the selected circuit.
      *
-     * @param string the circuit
+     * @param circuit : the name of the circuit
      * @param selected indicate if the delivery is selected (true) or hovered (false)
      */
     public void setSelectedCircuit ( String circuit, boolean selected) {    	

@@ -281,6 +281,7 @@ public class Controller {
 	 * Method called when a node from the deliveries tree is selected.
 	 *
 	 * @param deliverySelected the delivery selected
+	 * @param indexCircuit : the index of the circuit which contains the node
 	 */
 	public void treeDeliverySelected(Delivery deliverySelected, int indexCircuit) {
 		

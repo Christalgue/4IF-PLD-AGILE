@@ -11,7 +11,7 @@ import main.java.utils.Serializer;
  * The class that is interested in processing a buttons
  * event implements this interface, and the object created
  * with that class is registered with a component using the
- * component's <code>addButtonsListener<code> method. When
+ * component's <code>addButtonsListener</code> method. When
  * the buttons event occurs, that object's appropriate
  * method is invoked.
  *

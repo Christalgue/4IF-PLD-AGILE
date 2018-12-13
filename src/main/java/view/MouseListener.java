@@ -11,7 +11,7 @@ import main.java.entity.Point;
  * The class that is interested in processing a mouse
  * event implements this interface, and the object created
  * with that class is registered with a component using the
- * component's <code>addMouseListener<code> method. When
+ * component's <code>addMouseListener</code> method. When
  * the mouse event occurs, that object's appropriate
  * method is invoked.
  *
