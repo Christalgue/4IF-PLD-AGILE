@@ -149,7 +149,8 @@ public interface State {
 	 *
 	 * @param controller the controller
 	 * @param window the window
-	 * @param indexCircuit : the index of the circuit which contains the node
+	 * @param deliverySelected the delivery selected
+	 * @param indexCircuit the index of the circuit which contains the node
 	 * @param commandsList the commands list
 	 */
 	public void treeDeliverySelected(Controller controller, Window window, Delivery deliverySelected, int indexCircuit, CommandsList commandsList);
